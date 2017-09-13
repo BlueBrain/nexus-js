@@ -7,7 +7,7 @@ today! As a contributor, here are the guidelines we would like you to follow:
  - [Submission Guidelines](#submit)
  - [Signing the CLA](#cla)
 ## <a name="question"></a> Got a Question or Problem?
-Please do not hesitate to contact the BlueBrain Nexus team at [<nexus-team-email>](nexus-team-email)
+Please do not hesitate to contact the [BlueBrain Nexus team by email][nexus-team-email].
 ## <a name="issue"></a> Found a Bug?
 If you find a bug in the source code, you can help us by
 [submitting an issue](#submit-issue) to our [GitHub Repository][github]. Even better, you can
@@ -78,8 +78,8 @@ from the main (upstream) repository:
     ```shell
     git pull --ff upstream master
     ```
-## <a name=“cla”></a> Signing the CLA
-If you are not part of the BlueBrain project, a Contributor License Agreement (CLA) must be signed for any code changes to be accepted. Please contact the BlueBrain Nexus team at [<nexus-team-email>](nexus-team-email) to get the latest CLA version and instructions.
-[nexus-team-email]: mailto:nexus@bluebrain.epfl.ch
-[github]: https://github.com/bluebrain/<component>
-```
+## <a name="cla"></a> Signing the CLA
+If you are not part of the BlueBrain project, a Contributor License Agreement (CLA) must be signed for any code changes to be accepted. Please contact the [BlueBrain Nexus team][nexus-team-email] to get the latest CLA version and instructions.
+
+[nexus-team-email]: mailto:bbp-nexus-support@groupes.epfl.ch
+[github]: https://github.com/bluebrain/nexus-webapp-commons

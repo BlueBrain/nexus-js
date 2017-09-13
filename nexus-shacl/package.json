@@ -1,0 +1,15 @@
+{
+  "name": "nexus-shacl",
+  "version": "0.1.0",
+  "description": "Helper library to process SHACL schemas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "shacl",
+    "js"
+  ],
+  "author": "Blue Brain Nexus",
+  "license": "Apache-2.0"
+}

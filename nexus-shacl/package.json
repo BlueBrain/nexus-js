@@ -10,6 +10,9 @@
     "shacl",
     "js"
   ],
+  "publishConfig": {
+    "registry": "http://bbpteam.epfl.ch/repository/npm"
+  },
   "author": "Blue Brain Nexus",
   "license": "Apache-2.0"
 }

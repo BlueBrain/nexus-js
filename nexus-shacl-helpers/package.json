@@ -1,7 +1,7 @@
 {
-  "name": "nexus-shacl",
-  "version": "0.1.0",
-  "description": "Helper library to process SHACL schemas",
+  "name": "nexus-shacl-helpers",
+  "version": "0.1.1",
+  "description": "Helper library to process SHACL schemas, built for the Blue Brain Nexus platform",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,9 +10,6 @@
     "shacl",
     "js"
   ],
-  "publishConfig": {
-    "registry": "http://bbpteam.epfl.ch/repository/npm"
-  },
   "author": "Blue Brain Nexus",
   "license": "Apache-2.0"
 }

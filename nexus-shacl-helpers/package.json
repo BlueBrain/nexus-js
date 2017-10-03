@@ -1,5 +1,5 @@
 {
-  "name": "nexus-shacl-helpers",
+  "name": "@bbp/nexus-shacl-helpers",
   "version": "0.1.1",
   "description": "Helper library to process SHACL schemas, built for the Blue Brain Nexus platform",
   "main": "index.js",

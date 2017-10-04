@@ -1,13 +1,10 @@
 {
-  "name": "nexus-js-helpers",
+  "name": "@bbp/nexus-js-helpers",
   "version": "0.1.0",
-  "description": "JS hellpers for interaction with API",
+  "description": "Helpers to make it easier to use Blue Brain Nexus REST API in Javascript applications",
   "main": "index.js",
   "scripts": {
     "test": "true"
-  },
-  "publishConfig": {
-    "registry": "http://bbpteam.epfl.ch/repository/npm"
   },
   "author": "Blue Brain Nexus",
   "license": "Apache-2.0"

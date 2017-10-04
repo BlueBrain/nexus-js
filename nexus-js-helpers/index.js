@@ -1,5 +1,5 @@
 'use strict';
-const BASE_PATH = 'https://bbp-nexus.epfl.ch/dev/v0';
+const BASE_PATH = 'https://bbp-nexus.epfl.ch/v0';
 
 function getSchemasList(org, API_PATH) {
   checkPath(API_PATH)

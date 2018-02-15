@@ -1,11 +1,15 @@
 {
-  "name": "@bbp/nexus-js-helpers",
-  "version": "0.1.0",
+  "author": {
+    "name": "Blue Brain Nexus"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
   "description": "Helpers to make it easier to use Blue Brain Nexus REST API in Javascript applications",
+  "license": "Apache-2.0",
   "main": "index.js",
+  "name": "@bbp/nexus-js-helpers",
   "scripts": {
     "test": "true"
   },
-  "author": "Blue Brain Nexus",
-  "license": "Apache-2.0"
+  "version": "0.3.1"
 }

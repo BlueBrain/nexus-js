@@ -7,12 +7,13 @@ const BASE_PATH = 'https://bbp-nexus.epfl.ch/v0';
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom URI for Nexus instance
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
+ * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getSchemasList(org, domain, options = {}, API_PATH, fetchAll) {
+function getSchemasList(org, domain, options = {}, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['schemas', org, domain], options);
-  return fetchWrapper(uri, {}, fetchAll);
+  return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 
 /**
@@ -23,12 +24,13 @@ function getSchemasList(org, domain, options = {}, API_PATH, fetchAll) {
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
+ * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function searchInstance(query, org, domain, API_PATH, fetchAll) {
+function searchInstance(query, org, domain, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['data'], { q: 'query' });
-  return fetchWrapper(uri, {}, fetchAll);
+  return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 
 /**
@@ -40,16 +42,27 @@ function searchInstance(query, org, domain, API_PATH, fetchAll) {
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
+ * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getInstancesList(org, domain, schema, ver, options = {}, API_PATH, fetchAll) {
+function getInstancesList(org, domain, schema, ver, options = {}, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['data', org, domain, schema, ver], options);
-  return fetchWrapper(uri, {}, fetchAll);
+  return fetchWrapper(uri, {}, fetchAll, access_token);
 }
-function fetchWrapper(url, result, fetchAll) {
+
+/**
+ * Wrapper around native fetch to pass all params
+ * @param {string} url - actual url for request
+ * @param {Object} result - accumulated response by default just an empty object
+ * @param {Boolean} fetchAll - bool flag for recursive call up to the end of results
+ * @param {string} access_token - access_token recieved via OAuth
+ * @returns {Promise<Object>}
+ */
+function fetchWrapper(url, result, fetchAll, access_token) {
   fetchAll = Boolean(fetchAll);
-  return fetch(url)
+  const requestOptions = access_token? { headers: { "Authorization": "Bearer "+ access_token } }: {};
+  return fetch(url, requestOptions)
   .then(response => {
     if (response.ok) {
       return response.json();
@@ -79,12 +92,14 @@ function fetchWrapper(url, result, fetchAll) {
  * @param {id} id - ID of instance
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
+ * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getInstance(org, domain, schema, ver, id, options = {}, API_PATH) {
+function getInstance(org, domain, schema, ver, id, options = {}, API_PATH, access_token) {
+  const requestOptions = access_token? { headers: { "Authorization": "Bearer "+ access_token } }: {};
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['data', org, domain, schema, ver, id], options);
-  return fetch(uri);
+  return fetch(uri, requestOptions);
 }
 
 /**
@@ -92,12 +107,13 @@ function getInstance(org, domain, schema, ver, id, options = {}, API_PATH) {
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
+ * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getOrgList(options = {}, API_PATH, fetchAll) {
+function getOrgList(options = {}, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['organizations'], options);
-  return fetchWrapper(uri, {}, fetchAll);
+  return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 
 /**
@@ -106,12 +122,13 @@ function getOrgList(options = {}, API_PATH, fetchAll) {
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
+ * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getDomainsList(org, options = {}, API_PATH, fetchAll) {
+function getDomainsList(org, options = {}, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['domains', org], options);
-  return fetchWrapper(uri, {}, fetchAll);
+  return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 
 /**
@@ -123,12 +140,16 @@ function getDomainsList(org, options = {}, API_PATH, fetchAll) {
  * @param {Object} instance - instance
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
+ * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function addInstance(org, domain, schema, ver, instance, options = {}, API_PATH) {
+function addInstance(org, domain, schema, ver, instance, options = {}, API_PATH, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['data', org, domain, schema, ver], options);
-  return fetch(uri, { method: 'POST', body: instance });
+  const requestOptions = access_token?
+    { method: 'POST', body: instance, headers: {"Authorization": "Bearer "+access_token} }:
+    { method: 'POST', body: instance };
+  return fetch(uri, requestOptions);
 }
 
 /**
@@ -140,12 +161,14 @@ function addInstance(org, domain, schema, ver, instance, options = {}, API_PATH)
  * @param {string} id - id of instance
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
+ * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function downloadAttachment(org, domain, schema, ver, id, options = {}, API_PATH) {
+function downloadAttachment(org, domain, schema, ver, id, options = {}, API_PATH, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['data', org, domain, schema, ver, id, 'attachment'], options);
-  return fetch(uri);
+  const requestOptions = access_token? { headers: {"Authorization": "Bearer "+access_token } }:{};
+  return fetch(uri, requestOptions);
 }
 
 /**

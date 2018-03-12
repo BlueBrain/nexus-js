@@ -212,7 +212,17 @@ function buildURI(base, uriParts, options={}) {
 function getUserInfo(API_PATH, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['oauth2', 'userinfo']);
-  return fetchWrapper(uri, {}, false, access_token);
+  const requestOptions = access_token? { headers: { "Authorization": "Bearer "+ access_token } }: {};
+  return fetch(uri, requestOptions)
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+    throw new Error(`Error occured while fetching ${url}`);
+  })
+  .catch(err => {
+    console.error(err);
+  });
 }
 
 module.exports = { getSchemasList, searchInstance, getInstancesList, getInstance, getOrgList, getDomainsList, addInstance, downloadAttachment, getUserInfo };

@@ -209,8 +209,10 @@ function buildURI(base, uriParts, options={}) {
   }, uri + '?');
 }
 
-function login() {
-
+function getUserInfo(options = {}, API_PATH, access_token) {
+  const path = 'https://bbp-nexus.epfl.ch/staging/v0';//checkPath(API_PATH);
+  const uri = buildURI(path, ['oauth2', 'userinfo'], options);
+  return fetchWrapper(uri, {}, false, access_token);
 }
 
-module.exports = { getSchemasList, searchInstance, getInstancesList, getInstance, getOrgList, getDomainsList, addInstance, downloadAttachment, login };
+module.exports = { getSchemasList, searchInstance, getInstancesList, getInstance, getOrgList, getDomainsList, addInstance, downloadAttachment, getUserInfo };

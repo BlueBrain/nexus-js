@@ -3,16 +3,15 @@ const BASE_PATH = 'https://bbp-nexus.epfl.ch/v0';
 /**
  * retrieve schemas listing optionally for particular org and domain
  * @param {string} org - name of organization
- * @param {string} domain - name of domain
- * @param {object} options - querystring contained in an object form
+ * @param {Array} parts - array containg child entity names for building request
  * @param {string} API_PATH - custom URI for Nexus instance
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
  * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getSchemasList(org, domain, options = {}, API_PATH, fetchAll, access_token) {
+function getSchemasList(parts = [], options = {}, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
-  const uri = buildURI(path, ['schemas', org, domain], options);
+  const uri = buildURI(path, ['schemas', ...parts], options);
   return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 
@@ -35,19 +34,16 @@ function searchInstance(query, org, domain, API_PATH, fetchAll, access_token) {
 
 /**
  * Retrievs instances by its schema version
- * @param {string} org - organization
- * @param {string} domain - domain
- * @param {string} schema - schema
- * @param {ver} ver - version of schema
+ * @param {Array} parts - array containg child entity names for building request
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
  * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getInstancesList(org, domain, schema, ver, options = {}, API_PATH, fetchAll, access_token) {
+function getInstancesList(parts = [], options = {}, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
-  const uri = buildURI(path, ['data', org, domain, schema, ver], options);
+  const uri = buildURI(path, ['data', ...parts], options);
   return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 
@@ -104,30 +100,31 @@ function getInstance(org, domain, schema, ver, id, options = {}, API_PATH, acces
 
 /**
  * Gets list of organizations
+ * @param {Array} parts - array containg child entity names for building request(here will be [])
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
  * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getOrgList(options = {}, API_PATH, fetchAll, access_token) {
+function getOrgList(parts = [], options = {}, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
-  const uri = buildURI(path, ['organizations'], options);
+  const uri = buildURI(path, ['organizations', ...parts], options);
   return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 
 /**
  * Gets list of domains for particular organization
- * @param {string} org - organization
+ * @param {Array} parts - array containg child entity names for building request
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
  * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getDomainsList(org, options = {}, API_PATH, fetchAll, access_token) {
+function getDomainsList(parts, options = {}, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
-  const uri = buildURI(path, ['domains', org], options);
+  const uri = buildURI(path, ['domains', ...parts], options);
   return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 

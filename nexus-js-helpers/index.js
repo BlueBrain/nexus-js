@@ -81,20 +81,16 @@ function fetchWrapper(url, result, fetchAll, access_token) {
 }
 /**
  * Retrieves instance by its ID
- * @param {string} org - organization
- * @param {string} domain - domain
- * @param {string} schema - schema
- * @param {ver} ver - version of schema
- * @param {id} id - ID of instance
+ * @param {Array} parts - array containg child entity names for building request
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
  * @param {string} access_token - access_token recieved via OAuth
  * @returns {Promise<Object>}
  */
-function getInstance(org, domain, schema, ver, id, options = {}, API_PATH, access_token) {
+function getInstance(parts, options = {}, API_PATH, access_token) {
   const requestOptions = access_token? { headers: { "Authorization": "Bearer "+ access_token } }: {};
   const path = checkPath(API_PATH);
-  const uri = buildURI(path, ['data', org, domain, schema, ver, id], options);
+  const uri = buildURI(path, ['data', ...parts], options);
   return fetch(uri, requestOptions);
 }
 

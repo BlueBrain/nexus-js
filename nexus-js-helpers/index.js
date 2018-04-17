@@ -28,7 +28,7 @@ function getSchemasList(parts = [], options = {}, API_PATH, fetchAll, access_tok
  */
 function searchInstance(query, org, domain, API_PATH, fetchAll, access_token) {
   const path = checkPath(API_PATH);
-  const uri = buildURI(path, ['data'], { q: 'query' });
+  const uri = buildURI(path, ['data'], { q: query });
   return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 

@@ -1,4 +1,6 @@
-'use strict';
+import FileSaver from 'file-saver';
+import queryString from 'query-string';
+
 const BASE_PATH = 'https://bbp-nexus.epfl.ch/v0';
 /**
  * retrieve schemas listing optionally for particular org and domain
@@ -57,8 +59,7 @@ function getInstancesList(parts = [], options = {}, API_PATH, fetchAll, access_t
  */
 function fetchWrapper(url, result, fetchAll, access_token) {
   fetchAll = Boolean(fetchAll);
-  const requestOptions = access_token? { headers: { "Authorization": "Bearer "+ access_token } }: {};
-  return fetch(url, requestOptions)
+  return fetchWithToken(url, access_token)
   .then(response => {
     if (response.ok) {
       return response.json();
@@ -77,8 +78,19 @@ function fetchWrapper(url, result, fetchAll, access_token) {
   })
   .catch(err => {
     console.error(err);
-  })
+  });
 }
+
+/**
+ * Add Authorization header to fetch request.
+ * @param {string} uri - actual url for request
+ * @param {string} access_token - access_token recieved via OAuth
+ */
+function fetchWithToken(uri, access_token) {
+  const requestOptions = access_token? { headers: { "Authorization": "Bearer "+ access_token } }: {};
+  return fetch(uri, requestOptions);
+}
+
 /**
  * Retrieves instance by its ID
  * @param {Array} parts - array containg child entity names for building request
@@ -88,10 +100,9 @@ function fetchWrapper(url, result, fetchAll, access_token) {
  * @returns {Promise<Object>}
  */
 function getInstance(parts, options = {}, API_PATH, access_token) {
-  const requestOptions = access_token? { headers: { "Authorization": "Bearer "+ access_token } }: {};
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['data', ...parts], options);
-  return fetch(uri, requestOptions);
+  return fetchWithToken(uri, requestOptions);
 }
 
 /**
@@ -133,7 +144,7 @@ function getDomainsList(parts, options = {}, API_PATH, fetchAll, access_token) {
  * @param {Object} instance - instance
  * @param {object} options - querystring contained in an object form
  * @param {string} API_PATH - custom path for API
- * @param {string} access_token - access_token recieved via OAuth
+ * @param {string} access_token - access_token received via OAuth
  * @returns {Promise<Object>}
  */
 function addInstance(org, domain, schema, ver, instance, options = {}, API_PATH, access_token) {
@@ -146,22 +157,23 @@ function addInstance(org, domain, schema, ver, instance, options = {}, API_PATH,
 }
 
 /**
- * Downloads an attachment for particular instance
- * @param {string} org - organization
- * @param {string} domain - domain
- * @param {string} schema - schema
- * @param {string} ver - schema version
- * @param {string} id - id of instance
- * @param {object} options - querystring contained in an object form
- * @param {string} API_PATH - custom path for API
- * @param {string} access_token - access_token recieved via OAuth
- * @returns {Promise<Object>}
+ * Trigger the download of an attachment
+ * @param {string} downloadUrl - value of downloadUrl property in the selected attachment of the instance
+ * @param {string} fileName - value of originalFileName property in the attachment
+ * @param {string} access_token - access_token received via OAuth
+ * @returns {void}
  */
-function downloadAttachment(org, domain, schema, ver, id, options = {}, API_PATH, access_token) {
-  const path = checkPath(API_PATH);
-  const uri = buildURI(path, ['data', org, domain, schema, ver, id, 'attachment'], options);
-  const requestOptions = access_token? { headers: {"Authorization": "Bearer "+access_token } }:{};
-  return fetch(uri, requestOptions);
+function downloadAttachment(downloadUrl, fileName, access_token) {
+  return fetchWithToken(downloadUrl, access_token)
+    .then(response => {
+      if (!response.ok) {
+        return;
+      }
+
+      response.blob().then(blob => {
+        FileSaver.saveAs(blob, fileName);
+      });
+    });
 }
 
 /**
@@ -189,24 +201,14 @@ function buildURI(base, uriParts, options={}) {
   .reduce((prev, current) => {
     return `${prev}/${current}`;
   }, base);
-  const params = Object.keys(options);
-  if (params.length === 0) {
-    return uri;
-  }
-  return params.reduce((prev, current, index) => {
-    if (index > 0) {
-      return `${prev}&${current}=${options[current]}`;
-    } else {
-      return `${prev}${current}=${options[current]}`;
-    }
-  }, uri + '?');
+  const params = queryString.stringify(options);
+  return `${uri}?${params}`;
 }
 
 function getUserInfo(API_PATH, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['oauth2', 'userinfo']);
-  const requestOptions = access_token? { headers: { "Authorization": "Bearer "+ access_token } }: {};
-  return fetch(uri, requestOptions)
+  return fetchWithToken(uri, requestOptions)
   .then(response => {
     if (response.ok) {
       return response.json();
@@ -218,4 +220,4 @@ function getUserInfo(API_PATH, access_token) {
   });
 }
 
-module.exports = { getSchemasList, searchInstance, getInstancesList, getInstance, getOrgList, getDomainsList, addInstance, downloadAttachment, getUserInfo };
+module.exports = { getSchemasList, searchInstance, getInstancesList, getInstance, getOrgList, getDomainsList, addInstance, downloadAttachment, getUserInfo, buildURI };

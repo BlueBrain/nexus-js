@@ -102,7 +102,7 @@ function fetchWithToken(uri, access_token) {
 function getInstance(parts, options = {}, API_PATH, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['data', ...parts], options);
-  return fetchWithToken(uri, requestOptions);
+  return fetchWithToken(uri, access_token);
 }
 
 /**
@@ -208,7 +208,7 @@ function buildURI(base, uriParts, options={}) {
 function getUserInfo(API_PATH, access_token) {
   const path = checkPath(API_PATH);
   const uri = buildURI(path, ['oauth2', 'userinfo']);
-  return fetchWithToken(uri, requestOptions)
+  return fetchWithToken(uri, access_token)
   .then(response => {
     if (response.ok) {
       return response.json();
@@ -220,4 +220,4 @@ function getUserInfo(API_PATH, access_token) {
   });
 }
 
-module.exports = { getSchemasList, searchInstance, getInstancesList, getInstance, getOrgList, getDomainsList, addInstance, downloadAttachment, getUserInfo, buildURI };
+module.exports = { getSchemasList, searchInstance, getInstancesList, getInstance, getOrgList, getDomainsList, addInstance, downloadAttachment, getUserInfo };

@@ -1,0 +1,7 @@
+@import "./keyframes.css";
+
+.fadeInAlmost {
+  opacity: 0;
+  animation: fadeInAlmost 1s ease-in;
+  animation-fill-mode: forwards;
+}

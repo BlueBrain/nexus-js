@@ -1,0 +1,9 @@
+:root
+{
+  --primary: #44c6f3;
+  --primary-light: color(var(--primary) l(50%));
+  --highlight: rgba(185, 233, 212);
+  --highlight-light: color(var(--highlight) l(80%));
+  --light-grey: #eee;
+  --text: #555;
+}

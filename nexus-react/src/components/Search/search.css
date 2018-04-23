@@ -1,0 +1,71 @@
+@import "../../styles/colors.css";
+
+.search {
+  text-align: left;
+  display: block;
+  padding: 0.5em;
+  font-weight: lighter;
+  font-size: 20px;
+  width: 100%;
+  /* background-color: #f7f9fa;
+  border-bottom: 1px solid #b4c3ca; */
+  border-top-left-radius: 1px;
+  color: var(--text);
+  border-top-right-radius: 1px;
+  transition: all 0.5ms cubic-bezier(0.2, 1, 0.3, 1);
+  min-height: 1px;
+  max-height: 1000px;
+}
+
+.input-group {
+  box-sizing: border-box;
+  position: relative;
+}
+
+.search label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.search input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 0;
+  color: var(--text);
+  font-size: 1rem;
+  -webkit-appearance: none;
+}
+
+.search input:focus {
+  outline: none;
+}
+
+.icon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  height: 1em;
+  fill: var(--text);
+}
+
+.pending {
+  color: green;
+}
+
+.error {
+  color: red;
+}
+
+.search-value-indicator {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 0.5em;
+  border-bottom: 1px solid #b4c3ca12;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #555;
+  text-decoration: none;
+}

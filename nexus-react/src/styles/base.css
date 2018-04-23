@@ -1,0 +1,22 @@
+html {
+  height: auto;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  background-color: #c5dfeb;
+  box-sizing: border-box;
+}
+*::selection {
+  color: white;
+  background-color: rgba(185, 233, 212, 0.8);
+}
+/*
+  this is a recommended box-sizing reset to insure the box models use the intuitive border-box box model,
+  while also allowing you to use content-box or padding-box on more specific selectors.
+  https://css-tricks.com/box-sizing/
+*/
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}

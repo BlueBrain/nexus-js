@@ -1,0 +1,52 @@
+{
+  "name": "nexus-react",
+  "version": "0.0.1",
+  "description": "React components for the nexus project",
+  "main": "build/index.js",
+  "peerDependencies": {
+    "react": "^16.3.1"
+  },
+  "dependencies": {
+    "@bbp/nexus-js-helpers": "^0.3.7",
+    "lodash": "^4.17.5",
+    "paper": "^0.11.5",
+    "react": "^16.3.1",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2",
+    "webpack": "^4.5.0"
+  },
+  "scripts": {
+    "lint": "node_modules/.bin/xo src",
+    "fix": "node_modules/.bin/xo src --fix",
+    "test": "true",
+    "start": "webpack --watch",
+    "build": "webpack",
+    "postinstall": "webpack"
+  },
+  "author": {
+    "name": "Blue Brain Nexus"
+  },
+  "repository": "github:bluebrain/nexus-webapp-commons",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-runtime": "^6.26.0",
+    "css-loader": "^0.28.11",
+    "eslint-config-xo-react": "^0.16.0",
+    "file-loader": "^1.1.11",
+    "image-webpack-loader": "^4.2.0",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-loader": "^2.1.3",
+    "precss": "^3.1.2",
+    "style-loader": "^0.20.3",
+    "svg-react-loader": "^0.4.5",
+    "url-loader": "^1.0.1",
+    "webpack-cli": "^2.0.14",
+    "xo": "^0.20.3"
+  }
+}

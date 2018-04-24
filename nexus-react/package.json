@@ -1,6 +1,6 @@
 {
   "name": "@bbp/nexus-react",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React components for the nexus project",
   "main": "build/index.js",
   "license": "Apache-2.0",
@@ -8,7 +8,7 @@
     "react": "^16.3.1"
   },
   "dependencies": {
-    "@bbp/nexus-js-helpers": "^0.3.7",
+    "@bbp/nexus-js-helpers": "^0.4.1",
     "lodash": "^4.17.5",
     "paper": "^0.11.5",
     "react": "^16.3.1",

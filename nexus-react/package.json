@@ -1,6 +1,6 @@
 {
   "name": "@bbp/nexus-react",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React components for the nexus project",
   "main": "build/index.js",
   "license": "Apache-2.0",
@@ -21,8 +21,7 @@
     "fix": "node_modules/.bin/xo src --fix",
     "test": "true",
     "start": "webpack --watch",
-    "build": "webpack",
-    "postinstall": "webpack"
+    "build": "webpack"
   },
   "author": {
     "name": "Blue Brain Nexus"

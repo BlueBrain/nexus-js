@@ -26,11 +26,13 @@ function getSchemasList(parts = [], options = {}, API_PATH, fetchAll, access_tok
  * @param {string} API_PATH - custom path for API
  * @param {boolean} fetchAll - whether to fetch all instances or just 1 page
  * @param {string} access_token - access_token recieved via OAuth
+ * @param {number} from - begninng point for pagination
+ * @param {number} size - size of results for pagination
  * @returns {Promise<Object>}
  */
-function searchInstance(query, org, domain, API_PATH, fetchAll, access_token) {
+function searchInstance(query, org, domain, API_PATH, fetchAll, access_token, from, size) {
   const path = checkPath(API_PATH);
-  const uri = buildURI(path, ['data'], { q: query });
+  const uri = buildURI(path, ['data'], { q: query, from: from, size: size });
   return fetchWrapper(uri, {}, fetchAll, access_token);
 }
 
@@ -220,4 +222,4 @@ function getUserInfo(API_PATH, access_token) {
   });
 }
 
-module.exports = { getSchemasList, searchInstance, getInstancesList, getInstance, getOrgList, getDomainsList, addInstance, downloadAttachment, getUserInfo };
+export { fetchWithToken, getSchemasList, searchInstance, getInstancesList, getInstance, getOrgList, getDomainsList, addInstance, downloadAttachment, getUserInfo };

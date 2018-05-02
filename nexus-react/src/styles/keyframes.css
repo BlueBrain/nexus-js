@@ -1,3 +1,5 @@
+@import "./colors.css";
+
 @keyframes fadeInAlmost {
   0% {
     opacity: 0;
@@ -5,5 +7,35 @@
 
   100% {
     opacity: 0.2;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+
+@keyframes changeInColors {
+  0% {
+    stroke: var(--primary);
+  }
+  50% {
+    stroke: var(--highlight);
   }
 }

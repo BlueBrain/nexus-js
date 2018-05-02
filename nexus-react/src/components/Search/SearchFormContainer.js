@@ -9,7 +9,7 @@ class SearchFormContainer extends React.Component {
   constructor(props) {
     super(props);
     // TODO add debounce that feels right
-    this.debouncedSearch = this.search.bind(this);
+    this.debouncedSearch = debounce(this.search.bind(this), 100, true);
     this.input = React.createRef();
     this.component = this.props.component
       ? this.props.component
@@ -19,15 +19,18 @@ class SearchFormContainer extends React.Component {
     e.preventDefault();
     let val = this.input.value + "";
     this.input.value = null;
-    if (this.props.submit) {
-      return this.props.submit(val);
+    if (this.props.onSubmit) {
+      return this.props.onSubmit(val);
     }
     this.props.search(val);
   }
   refCallback(ref) {
     this.input = ref;
   }
-  search() {
+  search(e) {
+    let keyCode = Number(e.keyCode);
+    // dont fire search for arrow keys
+    if (keyCode <= 40 && keyCode >= 37) { return; }
     this.props.search(this.input.value);
   }
   render() {

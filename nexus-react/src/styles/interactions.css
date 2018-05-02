@@ -1,0 +1,23 @@
+@import './colors.css';
+@import './curves.css';
+
+/*
+  highlights text and nudges span to the right
+  intended to be used for clickable links
+*/
+:global .nudge-on-hover {
+  display: flex;
+  justify-content: space-between;
+}
+
+:global .nudge-on-hover:hover {
+  background-color: var(--highlight-blue);
+}
+
+:global .nudge-on-hover span {
+  transition: all 300ms var(--fun-curve);
+}
+
+:global .nudge-on-hover:hover span {
+  margin-left: 0.25em;
+}

@@ -1,20 +1,19 @@
-import { searchInstance } from "@bbp/nexus-js-helpers";
+import { searchInstance } from "../../../../../nexus-js-helpers";
 import * as types from "./types";
 
 // TODO should client be dep injected instead of hardcoded?
-const client = ({ api, token, query }) => {
+const client = ({ api, token, query, from, size }) => {
   if (!query) {
     return Promise.resolve({ results: [], total: 0 });
   }
-  return searchInstance(query + "*", null, null, api, false, token);
+  return searchInstance(query + "*", null, null, api, false, token, from, size);
 };
 
-const search = (typeActions, searchClient) => ({ query, api, token }) => {
-  if (!token) { console.error('missing required property "token" for search action'); }
+const search = (typeActions, searchClient) => ({ query, api, token, from, size }) => {
   if (!api) { console.error('missing required property "api" for search action'); }
   return (dispatch, getState) => {
     dispatch(typeActions.searchPending());
-    return searchClient({ api, token, query })
+    return searchClient({ api, token, query, from, size })
       .then(response =>
         dispatch(
           typeActions.searchFulfilled({

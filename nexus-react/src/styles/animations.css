@@ -5,3 +5,16 @@
   animation: fadeInAlmost 1s ease-in;
   animation-fill-mode: forwards;
 }
+
+.fade {
+  opacity: 0;
+  transition: opacity .5s ease-in;
+}
+
+.fade.in {
+  opacity: 1;
+}
+
+.fade.out {
+  opacity: 0;
+}

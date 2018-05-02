@@ -6,6 +6,7 @@ module.exports = {
     filename: "index.js",
     libraryTarget: "commonjs2"
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -16,18 +17,6 @@ module.exports = {
           loader: "babel-loader",
         }
       },
-      // {
-      //   test: /\.(gif|png|jpe?g|svg)$/i,
-      //   use: [
-      //     'file-loader',
-          // {
-          //   loader: 'image-webpack-loader',
-          //   options: {
-          //     bypassOnDebug: true,
-          //   },
-      //     },
-      //   ],
-      // },
       {
         test: /\.svg$/,
         loader: 'babel-loader!svg-react-loader'
@@ -62,9 +51,6 @@ module.exports = {
             options: {
               modules: true,
               localIdentName: '[path][name]__[local]--[hash:base64:5]',
-              // getLocalIdent: (context, localIdentName, localName, options) => {
-              //   return `${context}_myname`
-              // },
               importLoaders: 1
             }
           },

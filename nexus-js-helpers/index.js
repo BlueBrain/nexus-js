@@ -1,4 +1,5 @@
 import FileSaver from 'file-saver';
+import streamSaver from 'StreamSaver';
 import queryString from 'query-string';
 
 const BASE_PATH = 'https://bbp-nexus.epfl.ch/v0';
@@ -169,12 +170,22 @@ function downloadAttachment(downloadUrl, fileName, access_token) {
   return fetchWithToken(downloadUrl, access_token)
     .then(response => {
       if (!response.ok) {
+        console.log('Download failed: ', response);
         return;
       }
 
-      response.blob().then(blob => {
-        FileSaver.saveAs(blob, fileName);
-      });
+      //TODO: replace below with one time download link when implemented
+      //https://github.com/BlueBrain/nexus-kg/issues/303
+
+      //use streamSaver to download if supported, FileSaver is RAM and blob size limited
+      if(streamSaver.supported && typeof response.body.pipeTo === 'function'){
+        const fileStream = streamSaver.createWriteStream(fileName);
+        response.body.pipeTo(fileStream);
+      }else{
+        response.blob().then(blob => {
+          FileSaver.saveAs(blob, fileName, true);
+        });
+      }
     });
 }
 

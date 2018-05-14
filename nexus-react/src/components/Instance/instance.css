@@ -1,0 +1,7 @@
+.instance {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+  position: relative;
+}

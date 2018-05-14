@@ -1,6 +1,6 @@
 {
   "name": "@bbp/nexus-react",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "React components for the nexus project",
   "main": "build/index.js",
   "license": "Apache-2.0",
@@ -9,10 +9,19 @@
   },
   "dependencies": {
     "lodash": "^4.17.10",
+    "moment": "^2.22.1",
     "paper": "^0.11.5",
     "react": "^16.3.1",
+    "react-copy-to-clipboard": "^5.0.1",
+    "react-dom": "^16.3.2",
+    "react-fontawesome": "^1.6.1",
+    "react-json-view": "^1.16.6",
     "react-redux": "^5.0.7",
+    "react-responsive-modal": "^3.0.1",
+    "react-tabs": "^2.2.2",
+    "react-tooltip": "^3.5.1",
     "redux": "^3.7.2",
+    "styled-jss": "^2.2.2",
     "webpack": "^4.5.0"
   },
   "scripts": {

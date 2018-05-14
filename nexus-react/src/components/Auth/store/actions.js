@@ -23,6 +23,7 @@ const createAuthenticate = typeActions => currentLocation => {
     const now = Date.now()/1000; //toz get in seconds
     const { tokenExpiration } = getState().auth
     const isValidToken = isFinite(tokenExpiration) && now < tokenExpiration;
+    console.log('logging out: ', loginObject, tokenExpiration);
     // The token in state is good already
     if (isValidToken) {
       return

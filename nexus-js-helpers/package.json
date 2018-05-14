@@ -12,7 +12,7 @@
     "build": "parcel build -d ./ -o index.min index.js && rm index.min.map  # Until --no-source-maps support",
     "test": "true"
   },
-  "version": "0.4.2",
+  "version": "0.4.3",
   "dependencies": {
     "file-saver": "^1.3.8",
     "query-string": "^6.0.0"

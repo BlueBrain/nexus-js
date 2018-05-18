@@ -6,6 +6,7 @@ import FontAwesome from "react-fontawesome";
 import ReactTooltip from "react-tooltip";
 import Type from "./Type";
 import { guidGenerator } from "../../libs/utils";
+import Preview from "./Preview.jsx";
 
 //TODO handle all links externally in parent
 const KeyLinkComponent = ({ isExternalLink, id, children }) => {
@@ -103,11 +104,25 @@ const Loading = (name, value) => (
   </React.Fragment>
 );
 
+function distro (distribution) {
+  if (!distribution) {
+    return;
+  }
+  const {
+    downloadURL,
+    contentSize,
+    originalFileName,
+    mediaType
+  } = Array.isArray(distribution) ? distribution[0] : distribution;
+  return Preview(mediaType, downloadURL);
+}
+
 const Fulfilled = (name, value, label) => {
   let id = guidGenerator();
   return (
     <React.Fragment>
       <ReactTooltip id={id} className="small-tooltip" effect="solid" />
+      {value.distribution && distro(value.distribution)}
       {name && <div className="key ellipsis">{name} </div>}
       <div className="value ellipsis" data-for={id} data-tip={label}>
         <i>{label}</i>{" "}

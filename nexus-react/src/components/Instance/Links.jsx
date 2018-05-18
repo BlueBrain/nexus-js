@@ -11,7 +11,12 @@ const LinksComponent = (links, which, goToEntityByID) => {
         {links.map(({ source }) => {
           return (
             <li key={source["@id"]}>
-              <Relationship value={source} goToEntityByID={goToEntityByID} />
+              <a href={source["@id"]} onClick={e => {
+                  e.preventDEfault();
+                  goToEntityByID(source["@id"])
+              }}>
+                <Relationship value={source}/>
+              </a>
             </li>
           );
         })}

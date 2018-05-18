@@ -4,6 +4,7 @@ import prettyBytes from "pretty-bytes";
 import ReactTooltip from "react-tooltip";
 import { downloadAttachment } from "../../../../nexus-js-helpers";
 import { WithStore } from "../";
+import Preview from "./Preview.jsx";
 
 const Distribution = distribution => {
   if (!distribution) {
@@ -15,7 +16,7 @@ const Distribution = distribution => {
     originalFileName,
     mediaType
   } = Array.isArray(distribution) ? distribution[0] : distribution;
-  const [, fileType] = originalFileName.split(".");
+  const [, fileType] = originalFileName? originalFileName.split(".") : downloadURL.split(".");
   return (
     <WithStore
       mapStateToProps={({ auth }) => ({
@@ -55,9 +56,10 @@ const Distribution = distribution => {
                 </a>
               </div>
               <div>
-                <small>
+                {contentSize && <small>
                   <b>Size</b> {prettyBytes(contentSize.value)}
                 </small>
+                }
                 <br />
                 <small>
                   <b>Media Type</b> {fileType}
@@ -71,19 +73,6 @@ const Distribution = distribution => {
     </WithStore>
   );
 };
-
-const Preview = (mediaType, downloadURL) => {
-  const mimeType = mediaType.split(";")[0];
-  if (mimeType !== "image/jpeg" && mimeType !== "image/png") {
-    return;
-  }
-  return (
-    <div
-      className="media-preview"
-      style={{ backgroundImage: `url(${downloadURL})` }}
-    />
-  );
-};
 /**
  * Download an attachment, including if restricted by ACLs
  *
@@ -93,7 +82,7 @@ const Preview = (mediaType, downloadURL) => {
  * @param {string} uri
  * @param {string} fileName
  */
-function fetchAttachment(uri, fileNamem, token) {
+function fetchAttachment(uri, fileName, token) {
   return () => {
     downloadAttachment(uri, fileName, token);
   };

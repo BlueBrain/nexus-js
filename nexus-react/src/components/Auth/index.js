@@ -16,7 +16,7 @@ function createAuthStore(reducerKey) {
   reducerKey = reducerKey ? reducerKey.toUpperCase() + '_' : reducerKey;
   return {
     reducer: createReducer(reducerKey),
-    actions: createActions(reducerKey)
+    actions: createActions(reducerKey),
   };
 }
 export default {

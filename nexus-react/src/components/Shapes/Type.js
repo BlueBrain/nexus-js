@@ -32,7 +32,7 @@ const Type = ({ type }) => {
   return (
     <React.Fragment>
       <ReactTooltip id={id} className="small-tooltip" effect="solid" />
-      <div className="type pill" data-for={id} data-tip={"type of instance"}>
+      <div className="type pill ellipsis" data-for={id} data-tip={"type of instance"}>
         <FontAwesome name="tags" /> {typeName(type)}
       </div>
     </React.Fragment>

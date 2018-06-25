@@ -8,9 +8,11 @@ import Dropdown from './Dropdown/Dropdown.jsx';
 import Spinner from './Spinner/Spinner.jsx';
 import * as Shapes from './Shapes';
 import Instance from './Instance/index.jsx';
+import CopyToClipboard from './CopyToClipboard/index.jsx';
 
 export {
 	Auth,
+	CopyToClipboard,
 	Dropdown,
 	Instance,
 	Lines,

@@ -14,7 +14,6 @@ const getLoginObjectFromURL = URL => {
     // Only 2 characters differ.
     const payloadBase64 = payload.replace(/-/g, '+').replace(/_/g, '/');
 
-
     // Go through URL decoding to properly parse UTF-8 data.
     // @see https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
     const { name, exp } = JSON.parse(decodeURIComponent(escape(atob(payloadBase64))));

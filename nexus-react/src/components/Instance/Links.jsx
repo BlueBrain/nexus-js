@@ -12,7 +12,7 @@ const LinksComponent = (links, which, goToEntityByID) => {
           return (
             <li key={source["@id"]}>
               <a href={source["@id"]} onClick={e => {
-                  e.preventDEfault();
+                  e.preventDefault();
                   goToEntityByID(source["@id"])
               }}>
                 <Relationship value={source}/>

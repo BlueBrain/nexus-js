@@ -9,21 +9,34 @@ import { guidGenerator } from "../../libs/utils";
 import Preview from "./Preview.jsx";
 
 //TODO handle all links externally in parent
-const KeyLinkComponent = ({ isExternalLink, id, children }) => {
-  if (isExternalLink) {
+const KeyLinkComponent = ({ isExternalLink, id, children, goToEntityByID }) => {
+  if (isExternalLink && id.indexOf('http') === 0) {
     return (
       <a href={id} target="_blank">
         {children}
       </a>
     );
   }
+
+  if (!isExternalLink && id.indexOf('http') === 0) {
+    return (
+      <a href={id} onClick={e => {
+        e.preventDefault();
+        goToEntityByID(id);
+      }}>
+        {children}
+      </a>
+    );
+  }
+
   return <a onClick={() => {}}>{children}</a>;
 };
 
 KeyLinkComponent.propTypes = {
   isExternalLink: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
-  children: PropTypes.element.isRequired
+  children: PropTypes.element.isRequired,
+  goToEntityByID: PropTypes.func.isRequired
 };
 
 const RelationshipComponent = ({
@@ -32,6 +45,7 @@ const RelationshipComponent = ({
   value,
   label,
   status,
+  goToEntityByID
 }) => {
   let id = value["@id"];
   let component;
@@ -52,6 +66,7 @@ const RelationshipComponent = ({
     <KeyLinkComponent
       isExternalLink={isExternalLink}
       id={id}
+      goToEntityByID={goToEntityByID}
     >
       <div className="property relationship bordered-box">
         <div className="handle" />
@@ -85,7 +100,8 @@ RelationshipComponent.propTypes = {
   api: PropTypes.string.isRequired,
   label: PropTypes.string,
   status: PropTypes.string.isRequired,
-  isExternalLink: PropTypes.bool
+  isExternalLink: PropTypes.bool,
+  goToEntityByID: PropTypes.func.isRequired
 };
 
 const Loading = (name, value) => (
@@ -137,7 +153,7 @@ const Fulfilled = (name, value, label) => {
 class RelationshipContainer extends React.Component {
   constructor(props) {
     super(props);
-    let { name, value, api } = props;
+    let { name, value, api, goToEntityByID } = props;
     const valueId =
       typeof value === "object" && value["@id"] ? value["@id"] : "";
     const isOntology = valueId.indexOf("http") < 0;
@@ -149,7 +165,8 @@ class RelationshipContainer extends React.Component {
       label: value.label,
       isExternalLink,
       // ID these have special identifers, they should fetch ids from context
-      isOntology
+      isOntology,
+      goToEntityByID
     };
   }
   componentDidMount() {
@@ -206,7 +223,8 @@ RelationshipContainer.propTypes = {
   value: PropTypes.any.isRequired,
   api: PropTypes.string.isRequired,
   label: PropTypes.string,
-  token: PropTypes.string
+  token: PropTypes.string,
+  goToEntityByID: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps)(RelationshipContainer);

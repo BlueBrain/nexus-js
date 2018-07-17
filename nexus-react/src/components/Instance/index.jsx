@@ -52,7 +52,7 @@ const Fulfilled = (instance, goToEntityByID) => (
           </TabList>
         </div>
         <div className="modal-body container">
-          <TabPanel>{InstanceBody(instance)}</TabPanel>
+          <TabPanel>{InstanceBody(instance, goToEntityByID)}</TabPanel>
           <TabPanel>
             <div className="json-viewer">
               <ReactJson src={instance} />

@@ -8,21 +8,21 @@ import { guidGenerator } from "../../libs/utils";
 const isDate = dateToTest =>
   moment(dateToTest, moment.ISO_8601, true).isValid();
 
-export const Properties = ({ instance }) =>
+export const Properties = ({ instance, goToEntityByID }) =>
   Object.keys(instance).map(key => {
     let value = instance[key];
     // dont process metaFields
     if (instance.metaFields && instance.metaFields.indexOf(key) >= 0) {
       return;
     }
-    return mapToPropertyComponent(key, value);
+    return mapToPropertyComponent(key, value, goToEntityByID);
   });
 
 Properties.propTypes = {
   instance: PropTypes.any.isRequired
 };
 
-export const mapToPropertyComponent = (key, value) => {
+export const mapToPropertyComponent = (key, value, goToEntityByID) => {
   const reactID = guidGenerator();
   if (value.value) {
     return (
@@ -34,14 +34,14 @@ export const mapToPropertyComponent = (key, value) => {
   }
   if (Array.isArray(value)) {
     if (value.length === 1 && value[0]["@id"]) {
-      return <Relationship key={reactID} name={key} value={value[0]} />;
+      return <Relationship key={reactID} name={key} value={value[0]} goToEntityByID={goToEntityByID} />;
     } else {
       return <Property key={reactID} type="list" name={key} value={value} />;
     }
   }
   if (typeof value === "object") {
     if (value["@id"]) {
-      return <Relationship key={reactID} name={key} value={value} />;
+      return <Relationship key={reactID} name={key} value={value} goToEntityByID={goToEntityByID} />;
     }
     return <Property key={reactID} type="object" name={key} value={value} />;
   }

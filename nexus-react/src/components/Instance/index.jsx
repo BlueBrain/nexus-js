@@ -61,7 +61,7 @@ const Fulfilled = (instance, goToEntityByID) => (
         </div>
       </Tabs>
     </div>
-    <Links which="outgoing" resolvedLinks={instance.resolvedLinks} />
+    <Links which="outgoing" resolvedLinks={instance.resolvedLinks} goToEntityByID={goToEntityByID} />
   </div>
 );
 

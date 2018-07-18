@@ -49,8 +49,8 @@
     "xo": "^0.21.1"
   },
   "scripts": {
-    "lint": "node_modules/.bin/xo src",
-    "fix": "node_modules/.bin/xo src --fix",
+    "lint": "xo src",
+    "fix": "xo src --fix",
     "test": "true",
     "start": "webpack --watch",
     "build": "webpack",
@@ -60,6 +60,9 @@
     "name": "Blue Brain Nexus"
   },
   "repository": "github:bluebrain/nexus-webapp-commons",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "xo": {
     "extends": "xo-react",
     "space": true

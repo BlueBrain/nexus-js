@@ -7,6 +7,7 @@ module.exports = {
     libraryTarget: "commonjs2"
   },
   devtool: 'source-map',
+  mode: 'production',
   module: {
     rules: [
       {
@@ -62,6 +63,9 @@ module.exports = {
     ]
   },
   externals: {
-    react: "commonjs react" // this line is just to use the React dependency of our parent-testing-project instead of using our own React.
+    react: "commonjs react", // this line is just to use the React dependency of our parent-testing-project instead of using our own React.
+    'react-dom': "commonjs react-dom",
+    'react-redux': "commonjs react-redux",
+    redux: "commonjs redux",
   }
 };

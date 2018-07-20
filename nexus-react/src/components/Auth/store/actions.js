@@ -30,26 +30,31 @@ const createAuthenticate = typeActions => currentLocation => {
     const loginObject = getLoginObjectFromURL(currentLocation);
     const now = Date.now()/1000; //toz get in seconds
     const { tokenExpiration } = getState().auth
-    const isValidToken = isFinite(tokenExpiration) && now < tokenExpiration;
+    const isValidToken = Number.isFinite(tokenExpiration) && now < tokenExpiration;
     // The token in state is good already
     if (isValidToken) {
       return
+    }
+    // The token expired, so logout
+    if (Number.isFinite(tokenExpiration) && !isValidToken) {
+      return dispatch(typeActions.logout({ reason: "expired" }))
     }
     // Our current token is bad or doesnt exist, but we have just been redirected
     // with the query parameter token so that we can log in
     if (loginObject.token) {
       return dispatch(typeActions.login(loginObject));
     }
-    // we have an expired token or no token at all, we should logout
-    return dispatch(typeActions.logout());
+    // somehow there is no token, so logout
+    return dispatch(typeActions.logout({ reason: "invalid" }));
   }
 }
 
 // TODO it might be silly to have reducerKey functionality here as there is
 // likely not to have multiple users in a session..
-const createLogout = reducerKey => () => {
+const createLogout = reducerKey => ({ reason }) => {
   return {
-    type: reducerKey + types.LOGOUT
+    type: reducerKey + types.LOGOUT,
+    payload: { reason }
   };
 };
 

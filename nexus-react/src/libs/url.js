@@ -26,7 +26,7 @@ export function removeTokenFromUrl(URL) {
   return access_token;
 }
 
-export function getLoginObjectFromURL (URL) {
+export function getLoginObjectFromURL (URL=window.location.href) {
   try {
     // Token in JWT format
     const token = removeTokenFromUrl(URL);

@@ -6,6 +6,9 @@ import generateLineGeometry from "./lines-geometry";
 class LinesContainer extends React.Component {
   componentDidMount() {
     generateLineGeometry(this.ref);
+    window.addEventListener("resize", () => {
+      generateLineGeometry(this.ref);
+    });
   }
   canvasReferenceCallback(ref) {
     this.ref = ref;

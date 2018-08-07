@@ -1,16 +1,14 @@
 import * as types from "./types";
+import { getLoginObjectFromURL } from "../../../libs/url";
 
+const defaultState = getLoginObjectFromURL();
 /*
   reducerKey allows you to make unique places in the redux state
   object where the actions for this will be assigned so as not
   to overlap other search instances
 */
 export default (reducerKey = "") => (
-  state = {
-    token: null,
-    tokenOwner: null,
-    tokenExpiration: null,
-  },
+  state = defaultState,
   action
 ) => {
   switch (action.type) {

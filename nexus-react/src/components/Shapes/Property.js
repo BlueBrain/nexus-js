@@ -129,7 +129,7 @@ const PropertyComponent = ({ type, name, value }) => {
     default:
       component = StringProperty;
   }
-  return <li key={guidGenerator()}>{component(name, value)}</li>;
+  return component(name, value);
 };
 
 PropertyComponent.propTypes = {

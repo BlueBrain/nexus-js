@@ -1,4 +1,4 @@
-import React from "react";
+import React, { cloneElement } from "react";
 import styled from "styled-jss";
 import PropTypes from "prop-types";
 import { CopyToClipboard as Copy } from "react-copy-to-clipboard";
@@ -33,10 +33,19 @@ class CopyToClipboard extends React.Component {
     }, COPY_REVERT_DURATION);
   }
   render() {
-    const { value, text, icon } = this.props;
+    const { value, text, icon, children } = this.props;
     const id = "copy" + value.toString().replace(" ", "-") + Math.random();
     const { copied } = this.state;
     const [textCopied, textCopy] = COPY_TEXT;
+    let content = children ? (
+      cloneElement(children, { copied })
+    ) : (
+      <FontAwesome
+        className={copied ? "copied" : ""}
+        name={icon || "paste"}
+        style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+      />
+    );
 
     return (
       <CopyBlock>
@@ -47,13 +56,9 @@ class CopyToClipboard extends React.Component {
           getContent={() => (copied ? textCopied : text || textCopy)}
         />
         <Copy text={value} onCopy={this.onCopy.bind(this)}>
-          <FontAwesome
-            data-for={id}
-            data-tip
-            className={copied ? "copied" : ""}
-            name={icon || "paste"}
-            style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
-          />
+          <div data-for={id} data-tip>
+            {content}
+          </div>
         </Copy>
       </CopyBlock>
     );
@@ -63,7 +68,8 @@ class CopyToClipboard extends React.Component {
 CopyToClipboard.propTypes = {
   value: PropTypes.string,
   text: PropTypes.string,
-  icon: PropTypes.string
+  icon: PropTypes.string,
+  children: PropTypes.element
 };
 
 export default CopyToClipboard;

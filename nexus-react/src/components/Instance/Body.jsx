@@ -4,12 +4,8 @@ import { Distribution, Properties } from "../Shapes";
 const Body = (instance, goToEntityByID) => {
   return (
     <div className="instance-content container">
-      <ul>
-        {instance.distribution && (
-          <li>{Distribution(instance.distribution)}</li>
-        )}
+        {instance.distribution && Distribution(instance.distribution)}
         <Properties instance={instance} goToEntityByID={goToEntityByID} />
-      </ul>
     </div>
   );
 };

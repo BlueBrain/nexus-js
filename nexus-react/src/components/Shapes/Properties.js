@@ -17,13 +17,7 @@ export const Properties = ({ instance, goToEntityByID }) => {
     "nxv:deprecated",
     "nxv:rev",
     "links",
-    "resolvedLinks",
-    "metaFields",
-    "numFields"
   ];
-  const numFields = Object.keys(instance).filter(
-    key => metaFields.indexOf(key) < 0
-  ).length;
 
   return Object.keys(instance).map(key => {
     let value = instance[key];

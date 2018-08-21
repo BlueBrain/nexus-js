@@ -10,7 +10,7 @@ import Links from "./Links.jsx";
 import ReactJson from "react-json-view";
 
 // TODO how do we want to display errors?
-const InstanceComponent = (open, error, pending, data, goDown, goToEntityByID) => (
+const InstanceComponent = (open, error, pending, data, resolvedLinks, goDown, goToEntityByID) => (
   <Modal
     open={open}
     onClose={goDown}
@@ -22,7 +22,7 @@ const InstanceComponent = (open, error, pending, data, goDown, goToEntityByID) =
     }}
   >
     {error && Failure(error)}
-    {!error && (data ? Fulfilled(data, goToEntityByID) : Loading())}
+    {!error && (data ? Fulfilled(data, resolvedLinks, goToEntityByID) : Loading())}
   </Modal>
 );
 
@@ -39,9 +39,9 @@ const Failure = error => (
   </div>
 );
 
-const Fulfilled = (instance, goToEntityByID) => (
+const Fulfilled = (instance, resolvedLinks, goToEntityByID) => (
   <div className="instance flex center">
-    <Links which="incoming" resolvedLinks={instance.resolvedLinks} goToEntityByID={goToEntityByID} />
+    <Links which="incoming" resolvedLinks={resolvedLinks} goToEntityByID={goToEntityByID} />
     <div className="modal-content">
       <Tabs>
         <div className="modal-header">
@@ -61,13 +61,13 @@ const Fulfilled = (instance, goToEntityByID) => (
         </div>
       </Tabs>
     </div>
-    <Links which="outgoing" resolvedLinks={instance.resolvedLinks} goToEntityByID={goToEntityByID} />
+    <Links which="outgoing" resolvedLinks={resolvedLinks} goToEntityByID={goToEntityByID} />
   </div>
 );
 
 const InstanceContainer = props => {
-  const { open, error, pending, data, goDown, goToEntityByID } = props;
-  return InstanceComponent(open, error, pending, data, goDown, goToEntityByID);
+  const { open, error, pending, data, resolvedLinks, goDown, goToEntityByID } = props;
+  return InstanceComponent(open, error, pending, data, resolvedLinks, goDown, goToEntityByID);
 };
 
 InstanceContainer.propTypes = {
@@ -75,28 +75,12 @@ InstanceContainer.propTypes = {
   error: PropTypes.any,
   pending: PropTypes.bool,
   data: PropTypes.any,
+  resolvedLinks: PropTypes.any,
   goDown: PropTypes.func.isRequired,
   goToEntityByID: PropTypes.func.isRequired,
 };
 
 function mapStateToInstanceContainerProps({ instance, pick }) {
-  if (instance.data) {
-    instance.data.metaFields = [
-      "distribution",
-      "@id",
-      "@context",
-      "@type",
-      "nxv:deprecated",
-      "nxv:rev",
-      "links",
-      "resolvedLinks",
-      "metaFields",
-      "numFields"
-    ];
-    instance.data.numFields = Object.keys(instance).filter(
-      key => instance.data.metaFields.indexOf(key) < 0
-    ).length;
-  }
   return {
     ...instance,
     open: !!pick.instance

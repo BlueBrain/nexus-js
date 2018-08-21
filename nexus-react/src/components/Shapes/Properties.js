@@ -8,15 +8,26 @@ import { guidGenerator } from "../../libs/utils";
 const isDate = dateToTest =>
   moment(dateToTest, moment.ISO_8601, true).isValid();
 
-export const Properties = ({ instance, goToEntityByID }) =>
-  Object.keys(instance).map(key => {
+export const Properties = ({ instance, goToEntityByID }) => {
+  const metaFields = [
+    "distribution",
+    "@id",
+    "@context",
+    "@type",
+    "nxv:deprecated",
+    "nxv:rev",
+    "links",
+  ];
+
+  return Object.keys(instance).map(key => {
     let value = instance[key];
     // dont process metaFields
-    if (instance.metaFields && instance.metaFields.indexOf(key) >= 0) {
+    if (metaFields && metaFields.indexOf(key) >= 0) {
       return;
     }
     return mapToPropertyComponent(key, value, goToEntityByID);
   });
+};
 
 Properties.propTypes = {
   instance: PropTypes.any.isRequired

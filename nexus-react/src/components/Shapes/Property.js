@@ -72,7 +72,7 @@ const MeasurementProperty = (name, value) => {
   );
 };
 
-const ListProperty = (name, value) => {
+const ListProperty = (name, value, goToEntityByID) => {
   return (
     <div className="property-list container unbordered-box">
       <div className="property list">
@@ -84,7 +84,7 @@ const ListProperty = (name, value) => {
           <div className="key">{name}</div>
         </div>
       </div>
-      <ul>{value.map(entity => mapToPropertyComponent(name, entity))}</ul>
+      <ul>{value.map(entity => mapToPropertyComponent(name, entity, goToEntityByID))}</ul>
     </div>
   );
 };
@@ -108,7 +108,7 @@ const ObjectProperty = (name, value) => {
   );
 };
 
-const PropertyComponent = ({ type, name, value }) => {
+const PropertyComponent = ({ type, name, value, goToEntityByID}) => {
   let component;
   switch (type) {
     case "date":
@@ -129,13 +129,14 @@ const PropertyComponent = ({ type, name, value }) => {
     default:
       component = StringProperty;
   }
-  return component(name, value);
+  return component(name, value, goToEntityByID);
 };
 
 PropertyComponent.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
+  goToEntityByID: PropTypes.func.isRequired
 };
 
 export default PropertyComponent;

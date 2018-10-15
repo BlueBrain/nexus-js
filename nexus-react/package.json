@@ -1,6 +1,6 @@
 {
   "name": "@bbp/nexus-react",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "React components for the nexus project",
   "main": "build/index.js",
   "license": "Apache-2.0",

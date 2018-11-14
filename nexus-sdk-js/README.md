@@ -2,7 +2,7 @@
 
 ## Develop
 
-- Build: `yarn build`
-- Test: `yarn test`
-- Lint: `yarn lint`
-- Generate Documentation: `yarn documentation`
+- Build: `npm run build`
+- Test: `npm run test`
+- Lint: `npm run lint`
+- Generate Documentation: `npm run documentation`

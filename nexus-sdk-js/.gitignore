@@ -1,0 +1,11 @@
+.cache/
+.DS_Store
+dist/
+es/
+lib/
+documentation/
+node_modules/
+envs/*.env
+.vscode
+coverage/
+.ocp-port-forwarding.js

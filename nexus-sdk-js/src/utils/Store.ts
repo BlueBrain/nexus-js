@@ -17,8 +17,8 @@ export default class Store {
     return this.state;
   }
 
-  update(storeKey: string, updadeFn: ReducerFunction) {
-    const nextState: State = updadeFn(this.state[storeKey]);
+  update(storeKey: string, updateFn: ReducerFunction) {
+    const nextState: State = updateFn(this.state[storeKey]);
     if (nextState !== this.state[storeKey]) {
       this.state[storeKey] = nextState;
     }

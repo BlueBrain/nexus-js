@@ -2,10 +2,9 @@
   "name": "nexus-sdk",
   "version": "1.0.0",
   "description": "JavaScript SDK from Nexus",
-  "main": "lib/index.js",
-  "module": "es/index.js",
+  "main": "lib/Nexus.js",
+  "module": "es/Nexus.js",
   "unpkg": "dist/nexus-sdk.js",
-  "types": "lib/index.d.ts",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -56,5 +55,9 @@
       "json",
       "node"
     ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
   }
 }

@@ -3,8 +3,8 @@ import Organization, { OrganizationResponse } from './Organization';
 import { httpGet, httpPost } from './utils/http';
 
 type NexusConfig = {
-  environment: string,
-  token: string,
+  environment: string;
+  token?: string;
 };
 
 export const store: Store = new Store({
@@ -18,13 +18,34 @@ export const store: Store = new Store({
 
 export default class Nexus {
   constructor(config: NexusConfig) {
-    store.update('auth', state => ({
-      ...state,
-      accessToken: config.token,
-    }));
+    if (!config.environment) {
+      throw new Error(
+        'No environment provided. Please specify your Nexus instance endpoint.'
+      );
+    }
     store.update('api', state => ({
       ...state,
       baseUrl: config.environment,
+    }));
+    if (config.token) {
+      store.update('auth', state => ({
+        ...state,
+        accessToken: config.token,
+      }));
+    }
+  }
+
+  setToken(token: string): void {
+    store.update('auth', state => ({
+      ...state,
+      accessToken: token,
+    }));
+  }
+
+  removeToken(): void {
+    store.update('auth', state => ({
+      ...state,
+      accessToken: undefined,
     }));
   }
 
@@ -33,6 +54,7 @@ export default class Nexus {
       const orgs: OrganizationResponse[] = await httpGet('/orgs');
       return orgs.map((org: OrganizationResponse) => new Organization(org));
     } catch (e) {
+      console.log(e);
       return e;
     }
   }

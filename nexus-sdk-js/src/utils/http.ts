@@ -1,12 +1,17 @@
 import { store } from '../Nexus';
 
 const getHeaders = (headers?: Object): Headers => {
-  const { auth: { accessToken } } = store.getState();
-  if  (!accessToken) {
-    throw new Error('No access token found.');
+  const {
+    auth: { accessToken },
+  } = store.getState();
+  let extraHeaders = {};
+  if (accessToken) {
+    extraHeaders = {
+      Authorization: `Bearer ${accessToken}`,
+    };
   }
   return new Headers({
-    Authorization: `Bearer ${accessToken}`,
+    ...extraHeaders,
     mode: 'cors',
   });
 };
@@ -28,8 +33,10 @@ const parseError = (error: Error) => {
 };
 
 export function httpGet(url: string): Promise<any> {
-  const { api: { baseUrl } } = store.getState();
-  return fetch(`${baseUrl.getURL()}${url}`, {
+  const {
+    api: { baseUrl },
+  } = store.getState();
+  return fetch(`${baseUrl}${url}`, {
     headers: getHeaders(),
   })
     .then(checkStatus)
@@ -38,7 +45,9 @@ export function httpGet(url: string): Promise<any> {
 }
 
 export const httpPost = (url: string, body: Object): Promise<any> => {
-  const { api: { baseUrl } } = store.getState();
+  const {
+    api: { baseUrl },
+  } = store.getState();
   return fetch(`${baseUrl.getURL()}${url}`, {
     headers: getHeaders(),
     method: 'POST',

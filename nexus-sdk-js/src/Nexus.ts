@@ -1,5 +1,9 @@
 import Store from './utils/Store';
-import Organization, { ListOrgsResponse, OrgInit } from './Organization';
+import Organization, {
+  ListOrgsResponse,
+  OrgInit,
+  OrgResponse,
+} from './Organization';
 import { httpGet, httpPost } from './utils/http';
 
 type NexusConfig = {
@@ -50,43 +54,33 @@ export default class Nexus {
   }
 
   // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-  // This is SUPER hacky.
-  // I first get the list of all projects which gives me a list of `_id` (that's because the /projects endpoint is not implemented either)
-  // I then generate an array of Orgs from the _id and return Orgs with empty everything, apart from name and @id.
   async listOrganizations(): Promise<Organization[]> {
     try {
       const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
       if (listOrgsResponse.code || !listOrgsResponse._results) {
         return [];
       }
-      // Close your eyes 😑
-      // map list and return only _id
-      // filter duplicates
-      // map to return list of {id, name}
-      const filteredOrgs = listOrgsResponse._results
-        .map(org => org._id)
-        .filter((org, index, self) => self.indexOf(org) === index)
+      // Get list of unique orgs names
+      const filteredOrgNames = listOrgsResponse._results
         .map(org => {
-          const idArray = org
-            .replace('/projects/', '/orgs/')
-            .split('/')
-            .slice(0, -1);
-          return {
-            id: idArray.join('/'),
-            name: idArray[idArray.length - 1],
-          };
-        });
+          const split = org._id.split('/');
+          const orgName = split.slice(split.length - 2, split.length - 1)[0];
+          return orgName;
+        })
+        .filter((org, index, self) => self.indexOf(org) === index);
 
-      const orgs = filteredOrgs.map(({ id, name }) => {
-        return new Organization({
-          '@context': listOrgsResponse['@context'],
-          '@id': id,
-          _label: name,
-        });
-      });
-      return orgs;
+      // get orgs details
+      const rawOrgs: Promise<OrgResponse[]> = Promise.all(
+        filteredOrgNames.map(async org => await httpGet(`/orgs/${org}`)),
+      );
+
+      // return list of Org instance
+      return rawOrgs.then(orgs =>
+        orgs.map(org => {
+          return new Organization(org);
+        }),
+      );
     } catch (e) {
-      console.log(e);
       throw new Error(`ListOrgsError: ${e}`);
     }
   }

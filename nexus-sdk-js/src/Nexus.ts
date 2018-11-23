@@ -59,15 +59,23 @@ export default class Nexus {
       if (listOrgsResponse.code || !listOrgsResponse._results) {
         return [];
       }
+      // Close your eyes 😑
+      // map list and return only _id
+      // filter duplicates
+      // map to return list of {id, name}
       const filteredOrgs = listOrgsResponse._results
         .map(org => org._id)
         .filter((org, index, self) => self.indexOf(org) === index)
-        .map(org => ({
-          id: org,
-          name: org
-            .replace(`${store.getState().api.baseUrl}/projects/`, '')
-            .split('/')[0],
-        }));
+        .map(org => {
+          const idArray = org
+            .replace('/projects/', '/orgs/')
+            .split('/')
+            .slice(0, -1);
+          return {
+            id: idArray.join('/'),
+            name: idArray[idArray.length - 1],
+          };
+        });
 
       const orgs = filteredOrgs.map(({ id, name }) => {
         return new Organization({

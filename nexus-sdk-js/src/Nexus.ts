@@ -1,5 +1,5 @@
 import Store from './utils/Store';
-import Organization, { OrganizationResponse } from './Organization';
+import Organization, { ListOrgsResponse, OrgInit } from './Organization';
 import { httpGet, httpPost } from './utils/http';
 
 type NexusConfig = {
@@ -20,7 +20,7 @@ export default class Nexus {
   constructor(config: NexusConfig) {
     if (!config.environment) {
       throw new Error(
-        'No environment provided. Please specify your Nexus instance endpoint.'
+        'No environment provided. Please specify your Nexus instance endpoint.',
       );
     }
     store.update('api', state => ({
@@ -49,31 +49,37 @@ export default class Nexus {
     }));
   }
 
+  // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
+  // This is SUPER hacky.
+  // I first get the list of all projects which gives me a list of `_id` (that's because the /projects endpoint is not implemented either)
+  // I then generate an array of Orgs from the _id and return Orgs with empty everything, apart from name and @id.
   async listOrganizations(): Promise<Organization[]> {
     try {
-      const orgs: OrganizationResponse[] = await httpGet('/orgs');
-      return orgs.map((org: OrganizationResponse) => new Organization(org));
+      const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
+      if (listOrgsResponse.code || !listOrgsResponse._results) {
+        return [];
+      }
+      const filteredOrgs = listOrgsResponse._results
+        .map(org => org._id)
+        .filter((org, index, self) => self.indexOf(org) === index)
+        .map(org => ({
+          id: org,
+          name: org
+            .replace(`${store.getState().api.baseUrl}/projects/`, '')
+            .split('/')[0],
+        }));
+
+      const orgs = filteredOrgs.map(({ id, name }) => {
+        return new Organization({
+          '@context': listOrgsResponse['@context'],
+          '@id': id,
+          _label: name,
+        });
+      });
+      return orgs;
     } catch (e) {
       console.log(e);
-      return e;
-    }
-  }
-
-  async getOrganization(id: string): Promise<Organization> {
-    try {
-      const org: OrganizationResponse = await httpGet(`/orgs/${id}`);
-      return new Organization(org);
-    } catch (e) {
-      return e;
-    }
-  }
-
-  async createOrganization(): Promise<Organization> {
-    try {
-      const org: OrganizationResponse = await httpPost('/orgs', {});
-      return new Organization(org);
-    } catch (e) {
-      return e;
+      throw new Error(`ListOrgsError: ${e}`);
     }
   }
 }

@@ -1,6 +1,7 @@
+import fetch, { Headers, HeaderInit, Response } from 'node-fetch';
 import { store } from '../Nexus';
 
-const getHeaders = (headers?: Object): Headers => {
+const getHeaders = (headers?: Object): HeaderInit => {
   const {
     auth: { accessToken },
   } = store.getState();
@@ -48,7 +49,7 @@ export const httpPost = (url: string, body: Object): Promise<any> => {
   const {
     api: { baseUrl },
   } = store.getState();
-  return fetch(`${baseUrl.getURL()}${url}`, {
+  return fetch(`${baseUrl}${url}`, {
     headers: getHeaders(),
     method: 'POST',
   })

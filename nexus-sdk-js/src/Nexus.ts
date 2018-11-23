@@ -1,9 +1,5 @@
 import Store from './utils/Store';
-import Organization, {
-  ListOrgsResponse,
-  OrgInit,
-  OrgResponse,
-} from './Organization';
+import Organization, { ListOrgsResponse, OrgResponse } from './Organization';
 import { httpGet, httpPost } from './utils/http';
 
 type NexusConfig = {
@@ -61,7 +57,7 @@ export default class Nexus {
         return [];
       }
       // Get list of unique orgs names
-      const filteredOrgNames = listOrgsResponse._results
+      const filteredOrgNames: string[] = listOrgsResponse._results
         .map(org => {
           const split = org._id.split('/');
           const orgName = split.slice(split.length - 2, split.length - 1)[0];

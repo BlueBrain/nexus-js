@@ -2,10 +2,9 @@
   "name": "nexus-sdk",
   "version": "1.0.0",
   "description": "JavaScript SDK from Nexus",
-  "main": "lib/index.js",
-  "module": "es/index.js",
+  "main": "lib/Nexus.js",
+  "module": "es/Nexus.js",
   "unpkg": "dist/nexus-sdk.js",
-  "types": "lib/index.d.ts",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -22,6 +21,7 @@
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@types/jest": "^23.3.5",
+    "@types/node-fetch": "^2.1.4",
     "eslint": "^5.6.0",
     "jest": "^23.6.0",
     "rollup": "^0.66.4",
@@ -32,6 +32,7 @@
     "ts-jest": "^23.10.4",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
     "typedoc": "^0.13.0",
     "typescript": "^3.0.3"
   },
@@ -56,5 +57,12 @@
       "json",
       "node"
     ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "dependencies": {
+    "node-fetch": "^2.3.0"
   }
 }

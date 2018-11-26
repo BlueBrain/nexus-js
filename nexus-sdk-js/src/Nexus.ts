@@ -1,11 +1,15 @@
+import { httpGet, httpPost } from './utils/http';
 import Store from './utils/Store';
 import Organization, { ListOrgsResponse, OrgResponse } from './Organization';
-import { httpGet, httpPost } from './utils/http';
+import Project from './Project';
+import ACL from './ACL';
 
 type NexusConfig = {
   environment: string;
   token?: string;
 };
+
+export { Organization, Project, ACL };
 
 export const store: Store = new Store({
   auth: {

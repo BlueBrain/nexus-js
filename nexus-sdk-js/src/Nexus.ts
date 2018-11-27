@@ -70,16 +70,19 @@ export default class Nexus {
         .filter((org, index, self) => self.indexOf(org) === index);
 
       // get orgs details
-      const rawOrgs: Promise<OrgResponse[]> = Promise.all(
-        filteredOrgNames.map(async org => await httpGet(`/orgs/${org}`)),
+      return Promise.all(
+        filteredOrgNames.map(async org => await this.listOrganization(org)),
       );
+    } catch (e) {
+      throw new Error(`ListOrgsError: ${e}`);
+    }
+  }
 
-      // return list of Org instance
-      return rawOrgs.then(orgs =>
-        orgs.map(org => {
-          return new Organization(org);
-        }),
-      );
+  async listOrganization(name: string): Promise<Organization> {
+    try {
+      const orgResponse: OrgResponse = await httpGet(`/orgs/${name}`);
+      const org = new Organization(orgResponse);
+      return org;
     } catch (e) {
       throw new Error(`ListOrgsError: ${e}`);
     }

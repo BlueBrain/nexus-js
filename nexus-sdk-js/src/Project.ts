@@ -7,6 +7,7 @@ export interface ProjectResponse {
   '@id': string;
   '@context': string;
   '@type': string;
+  code?: string;
   name: string;
   base: string;
   _rev: number;

@@ -15,7 +15,7 @@ import Nexus from 'nexus-sdk';
 // Create a Nexus instance
 const nexus: Nexus = new Nexus({
   environment: 'http://api.url',
-  token: 'my_bearer_token', // not required
+  token: 'my_bearer_token', // optional
 });
 
 // List all organisations
@@ -29,9 +29,6 @@ const projects: Project[] = await myOrg.listProjects();
 
 // Get a specific project
 const myProject: Project = await myOrg.getProject('my-project');
-
-// TODO: get a specific project of a specific organisation
-const project: Project = await nexus.getProject('my-org', 'my-project');
 ```
 
 # License

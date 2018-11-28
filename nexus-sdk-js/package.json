@@ -2,6 +2,12 @@
   "name": "@bbp/nexus-sdk",
   "version": "0.0.1",
   "description": "JavaScript SDK from Nexus",
+  "keywords": [
+    "typescript",
+    "nexus",
+    "sdk",
+    "bbp"
+  ],
   "main": "lib/Nexus.js",
   "module": "es/Nexus.js",
   "unpkg": "dist/nexus-sdk.js",
@@ -14,7 +20,8 @@
     "build:es": "tsc --module es2015 --target es5 --outDir es",
     "build:umd": "rollup -c",
     "documentation": "typedoc --out documentation/ --exclude \"**/*+(test|spec).ts\" src/",
-    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/"
+    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/",
+    "prepublish": "npm run clean && npm run test && npm run lint && npm run build"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

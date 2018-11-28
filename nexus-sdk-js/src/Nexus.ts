@@ -71,14 +71,14 @@ export default class Nexus {
 
       // get orgs details
       return Promise.all(
-        filteredOrgNames.map(async org => await this.listOrganization(org)),
+        filteredOrgNames.map(async org => await this.getOrganization(org)),
       );
     } catch (e) {
       throw new Error(`ListOrgsError: ${e}`);
     }
   }
 
-  async listOrganization(name: string): Promise<Organization> {
+  async getOrganization(name: string): Promise<Organization> {
     try {
       const orgResponse: OrgResponse = await httpGet(`/orgs/${name}`);
       const org = new Organization(orgResponse);

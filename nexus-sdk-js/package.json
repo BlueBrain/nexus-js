@@ -1,6 +1,6 @@
 {
   "name": "@bbp/nexus-sdk",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "JavaScript SDK from Nexus",
   "main": "lib/Nexus.js",
   "module": "es/Nexus.js",

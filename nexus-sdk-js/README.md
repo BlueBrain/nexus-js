@@ -12,8 +12,24 @@
 ```typescript
 import Nexus from 'nexus-sdk';
 
+// Create a Nexus instance
 const nexus: Nexus = new Nexus({
   environment: 'http://api.url',
-  token: 'my_bearer_token',
+  token: 'my_bearer_token', // not required
 });
+
+// List all organisations
+const orgs: Organization[] = await nexus.listOrganizations();
+
+// Get a specific organisation
+const myOrg: Organization = await nexus.getOrganization('my-org');
+
+// List all the projects that belong to an organisation
+const projects: Project[] = await myOrg.listProjects();
+
+// Get a specific project
+const myProject: Project = await myOrg.getProject('my-project');
+
+// TODO: get a specific project of a specific organisation
+const project: Project = await nexus.getProject('my-org', 'my-project');
 ```

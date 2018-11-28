@@ -1,11 +1,11 @@
 {
-  "name": "nexus-sdk",
+  "name": "@bbp/nexus-sdk",
   "version": "1.0.0",
   "description": "JavaScript SDK from Nexus",
   "main": "lib/Nexus.js",
   "module": "es/Nexus.js",
   "unpkg": "dist/nexus-sdk.js",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "test": "jest",
     "lint": "tslint src/**/*",

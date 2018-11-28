@@ -33,3 +33,7 @@ const myProject: Project = await myOrg.getProject('my-project');
 // TODO: get a specific project of a specific organisation
 const project: Project = await nexus.getProject('my-org', 'my-project');
 ```
+
+# License
+
+- [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)

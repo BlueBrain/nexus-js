@@ -1,3 +1,6 @@
+import Resource, { ResourceResponse, ListResourceResponse } from './Resource';
+import { httpGet } from './utils/http';
+
 export interface PrefixMapping {
   prefix: string;
   namespace: string;
@@ -8,6 +11,7 @@ export interface ProjectResponse {
   '@context': string;
   '@type': string;
   code?: string;
+  label: string;
   name: string;
   base: string;
   _rev: number;
@@ -24,9 +28,11 @@ export interface ProjectResponse {
 }
 
 export default class Project {
+  orgLabel: string;
   id: string;
   context: string;
   type: string;
+  label: string;
   name: string;
   base: string;
   version: number;
@@ -35,10 +41,12 @@ export default class Project {
   updatedAt: Date;
   prefixMappings: PrefixMapping[];
 
-  constructor(projectResponse: ProjectResponse) {
+  constructor(orgLabel: string, projectResponse: ProjectResponse) {
+    this.orgLabel = orgLabel;
     this.id = projectResponse['@id'];
     this.context = projectResponse['@context'];
     this.type = projectResponse['@type'];
+    this.label = projectResponse['label'];
     this.name = projectResponse.name;
     this.base = projectResponse.base;
     this.version = projectResponse._rev;
@@ -48,7 +56,36 @@ export default class Project {
     this.prefixMappings = projectResponse.prefixMappings;
   }
 
-  async tag() {}
-  async update() {}
-  async delete() {}
+  async listResources(): Promise<Resource[]> {
+    try {
+      const listResourceResponses: ListResourceResponse = await httpGet(
+        `/resources/${this.orgLabel}/${this.label}`,
+      );
+      return listResourceResponses._results.map(
+        resource =>
+          new Resource(this.orgLabel, this.label, {
+            '@context': listResourceResponses['@context'],
+            ...resource,
+          }),
+      );
+    } catch (e) {
+      return e;
+    }
+  }
+
+  async getResource(resourceLabel: string): Promise<Resource> {
+    try {
+      const resourceResponse: ResourceResponse = await httpGet(
+        `/resources/${this.orgLabel}/${this.label}/${resourceLabel}`,
+      );
+      const resource = new Resource(
+        this.orgLabel,
+        this.label,
+        resourceResponse,
+      );
+      return resource;
+    } catch (e) {
+      return e;
+    }
+  }
 }

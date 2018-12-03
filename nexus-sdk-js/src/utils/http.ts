@@ -30,7 +30,7 @@ const parseResponse = (response: Response, parser = jsonParser): any => {
 };
 
 const parseError = (error: Error) => {
-  throw new Error('Something went wrong in your http request');
+  throw new Error(`Something went wrong in your http request: ${error}`);
 };
 
 export function httpGet(url: string): Promise<any> {

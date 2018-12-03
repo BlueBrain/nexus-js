@@ -79,7 +79,7 @@ export default class Organization {
       const projectResponse: ProjectResponse = await httpGet(
         `/projects/${this.label}/${projectName}`,
       );
-      const project = new Project(projectResponse);
+      const project = new Project(this.label, projectResponse);
       return project;
     } catch (e) {
       return e;

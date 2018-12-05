@@ -29,6 +29,12 @@ const projects: Project[] = await myOrg.listProjects();
 
 // Get a specific project
 const myProject: Project = await myOrg.getProject('my-project');
+
+// List all the resources that belong to a project
+const resources: Resource[] = await myProject.listResources();
+
+// Get a specific resource
+const myResource: Resource = await myProject.getResource('my-resource');
 ```
 
 # License

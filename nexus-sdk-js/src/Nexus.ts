@@ -2,6 +2,7 @@ import { httpGet, httpPost } from './utils/http';
 import Store from './utils/Store';
 import Organization, { ListOrgsResponse, OrgResponse } from './Organization';
 import Project from './Project';
+import Resource from './Resource';
 import ACL from './ACL';
 
 type NexusConfig = {
@@ -9,7 +10,7 @@ type NexusConfig = {
   token?: string;
 };
 
-export { Organization, Project, ACL };
+export { Organization, Project, Resource, ACL };
 
 export const store: Store = new Store({
   auth: {

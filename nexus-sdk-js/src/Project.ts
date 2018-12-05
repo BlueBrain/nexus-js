@@ -61,23 +61,19 @@ export default class Project {
       const listResourceResponses: ListResourceResponse = await httpGet(
         `/resources/${this.orgLabel}/${this.label}`,
       );
-      return listResourceResponses._results.map(
-        resource =>
-          new Resource(this.orgLabel, this.label, {
-            '@context': listResourceResponses['@context'],
-            ...resource,
-          }),
+      return Promise.all(
+        listResourceResponses._results.map(
+          async resource => await this.getResource(resource['@id']),
+        ),
       );
     } catch (e) {
       return e;
     }
   }
 
-  async getResource(resourceLabel: string): Promise<Resource> {
+  async getResource(id: string): Promise<Resource> {
     try {
-      const resourceResponse: ResourceResponse = await httpGet(
-        `/resources/${this.orgLabel}/${this.label}/${resourceLabel}`,
-      );
+      const resourceResponse: ResourceResponse = await httpGet(id);
       const resource = new Resource(
         this.orgLabel,
         this.label,

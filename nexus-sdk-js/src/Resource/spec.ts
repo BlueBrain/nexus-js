@@ -290,6 +290,20 @@ describe('Resource class', () => {
       testClassProperties(resource, mockGetByIDResponse);
     });
 
+    it('it should put non-meta-data properties inside a data object', () => {
+      const resource = new Resource(
+        'testOrg',
+        'testProject',
+        mockGetByIDResponse,
+      );
+      expect(resource.data.brainLocation).toEqual(
+        mockGetByIDResponse.brainLocation,
+      );
+      expect(resource.data.contribution).toEqual(
+        mockGetByIDResponse.contribution,
+      );
+    });
+
     it('from a list response example with @type as a string', () => {
       const resource = new Resource(
         'testOrg',

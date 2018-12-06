@@ -33,11 +33,12 @@ const parseError = (error: Error) => {
   throw new Error(`Something went wrong in your http request: ${error}`);
 };
 
-export function httpGet(url: string): Promise<any> {
+export function httpGet(url: string, useBase: boolean = true): Promise<any> {
   const {
     api: { baseUrl },
   } = store.getState();
-  return fetch(`${baseUrl}${url}`, {
+  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  return fetch(fetchURL, {
     headers: getHeaders(),
   })
     .then(checkStatus)

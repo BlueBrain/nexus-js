@@ -40,6 +40,7 @@ export default class Project {
   createdAt: Date;
   updatedAt: Date;
   prefixMappings: PrefixMapping[];
+  private projectResourceURL: string;
 
   constructor(orgLabel: string, projectResponse: ProjectResponse) {
     this.orgLabel = orgLabel;
@@ -54,30 +55,30 @@ export default class Project {
     this.createdAt = new Date(projectResponse._createdAt);
     this.updatedAt = new Date(projectResponse._updatedAt);
     this.prefixMappings = projectResponse.prefixMappings;
+    this.projectResourceURL = `/resources/${this.orgLabel}/${this.label}`;
   }
 
   async listResources(): Promise<Resource[]> {
     try {
       const listResourceResponses: ListResourceResponse = await httpGet(
-        `/resources/${this.orgLabel}/${this.label}`,
+        this.projectResourceURL,
       );
-      return listResourceResponses._results.map(
-        resource =>
-          new Resource(this.orgLabel, this.label, {
-            '@context': listResourceResponses['@context'],
-            ...resource,
-          }),
+
+      // Expand the data for each item in the list
+      // By fetching each item by ID
+      return Promise.all(
+        listResourceResponses._results.map(async resource => {
+          return await this.getResource(resource['_self']);
+        }),
       );
     } catch (e) {
       return e;
     }
   }
 
-  async getResource(resourceLabel: string): Promise<Resource> {
+  async getResource(id: string): Promise<Resource> {
     try {
-      const resourceResponse: ResourceResponse = await httpGet(
-        `/resources/${this.orgLabel}/${this.label}/${resourceLabel}`,
-      );
+      const resourceResponse: ResourceResponse = await httpGet(id, false);
       const resource = new Resource(
         this.orgLabel,
         this.label,

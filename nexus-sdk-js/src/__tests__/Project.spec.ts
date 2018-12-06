@@ -38,7 +38,7 @@ const mockResponse: ProjectResponse = {
 /* tslint:enable */
 
 describe('Project class', () => {
-  it('Should create an Project instance', () => {
+  it('Should create a Project instance', () => {
     const p = new Project('my-org', mockResponse);
     expect(p.id).toEqual(mockResponse['@id']);
     expect(p.name).toEqual(mockResponse.name);

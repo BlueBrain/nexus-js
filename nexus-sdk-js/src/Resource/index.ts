@@ -1,17 +1,45 @@
 import { Context, Distribution } from '../utils/types';
-import {
-  ResourceMetadataKeys,
-  ResourceResponseCommon,
-  ResourceResponse,
-  ListResourceResponse,
-} from './types';
+export const RESOURCE_METADATA_KEYS = [
+  '@context',
+  '@id',
+  '@type',
+  '_self',
+  '_constrainedBy',
+  '_project',
+  '_createdAt',
+  '_createdBy',
+  '_updatedAt',
+  '_updatedBy',
+  '_distribution',
+  '_rev',
+  '_deprecated',
+];
 
-export {
-  ResourceResponse,
-  ResourceResponseCommon,
-  ResourceMetadataKeys,
-  ListResourceResponse,
-};
+export interface ResourceResponseCommon {
+  '@id': string;
+  '@type'?: string | string[];
+  _self: string;
+  _constrainedBy: string;
+  _project: string;
+  _createdAt: string;
+  _createdBy: string;
+  _updatedAt: string;
+  _updatedBy: string;
+  _rev: number;
+  _deprecated: boolean;
+  _distribution?: Distribution;
+  // This is for the rest of the dataset's data
+  [key: string]: any;
+}
+
+export interface ListResourceResponse {
+  '@context': Context;
+  _total: number;
+  _results: ResourceResponseCommon[];
+}
+export interface ResourceResponse extends ResourceResponseCommon {
+  '@context': Context;
+}
 
 export default class Resource<T = {}> {
   orgLabel: string;
@@ -40,9 +68,9 @@ export default class Resource<T = {}> {
     this.id = resourceResponse['@id'];
     if (resourceResponse['@type']) {
       if (Array.isArray(resourceResponse['@type'])) {
-        this.type = resourceResponse['@type'] as Array<string>;
+        this.type = resourceResponse['@type'] as string[];
       } else {
-        this.type = new Array(resourceResponse['@type']) as Array<string>;
+        this.type = [resourceResponse['@type']] as string[];
       }
     }
     if (resourceResponse['@context']) {
@@ -58,16 +86,14 @@ export default class Resource<T = {}> {
     this.distribution = resourceResponse._distribution;
     this.rev = resourceResponse._rev;
     this.deprecated = resourceResponse._deprecated;
-    this.data = Object.keys(resourceResponse)
-      .filter(
-        key =>
-          !Object.keys(ResourceMetadataKeys)
-            .map(key => ResourceMetadataKeys[key])
-            .includes(key),
-      )
-      .reduce((obj: any, key: string) => {
-        obj[key] = resourceResponse[key];
-        return obj;
-      }, {});
+    this.data = Object.keys(resourceResponse).reduce(
+      (memo: any, key: string) => {
+        if (!RESOURCE_METADATA_KEYS.includes(key)) {
+          memo[key] = resourceResponse[key];
+        }
+        return memo;
+      },
+      {},
+    );
   }
 }

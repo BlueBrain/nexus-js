@@ -1,7 +1,7 @@
 import Resource, {
   ResourceResponse,
   ResourceResponseCommon,
-} from '../Resource';
+} from '../../Resource';
 
 const mockListResponseWithStringType: ResourceResponseCommon = {
   '@id': 'https://neuroshapes.org/commons/annotation',
@@ -43,103 +43,6 @@ const mockGetByIDResponse: ResourceResponse = {
       Dataset: {
         '@id': 'dcat:Dataset',
       },
-      accessURL: {
-        '@id': 'dcat:accessURL',
-      },
-      agent: {
-        '@id': 'prov:agent',
-      },
-      atlasSpatialReferenceSystem: {
-        '@id': 'nsg:atlasSpatialReferenceSystem',
-      },
-      brainLocation: {
-        '@id': 'nsg:brainLocation',
-      },
-      brainRegion: {
-        '@id': 'nsg:brainRegion',
-      },
-      byteSize: {
-        '@id': 'dcat:byteSize',
-      },
-      contribution: {
-        '@id': 'nsg:contribution',
-      },
-      coordinatesInBrainAtlas: {
-        '@id': 'nsg:coordinatesInBrainAtlas',
-      },
-      dc: 'http://purl.org/dc/elements/1.1/',
-      dcat: 'http://www.w3.org/ns/dcat#',
-      dcterms: 'http://purl.org/dc/terms/',
-      digest: {
-        '@id': 'nxv:digest',
-      },
-      distribution: {
-        '@id': 'dcat:distribution',
-      },
-      downloadURL: {
-        '@id': 'dcat:downloadURL',
-      },
-      label: {
-        '@id': 'rdfs:label',
-      },
-      license: {
-        '@id': 'dcat:license',
-      },
-      maxValue: {
-        '@id': 'schema:maxValue',
-      },
-      mediaType: {
-        '@id': 'dcat:mediaType',
-      },
-      minValue: {
-        '@id': 'schema:minValue',
-      },
-      nsg:
-        'https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/',
-      nxv: 'https://bbp-nexus.epfl.ch/vocabs/nexus/core/terms/v0.1.0/',
-      objectOfStudy: {
-        '@id': 'nsg:objectOfStudy',
-      },
-      owl: 'http://www.w3.org/2002/07/owl#',
-      prov: 'http://www.w3.org/ns/prov#',
-      rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-      rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
-      repository: {
-        '@id': 'nsg:repository',
-      },
-      schema: 'http://schema.org/',
-      sh: 'http://www.w3.org/ns/shacl#',
-      shsh: 'http://www.w3.org/ns/shacl-shacl#',
-      skos: 'http://www.w3.org/2004/02/skos/core#',
-      species: {
-        '@id': 'nsg:species',
-      },
-      subject: {
-        '@id': 'nsg:subject',
-      },
-      this: 'http://example.org/minds/',
-      type: {
-        '@id': 'rdf:type',
-      },
-      unitCode: {
-        '@id': 'schema:unitCode',
-      },
-      value: {
-        '@id': 'schema:value',
-      },
-      valueX: {
-        '@id': 'nsg:valueX',
-      },
-      valueY: {
-        '@id': 'nsg:valueY',
-      },
-      valueZ: {
-        '@id': 'nsg:valueZ',
-      },
-      vann: 'http://purl.org/vocab/vann/',
-      void: 'http://rdfs.org/ns/void#',
-      xml: 'http://www.w3.org/XML/1998/namespace',
-      xsd: 'http://www.w3.org/2001/XMLSchema#',
     },
     'https://bluebrain.github.io/nexus/contexts/resource.json',
   ],
@@ -208,9 +111,7 @@ describe('Resource class', () => {
         'testProject',
         mockListResponseWithStringType,
       );
-      expect(resource.type).toEqual(
-        new Array(mockListResponseWithStringType['@type']),
-      );
+      expect(resource.type).toEqual([mockListResponseWithStringType['@type']]);
       testClassProperties(resource, mockListResponseWithStringType);
     });
 

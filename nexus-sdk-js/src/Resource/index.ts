@@ -1,4 +1,4 @@
-import { Context } from '../utils/types';
+import { Context, Distribution } from '../utils/types';
 import {
   ResourceMetadataKeys,
   ResourceResponseCommon,
@@ -13,7 +13,7 @@ export {
   ListResourceResponse,
 };
 
-export default class Resource {
+export default class Resource<T = {}> {
   orgLabel: string;
   projectLabel: string;
   context?: Context;
@@ -28,7 +28,8 @@ export default class Resource {
   updatedBy: string;
   rev: number;
   deprecated: boolean;
-  data: any;
+  distribution?: Distribution | Distribution[];
+  data: T;
   constructor(
     orgLabel: string,
     projectLabel: string,
@@ -54,6 +55,7 @@ export default class Resource {
     this.createdBy = resourceResponse._createdBy;
     this.updatedAt = resourceResponse._updatedAt;
     this.updatedBy = resourceResponse._updatedBy;
+    this.distribution = resourceResponse._distribution;
     this.rev = resourceResponse._rev;
     this.deprecated = resourceResponse._deprecated;
     this.data = Object.keys(resourceResponse)

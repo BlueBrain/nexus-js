@@ -1,4 +1,4 @@
-import { Context } from '../utils/types';
+import { Context, Distribution } from '../utils/types';
 
 // TODO make it an enum?
 // This uses the enum style with capitalized keys
@@ -15,6 +15,7 @@ export const ResourceMetadataKeys: { [key: string]: string } = {
   CreatedBy: '_createdBy',
   UpdatedAt: '_updatedAt',
   UpdatedBy: '_updatedBy',
+  Distribution: '_distribution',
   Rev: '_rev',
   Deprecated: '_deprecated',
 };
@@ -31,6 +32,7 @@ export interface ResourceResponseCommon {
   _updatedBy: string;
   _rev: number;
   _deprecated: boolean;
+  _distribution?: Distribution;
   // This is for the rest of the dataset's data
   [key: string]: any;
 }

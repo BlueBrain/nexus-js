@@ -152,102 +152,8 @@ const mockGetByIDResponse: ResourceResponse = {
     'nsg:ReconstructedPatchedCell',
     'nsg:InVitroSliceReconstructedPatchedNeuron',
   ],
-  _distribution: [
-    {
-      '@type': 'dcat:Distribution',
-      _downloadURL:
-        'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae/attachments/mtC180800A_idC.asc',
-      _originalFileName: 'mtC180800A_idC.asc',
-      byteSize: 1810564,
-      digest: {
-        _algorithm: 'SHA-256',
-        _value:
-          '19defdc24063d225d925edf392f33cf2b5e68b3fb9179946a8123012a0417b0b',
-      },
-      mediaType: 'text/plain; charset=UTF-8',
-    },
-    {
-      '@type': 'dcat:Distribution',
-      _downloadURL: 'http://microcircuits.epfl.ch/#/article/article_3_mph',
-      mediaType: 'text/plain; charset=UTF-8',
-      repository: 'Neocortical Microcircuitry Collaboration Portal',
-    },
-  ],
-  brainLocation: {
-    '@type': 'nsg:BrainLocation',
-    brainRegion: {
-      '@id': 'http://purl.obolibrary.org/obo/UBERON_0008933',
-      label: 'primary somatosensory cortex',
-    },
-  },
-  contribution: {
-    '@type': 'nsg:Contribution',
-    agent: {
-      '@id':
-        'https://bbp.epfl.ch/nexus/v0/data/bbp/core/agent/v0.1.0/664380c8-5a22-4974-951c-68ca78c0b1f1',
-      '@type': ['nsg:Agent', 'schema:Person'],
-    },
-  },
-  'nsg:annotation': {
-    '@type': 'nsg:MorphologyAnnotation',
-    'nsg:hasBody': {
-      '@id': 'http://uri.interlex.org/base/ilx_0383202',
-      '@type': 'nsg:MType',
-      label: 'L23_LBC',
-    },
-  },
-  'nsg:derivation': [
-    {
-      '@type': 'prov:Derivation',
-      'prov:entity': {
-        '@id':
-          'https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/slice/v0.1.0/e6e2537e-1323-4783-8ab9-cfc999d6f8b6',
-        '@type': ['nsg:Slice', 'prov:Entity'],
-      },
-    },
-    {
-      '@type': 'prov:Derivation',
-      'prov:entity': {
-        '@id':
-          'https://bbp.epfl.ch/nexus/v0/data/bbp/morphology/labeledcell/v0.1.0/3174c067-a9aa-4ee3-a625-76b00ec7b6d4',
-        '@type': ['prov:Entity', 'nsg:LabeledCell'],
-      },
-    },
-    {
-      '@type': 'prov:Derivation',
-      'prov:entity': {
-        '@id':
-          'https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/patchedcell/v0.1.0/658b72f8-f64f-4fc4-9f6e-cdde7e91f87f',
-        '@type': ['nsg:PatchedCell', 'prov:Entity'],
-      },
-    },
-    {
-      '@type': 'prov:Derivation',
-      'prov:entity': {
-        '@id':
-          'https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/subject/v0.1.0/ba9916df-1f21-47d9-be4f-3f1612d2f429',
-      },
-    },
-  ],
-  'nsg:generation': {
-    '@type': 'prov:Generation',
-    'prov:activity': {
-      '@id':
-        'https://bbp.epfl.ch/nexus/v0/data/bbp/morphology/reconstruction/v0.1.0/6f7c9cac-489b-48ef-b313-531ec705dcc6',
-      '@type': 'prov:Activity',
-    },
-  },
-  'schema:image': {
-    '@id':
-      'https://bbp.epfl.ch/nexus/v0/data/bbp/core/entity/v0.1.0/617ed886-311b-4bbd-93c6-d85ceb692c4f',
-    '@type': 'prov:Entity',
-  },
-  'schema:name': 'mtC180800A_idC',
-  subject: {
-    '@id':
-      'https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/subject/v0.1.0/ba9916df-1f21-47d9-be4f-3f1612d2f429',
-    '@type': ['nsg:Subject', 'prov:Entity'],
-  },
+  subject:
+    'https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/subject/v0.1.0/ba9916df-1f21-47d9-be4f-3f1612d2f429',
   _self:
     'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae',
   _constrainedBy: 'https://neuroshapes.org/dash/reconstructedpatchedcell',
@@ -282,26 +188,18 @@ function testClassProperties(
 describe('Resource class', () => {
   describe('It should create a Resource instance', () => {
     it('from a getByID example response', () => {
-      const resource = new Resource(
-        'testOrg',
-        'testProject',
-        mockGetByIDResponse,
-      );
+      const resource = new Resource<{
+        subject: string;
+      }>('testOrg', 'testProject', mockGetByIDResponse);
       testClassProperties(resource, mockGetByIDResponse);
     });
 
     it('it should put non-meta-data properties inside a data object', () => {
-      const resource = new Resource(
-        'testOrg',
-        'testProject',
-        mockGetByIDResponse,
-      );
-      expect(resource.data.brainLocation).toEqual(
-        mockGetByIDResponse.brainLocation,
-      );
-      expect(resource.data.contribution).toEqual(
-        mockGetByIDResponse.contribution,
-      );
+      const resource = new Resource<{
+        subject: string;
+      }>('testOrg', 'testProject', mockGetByIDResponse);
+      expect(resource.data.subject).toEqual(mockGetByIDResponse.subject);
+      expect(resource.data.subject).toEqual(mockGetByIDResponse.subject);
     });
 
     it('from a list response example with @type as a string', () => {
@@ -324,6 +222,13 @@ describe('Resource class', () => {
       );
       expect(resource.type).toBeUndefined();
       testClassProperties(resource, mockListResponseWithoutType);
+    });
+
+    it('fails to compile if we give it a strict type for data', () => {
+      const resource = new Resource<{
+        banana: string;
+      }>('testOrg', 'testProject', mockGetByIDResponse);
+      expect(resource.data.banana).toBeUndefined();
     });
   });
 });

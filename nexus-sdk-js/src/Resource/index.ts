@@ -3,9 +3,15 @@ import {
   ResourceMetadataKeys,
   ResourceResponseCommon,
   ResourceResponse,
+  ListResourceResponse,
 } from './types';
 
-export { ResourceResponse, ResourceResponseCommon, ResourceMetadataKeys };
+export {
+  ResourceResponse,
+  ResourceResponseCommon,
+  ResourceMetadataKeys,
+  ListResourceResponse,
+};
 
 export default class Resource {
   orgLabel: string;
@@ -51,7 +57,12 @@ export default class Resource {
     this.rev = resourceResponse._rev;
     this.deprecated = resourceResponse._deprecated;
     this.data = Object.keys(resourceResponse)
-      .filter(key => !Object.values(ResourceMetadataKeys).includes(key))
+      .filter(
+        key =>
+          !Object.keys(ResourceMetadataKeys)
+            .map(key => ResourceMetadataKeys[key])
+            .includes(key),
+      )
       .reduce((obj: any, key: string) => {
         obj[key] = resourceResponse[key];
         return obj;

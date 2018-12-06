@@ -61,6 +61,8 @@ export default class Project {
       const listResourceResponses: ListResourceResponse = await httpGet(
         `/resources/${this.orgLabel}/${this.label}`,
       );
+      // We want the expanded data for each
+      // TODO do we want a flag for this mode?
       return Promise.all(
         listResourceResponses._results.map(
           async resource => await this.getResource(resource['@id']),

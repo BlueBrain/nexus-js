@@ -1,7 +1,7 @@
 import { httpGet, httpPost } from './utils/http';
 import Store from './utils/Store';
 import Organization, { ListOrgsResponse, OrgResponse } from './Organization';
-import Project, { ProjectResponse } from './Project';
+import Project from './Project';
 import Resource from './Resource';
 import ACL from './ACL';
 

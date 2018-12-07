@@ -21,6 +21,7 @@ export interface ProjectResponse {
   _updatedAt: string;
   _updatedBy: string;
   prefixMappings: PrefixMapping[];
+  resourceNumber: number;
   _label?: string;
   _uuid?: string;
   _self?: string;
@@ -40,6 +41,7 @@ export default class Project {
   createdAt: Date;
   updatedAt: Date;
   prefixMappings: PrefixMapping[];
+  resourceNumber: number;
   private projectResourceURL: string;
 
   constructor(orgLabel: string, projectResponse: ProjectResponse) {
@@ -55,6 +57,7 @@ export default class Project {
     this.createdAt = new Date(projectResponse._createdAt);
     this.updatedAt = new Date(projectResponse._updatedAt);
     this.prefixMappings = projectResponse.prefixMappings;
+    this.resourceNumber = projectResponse.resourceNumber;
     this.projectResourceURL = `/resources/${this.orgLabel}/${this.label}`;
   }
 

@@ -1,7 +1,7 @@
 import { httpGet, httpPost } from './utils/http';
 import Store from './utils/Store';
 import Organization, { ListOrgsResponse, OrgResponse } from './Organization';
-import Project from './Project';
+import Project, { ProjectResponse } from './Project';
 import Resource from './Resource';
 import ACL from './ACL';
 
@@ -79,10 +79,24 @@ export default class Nexus {
     }
   }
 
+  // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
   async getOrganization(name: string): Promise<Organization> {
     try {
       const orgResponse: OrgResponse = await httpGet(`/orgs/${name}`);
-      const org = new Organization(orgResponse);
+      // we want to know how many projects there are per organisation
+      const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
+      const projectNumber: number = listOrgsResponse._results
+        ? listOrgsResponse._results.reduce((prev, org) => {
+            const split = org._id.split('/');
+            const orgName = split.slice(split.length - 2, split.length - 1)[0];
+            if (orgName === name) {
+              return prev + 1;
+            }
+            return prev;
+          }, 0)
+        : 0;
+
+      const org = new Organization({ ...orgResponse, projectNumber });
       return org;
     } catch (e) {
       throw new Error(`ListOrgsError: ${e}`);

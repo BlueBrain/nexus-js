@@ -34,6 +34,7 @@ const mockResponse: ProjectResponse = {
     'https://nexus.example.com/v1/realms/myrealm/users/f:ad46ddd6-134e-44d6-ab70-bdf00f48dfce:someone',
   _rev: 4,
   _deprecated: true,
+  resourceNumber: 563,
 };
 /* tslint:enable */
 

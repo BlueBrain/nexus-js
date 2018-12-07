@@ -1,5 +1,6 @@
 import { httpGet } from './utils/http';
 import Project, { ProjectResponse } from './Project';
+import { ListResourceResponse } from './Resource';
 
 export interface ListOrgsResponse {
   '@context': string;
@@ -19,6 +20,7 @@ export interface OrgResponse {
   _deprecated: boolean;
   _rev: number;
   _uuid: string;
+  projectNumber: number;
 }
 
 export default class Organization {
@@ -30,6 +32,7 @@ export default class Organization {
   deprecated: boolean;
   rev: number;
   uuid: string;
+  projectNumber: number;
 
   constructor(organizationResponse: OrgResponse) {
     this.context = organizationResponse['@context'];
@@ -40,6 +43,7 @@ export default class Organization {
     this.deprecated = organizationResponse._deprecated;
     this.rev = organizationResponse._rev;
     this.uuid = organizationResponse._uuid;
+    this.projectNumber = organizationResponse.projectNumber;
   }
 
   // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
@@ -76,10 +80,18 @@ export default class Organization {
 
   async getProject(projectName: string): Promise<Project> {
     try {
+      // Get project details
       const projectResponse: ProjectResponse = await httpGet(
         `/projects/${this.label}/${projectName}`,
       );
-      const project = new Project(this.label, projectResponse);
+      // We want to know how many resources the project has
+      const resourceResponse: ListResourceResponse = await httpGet(
+        `/resources/${this.label}/${projectName}`,
+      );
+      const project = new Project(this.label, {
+        ...projectResponse,
+        resourceNumber: resourceResponse._total,
+      });
       return project;
     } catch (e) {
       return e;

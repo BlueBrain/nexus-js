@@ -1,6 +1,6 @@
-import { httpGet } from './utils/http';
-import Project, { ProjectResponse } from './Project';
-import { ListResourceResponse } from './Resource';
+import { httpGet } from '../utils/http';
+import Project, { ProjectResponse } from '../Project';
+import { ListResourceResponse } from '../Resource';
 
 export interface ListOrgsResponse {
   '@context': string;

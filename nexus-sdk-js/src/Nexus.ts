@@ -1,9 +1,10 @@
-import { httpGet, httpPost } from './utils/http';
+import { httpGet, httpPut } from './utils/http';
 import Store from './utils/Store';
 import Organization, { ListOrgsResponse, OrgResponse } from './Organization';
 import Project from './Project';
 import Resource from './Resource';
 import ACL from './ACL';
+import { CreateOrganizationException } from './Organization/exceptions';
 
 type NexusConfig = {
   environment: string;
@@ -98,6 +99,23 @@ export default class Nexus {
       return org;
     } catch (e) {
       throw new Error(`ListOrgsError: ${e}`);
+    }
+  }
+
+  async createOrganization(label: string, name: string): Promise<Organization> {
+    try {
+      const orgResponse: OrgResponse = await httpPut(`/orgs/${label}`, {
+        name,
+      });
+      return new Organization({
+        ...orgResponse,
+        label,
+        name,
+        projectNumber: 0,
+        _deprecated: false,
+      });
+    } catch (error) {
+      throw new CreateOrganizationException(error.message);
     }
   }
 }

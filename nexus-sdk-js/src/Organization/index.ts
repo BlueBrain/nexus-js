@@ -5,8 +5,13 @@ import { ListResourceResponse } from '../Resource';
 export interface ListOrgsResponse {
   '@context': string;
   _total: number;
-  _links?: string;
-  _results?: [{ _id: string }];
+  _links?: any;
+  _results?: {
+    _id: string;
+    _source: {
+      '@id': string;
+    };
+  }[];
   code?: string;
   message?: string;
 }

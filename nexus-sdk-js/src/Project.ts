@@ -1,5 +1,6 @@
 import Resource, { ResourceResponse, ListResourceResponse } from './Resource';
 import { httpGet } from './utils/http';
+import { PaginationSettings, PaginatedList } from './utils/types';
 
 export interface PrefixMapping {
   prefix: string;
@@ -61,19 +62,34 @@ export default class Project {
     this.projectResourceURL = `/resources/${this.orgLabel}/${this.label}`;
   }
 
-  async listResources(): Promise<Resource[]> {
+  async listResources(
+    pagination?: PaginationSettings,
+  ): Promise<PaginatedList<Resource>> {
     try {
+      const requestURL = pagination
+        ? `${this.projectResourceURL}?from=${pagination.from}&size=${
+            pagination.size
+          }`
+        : this.projectResourceURL;
+
       const listResourceResponses: ListResourceResponse = await httpGet(
-        this.projectResourceURL,
+        requestURL,
       );
+
+      const total: number = listResourceResponses._total;
 
       // Expand the data for each item in the list
       // By fetching each item by ID
-      return Promise.all(
+      const results: Resource[] = await Promise.all(
         listResourceResponses._results.map(async resource => {
           return await this.getResource(resource['_self']);
         }),
       );
+
+      return {
+        total,
+        results,
+      };
     } catch (e) {
       return e;
     }

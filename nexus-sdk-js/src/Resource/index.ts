@@ -37,6 +37,7 @@ export interface ListResourceResponse {
   _total: number;
   _results: ResourceResponseCommon[];
 }
+
 export interface ResourceResponse extends ResourceResponseCommon {
   '@context': Context;
 }

@@ -10,10 +10,6 @@ type NexusConfig = {
   token?: string;
 };
 
-export * from './utils/types';
-
-export { Organization, Project, Resource, ACL };
-
 export const store: Store = new Store({
   auth: {
     accessToken: null,

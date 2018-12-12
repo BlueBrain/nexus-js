@@ -8,8 +8,8 @@
     "sdk",
     "bbp"
   ],
-  "main": "lib/Nexus.js",
-  "module": "es/Nexus.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
   "unpkg": "dist/nexus-sdk.js",
   "license": "Apache-2.0",
   "scripts": {

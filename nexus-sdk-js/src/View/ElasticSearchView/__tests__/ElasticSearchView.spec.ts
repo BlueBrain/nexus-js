@@ -1,99 +1,87 @@
-import ElasticSearchView, { InvalidESViewPayloadError } from '../index';
+import ElasticSearchView, { ElasticSearchViewResponse } from '../index';
+import { mockElasticSearchViewResponse } from '../../../__mocks__/helpers';
+import { httpPost } from '../../../utils/http';
 
-const exampleESView = {
-  '@id': 'nxv:defaultElasticIndex',
-  '@type': ['View', 'Alpha', 'ElasticView'],
-  _uuid: '684bd815-9273-46f4-ac1c-0383d4a98254',
-  includeMetadata: true,
-  mapping: {
-    dynamic: false,
-    properties: {
-      '@id': {
-        type: 'keyword',
-      },
-      '@type': {
-        type: 'keyword',
-      },
-      _distribution: {
-        properties: {
-          '@id': {
-            type: 'keyword',
-          },
-          '@type': {
-            type: 'keyword',
-          },
-          _byteSize: {
-            type: 'long',
-          },
-          _digest: {
-            properties: {
-              _algorithm: {
-                type: 'keyword',
-              },
-              _value: {
-                type: 'keyword',
-              },
-            },
-            type: 'nested',
-          },
-          _downloadURL: {
-            type: 'keyword',
-          },
-          _mediaType: {
-            type: 'keyword',
-          },
-          _originalFileName: {
-            type: 'keyword',
-          },
-        },
-        type: 'nested',
-      },
-      _original_source: {
-        type: 'text',
-      },
-      _self: {
-        type: 'keyword',
-      },
-      _constrainedBy: {
-        type: 'keyword',
-      },
-      _project: {
-        type: 'keyword',
-      },
-      _createdAt: {
-        type: 'date',
-      },
-      _createdBy: {
-        type: 'keyword',
-      },
-      _updatedAt: {
-        type: 'date',
-      },
-      _updatedBy: {
-        type: 'keyword',
-      },
-      _rev: {
-        type: 'long',
-      },
-      _deprecated: {
-        type: 'boolean',
-      },
-    },
-  },
-  sourceAsText: true,
-  _rev: 1,
-  _deprecated: false,
-};
+jest.mock('../../../utils/http');
+
+function testClassProperties(
+  view: ElasticSearchView,
+  response: ElasticSearchViewResponse,
+) {
+  expect(view.id).toEqual(response['@id']);
+  expect(view.type).toEqual(response['@type']);
+  expect(view.uuid).toEqual(response._uuid);
+  expect(view.mapping).toEqual(response.mapping);
+  expect(view.includeMetadata).toEqual(response.includeMetadata);
+  expect(view.rev).toEqual(response._rev);
+  expect(view.deprecated).toEqual(response._deprecated);
+}
 
 describe('ElasticSearchView class', () => {
+  const orgLabel = 'testOrg';
+  const projectLabel = 'testProject';
   it('should create a ElasticSearchView instance', () => {
-    const view = new ElasticSearchView();
+    const view = new ElasticSearchView(
+      orgLabel,
+      projectLabel,
+      mockElasticSearchViewResponse,
+    );
     expect(view).toBeInstanceOf(ElasticSearchView);
   });
 
-  it('should throw an error if nothing is given', () => {
-    expect(() => new ElasticSearchView()).toThrow(InvalidESViewPayloadError);
+  it('should convert a payload to class properties', () => {
+    const view = new ElasticSearchView(
+      orgLabel,
+      projectLabel,
+      mockElasticSearchViewResponse,
+    );
+    testClassProperties(view, mockElasticSearchViewResponse);
   });
 
-  it('should convert a payload to class properties', () => {});
+  it('should create a queryURL from project and org labels', () => {
+    const view = new ElasticSearchView(
+      orgLabel,
+      projectLabel,
+      mockElasticSearchViewResponse,
+    );
+    const expectedQueryURL = `views/${orgLabel}/${projectLabel}/${
+      view.id
+    }/_search`;
+    expect(view.queryURL).toEqual(expectedQueryURL);
+  });
+
+  describe('query()', () => {
+    it('should call httpPost method with the query object and URL', () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const myQuery = {};
+      const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
+      view.query(myQuery);
+      expect(mockHttpPost).toBeCalledWith(view.queryURL, myQuery);
+    });
+
+    it('should be able to make query with <PaginationSettings>', () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const myQuery = {};
+      const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
+      const myPaginationSettings = {
+        from: 2,
+        size: 20,
+      };
+      view.query(myQuery, myPaginationSettings);
+      const expectedQueryURL = `views/${orgLabel}/${projectLabel}/${
+        view.id
+      }/_search?from=${myPaginationSettings.from}&size=${
+        myPaginationSettings.size
+      }`;
+      expect(mockHttpPost).toBeCalledWith(expectedQueryURL, myQuery);
+    });
+  });
 });

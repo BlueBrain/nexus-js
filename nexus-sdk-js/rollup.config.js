@@ -5,7 +5,7 @@ import { terser } from 'rollup-plugin-terser';
 
 import pkg from './package.json';
 
-const libName = pkg.name;
+const libName = 'nexus-sdk';
 const UMDName = 'Nexus';
 
 export default [

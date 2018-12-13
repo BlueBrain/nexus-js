@@ -24,6 +24,9 @@ const orgs: Organization[] = await nexus.listOrganizations();
 // Get a specific organisation
 const myOrg: Organization = await nexus.getOrganization('my-org');
 
+// Create an Organisation
+const myNewOrg = await nexus.createOrganization('myorglabel', 'MyOrgName');
+
 // List all the projects that belong to an organisation
 const projects: Project[] = await myOrg.listProjects();
 
@@ -31,7 +34,7 @@ const projects: Project[] = await myOrg.listProjects();
 const myProject: Project = await myOrg.getProject('my-project');
 
 // List all the resources that belong to a project
-const resources: Resource[] = await myProject.listResources();
+const resources: PaginatedList<Resource> = await myProject.listResources(pagination?: PaginationSettings);
 
 // Get a specific resource
 const myResource: Resource = await myProject.getResource('my-resource');

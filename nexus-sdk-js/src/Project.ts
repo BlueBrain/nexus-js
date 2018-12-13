@@ -1,4 +1,4 @@
-import Resource, { ResourceResponse, ListResourceResponse } from './Resource';
+import Resource, { ListResourceResponse, getResource } from './Resource';
 import { httpGet } from './utils/http';
 import { PaginationSettings, PaginatedList } from './utils/types';
 
@@ -96,16 +96,6 @@ export default class Project {
   }
 
   async getResource(id: string): Promise<Resource> {
-    try {
-      const resourceResponse: ResourceResponse = await httpGet(id, false);
-      const resource = new Resource(
-        this.orgLabel,
-        this.label,
-        resourceResponse,
-      );
-      return resource;
-    } catch (e) {
-      return e;
-    }
+    return await getResource(id, this.orgLabel, this.label);
   }
 }

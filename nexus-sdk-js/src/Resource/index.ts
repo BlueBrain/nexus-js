@@ -1,4 +1,6 @@
 import { Context, Distribution } from '../utils/types';
+import { httpGet } from '../utils/http';
+
 export const RESOURCE_METADATA_KEYS = [
   '@context',
   '@id',
@@ -41,6 +43,20 @@ export interface ListResourceResponse {
 export interface ResourceResponse extends ResourceResponseCommon {
   '@context': Context;
 }
+
+export const getResource = async (
+  id: string,
+  orgLabel: string,
+  projectLabel: string,
+): Promise<Resource> => {
+  try {
+    const resourceResponse: ResourceResponse = await httpGet(id, false);
+    const resource = new Resource(orgLabel, projectLabel, resourceResponse);
+    return resource;
+  } catch (e) {
+    return e;
+  }
+};
 
 export default class Resource<T = {}> {
   orgLabel: string;

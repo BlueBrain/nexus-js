@@ -1,7 +1,10 @@
 import { ProjectResponse } from '../Project';
 import { ListOrgsResponse, OrgResponse } from '../Organization';
 import { ResourceResponse, ListResourceResponse } from '../Resource';
-import { ElasticSearchViewResponse } from '../View/ElasticSearchView';
+import {
+  ElasticSearchViewResponse,
+  ElasticSearchViewQueryResponse,
+} from '../View/ElasticSearchView';
 
 export const mockOrgResponse: OrgResponse = {
   '@context': 'https://bluebrain.github.io/nexus/contexts/organization',
@@ -118,6 +121,8 @@ export const mockListResourceResponse: ListResourceResponse = {
   _total: 1,
 };
 
+// [KP] The mappings property here is verbose, but it's exactly what we expect
+// from a default ESView response, so I think it's useful to keep here as-is.
 export const mockElasticSearchViewResponse: ElasticSearchViewResponse = {
   '@id': 'nxv:defaultElasticIndex',
   '@type': ['View', 'Alpha', 'ElasticView'],
@@ -201,4 +206,51 @@ export const mockElasticSearchViewResponse: ElasticSearchViewResponse = {
   sourceAsText: true,
   _rev: 1,
   _deprecated: false,
+};
+
+export const mockElasticSearchViewQueryResponse: ElasticSearchViewQueryResponse = {
+  _shards: {
+    failed: 0,
+    skipped: 0,
+    successful: 0,
+    total: 0,
+  },
+  hits: {
+    hits: [
+      {
+        _score: 1,
+        _id:
+          'https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/subject/v0.1.0/eb1b8cbb-ae00-44c0-889e-107e9f16faef',
+        _index:
+          'kg_v1_ed2a98da-e96f-4a7c-9362-f8e07a9e9151_684bd815-9273-46f4-ac1c-0383d4a98254_1',
+        _source: {
+          '@id':
+            'https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/subject/v0.1.0/eb1b8cbb-ae00-44c0-889e-107e9f16faef',
+          '@type': [
+            'http://www.w3.org/ns/prov#Entity',
+            'https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/Subject',
+          ],
+          _original_source:
+            '{"@context":{"xml":"http://www.w3.org/XML/1998/namespace","rdf":"http://www.w3.org/1999/02/22-rdf-syntax-ns#","rdfs":"http://www.w3.org/2000/01/rdf-schema#","xsd":"http://www.w3.org/2001/XMLSchema#","owl":"http://www.w3.org/2002/07/owl#","skos":"http://www.w3.org/2004/02/skos/core#","prov":"http://www.w3.org/ns/prov#","dcat":"http://www.w3.org/ns/dcat#","sh":"http://www.w3.org/ns/shacl#","shsh":"http://www.w3.org/ns/shacl-shacl#","dcterms":"http://purl.org/dc/terms/","schema":"http://schema.org/","nxv":"https://bbp-nexus.epfl.ch/vocabs/nexus/core/terms/v0.1.0/","nsg":"https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/","this":"http://example.org/minds/","dc":"http://purl.org/dc/elements/1.1/","vann":"http://purl.org/vocab/vann/","void":"http://rdfs.org/ns/void#","Dataset":{"@id":"dcat:Dataset"},"valueZ":{"@id":"nsg:valueZ"},"digest":{"@id":"nxv:digest"},"maxValue":{"@id":"schema:maxValue"},"unitCode":{"@id":"schema:unitCode"},"contribution":{"@id":"nsg:contribution"},"type":{"@id":"rdf:type"},"license":{"@id":"dcat:license"},"accessURL":{"@id":"dcat:accessURL"},"subject":{"@id":"nsg:subject"},"label":{"@id":"rdfs:label"},"valueX":{"@id":"nsg:valueX"},"species":{"@id":"nsg:species"},"valueY":{"@id":"nsg:valueY"},"repository":{"@id":"nsg:repository"},"agent":{"@id":"prov:agent"},"objectOfStudy":{"@id":"nsg:objectOfStudy"},"byteSize":{"@id":"dcat:byteSize"},"coordinatesInBrainAtlas":{"@id":"nsg:coordinatesInBrainAtlas"},"value":{"@id":"schema:value"},"downloadURL":{"@id":"dcat:downloadURL"},"atlasSpatialReferenceSystem":{"@id":"nsg:atlasSpatialReferenceSystem"},"mediaType":{"@id":"dcat:mediaType"},"brainLocation":{"@id":"nsg:brainLocation"},"distribution":{"@id":"dcat:distribution"},"brainRegion":{"@id":"nsg:brainRegion"},"minValue":{"@id":"schema:minValue"}},"@id":"https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/subject/v0.1.0/eb1b8cbb-ae00-44c0-889e-107e9f16faef","@type":["nsg:Subject","prov:Entity"],"schema:name":"Rattus norvegicus Wistar Han","nsg:providerId":"C300797C","species":{"@id":"http://purl.obolibrary.org/obo/NCBITaxon_10116","label":"Rattus norvegicus"},"nsg:strain":{"@id":"http://purl.obolibrary.org/obo/RS_0001833","label":"Wistar Han"}}',
+          _self:
+            'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:subject/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fexperiment%2Fsubject%2Fv0.1.0%2Feb1b8cbb-ae00-44c0-889e-107e9f16faef',
+          _constrainedBy: 'https://neuroshapes.org/dash/subject',
+          _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+          _createdAt: '2018-11-21T00:02:27.206Z',
+          _createdBy:
+            'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+          _updatedAt: '2018-11-26T11:00:29.200Z',
+          _updatedBy:
+            'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+          _rev: 11,
+          _deprecated: false,
+        },
+        _type: 'doc',
+      },
+    ],
+    max_score: 1,
+    total: 3341,
+  },
+  timed_out: false,
+  took: 8,
 };

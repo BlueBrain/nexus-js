@@ -1,7 +1,9 @@
 import { httpPost } from '../../utils/http';
 import { PaginatedList, PaginationSettings } from '../../utils/types';
-import Resource from '../../Resource';
+import Resource, { ResourceResponseCommon, getResource } from '../../Resource';
 
+// This is an Elastic Search Mapping
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
 export interface Mapping {
   dynamic?: boolean;
   properties: {
@@ -9,6 +11,7 @@ export interface Mapping {
   };
 }
 
+// When getting a ESView by ID.
 export interface ElasticSearchViewResponse {
   '@id': string;
   '@type': string[];
@@ -18,6 +21,37 @@ export interface ElasticSearchViewResponse {
   sourceAsText: boolean;
   _rev: number;
   _deprecated: boolean;
+}
+
+// Original Source is an optional setting from Elastic Search Views configured with
+// the 'sourceInText' field set to true, which is the default behavior
+export interface ElasticSearchResourceResponse extends ResourceResponseCommon {
+  _original_source?: string;
+}
+
+export interface ElasticSearchHit {
+  _score: number;
+  _id: string;
+  _index: string;
+  _source: ElasticSearchResourceResponse;
+  _type: string;
+}
+
+// This represents the vanilla Elastic Search resonse
+export interface ElasticSearchViewQueryResponse {
+  _shards: {
+    failed: number;
+    skipped: number;
+    successful: number;
+    total: number;
+  };
+  hits: {
+    hits: ElasticSearchHit[];
+    max_score: number;
+    total: number;
+  };
+  timed_out: boolean;
+  took: number;
 }
 
 class ElasticSeachView {
@@ -52,6 +86,15 @@ class ElasticSeachView {
     }/_search`;
   }
 
+  /**
+   * Search for resources located in a project the
+   * Elastic Search way!
+   *
+   * @param {Object} elasticSearchQuery
+   * @param {PaginationSettings} [pagination]
+   * @returns {Promise<PaginatedList<Resource>>}
+   * @memberof ElasticSeachView
+   */
   async query(
     elasticSearchQuery: Object,
     pagination?: PaginationSettings,
@@ -59,8 +102,29 @@ class ElasticSeachView {
     const requestURL = pagination
       ? `${this.queryURL}?from=${pagination.from}&size=${pagination.size}`
       : this.queryURL;
-    const response = await httpPost(requestURL, elasticSearchQuery);
-    return response;
+    const response: ElasticSearchViewQueryResponse = await httpPost(
+      requestURL,
+      elasticSearchQuery,
+    );
+
+    const total: number = response.hits.total;
+
+    // Expand the data for each item in the list
+    // By fetching each item by ID
+    const results: Resource[] = await Promise.all(
+      response.hits.hits.map(async resource => {
+        return await getResource(
+          resource._source['_self'],
+          this.orgLabel,
+          this.projectLabel,
+        );
+      }),
+    );
+
+    return {
+      total,
+      results,
+    };
   }
 }
 

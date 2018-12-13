@@ -1,6 +1,10 @@
 import ElasticSearchView, { ElasticSearchViewResponse } from '../index';
-import { mockElasticSearchViewResponse } from '../../../__mocks__/helpers';
-import { httpPost } from '../../../utils/http';
+import {
+  mockElasticSearchViewResponse,
+  mockElasticSearchViewQueryResponse,
+  mockResourceResponse,
+} from '../../../__mocks__/helpers';
+import { httpPost, httpGet } from '../../../utils/http';
 
 jest.mock('../../../utils/http');
 
@@ -51,6 +55,22 @@ describe('ElasticSearchView class', () => {
   });
 
   describe('query()', () => {
+    const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
+    const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
+    // Mock our query response
+    mockHttpPost.mockImplementation(async () => {
+      return mockElasticSearchViewQueryResponse;
+    });
+
+    // Mock the getResourcebyId response
+    mockHttpGet.mockImplementation(async () => {
+      return mockResourceResponse;
+    });
+
+    afterEach(() => {
+      mockHttpPost.mockClear();
+      mockHttpGet.mockClear();
+    });
     it('should call httpPost method with the query object and URL', () => {
       const view = new ElasticSearchView(
         orgLabel,
@@ -58,9 +78,9 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       const myQuery = {};
-      const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
       view.query(myQuery);
       expect(mockHttpPost).toBeCalledWith(view.queryURL, myQuery);
+      mockHttpPost.mockClear();
     });
 
     it('should be able to make query with <PaginationSettings>', () => {
@@ -70,7 +90,6 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       const myQuery = {};
-      const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
       const myPaginationSettings = {
         from: 2,
         size: 20,
@@ -82,6 +101,22 @@ describe('ElasticSearchView class', () => {
         myPaginationSettings.size
       }`;
       expect(mockHttpPost).toBeCalledWith(expectedQueryURL, myQuery);
+      mockHttpPost.mockClear();
+    });
+
+    it('should return Promise<PaginatedList<Resource>>', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const myQuery = {};
+      expect.assertions(2);
+      const data = await view.query(myQuery);
+      expect(data).toHaveProperty('total', 3341);
+      expect(data).toHaveProperty('results');
+      mockHttpPost.mockClear();
+      mockHttpPost.mockClear();
     });
   });
 });

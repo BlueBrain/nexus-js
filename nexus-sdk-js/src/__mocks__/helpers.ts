@@ -1,6 +1,24 @@
-import { ProjectResponse } from '../src/Project';
-import { ListOrgsResponse } from '../src/Organization';
-import { ResourceResponse, ListResourceResponse } from '../src/Resource';
+import { ProjectResponse } from '../Project';
+import { ListOrgsResponse, OrgResponse } from '../Organization';
+import { ResourceResponse, ListResourceResponse } from '../Resource';
+
+export const mockOrgResponse: OrgResponse = {
+  '@context': 'https://bluebrain.github.io/nexus/contexts/organization',
+  '@id': 'https://nexus.example.com/v1/orgs/myorg',
+  '@type': 'nxv:Organization',
+  name: 'myname',
+  _label: 'myorg',
+  _uuid: '659aed73-4cde-4016-93ec-67cbd308ac25',
+  _self: 'https://nexus.example.com/v1/orgs/myorg',
+  _constrainedBy: 'nxs:organization',
+  _createdAt: '2018-09-18T09:58:00.801Z',
+  _createdBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+  _updatedAt: '2018-09-18T10:01:00.801Z',
+  _updatedBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+  _rev: 4,
+  _deprecated: true,
+  projectNumber: 10,
+};
 
 export const mockProjectResponse: ProjectResponse = {
   '@context': 'https://bluebrain.github.io/nexus/contexts/project',

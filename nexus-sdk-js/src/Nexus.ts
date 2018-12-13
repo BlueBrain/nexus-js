@@ -22,6 +22,9 @@ export const store: Store = new Store({
 
 export default class Nexus {
   constructor(config: NexusConfig) {
+    if (!config) {
+      throw new Error('You need to provide a Nexus config.');
+    }
     if (!config.environment) {
       throw new Error(
         'No environment provided. Please specify your Nexus instance endpoint.',
@@ -109,8 +112,6 @@ export default class Nexus {
       });
       return new Organization({
         ...orgResponse,
-        label,
-        name,
         projectNumber: 0,
         _deprecated: false,
       });

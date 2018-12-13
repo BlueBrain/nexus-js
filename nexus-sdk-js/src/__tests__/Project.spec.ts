@@ -1,5 +1,5 @@
 import Project, { ProjectResponse } from '../Project';
-import { mockProjectResponse } from '../../test/helpers';
+import { mockProjectResponse } from '../__mocks__/helpers';
 
 describe('Project class', () => {
   it('Should create a Project instance', () => {

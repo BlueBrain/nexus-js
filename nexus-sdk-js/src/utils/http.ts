@@ -14,6 +14,7 @@ const getHeaders = (headers?: Object): HeaderInit => {
   return new Headers({
     ...extraHeaders,
     mode: 'cors',
+    'Content-Type': 'application/json',
   });
 };
 
@@ -22,15 +23,23 @@ const checkStatus = (response: Response): Response => {
 };
 
 function jsonParser(response: Response): Promise<Object> {
-  return response.json();
+  try {
+    return response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
 
 const parseResponse = (response: Response, parser = jsonParser): any => {
-  return parser(response);
+  try {
+    return parser(response);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
-const parseError = (error: Error) => {
-  throw new Error(`Something went wrong in your http request: ${error}`);
+const parseError = (error: Error): Error => {
+  throw new Error(error.message);
 };
 
 export function httpGet(url: string, useBase: boolean = true): Promise<any> {
@@ -46,19 +55,32 @@ export function httpGet(url: string, useBase: boolean = true): Promise<any> {
     .catch(parseError);
 }
 
-export const httpPost = (url: string, body: Object): Promise<any> => {
+export function httpPost(url: string, body?: Object): Promise<any> {
   const {
     api: { baseUrl },
   } = store.getState();
   return fetch(`${baseUrl}${url}`, {
     headers: getHeaders(),
     method: 'POST',
+    body: JSON.stringify(body),
   })
     .then(checkStatus)
     .then(r => parseResponse(r))
     .catch(parseError);
-};
+}
 
-export const httpPut = () => {};
+export function httpPut(url: string, body?: Object): Promise<any> {
+  const {
+    api: { baseUrl },
+  } = store.getState();
+  return fetch(`${baseUrl}${url}`, {
+    headers: getHeaders(),
+    method: 'PUT',
+    body: JSON.stringify(body),
+  })
+    .then(checkStatus)
+    .then(r => parseResponse(r))
+    .catch(parseError);
+}
 
 export const httpDelete = () => {};

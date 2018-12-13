@@ -1,12 +1,17 @@
-import { httpGet } from './utils/http';
-import Project, { ProjectResponse } from './Project';
-import { ListResourceResponse } from './Resource';
+import { httpGet } from '../utils/http';
+import Project, { ProjectResponse } from '../Project';
+import { ListResourceResponse } from '../Resource';
 
 export interface ListOrgsResponse {
   '@context': string;
   _total: number;
-  _links?: string;
-  _results?: [{ _id: string }];
+  _links?: any;
+  _results?: {
+    _id: string;
+    _source: {
+      '@id': string;
+    };
+  }[];
   code?: string;
   message?: string;
 }
@@ -15,8 +20,14 @@ export interface OrgResponse {
   '@context': string;
   '@id': string;
   '@type': string;
-  label: string;
+  _label: string;
+  _self: string;
+  _constrainedBy: string;
+  _createdAt: string;
+  _createdBy: string;
+  _updatedAt: string;
   name: string;
+  _updatedBy: string;
   _deprecated: boolean;
   _rev: number;
   _uuid: string;
@@ -38,7 +49,7 @@ export default class Organization {
     this.context = organizationResponse['@context'];
     this.id = organizationResponse['@id'];
     this.type = organizationResponse['@type'];
-    this.label = organizationResponse.label;
+    this.label = organizationResponse._label;
     this.name = organizationResponse.name;
     this.deprecated = organizationResponse._deprecated;
     this.rev = organizationResponse._rev;

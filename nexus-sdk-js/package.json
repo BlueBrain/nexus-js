@@ -1,6 +1,6 @@
 {
   "name": "@bbp/nexus-sdk",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "JavaScript SDK from Nexus",
   "keywords": [
     "typescript",
@@ -8,8 +8,8 @@
     "sdk",
     "bbp"
   ],
-  "main": "lib/Nexus.js",
-  "module": "es/Nexus.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
   "unpkg": "dist/nexus-sdk.js",
   "license": "Apache-2.0",
   "scripts": {
@@ -31,6 +31,7 @@
     "@types/node-fetch": "^2.1.4",
     "eslint": "^5.6.0",
     "jest": "^23.6.0",
+    "jest-fetch-mock": "^2.0.1",
     "rollup": "^0.66.4",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-node-resolve": "^3.4.0",
@@ -63,6 +64,9 @@
       "jsx",
       "json",
       "node"
+    ],
+    "setupFiles": [
+      "./test/setupJest.js"
     ]
   },
   "prettier": {

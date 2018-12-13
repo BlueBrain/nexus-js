@@ -12,6 +12,14 @@ test:
 	@echo "Running tests... 🧪"
 	@docker-compose run --rm nexus-sdk test
 
+lint:
+	@echo "Linting... ✨"
+	@docker-compose run --rm nexus-sdk run lint
+
+documentation:
+	@echo "Generating documentation... 📑"
+	@docker-compose run --rm nexus-sdk run documentation
+
 clean:
 	@echo "Cleaning... 🧹"
 	@docker-compose run --rm nexus-sdk run clean

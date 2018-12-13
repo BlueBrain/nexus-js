@@ -2,10 +2,23 @@
 
 ## Develop
 
+### With Node.js
+
+- Install: `npm install`
 - Build: `npm run build`
 - Test: `npm run test`
 - Lint: `npm run lint`
 - Generate Documentation: `npm run documentation`
+
+### With Docker
+
+Make sure you have already installed both [Docker Engine](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
+
+- Install: `make install`
+- Build: `make build`
+- Test: `make test`
+- Lint: `make lint`
+- Generate Documentation: `make documentation`
 
 ## Usage
 

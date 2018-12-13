@@ -24,7 +24,7 @@
     "build:es": "tsc --module es2015 --target es5 --outDir es",
     "build:umd": "rollup -c",
     "documentation": "typedoc --out documentation/ --exclude \"**/*+(test|spec).ts\" src/",
-    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/",
+    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr documentation/",
     "prepublish": "npm run clean && npm run test && npm run lint && npm run build"
   },
   "devDependencies": {

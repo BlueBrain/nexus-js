@@ -87,8 +87,52 @@ class ElasticSeachView {
   }
 
   /**
-   * Search for resources located in a project the
-   * Elastic Search way!
+   * Convenience method to help in filtering a project by @Types
+   *
+   * @param {string[]} types
+   * @param {PaginationSettings} [pagination]
+   * @returns {Promise<PaginatedList<Resource>>}
+   * @memberof ElasticSeachView
+   */
+  async filterByTypes(
+    types: string[],
+    pagination?: PaginationSettings,
+  ): Promise<PaginatedList<Resource>> {
+    const query = {
+      query: {
+        bool: {
+          filter: types.map(type => ({ term: { '@type': type } })),
+        },
+      },
+    };
+    return await this.query(query, pagination);
+  }
+
+  /**
+   * Convenience method to help in filtering a project by what
+   * Schema that the resources are conforming to
+   *
+   * @param {string} constrainedBy
+   * @param {PaginationSettings} [pagination]
+   * @returns {Promise<PaginatedList<Resource>>}
+   * @memberof ElasticSeachView
+   */
+  async filterByConstrainedBy(
+    constrainedBy: string,
+    pagination?: PaginationSettings,
+  ): Promise<PaginatedList<Resource>> {
+    const query = {
+      query: {
+        term: { _constrainedBy: constrainedBy },
+      },
+    };
+    return await this.query(query, pagination);
+  }
+
+  /**
+   * Search for resources located in a project
+   * using an elastic search Query (as a JS Object) as input
+   * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html
    *
    * @param {Object} elasticSearchQuery
    * @param {PaginationSettings} [pagination]

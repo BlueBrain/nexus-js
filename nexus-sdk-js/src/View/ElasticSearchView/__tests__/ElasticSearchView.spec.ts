@@ -80,7 +80,6 @@ describe('ElasticSearchView class', () => {
       const myQuery = {};
       view.query(myQuery);
       expect(mockHttpPost).toBeCalledWith(view.queryURL, myQuery);
-      mockHttpPost.mockClear();
     });
 
     it('should be able to make query with <PaginationSettings>', () => {
@@ -101,7 +100,6 @@ describe('ElasticSearchView class', () => {
         myPaginationSettings.size
       }`;
       expect(mockHttpPost).toBeCalledWith(expectedQueryURL, myQuery);
-      mockHttpPost.mockClear();
     });
 
     it('should return Promise<PaginatedList<Resource>>', async () => {
@@ -115,8 +113,119 @@ describe('ElasticSearchView class', () => {
       const data = await view.query(myQuery);
       expect(data).toHaveProperty('total', 3341);
       expect(data).toHaveProperty('results');
+    });
+  });
+
+  describe('filterByType()', () => {
+    const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
+    const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
+    // Mock our query response
+    mockHttpPost.mockImplementation(async () => {
+      return mockElasticSearchViewQueryResponse;
+    });
+
+    // Mock the getResourcebyId response
+    mockHttpGet.mockImplementation(async () => {
+      return mockResourceResponse;
+    });
+
+    afterEach(() => {
       mockHttpPost.mockClear();
+      mockHttpGet.mockClear();
+    });
+
+    it('should call the ES endpoint with the proper query', () => {
+      const filterType =
+        'https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/Person';
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      view.filterByTypes([filterType]);
+      const expectedQuery = {
+        query: {
+          bool: {
+            filter: [
+              {
+                term: {
+                  '@type':
+                    'https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/Person',
+                },
+              },
+            ],
+          },
+        },
+      };
+      expect(mockHttpPost).toBeCalledWith(view.queryURL, expectedQuery);
+    });
+
+    it('should call the ES endpoint and use a filter query with two types', () => {
+      const filterTypes = [
+        'https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/Person',
+        'somethingElse',
+      ];
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      view.filterByTypes(filterTypes);
+      const expectedQuery = {
+        query: {
+          bool: {
+            filter: [
+              {
+                term: {
+                  '@type':
+                    'https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/Person',
+                },
+              },
+              {
+                term: {
+                  '@type': 'somethingElse',
+                },
+              },
+            ],
+          },
+        },
+      };
+      expect(mockHttpPost).toBeCalledWith(view.queryURL, expectedQuery);
+    });
+  });
+
+  describe('filterByConstrainedBy()', () => {
+    const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
+    const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
+    // Mock our query response
+    mockHttpPost.mockImplementation(async () => {
+      return mockElasticSearchViewQueryResponse;
+    });
+
+    // Mock the getResourcebyId response
+    mockHttpGet.mockImplementation(async () => {
+      return mockResourceResponse;
+    });
+
+    afterEach(() => {
       mockHttpPost.mockClear();
+      mockHttpGet.mockClear();
+    });
+
+    it('should call the ES endpoint with the proper query', () => {
+      const constrainedBy = 'https://neuroshapes.org/dash/person';
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      view.filterByConstrainedBy(constrainedBy);
+      const expectedQuery = {
+        query: {
+          term: { _constrainedBy: constrainedBy },
+        },
+      };
+      expect(mockHttpPost).toBeCalledWith(view.queryURL, expectedQuery);
     });
   });
 });

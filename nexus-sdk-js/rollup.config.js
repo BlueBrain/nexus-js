@@ -3,9 +3,7 @@ import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 
-import pkg from './package.json';
-
-const libName = pkg.name;
+const libName = 'nexus-sdk';
 const UMDName = 'Nexus';
 
 export default [

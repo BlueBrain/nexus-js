@@ -8,6 +8,10 @@
     "sdk",
     "bbp"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BlueBrain/nexus-webapp-commons/tree/master/nexus-sdk-js"
+  },
   "main": "lib/index.js",
   "module": "es/index.js",
   "unpkg": "dist/nexus-sdk.js",

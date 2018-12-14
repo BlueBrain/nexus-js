@@ -5,7 +5,7 @@ import { ViewsListResponse } from '../views';
 import {
   ElasticSearchViewResponse,
   ElasticSearchViewQueryResponse,
-} from '../View/ElasticSearchView';
+} from '../views/ElasticSearchView';
 
 export const mockOrgResponse: OrgResponse = {
   '@context': 'https://bluebrain.github.io/nexus/contexts/organization',
@@ -226,8 +226,8 @@ export const mockViewsListResponse: ViewsListResponse = {
   ],
 };
 
-export const mockElasticSearchViewResponse: ElasticSearchViewResponse =
-  mockViewsListResponse._results[0];
+export const mockElasticSearchViewResponse: ElasticSearchViewResponse = mockViewsListResponse
+  ._results[0] as ElasticSearchViewResponse;
 
 export const mockElasticSearchViewQueryResponse: ElasticSearchViewQueryResponse = {
   _shards: {

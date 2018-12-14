@@ -1,11 +1,10 @@
 import { httpGet, httpPut } from './utils/http';
 import Store from './utils/Store';
 import Organization, { ListOrgsResponse, OrgResponse } from './Organization';
-import Project from './Project';
-import Resource from './Resource';
-import ACL from './ACL';
 import { CreateOrganizationException } from './Organization/exceptions';
-import SparqlView from './View/SparqlView';
+// import Project from './Project';
+// import SparqlView from './views/SparqlView';
+// import ElasticSeachView from './views/ElasticSearchView';
 
 type NexusConfig = {
   environment: string;
@@ -122,11 +121,47 @@ export default class Nexus {
   }
 }
 
-// Debub
-const nexus = new Nexus({
-  environment: 'https://bbp-nexus.epfl.ch/staging/v1',
-  token:
-    'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJONS1CU0ZxZG5NS3Y4SWtKUkg1R3E0LVA2c1RWQUxwU0EydGNQeEpWM1NBIn0.eyJqdGkiOiJhMjBiMjY2OC00OWZiLTRiYjYtYmQzMC1hZDJhMzQyYTQ0Y2IiLCJleHAiOjE1NDUyMTEyNzksIm5iZiI6MCwiaWF0IjoxNTQ0Nzk5NjA0LCJpc3MiOiJodHRwczovL2JicHRlYW0uZXBmbC5jaC9hdXRoL3JlYWxtcy9CQlAiLCJhdWQiOiJiYnAtbmV4dXMtc3RhZ2luZyIsInN1YiI6ImY6OWQ0NmRkZDYtMTM0ZS00NGQ2LWFhNzQtYmRmMDBmNDhkZmNlOm1hY2hvbiIsInR5cCI6IkJlYXJlciIsImF6cCI6ImJicC1uZXh1cy1zdGFnaW5nIiwibm9uY2UiOiIxMjM0NTYiLCJhdXRoX3RpbWUiOjE1NDQ2MDY0NzksInNlc3Npb25fc3RhdGUiOiIxODlmYzQzMy02NmE2LTQ4YTEtYjIyMC04MzY3YjY1NjYyM2EiLCJhY3IiOiIwIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlc291cmNlX2FjY2VzcyI6e30sInNjb3BlIjoib3BlbmlkIG5leHVzIiwibmFtZSI6Ikp1bGllbiBBbnRvbmluIE1hY2hvbiIsInByZWZlcnJlZF91c2VybmFtZSI6Im1hY2hvbiIsImdpdmVuX25hbWUiOiJKdWxpZW4gQW50b25pbiIsImZhbWlseV9uYW1lIjoiTWFjaG9uIiwiZW1haWwiOiJqdWxpZW4ubWFjaG9uQGVwZmwuY2gifQ.lMQLNS2r1QiVq0gGEzl3gVMdgKN1rhtmdMcpPhZN9xqwhuFOA0IBhHjeDiDGFjP9rLjoVEns487prWK8opaKamrliYpy-cNYk_VCzDuGN6fye2SaNcNPXCwqnPKuvpZyrBulXZ_9dd0cCcNSwgMCXHK8c6T3uKz-ECn4gZOCDhYG7rbvRcOm4QQs1UXD4j8ZSt5UnxTf0Eq0Vkh1LJDBHchWRyRfeJZw1IqwEHhUJYvnNh5NhA9PfWAuDKjYppm2VcMg695PAroZJ1P9HkRtNnOok-ldA_GE-yssIOkflUsT3C_7MBh046PKukHtAZfCYXOa1rPZBbEmlC_tfQkDJQ',
-});
-const sv = new SparqlView('kenny', 'search');
-sv.query({ content: 'SELECT ?A ?edge ?B where {?A ?edge ?B} LIMIT 50' });
+// // Debugggg
+// const nexus = new Nexus({
+//   // environment: 'https://bbp-nexus.epfl.ch/staging/v1',
+//   environment: 'https://bbp.epfl.ch/nexus/v1',
+//   // token: ''
+// });
+
+// // Promise.all([
+// //   nexus
+// //     .getOrganization('kenny')
+// //     .then((org: Organization) => {
+// //       console.log(org.id);
+// //       return org.getProject('search');
+// //     })
+// //     .then((project: Project) => {
+// //       console.log(project.id);
+// //       return project.listSparqlViews();
+// //     })
+// //     .then((svs: SparqlView[]) => {
+// //       console.log(svs);
+// //       return svs[0].query('SELECT ?A ?edge ?B where {?A ?edge ?B} LIMIT 50');
+// //     })
+// //     .then(r => console.log(r))
+// //     .catch(e => console.error(e)),
+// // ]);
+
+// Promise.all([
+//   nexus
+//     .getOrganization('anorg')
+//     .then((org: Organization) => {
+//       console.log(org.id);
+//       return org.getProject('testcore');
+//     })
+//     .then((project: Project) => {
+//       console.log(project.id);
+//       return project.listElasticSearchViews();
+//     })
+//     .then((evs: ElasticSeachView[]) => {
+//       console.log(evs);
+//       return evs[0].filterByTypes(['http://schema.org/Person']);
+//     })
+//     .then(r => console.log(JSON.stringify(r, null, 2)))
+//     .catch(e => console.error(e)),
+// ]);

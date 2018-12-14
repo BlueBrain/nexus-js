@@ -83,7 +83,7 @@ class ElasticSeachView {
     this.sourceAsText = elasticSearchViewResponse['sourceAsText'];
     this.rev = elasticSearchViewResponse['_rev'];
     this.deprecated = elasticSearchViewResponse['_deprecated'];
-    this.queryURL = `views/${this.orgLabel}/${this.projectLabel}/${
+    this.queryURL = `/views/${this.orgLabel}/${this.projectLabel}/${
       this.id
     }/_search`;
   }

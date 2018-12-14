@@ -1,6 +1,7 @@
 import { ProjectResponse } from '../Project';
 import { ListOrgsResponse, OrgResponse } from '../Organization';
 import { ResourceResponse, ListResourceResponse } from '../Resource';
+import { ViewsListResponse } from '../views';
 import {
   ElasticSearchViewResponse,
   ElasticSearchViewQueryResponse,
@@ -123,21 +124,21 @@ export const mockListResourceResponse: ListResourceResponse = {
 
 // [KP] The mappings property here is verbose, but it's exactly what we expect
 // from a default ESView response, so I think it's useful to keep here as-is.
-export const mockElasticSearchViewResponse: ElasticSearchViewResponse = {
-  '@id': 'nxv:defaultElasticIndex',
-  '@type': ['View', 'Alpha', 'ElasticView'],
-  _uuid: '684bd815-9273-46f4-ac1c-0383d4a98254',
-  includeMetadata: true,
-  mapping: {
-    dynamic: false,
-    properties: {
-      '@id': {
-        type: 'keyword',
-      },
-      '@type': {
-        type: 'keyword',
-      },
-      _distribution: {
+export const mockViewsListResponse: ViewsListResponse = {
+  '@context': [
+    'https://bluebrain.github.io/nexus/contexts/search.json',
+    'https://bluebrain.github.io/nexus/contexts/resource.json',
+    'https://bluebrain.github.io/nexus/contexts/view.json',
+  ],
+  _total: 2,
+  _results: [
+    {
+      '@id': 'nxv:defaultElasticIndex',
+      '@type': ['View', 'Alpha', 'ElasticView'],
+      _uuid: '684bd815-9273-46f4-ac1c-0383d4a98254',
+      includeMetadata: true,
+      mapping: {
+        dynamic: false,
         properties: {
           '@id': {
             type: 'keyword',
@@ -145,68 +146,88 @@ export const mockElasticSearchViewResponse: ElasticSearchViewResponse = {
           '@type': {
             type: 'keyword',
           },
-          _byteSize: {
-            type: 'long',
-          },
-          _digest: {
+          _distribution: {
             properties: {
-              _algorithm: {
+              '@id': {
                 type: 'keyword',
               },
-              _value: {
+              '@type': {
+                type: 'keyword',
+              },
+              _byteSize: {
+                type: 'long',
+              },
+              _digest: {
+                properties: {
+                  _algorithm: {
+                    type: 'keyword',
+                  },
+                  _value: {
+                    type: 'keyword',
+                  },
+                },
+                type: 'nested',
+              },
+              _downloadURL: {
+                type: 'keyword',
+              },
+              _mediaType: {
+                type: 'keyword',
+              },
+              _originalFileName: {
                 type: 'keyword',
               },
             },
             type: 'nested',
           },
-          _downloadURL: {
+          _original_source: {
+            type: 'text',
+          },
+          _self: {
             type: 'keyword',
           },
-          _mediaType: {
+          _constrainedBy: {
             type: 'keyword',
           },
-          _originalFileName: {
+          _project: {
             type: 'keyword',
+          },
+          _createdAt: {
+            type: 'date',
+          },
+          _createdBy: {
+            type: 'keyword',
+          },
+          _updatedAt: {
+            type: 'date',
+          },
+          _updatedBy: {
+            type: 'keyword',
+          },
+          _rev: {
+            type: 'long',
+          },
+          _deprecated: {
+            type: 'boolean',
           },
         },
-        type: 'nested',
       },
-      _original_source: {
-        type: 'text',
-      },
-      _self: {
-        type: 'keyword',
-      },
-      _constrainedBy: {
-        type: 'keyword',
-      },
-      _project: {
-        type: 'keyword',
-      },
-      _createdAt: {
-        type: 'date',
-      },
-      _createdBy: {
-        type: 'keyword',
-      },
-      _updatedAt: {
-        type: 'date',
-      },
-      _updatedBy: {
-        type: 'keyword',
-      },
-      _rev: {
-        type: 'long',
-      },
-      _deprecated: {
-        type: 'boolean',
-      },
+      sourceAsText: true,
+      _rev: 1,
+      _deprecated: false,
     },
-  },
-  sourceAsText: true,
-  _rev: 1,
-  _deprecated: false,
+    {
+      '@id': 'nxv:defaultSparqlIndex',
+      '@type': ['View', 'SparqlView'],
+      _uuid: 'd88b71d2-b8a4-4744-bf22-2d99ef5bd26b',
+      _rev: 1,
+      _deprecated: false,
+    },
+  ],
 };
+
+export const mockElasticSearchViewResponse: ElasticSearchViewResponse =
+  mockViewsListResponse._results[0];
 
 export const mockElasticSearchViewQueryResponse: ElasticSearchViewQueryResponse = {
   _shards: {

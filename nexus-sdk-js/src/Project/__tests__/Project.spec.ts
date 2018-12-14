@@ -1,5 +1,5 @@
-import Project, { ProjectResponse } from '../Project';
-import { mockProjectResponse } from '../__mocks__/helpers';
+import Project, { ProjectResponse } from '../index';
+import { mockProjectResponse } from '../../__mocks__/helpers';
 
 describe('Project class', () => {
   it('Should create a Project instance', () => {
@@ -11,5 +11,9 @@ describe('Project class', () => {
     expect(p.deprecated).toEqual(mockProjectResponse._deprecated);
     expect(p.createdAt.toISOString()).toEqual(mockProjectResponse._createdAt);
     expect(p.updatedAt.toISOString()).toEqual(mockProjectResponse._updatedAt);
+  });
+
+  describe('getElasticSearchViews()', () => {
+    it('should return a just list of ElasticSearchViews from all the views', () => {});
   });
 });

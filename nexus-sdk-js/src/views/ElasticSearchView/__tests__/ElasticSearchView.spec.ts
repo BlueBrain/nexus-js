@@ -57,19 +57,22 @@ describe('ElasticSearchView class', () => {
   describe('query()', () => {
     const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
     const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
-    // Mock our query response
-    mockHttpPost.mockImplementation(async () => {
-      return mockElasticSearchViewQueryResponse;
-    });
 
-    // Mock the getResourcebyId response
-    mockHttpGet.mockImplementation(async () => {
-      return mockResourceResponse;
+    beforeEach(() => {
+      // Mock our query response
+      mockHttpPost.mockImplementation(async () => {
+        return mockElasticSearchViewQueryResponse;
+      });
+
+      // Mock the getResourcebyId response
+      mockHttpGet.mockImplementation(async () => {
+        return mockResourceResponse;
+      });
     });
 
     afterEach(() => {
-      mockHttpPost.mockClear();
-      mockHttpGet.mockClear();
+      mockHttpPost.mockReset();
+      mockHttpGet.mockReset();
     });
     it('should call httpPost method with the query object and URL', () => {
       const view = new ElasticSearchView(
@@ -80,6 +83,24 @@ describe('ElasticSearchView class', () => {
       const myQuery = {};
       view.query(myQuery);
       expect(mockHttpPost).toBeCalledWith(view.queryURL, myQuery);
+    });
+
+    it('should throw an error if httpPost crashes', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const myQuery = {};
+      const message = 'some error message';
+      mockHttpPost.mockImplementation(async () => {
+        try {
+          throw new Error(message);
+        } catch (error) {
+          throw error;
+        }
+      });
+      await expect(view.query(myQuery)).rejects.toThrow(Error);
     });
 
     it('should be able to make query with <PaginationSettings>', () => {

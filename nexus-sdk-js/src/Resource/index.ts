@@ -44,6 +44,8 @@ export interface ResourceResponse extends ResourceResponseCommon {
   '@context': Context;
 }
 
+export class ResourceError extends Error {}
+
 export const getResource = async (
   id: string,
   orgLabel: string,
@@ -53,8 +55,8 @@ export const getResource = async (
     const resourceResponse: ResourceResponse = await httpGet(id, false);
     const resource = new Resource(orgLabel, projectLabel, resourceResponse);
     return resource;
-  } catch (e) {
-    return e;
+  } catch (error) {
+    throw error;
   }
 };
 

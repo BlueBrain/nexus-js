@@ -37,6 +37,8 @@ export interface ElasticSearchHit {
   _type: string;
 }
 
+export class ViewQueryError extends Error {}
+
 // This represents the vanilla Elastic Search resonse
 export interface ElasticSearchViewQueryResponse {
   _shards: {
@@ -143,32 +145,37 @@ class ElasticSeachView {
     elasticSearchQuery: Object,
     pagination?: PaginationSettings,
   ): Promise<PaginatedList<Resource>> {
-    const requestURL = pagination
-      ? `${this.queryURL}?from=${pagination.from}&size=${pagination.size}`
-      : this.queryURL;
-    const response: ElasticSearchViewQueryResponse = await httpPost(
-      requestURL,
-      elasticSearchQuery,
-    );
+    try {
+      const requestURL = pagination
+        ? `${this.queryURL}?from=${pagination.from}&size=${pagination.size}`
+        : this.queryURL;
 
-    const total: number = response.hits.total;
+      const response: ElasticSearchViewQueryResponse = await httpPost(
+        requestURL,
+        elasticSearchQuery,
+      );
 
-    // Expand the data for each item in the list
-    // By fetching each item by ID
-    const results: Resource[] = await Promise.all(
-      response.hits.hits.map(async resource => {
-        return await getResource(
-          resource._source['_self'],
-          this.orgLabel,
-          this.projectLabel,
-        );
-      }),
-    );
+      const total: number = response.hits.total;
 
-    return {
-      total,
-      results,
-    };
+      // Expand the data for each item in the list
+      // By fetching each item by ID
+      const results: Resource[] = await Promise.all(
+        response.hits.hits.map(async resource => {
+          return await getResource(
+            resource._source['_self'],
+            this.orgLabel,
+            this.projectLabel,
+          );
+        }),
+      );
+
+      return {
+        total,
+        results,
+      };
+    } catch (error) {
+      throw new ViewQueryError(error.message);
+    }
   }
 }
 

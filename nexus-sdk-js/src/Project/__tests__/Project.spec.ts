@@ -19,7 +19,7 @@ describe('Project class', () => {
     expect(p.updatedAt.toISOString()).toEqual(mockProjectResponse._updatedAt);
   });
 
-  describe('getElasticSearchViews()', () => {
+  describe('listElasticSearchViews()', () => {
     const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
 
     // Mock the elastic earch views response
@@ -31,7 +31,7 @@ describe('Project class', () => {
 
     it('should call httpGet method with the proper get views url', () => {
       const p = new Project('my-org', mockProjectResponse);
-      const myViews = p.getElasticSearchViews();
+      const myViews = p.listElasticSearchViews();
       const viewURL = `views/${p.orgLabel}/${p.label}`;
       expect(mockHttpGet).toBeCalledWith(viewURL);
     });
@@ -39,7 +39,7 @@ describe('Project class', () => {
     it('should return a just list of ElasticSearchViews from a response that includes multiple view types', async () => {
       const p = new Project('my-org', mockProjectResponse);
       expect.assertions(1);
-      const myViews = await p.getElasticSearchViews();
+      const myViews = await p.listElasticSearchViews();
       expect(myViews.length).toEqual(1);
     });
   });

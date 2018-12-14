@@ -106,7 +106,7 @@ export default class Project {
   // The current API does not support pagination / filtering of views
   // This should be fixed when possible and converted to signituare
   // Promise<PaginatedList<ElasticSearchView>>
-  async getElasticSearchViews(): Promise<ElasticSearchView[]> {
+  async listElasticSearchViews(): Promise<ElasticSearchView[]> {
     try {
       const viewURL = `views/${this.orgLabel}/${this.label}`;
       const viewListResponse: ViewsListResponse = await httpGet(viewURL);

@@ -52,8 +52,8 @@ const resources: PaginatedList<Resource> = await myProject.listResources(paginat
 // Get a specific resource
 const myResource: Resource = await myProject.getResource('my-resource');
 
-// TODO ❎  Fetch an Elastic Search View instance
-const myView: ElasticSearchView = await myProject.getElasticSearchViews().results[0];
+// Fetch all Elastic Search View instances in a Project
+const myViews: ElasticSearchView[] = await myProject.getElasticSearchViews()
 
 // Query a project with Elastic Search
 const searchAll: PaginatedList<Resource> = await myView.query({});

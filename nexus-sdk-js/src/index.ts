@@ -5,6 +5,7 @@ export { default as Project } from './Project';
 export { default as Resource } from './Resource';
 export { default as ElasticSearchView } from './views/ElasticSearchView';
 export { default as ACL } from './ACL';
+export * from './View';
 export * from './utils/types';
 
 export default Nexus;

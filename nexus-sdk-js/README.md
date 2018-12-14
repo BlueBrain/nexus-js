@@ -51,6 +51,20 @@ const resources: PaginatedList<Resource> = await myProject.listResources(paginat
 
 // Get a specific resource
 const myResource: Resource = await myProject.getResource('my-resource');
+
+// Fetch all Elastic Search View instances in a Project
+const myViews: ElasticSearchView[] = await myProject.listElasticSearchViews()
+
+// Query a project with Elastic Search
+const searchAll: PaginatedList<Resource> = await myView.query({});
+
+// ESView Query Convenience Method
+// Filter a project by Type (using AND)
+const filteredByType: PaginatedList<Resource> = await myView.filterByTypes(["someType"])
+
+// ESView Query Convenience Method
+// Filter a project by resources matching a schema ("_constrainedBy")
+const filteredByConstrainedBy: PaginatedList<Resource> = await myView.filterByConstrainedBy("someSchema")
 ```
 
 # License

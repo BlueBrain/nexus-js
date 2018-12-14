@@ -1,6 +1,10 @@
-import Resource, { ResourceResponse, ListResourceResponse } from './Resource';
-import { httpGet } from './utils/http';
-import { PaginationSettings, PaginatedList } from './utils/types';
+import Resource, { ListResourceResponse, getResource } from '../Resource';
+import { httpGet } from '../utils/http';
+import { PaginationSettings, PaginatedList } from '../utils/types';
+import { ViewsListResponse } from '../views';
+import ElasticSearchView, {
+  ElasticSearchViewResponse,
+} from '../views/ElasticSearchView';
 
 export interface PrefixMapping {
   prefix: string;
@@ -96,16 +100,29 @@ export default class Project {
   }
 
   async getResource(id: string): Promise<Resource> {
+    return await getResource(id, this.orgLabel, this.label);
+  }
+
+  // The current API does not support pagination / filtering of views
+  // This should be fixed when possible and converted to signituare
+  // Promise<PaginatedList<ElasticSearchView>>
+  async listElasticSearchViews(): Promise<ElasticSearchView[]> {
     try {
-      const resourceResponse: ResourceResponse = await httpGet(id, false);
-      const resource = new Resource(
-        this.orgLabel,
-        this.label,
-        resourceResponse,
-      );
-      return resource;
-    } catch (e) {
-      return e;
+      const viewURL = `views/${this.orgLabel}/${this.label}`;
+      const viewListResponse: ViewsListResponse = await httpGet(viewURL);
+      const elasticSearchViews: ElasticSearchView[] = viewListResponse._results
+        .filter(entry => entry['@type'].includes('ElasticView'))
+        .map(
+          elasticSearchViewResponse =>
+            new ElasticSearchView(
+              this.orgLabel,
+              this.label,
+              elasticSearchViewResponse as ElasticSearchViewResponse,
+            ),
+        );
+      return elasticSearchViews;
+    } catch (error) {
+      throw error;
     }
   }
 }

@@ -65,6 +65,12 @@ const filteredByType: PaginatedList<Resource> = await myView.filterByTypes(["som
 // ESView Query Convenience Method
 // Filter a project by resources matching a schema ("_constrainedBy")
 const filteredByConstrainedBy: PaginatedList<Resource> = await myView.filterByConstrainedBy("someSchema")
+
+// Fetch all Sparql View instances on a Project
+const myViews: SparqlView[] = await myProject.listSparqlViews();
+
+// Query a Project with Sparql
+const response: SparqlQueryViewResponse = myView.query('SELECT * where {?s ?p ?o} LIMIT 50');
 ```
 
 # License

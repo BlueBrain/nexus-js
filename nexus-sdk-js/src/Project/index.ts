@@ -6,7 +6,6 @@ import ElasticSearchView, {
   ElasticSearchViewResponse,
 } from '../views/ElasticSearchView';
 import SparqlView, { SparqlViewResponse } from '../views/SparqlView';
-import { SparqlViewQueryException } from '../views/SparqlView/exceptions';
 
 export interface PrefixMapping {
   prefix: string;
@@ -128,7 +127,8 @@ export default class Project {
     }
   }
 
-  async listSparqlViews(): Promise<SparqlView[]> {
+  // TODO: refactor once we can fetch views per IDs (broken just now)
+  async getSparqlView(): Promise<SparqlView> {
     try {
       const viewURL = `/views/${this.orgLabel}/${this.label}`;
       const viewListResponse: ViewsListResponse = await httpGet(viewURL);
@@ -142,7 +142,7 @@ export default class Project {
               sparqlViewResponse as SparqlViewResponse,
             ),
         );
-      return sparqlViews;
+      return sparqlViews[0];
     } catch (error) {
       throw error;
     }

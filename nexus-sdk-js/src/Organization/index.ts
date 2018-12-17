@@ -64,7 +64,6 @@ export default class Organization {
       if (listOrgsResponse.code || !listOrgsResponse._results) {
         return [];
       }
-      console.log(listOrgsResponse);
       // Get list of unique orgs names
       const filteredOrgNames: {
         orgName: string;

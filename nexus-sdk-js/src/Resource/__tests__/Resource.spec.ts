@@ -77,7 +77,7 @@ function testClassProperties(
 ) {
   expect(resource.id).toEqual(response['@id']);
   // We expect self to be cast into a URL object
-  expect(resource.self).toEqual(new URL(response._self));
+  expect(resource.self).toEqual(response._self);
   expect(resource.constrainedBy).toEqual(response._constrainedBy);
   expect(resource.project).toEqual(response._project);
   expect(resource.createdAt).toEqual(response._createdAt);

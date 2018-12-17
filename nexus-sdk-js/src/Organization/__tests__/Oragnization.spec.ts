@@ -13,7 +13,7 @@ describe('Organization class', () => {
   it('should create an Org instance', () => {
     expect(org).toBeInstanceOf(Organization);
     expect(org.name).toEqual(mockOrgResponse.name);
-    expect(org.label).toEqual(mockOrgResponse._label);
+    expect(org.label).toEqual(mockOrgResponse.label);
     expect(org.projectNumber).toEqual(mockOrgResponse.projectNumber);
   });
 

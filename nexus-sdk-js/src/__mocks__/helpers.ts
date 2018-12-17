@@ -12,7 +12,7 @@ export const mockOrgResponse: OrgResponse = {
   '@id': 'https://nexus.example.com/v1/orgs/myorg',
   '@type': 'nxv:Organization',
   name: 'myname',
-  _label: 'myorg',
+  label: 'myorg',
   _uuid: '659aed73-4cde-4016-93ec-67cbd308ac25',
   _self: 'https://nexus.example.com/v1/orgs/myorg',
   _constrainedBy: 'nxs:organization',

@@ -32,7 +32,7 @@ describe('Project class', () => {
     it('should call httpGet method with the proper get views url', () => {
       const p = new Project('my-org', mockProjectResponse);
       const myViews = p.listElasticSearchViews();
-      const viewURL = `views/${p.orgLabel}/${p.label}`;
+      const viewURL = `/views/${p.orgLabel}/${p.label}`;
       expect(mockHttpGet).toBeCalledWith(viewURL);
     });
 

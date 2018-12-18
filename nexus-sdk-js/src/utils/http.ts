@@ -1,7 +1,17 @@
 import fetch, { Headers, HeaderInit, Response } from 'node-fetch';
 import { store } from '../Nexus';
 
-const getHeaders = (headers?: Object): HeaderInit => {
+type httpTypes = 'json' | 'text' | 'arrayBuffer' | 'blob';
+
+interface HttpConfig {
+  sendAs?: httpTypes;
+  receiveAs?: httpTypes;
+  extraHeaders?: { [key: string]: string };
+}
+
+const getHeaders = (
+  headers: { [key: string]: string } = { 'Content-Type': 'application/json' },
+): HeaderInit => {
   const {
     auth: { accessToken },
   } = store.getState();
@@ -12,9 +22,9 @@ const getHeaders = (headers?: Object): HeaderInit => {
     };
   }
   return new Headers({
+    ...headers,
     ...extraHeaders,
     mode: 'cors',
-    'Content-Type': 'application/json',
   });
 };
 
@@ -27,6 +37,23 @@ function jsonParser(response: Response): Promise<Object> {
     return response.json();
   } catch (error) {
     throw new Error(error.message);
+  }
+}
+
+function textParser(response: Response): Promise<string> {
+  try {
+    return response.text();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+function prepareBody<T = object>(body: T, as: httpTypes = 'json'): any {
+  switch (as) {
+    case 'text':
+      return String(body);
+    default:
+      return JSON.stringify(body);
   }
 }
 
@@ -55,14 +82,18 @@ export function httpGet(url: string, useBase: boolean = true): Promise<any> {
     .catch(parseError);
 }
 
-export function httpPost(url: string, body?: Object): Promise<any> {
+export function httpPost<T = Object>(
+  url: string,
+  body?: T,
+  config?: HttpConfig,
+): Promise<any> {
   const {
     api: { baseUrl },
   } = store.getState();
   return fetch(`${baseUrl}${url}`, {
-    headers: getHeaders(),
+    headers: getHeaders(config && config.extraHeaders),
     method: 'POST',
-    body: JSON.stringify(body),
+    body: prepareBody(body, config && config.sendAs),
   })
     .then(checkStatus)
     .then(r => parseResponse(r))

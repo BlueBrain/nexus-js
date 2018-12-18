@@ -20,7 +20,7 @@ export interface OrgResponse {
   '@context': string;
   '@id': string;
   '@type': string;
-  _label: string;
+  label: string;
   _self: string;
   _constrainedBy: string;
   _createdAt: string;
@@ -49,7 +49,7 @@ export default class Organization {
     this.context = organizationResponse['@context'];
     this.id = organizationResponse['@id'];
     this.type = organizationResponse['@type'];
-    this.label = organizationResponse._label;
+    this.label = organizationResponse.label;
     this.name = organizationResponse.name;
     this.deprecated = organizationResponse._deprecated;
     this.rev = organizationResponse._rev;
@@ -101,7 +101,7 @@ export default class Organization {
       );
       const project = new Project(this.label, {
         ...projectResponse,
-        resourceNumber: resourceResponse._total,
+        resourceNumber: resourceResponse._total || 0,
       });
       return project;
     } catch (e) {

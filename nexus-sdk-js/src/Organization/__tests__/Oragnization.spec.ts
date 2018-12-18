@@ -5,6 +5,7 @@ import {
   mockProjectResponse,
   mockListProjectResponse,
   mockOrgResponse,
+  mockListResourceResponse,
 } from '../../__mocks__/helpers';
 
 const org = new Organization(mockOrgResponse);
@@ -13,7 +14,7 @@ describe('Organization class', () => {
   it('should create an Org instance', () => {
     expect(org).toBeInstanceOf(Organization);
     expect(org.name).toEqual(mockOrgResponse.name);
-    expect(org.label).toEqual(mockOrgResponse._label);
+    expect(org.label).toEqual(mockOrgResponse.label);
     expect(org.projectNumber).toEqual(mockOrgResponse.projectNumber);
   });
 
@@ -21,15 +22,16 @@ describe('Organization class', () => {
     afterEach(() => {
       resetMocks();
     });
-    it('should call the API', () => {
-      org.getProject('project');
-      expect(mock.calls.length).toBe(1);
-    });
     it('should return a project', async () => {
-      mockResponse(JSON.stringify(mockProjectResponse));
+      mockResponses(
+        [JSON.stringify(mockProjectResponse)],
+        [JSON.stringify(mockListResourceResponse)],
+      );
       const project: Project = await org.getProject('project');
+      expect(mock.calls.length).toBe(2);
       expect(project).toBeInstanceOf(Project);
       expect(project.id).toEqual(mockProjectResponse['@id']);
+      expect(project.resourceNumber).toEqual(1);
     });
   });
   describe('list Projects', () => {

@@ -1,6 +1,6 @@
 {
   "name": "@bbp/nexus-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "JavaScript SDK from Nexus",
   "keywords": [
     "typescript",
@@ -42,6 +42,7 @@
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-terser": "^3.0.0",
     "ts-jest": "^23.10.4",
+    "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.0",
     "tslint-config-prettier": "^1.16.0",

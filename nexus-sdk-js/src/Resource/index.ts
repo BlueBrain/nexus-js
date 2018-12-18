@@ -65,7 +65,7 @@ export default class Resource<T = {}> {
   projectLabel: string;
   context?: Context;
   type?: string[];
-  self: URL;
+  self: string;
   id: string;
   constrainedBy: string;
   project: string;
@@ -97,7 +97,7 @@ export default class Resource<T = {}> {
     if (resourceResponse['@context']) {
       this.context = resourceResponse['@context'];
     }
-    this.self = new URL(resourceResponse._self);
+    this.self = resourceResponse._self;
     this.constrainedBy = resourceResponse._constrainedBy;
     this.project = resourceResponse._project;
     this.createdAt = resourceResponse._createdAt;

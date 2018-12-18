@@ -19,15 +19,16 @@ describe('Nexus class', () => {
     afterEach(() => {
       resetMocks();
     });
-    it('should call the API', () => {
-      nexus.getOrganization('myorg');
-      expect(mock.calls.length).toBe(1);
-    });
     it('should return an organisation', async () => {
-      mockResponse(JSON.stringify(mockOrgResponse));
+      mockResponses(
+        [JSON.stringify(mockOrgResponse)],
+        [JSON.stringify(mockListProjectResponse)],
+      );
       const org: Organization = await nexus.getOrganization('myorg');
+      expect(mock.calls.length).toBe(2);
       expect(org).toBeInstanceOf(Organization);
       expect(org.label).toEqual('myorg');
+      expect(org.projectNumber).toEqual(2);
     });
   });
 

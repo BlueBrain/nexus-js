@@ -5,6 +5,7 @@ import { ViewsListResponse } from '../views';
 import ElasticSearchView, {
   ElasticSearchViewResponse,
 } from '../views/ElasticSearchView';
+import SparqlView, { SparqlViewResponse } from '../views/SparqlView';
 
 export interface PrefixMapping {
   prefix: string;
@@ -108,7 +109,7 @@ export default class Project {
   // Promise<PaginatedList<ElasticSearchView>>
   async listElasticSearchViews(): Promise<ElasticSearchView[]> {
     try {
-      const viewURL = `views/${this.orgLabel}/${this.label}`;
+      const viewURL = `/views/${this.orgLabel}/${this.label}`;
       const viewListResponse: ViewsListResponse = await httpGet(viewURL);
       const elasticSearchViews: ElasticSearchView[] = viewListResponse._results
         .filter(entry => entry['@type'].includes('ElasticView'))
@@ -121,6 +122,27 @@ export default class Project {
             ),
         );
       return elasticSearchViews;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // TODO: refactor once we can fetch views per IDs (broken just now)
+  async getSparqlView(): Promise<SparqlView> {
+    try {
+      const viewURL = `/views/${this.orgLabel}/${this.label}`;
+      const viewListResponse: ViewsListResponse = await httpGet(viewURL);
+      const sparqlViews: SparqlView[] = viewListResponse._results
+        .filter(entry => entry['@type'].includes('SparqlView'))
+        .map(
+          sparqlViewResponse =>
+            new SparqlView(
+              this.orgLabel,
+              this.label,
+              sparqlViewResponse as SparqlViewResponse,
+            ),
+        );
+      return sparqlViews[0];
     } catch (error) {
       throw error;
     }

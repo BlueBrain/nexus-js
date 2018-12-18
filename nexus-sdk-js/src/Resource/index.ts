@@ -77,7 +77,7 @@ export default class Resource<T = {}> {
   deprecated: boolean;
   distribution?: Distribution | Distribution[];
   data: T;
-  raw: any;
+  raw: ResourceResponseCommon;
   constructor(
     orgLabel: string,
     projectLabel: string,
@@ -116,5 +116,19 @@ export default class Resource<T = {}> {
       },
       {},
     );
+  }
+
+  formatName(raw: ResourceResponseCommon): string {
+    const formattedNameValue =
+      raw['skos:prefLabel'] ||
+      raw['rdfs:label'] ||
+      raw['schema:name'] ||
+      raw['name'] ||
+      raw['@id'];
+    return formattedNameValue;
+  }
+
+  get name(): string {
+    return this.formatName(this.raw);
   }
 }

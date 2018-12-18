@@ -132,4 +132,50 @@ describe('Resource class', () => {
       expect(resource.data.banana).toBeUndefined();
     });
   });
+
+  describe('.name', () => {
+    it('should match the name property if defined', () => {
+      const myName = 'Foo';
+      const resource = new Resource('testOrg', 'testProject', {
+        ...mockListResponseWithoutType,
+        name: myName,
+      });
+      expect(resource.name).toEqual(myName);
+    });
+    it('should match a schema:name property if defined', () => {
+      const myName = 'Foo';
+      const resource = new Resource('testOrg', 'testProject', {
+        ...mockListResponseWithoutType,
+        'schema:name': myName,
+      });
+      expect(resource.name).toEqual(myName);
+    });
+    it('should match a "skos:prefLabel" property if defined over "name"', () => {
+      const myName = 'Foo';
+      const myPrefLabel = 'Bar';
+      const resource = new Resource('testOrg', 'testProject', {
+        ...mockListResponseWithoutType,
+        'skos:prefLabel': myPrefLabel,
+        name: myName,
+      });
+      expect(resource.name).toEqual(myPrefLabel);
+    });
+    it('should efault to the @id value if nothing else matches', () => {
+      const resource = new Resource(
+        'testOrg',
+        'testProject',
+        mockListResponseWithoutType,
+      );
+      expect(resource.name).toEqual(mockListResponseWithoutType['@id']);
+    });
+    it('should return the overwritten value of .formatName() method', () => {
+      const bar = 'FooBar';
+      const resource = new Resource('testOrg', 'testProject', {
+        ...mockListResponseWithoutType,
+        foo: bar,
+      });
+      resource.formatName = resource => resource.foo;
+      expect(resource.name).toEqual(bar);
+    });
+  });
 });

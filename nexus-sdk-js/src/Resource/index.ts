@@ -123,6 +123,7 @@ export default class Resource<T = {}> {
       raw['skos:prefLabel'] ||
       raw['rdfs:label'] ||
       raw['schema:name'] ||
+      raw['label'] ||
       raw['name'] ||
       raw['@id'];
     return formattedNameValue;

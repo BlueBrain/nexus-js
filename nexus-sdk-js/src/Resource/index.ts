@@ -77,11 +77,13 @@ export default class Resource<T = {}> {
   deprecated: boolean;
   distribution?: Distribution | Distribution[];
   data: T;
+  raw: any;
   constructor(
     orgLabel: string,
     projectLabel: string,
     resourceResponse: ResourceResponseCommon,
   ) {
+    this.raw = resourceResponse;
     this.orgLabel = orgLabel;
     this.projectLabel = projectLabel;
     this.id = resourceResponse['@id'];

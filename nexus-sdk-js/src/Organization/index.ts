@@ -101,7 +101,7 @@ export default class Organization {
       );
       const project = new Project(this.label, {
         ...projectResponse,
-        resourceNumber: resourceResponse._total,
+        resourceNumber: resourceResponse._total || 0,
       });
       return project;
     } catch (e) {

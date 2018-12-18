@@ -1,5 +1,7 @@
 # SDK for nexus
 
+![Nexus.js](nexus-js-logo.png)
+
 ## Develop
 
 ### With Node.js

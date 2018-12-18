@@ -15,7 +15,7 @@ export interface SparqlViewResponse {
 
 // based on: https://www.w3.org/TR/sparql11-results-json/
 // describes a SPARQL Query Results JSON
-interface SparqlViewQueryResponse {
+export interface SparqlViewQueryResponse {
   head: {
     vars: string[];
     link?: string | string[];
@@ -28,8 +28,8 @@ interface SparqlViewQueryResponse {
         datatype?: string;
         'xml:lang'?: string;
         [attribute: string]: any;
-      }[];
-    };
+      };
+    }[];
   };
   boolean?: boolean;
 }

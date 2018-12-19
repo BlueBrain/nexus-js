@@ -1,72 +1,41 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
+import typescript from 'rollup-plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 
 const libName = 'nexus-sdk';
-const UMDName = 'Nexus';
+const WindowName = 'Nexus';
 
 export default [
-  // ES for Browsers
+  // Browser Development
   {
-    input: 'es/index.js',
-    output: { file: 'es/nexus.mjs', format: 'es', indent: false },
-    plugins: [
-      nodeResolve({
-        jsnext: true,
-      }),
-      replace({
-        'process.env.NODE_ENV': JSON.stringify('production'),
-      }),
-      terser({
-        compress: {
-          pure_getters: true,
-          unsafe: true,
-          unsafe_comps: true,
-          warnings: false,
-        },
-      }),
-    ],
-  },
-
-  // UMD Development
-  {
-    input: 'es/index.js',
+    input: 'src/Nexus.ts',
     output: {
       file: `dist/${libName}.js`,
       format: 'umd',
-      name: UMDName,
+      name: WindowName,
       indent: false,
+      exports: 'default',
     },
     plugins: [
-      nodeResolve({
-        jsnext: true,
-      }),
-      babel({
-        exclude: 'node_modules/**',
-      }),
+      typescript(),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development'),
       }),
     ],
   },
 
-  // UMD Production
+  // Browser Production
   {
-    input: 'es/index.js',
+    input: 'src/Nexus.ts',
     output: {
       file: `dist/${libName}.min.js`,
       format: 'umd',
-      name: UMDName,
+      name: WindowName,
       indent: false,
+      exports: 'default',
     },
     plugins: [
-      nodeResolve({
-        jsnext: true,
-      }),
-      babel({
-        exclude: 'node_modules/**',
-      }),
+      typescript(),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
       }),

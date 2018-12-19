@@ -1,5 +1,6 @@
-import fetch, { Headers, HeaderInit, Response } from 'node-fetch';
-import { store } from '../Nexus';
+// import fetch, { Headers, HeaderInit, Response } from 'node-fetch';
+import fetch from 'cross-fetch';
+import store from '../store';
 
 type httpTypes = 'json' | 'text' | 'arrayBuffer' | 'blob';
 
@@ -11,7 +12,7 @@ interface HttpConfig {
 
 const getHeaders = (
   headers: { [key: string]: string } = { 'Content-Type': 'application/json' },
-): HeaderInit => {
+): Headers => {
   const {
     auth: { accessToken },
   } = store.getState();

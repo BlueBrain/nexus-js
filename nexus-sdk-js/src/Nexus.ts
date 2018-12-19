@@ -1,5 +1,5 @@
 import { httpGet, httpPut } from './utils/http';
-import Store from './utils/Store';
+import store from './store';
 import Organization, { ListOrgsResponse, OrgResponse } from './Organization';
 import { CreateOrganizationException } from './Organization/exceptions';
 
@@ -7,15 +7,6 @@ type NexusConfig = {
   environment: string;
   token?: string;
 };
-
-export const store: Store = new Store({
-  auth: {
-    accessToken: null,
-  },
-  api: {
-    baseUrl: null,
-  },
-});
 
 export default class Nexus {
   constructor(config: NexusConfig) {

@@ -1,4 +1,3 @@
-// import fetch, { Headers, HeaderInit, Response } from 'node-fetch';
 import fetch from 'cross-fetch';
 import store from '../store';
 

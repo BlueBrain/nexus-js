@@ -3,18 +3,17 @@ import typescript from 'rollup-plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 
 const libName = 'nexus-sdk';
-const WindowName = 'Nexus';
+const umdName = 'nexusSdk';
 
 export default [
   // Browser Development
   {
-    input: 'src/Nexus.ts',
+    input: 'src/index.ts',
     output: {
       file: `dist/${libName}.js`,
       format: 'umd',
-      name: WindowName,
+      name: umdName,
       indent: false,
-      exports: 'default',
     },
     plugins: [
       typescript(),
@@ -26,13 +25,12 @@ export default [
 
   // Browser Production
   {
-    input: 'src/Nexus.ts',
+    input: 'src/index.ts',
     output: {
       file: `dist/${libName}.min.js`,
       format: 'umd',
-      name: WindowName,
+      name: umdName,
       indent: false,
-      exports: 'default',
     },
     plugins: [
       typescript(),

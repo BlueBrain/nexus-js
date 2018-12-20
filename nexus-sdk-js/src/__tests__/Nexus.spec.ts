@@ -8,12 +8,6 @@ describe('Nexus class', () => {
   it('should create a Nexus instance', () => {
     expect(nexus).toBeInstanceOf(Nexus);
   });
-  it('should throw an error', () => {
-    // @ts-ignore
-    expect(() => new Nexus()).toThrowErrorMatchingSnapshot();
-    // @ts-ignore
-    expect(() => new Nexus({ foo: 'bar' })).toThrowErrorMatchingSnapshot();
-  });
 
   describe('get an Org', () => {
     afterEach(() => {

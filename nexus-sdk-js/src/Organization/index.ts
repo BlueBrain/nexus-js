@@ -1,6 +1,9 @@
-import { httpGet } from '../utils/http';
-import Project, { ProjectResponse } from '../Project';
-import { ListResourceResponse } from '../Resource';
+import Project from '../Project';
+import {
+  createOrganization,
+  getOrganization,
+  listOrganizations,
+} from './utils';
 
 export interface ListOrgsResponse {
   '@context': string;
@@ -45,6 +48,10 @@ export default class Organization {
   uuid: string;
   projectNumber: number;
 
+  static get = getOrganization;
+  static create = createOrganization;
+  static list = listOrganizations;
+
   constructor(organizationResponse: OrgResponse) {
     this.context = organizationResponse['@context'];
     this.id = organizationResponse['@id'];
@@ -57,55 +64,11 @@ export default class Organization {
     this.projectNumber = organizationResponse.projectNumber;
   }
 
-  // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-  async listProjects(): Promise<Project[]> {
-    try {
-      const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
-      if (listOrgsResponse.code || !listOrgsResponse._results) {
-        return [];
-      }
-      // Get list of unique orgs names
-      const filteredOrgNames: {
-        orgName: string;
-        projectName: string;
-      }[] = listOrgsResponse._results
-        .map(org => {
-          const split = org._id.split('/');
-          const [orgName, projectName] = split.slice(
-            split.length - 2,
-            split.length,
-          );
-          return { orgName, projectName };
-        })
-        .filter(({ orgName }) => orgName === this.label);
-
-      return Promise.all(
-        filteredOrgNames.map(
-          async ({ projectName }) => await this.getProject(projectName),
-        ),
-      );
-    } catch (e) {
-      return e;
-    }
+  async getProject(projectLabel: string): Promise<Project> {
+    return Project.get(this.label, projectLabel);
   }
 
-  async getProject(projectName: string): Promise<Project> {
-    try {
-      // Get project details
-      const projectResponse: ProjectResponse = await httpGet(
-        `/projects/${this.label}/${projectName}`,
-      );
-      // We want to know how many resources the project has
-      const resourceResponse: ListResourceResponse = await httpGet(
-        `/resources/${this.label}/${projectName}`,
-      );
-      const project = new Project(this.label, {
-        ...projectResponse,
-        resourceNumber: resourceResponse._total || 0,
-      });
-      return project;
-    } catch (e) {
-      return e;
-    }
+  async listProjects(): Promise<Project[]> {
+    return Project.list(this.label);
   }
 }

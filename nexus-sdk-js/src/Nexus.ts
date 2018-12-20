@@ -1,110 +1,58 @@
-import { httpGet, httpPut } from './utils/http';
 import store from './store';
-import Organization, { ListOrgsResponse, OrgResponse } from './Organization';
-import { CreateOrganizationException } from './Organization/exceptions';
+import Organization from './Organization';
 
 type NexusConfig = {
-  environment: string;
+  environment?: string;
   token?: string;
 };
 
 export default class Nexus {
-  constructor(config: NexusConfig) {
-    if (!config) {
-      throw new Error('You need to provide a Nexus config.');
-    }
-    if (!config.environment) {
-      throw new Error(
-        'No environment provided. Please specify your Nexus instance endpoint.',
-      );
-    }
+  static store = store;
+
+  static setEnvironment(environment: string): void {
     store.update('api', state => ({
       ...state,
-      baseUrl: config.environment,
+      baseUrl: environment,
     }));
-    if (config.token) {
-      store.update('auth', state => ({
-        ...state,
-        accessToken: config.token,
-      }));
-    }
   }
 
-  setToken(token: string): void {
+  static setToken(token: string): void {
+    if (!token || token === undefined || token.length === 0) {
+      throw new Error('Token is invalid.');
+    }
     store.update('auth', state => ({
       ...state,
       accessToken: token,
     }));
   }
 
-  removeToken(): void {
+  static removeToken(): void {
     store.update('auth', state => ({
       ...state,
       accessToken: undefined,
     }));
   }
 
-  // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-  async listOrganizations(): Promise<Organization[]> {
-    try {
-      const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
-      if (listOrgsResponse.code || !listOrgsResponse._results) {
-        return [];
+  constructor(config?: NexusConfig) {
+    if (config) {
+      if (config.environment) {
+        Nexus.setEnvironment(config.environment);
       }
-      // Get list of unique orgs names
-      const filteredOrgNames: string[] = listOrgsResponse._results
-        .map(org => {
-          const split = org._id.split('/');
-          const orgName = split.slice(split.length - 2, split.length - 1)[0];
-          return orgName;
-        })
-        .filter((org, index, self) => self.indexOf(org) === index);
-
-      // get orgs details
-      return Promise.all(
-        filteredOrgNames.map(async org => await this.getOrganization(org)),
-      );
-    } catch (e) {
-      throw new Error(`ListOrgsError: ${e}`);
+      if (config.token) {
+        Nexus.setToken(config.token);
+      }
     }
   }
 
-  // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-  async getOrganization(name: string): Promise<Organization> {
-    try {
-      const orgResponse: OrgResponse = await httpGet(`/orgs/${name}`);
-      // we want to know how many projects there are per organisation
-      const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
-      const projectNumber: number = listOrgsResponse._results
-        ? listOrgsResponse._results.reduce((prev, org) => {
-            const split = org._id.split('/');
-            const orgName = split.slice(split.length - 2, split.length - 1)[0];
-            if (orgName === name) {
-              return prev + 1;
-            }
-            return prev;
-          }, 0)
-        : 0;
+  async listOrganizations(): Promise<Organization[]> {
+    return Organization.list();
+  }
 
-      const org = new Organization({ ...orgResponse, projectNumber });
-      return org;
-    } catch (e) {
-      throw new Error(`ListOrgsError: ${e}`);
-    }
+  async getOrganization(name: string): Promise<Organization> {
+    return Organization.get(name);
   }
 
   async createOrganization(label: string, name: string): Promise<Organization> {
-    try {
-      const orgResponse: OrgResponse = await httpPut(`/orgs/${label}`, {
-        name,
-      });
-      return new Organization({
-        ...orgResponse,
-        projectNumber: 0,
-        _deprecated: false,
-      });
-    } catch (error) {
-      throw new CreateOrganizationException(error.message);
-    }
+    return Organization.create(label, name);
   }
 }

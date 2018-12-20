@@ -100,11 +100,16 @@ export function httpPost<T = Object>(
     .catch(parseError);
 }
 
-export function httpPut(url: string, body?: Object): Promise<any> {
+export function httpPut(
+  url: string,
+  body?: Object,
+  useBase: boolean = true,
+): Promise<any> {
   const {
     api: { baseUrl },
   } = store.getState();
-  return fetch(`${baseUrl}${url}`, {
+  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  return fetch(fetchURL, {
     headers: getHeaders(),
     method: 'PUT',
     body: JSON.stringify(body),

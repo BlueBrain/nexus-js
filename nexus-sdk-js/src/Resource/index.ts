@@ -1,5 +1,10 @@
 import { Context, Distribution } from '../utils/types';
-import { httpGet } from '../utils/http';
+import {
+  getResource,
+  getSelfResource,
+  updateResource,
+  updateSelfResource,
+} from './utils';
 
 export const RESOURCE_METADATA_KEYS = [
   '@context',
@@ -46,38 +51,42 @@ export interface ResourceResponse extends ResourceResponseCommon {
 
 export class ResourceError extends Error {}
 
-export const getResource = async (
-  id: string,
-  orgLabel: string,
-  projectLabel: string,
-): Promise<Resource> => {
-  try {
-    const resourceResponse: ResourceResponse = await httpGet(id, false);
-    const resource = new Resource(orgLabel, projectLabel, resourceResponse);
-    return resource;
-  } catch (error) {
-    throw error;
-  }
-};
-
 export default class Resource<T = {}> {
-  orgLabel: string;
-  projectLabel: string;
-  context?: Context;
-  type?: string[];
-  self: string;
-  id: string;
-  constrainedBy: string;
-  project: string;
-  createdAt: string;
-  createdBy: string;
-  updatedAt: string;
-  updatedBy: string;
-  rev: number;
-  deprecated: boolean;
-  distribution?: Distribution | Distribution[];
-  data: T;
-  raw: ResourceResponseCommon;
+  readonly orgLabel: string;
+  readonly projectLabel: string;
+  readonly context?: Context;
+  readonly type?: string[];
+  readonly self: string;
+  readonly id: string;
+  readonly constrainedBy: string;
+  readonly project: string;
+  readonly createdAt: string;
+  readonly createdBy: string;
+  readonly updatedAt: string;
+  readonly updatedBy: string;
+  readonly rev: number;
+  readonly deprecated: boolean;
+  readonly distribution?: Distribution | Distribution[];
+  readonly data: T;
+  readonly raw: ResourceResponseCommon;
+  readonly resourceURL: string;
+
+  static getSelf = getSelfResource;
+  static get = getResource;
+  static updateSelf = updateSelfResource;
+  static update = updateResource;
+
+  static formatName(raw: ResourceResponseCommon): string {
+    const formattedNameValue =
+      raw['skos:prefLabel'] ||
+      raw['rdfs:label'] ||
+      raw['schema:name'] ||
+      raw['label'] ||
+      raw['name'] ||
+      raw['@id'];
+    return formattedNameValue;
+  }
+
   constructor(
     orgLabel: string,
     projectLabel: string,
@@ -116,20 +125,31 @@ export default class Resource<T = {}> {
       },
       {},
     );
-  }
-
-  formatName(raw: ResourceResponseCommon): string {
-    const formattedNameValue =
-      raw['skos:prefLabel'] ||
-      raw['rdfs:label'] ||
-      raw['schema:name'] ||
-      raw['label'] ||
-      raw['name'] ||
-      raw['@id'];
-    return formattedNameValue;
+    this.resourceURL = `/resources/${this.orgLabel}/${
+      this.projectLabel
+    }/resource/${this.id}`;
   }
 
   get name(): string {
-    return this.formatName(this.raw);
+    return Resource.formatName(this.raw);
+  }
+
+  async update({
+    context,
+    ...data
+  }: {
+    context: { [field: string]: string };
+    [field: string]: any;
+  }): Promise<Resource> {
+    return Resource.updateSelf(
+      this.resourceURL,
+      this.rev,
+      {
+        context,
+        data,
+      },
+      this.orgLabel,
+      this.projectLabel,
+    );
   }
 }

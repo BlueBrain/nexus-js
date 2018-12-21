@@ -1,6 +1,6 @@
 import Nexus from './Nexus';
-import Store from './utils/Store';
 
+export { default as Nexus } from './Nexus';
 export { default as Organization } from './Organization';
 export { default as Project } from './Project';
 export { default as Resource } from './Resource';

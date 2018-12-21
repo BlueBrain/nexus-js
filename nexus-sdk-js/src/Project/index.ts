@@ -1,4 +1,4 @@
-import Resource, { ListResourceResponse, getResource } from '../Resource';
+import Resource, { ListResourceResponse } from '../Resource';
 import { httpGet } from '../utils/http';
 import { PaginationSettings, PaginatedList } from '../utils/types';
 import { ViewsListResponse } from '../views';
@@ -6,6 +6,7 @@ import ElasticSearchView, {
   ElasticSearchViewResponse,
 } from '../views/ElasticSearchView';
 import SparqlView, { SparqlViewResponse } from '../views/SparqlView';
+import { getProject, listProjects } from './utils';
 
 export interface PrefixMapping {
   prefix: string;
@@ -49,6 +50,9 @@ export default class Project {
   prefixMappings: PrefixMapping[];
   resourceNumber: number;
   private projectResourceURL: string;
+
+  static get = getProject;
+  static list = listProjects;
 
   constructor(orgLabel: string, projectResponse: ProjectResponse) {
     this.orgLabel = orgLabel;
@@ -101,11 +105,11 @@ export default class Project {
   }
 
   async getResource(id: string): Promise<Resource> {
-    return await getResource(id, this.orgLabel, this.label);
+    return await Resource.getSelf(id, this.orgLabel, this.label);
   }
 
   // The current API does not support pagination / filtering of views
-  // This should be fixed when possible and converted to signituare
+  // This should be fixed when possible and converted to signature
   // Promise<PaginatedList<ElasticSearchView>>
   async listElasticSearchViews(): Promise<ElasticSearchView[]> {
     try {

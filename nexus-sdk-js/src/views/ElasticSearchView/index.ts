@@ -1,6 +1,6 @@
 import { httpPost } from '../../utils/http';
 import { PaginatedList, PaginationSettings } from '../../utils/types';
-import Resource, { ResourceResponseCommon, getResource } from '../../Resource';
+import Resource, { ResourceResponseCommon } from '../../Resource';
 
 // This is an Elastic Search Mapping
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
@@ -161,7 +161,7 @@ class ElasticSeachView {
       // By fetching each item by ID
       const results: Resource[] = await Promise.all(
         response.hits.hits.map(async resource => {
-          return await getResource(
+          return await Resource.getSelf(
             resource._source['_self'],
             this.orgLabel,
             this.projectLabel,

@@ -174,7 +174,7 @@ describe('Resource class', () => {
         ...mockListResponseWithoutType,
         foo: bar,
       });
-      resource.formatName = resource => resource.foo;
+      Resource.formatName = resource => resource.foo;
       expect(resource.name).toEqual(bar);
     });
   });

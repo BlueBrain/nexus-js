@@ -25,13 +25,25 @@ Make sure you have already installed both [Docker Engine](https://docs.docker.co
 ## Usage
 
 ```typescript
-import Nexus from 'nexus-sdk';
+// import the Nexus class
 
-// Create a Nexus instance
+// ES modules
+import Nexus from '@bbp/nexus-sdk';
+// Node.js
+const { Nexus } = require('@bbp/nexus-sdk');
+// in browser
+const { Nexus } = nexusSdk; // global name exposed in window is nexusSdk
+
+// Create a Nexus instance (config is optional)
 const nexus: Nexus = new Nexus({
-  environment: 'http://api.url',
+  environment: 'http://api.url', // optional
   token: 'my_bearer_token', // optional
 });
+
+// You can also setup your Nexus config with the static methods
+Nexus.setEnvironment('http://api.url');
+Nexus.setToken('my_bearer_token');
+Nexus.removeToken();
 
 // List all organisations
 const orgs: Organization[] = await nexus.listOrganizations();
@@ -52,7 +64,7 @@ const myProject: Project = await myOrg.getProject('my-project');
 const resources: PaginatedList<Resource> = await myProject.listResources(pagination?: PaginationSettings);
 
 // Get a specific resource
-const myResource: Resource = await myProject.getResource('my-resource');
+const myResource: Resource = await myProject.getResource('schema-id', 'my-resource-id');
 
 // Fetch all Elastic Search View instances in a Project
 const myViews: ElasticSearchView[] = await myProject.listElasticSearchViews()
@@ -73,6 +85,21 @@ const sparqlView: SparqlView = await myProject.getSparqlView();
 
 // Query a Project with Sparql
 const response: SparqlQueryViewResponse = sparqlView.query('SELECT * where {?s ?p ?o} LIMIT 50');
+```
+
+Each class also has static methods wrapping and reflecting the API endpoints. For example:
+
+```typescript
+import { Organization, Project, Resource } from '@bbp/nexus-sdk';
+
+const org = Organization.get('org-label');
+const project = Project.get('org-label', 'project-label');
+const resource = Resource.get(
+  'org-label',
+  'project-label',
+  'schema-id',
+  'resource-id',
+);
 ```
 
 # License

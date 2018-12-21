@@ -26,15 +26,10 @@ Pre-alpha
 
 - [x] Get by label
 - [x] List Projects
-- [ ] Create
+- [x] Create
 - [ ] Update
 - [ ] Delete
 
-<<<<<<< HEAD
-```typescript
-// import the Nexus class
-
-=======
 #### Resources
 
 - [x] Get by <schema ID, resource ID>
@@ -89,20 +84,11 @@ npm i -S @bbp/nexus-sdk
 ### Add to your project
 
 ```javascript
->>>>>>> add menu + todo list
 // ES modules
 import Nexus from '@bbp/nexus-sdk';
 // Node.js
 const { Nexus } = require('@bbp/nexus-sdk');
 // in browser
-<<<<<<< HEAD
-const { Nexus } = nexusSdk; // global name exposed in window is nexusSdk
-
-// Create a Nexus instance (config is optional)
-const nexus: Nexus = new Nexus({
-  environment: 'http://api.url', // optional
-  token: 'my_bearer_token', // optional
-=======
 const { Nexus } = nexusSdk; // global name is window.nexusSdk
 ```
 
@@ -113,7 +99,6 @@ const { Nexus } = nexusSdk; // global name is window.nexusSdk
 const nexus: Nexus = new Nexus({
   environment: 'http://api.url',
   token: 'my_bearer_token',
->>>>>>> add menu + todo list
 });
 
 // You can also setup your Nexus config with the static methods
@@ -168,15 +153,9 @@ Each class also has static methods wrapping and reflecting the API endpoints. Fo
 ```typescript
 import { Organization, Project, Resource } from '@bbp/nexus-sdk';
 
-<<<<<<< HEAD
-const org = Organization.get('org-label');
-const project = Project.get('org-label', 'project-label');
-const resource = Resource.get(
-=======
 const org: Organization = Organization.get('org-label');
 const project: Project = Project.get('org-label', 'project-label');
 const resource: Resource = Resource.get(
->>>>>>> add menu + todo list
   'org-label',
   'project-label',
   'schema-id',
@@ -184,8 +163,6 @@ const resource: Resource = Resource.get(
 );
 ```
 
-<<<<<<< HEAD
-=======
 ## Development
 
 ### With Node.js
@@ -206,7 +183,6 @@ Make sure you have already installed both [Docker Engine](https://docs.docker.co
 - Lint: `make lint`
 - Generate Documentation: `make documentation`
 
->>>>>>> add menu + todo list
 # License
 
 - [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.)

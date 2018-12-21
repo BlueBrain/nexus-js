@@ -3,6 +3,8 @@ import Project, { ProjectResponse } from '../index';
 import {
   mockProjectResponse,
   mockViewsListResponse,
+  mockListResourceResponse,
+  mockListProjectResponse,
 } from '../../__mocks__/helpers';
 import { httpGet } from '../../utils/http';
 import {
@@ -29,22 +31,45 @@ describe('Project class', () => {
     expect(p.createdAt.toISOString()).toEqual(mockProjectResponse._createdAt);
     expect(p.updatedAt.toISOString()).toEqual(mockProjectResponse._updatedAt);
   });
+  describe('static methods', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+    it('should return a project', async () => {
+      mockResponses(
+        [JSON.stringify(mockProjectResponse)],
+        [JSON.stringify(mockListResourceResponse)],
+      );
+      const project: Project = await Project.get('myorg', 'project');
+      expect(mock.calls.length).toBe(2);
+      expect(project).toBeInstanceOf(Project);
+      expect(project.id).toEqual(mockProjectResponse['@id']);
+      expect(project.resourceNumber).toEqual(1);
+    });
+    it('should return a list of projects', async () => {
+      mockResponses(
+        [JSON.stringify(mockListProjectResponse)],
+        [JSON.stringify(mockProjectResponse)],
+        [JSON.stringify(mockProjectResponse)],
+        [JSON.stringify(mockListProjectResponse)],
+        [JSON.stringify(mockListProjectResponse)],
+      );
+      const projects: Project[] = await Project.list('myorg');
+      expect(mock.calls.length).toBe(5); // TODO: VERY BAD, wait after API refactor before addressing to backend team
+      expect(projects.length).toEqual(2);
+    });
+  });
 
   describe.skip('listElasticSearchViews()', () => {
-    const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
-
-    // Mock the elastic earch views response
-    mockHttpGet.mockImplementation(async () => mockViewsListResponse);
-
     afterEach(() => {
-      mockHttpGet.mockClear();
+      resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', () => {
       const p = new Project('my-org', mockProjectResponse);
       const myViews = p.listElasticSearchViews();
       const viewURL = `/views/${p.orgLabel}/${p.label}`;
-      expect(mockHttpGet).toBeCalledWith(viewURL);
+      expect(mock.calls[0][0]).toBeCalledWith(viewURL);
     });
 
     it('should return a just list of ElasticSearchViews from a response that includes multiple view types', async () => {

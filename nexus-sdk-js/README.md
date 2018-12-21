@@ -87,33 +87,27 @@ npm i -S @bbp/nexus-sdk
 // ES modules
 import Nexus from '@bbp/nexus-sdk';
 // Node.js
-const { Nexus } = require('@bbp/nexus-sdk');
+const Nexus = require('@bbp/nexus-sdk');
 // in browser
-const { Nexus } = nexusSdk; // global name is window.nexusSdk
+const Nexus = nexusSdk; // global name is window.nexusSdk
 ```
 
 ## Documentation
 
 ```typescript
-// Create a Nexus instance (config is optional)
-const nexus: Nexus = new Nexus({
-  environment: 'http://api.url',
-  token: 'my_bearer_token',
-});
-
-// You can also setup your Nexus config with the static methods
+// Setup your Nexus config
 Nexus.setEnvironment('http://api.url');
 Nexus.setToken('my_bearer_token');
 Nexus.removeToken();
 
 // List all organisations
-const orgs: Organization[] = await nexus.listOrganizations();
+const orgs: Organization[] = await Nexus.listOrganizations();
 
 // Get a specific organisation
-const myOrg: Organization = await nexus.getOrganization('my-org');
+const myOrg: Organization = await Nexus.getOrganization('my-org');
 
 // Create an Organisation
-const myNewOrg = await nexus.createOrganization('myorglabel', 'MyOrgName');
+const myNewOrg = await Nexus.createOrganization('myorglabel', 'MyOrgName');
 
 // List all the projects that belong to an organisation
 const projects: Project[] = await myOrg.listProjects();
@@ -152,6 +146,8 @@ Each class also has static methods wrapping and reflecting the API endpoints. Fo
 
 ```typescript
 import { Organization, Project, Resource } from '@bbp/nexus-sdk';
+// or
+const { Organization, Project, Resource } = Nexus;
 
 const org: Organization = Organization.get('org-label');
 const project: Project = Project.get('org-label', 'project-label');

@@ -1,11 +1,9 @@
-import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
-import Organization, { OrgResponse } from '../';
+import { resetMocks, mock, mockResponses } from 'jest-fetch-mock';
+import Organization from '../';
 import Project from '../../Project';
 import {
-  mockProjectResponse,
   mockListProjectResponse,
   mockOrgResponse,
-  mockListResourceResponse,
 } from '../../__mocks__/helpers';
 import {
   getOrganization,
@@ -26,38 +24,30 @@ describe('Organization class', () => {
     expect(org.label).toEqual(mockOrgResponse.label);
     expect(org.projectNumber).toEqual(mockOrgResponse.projectNumber);
   });
-
-  describe('get Project', () => {
+  describe('static methods', () => {
     afterEach(() => {
       resetMocks();
     });
-    it('should return a project', async () => {
+    it('should return an organisation', async () => {
       mockResponses(
-        [JSON.stringify(mockProjectResponse)],
-        [JSON.stringify(mockListResourceResponse)],
+        [JSON.stringify(mockOrgResponse)],
+        [JSON.stringify(mockListProjectResponse)],
       );
-      const project: Project = await org.getProject('project');
+      const org: Organization = await Organization.get('myorg');
       expect(mock.calls.length).toBe(2);
-      expect(project).toBeInstanceOf(Project);
-      expect(project.id).toEqual(mockProjectResponse['@id']);
-      expect(project.resourceNumber).toEqual(1);
+      expect(org).toBeInstanceOf(Organization);
+      expect(org.label).toEqual('myorg');
+      expect(org.projectNumber).toEqual(2);
     });
-  });
-  describe('list Projects', () => {
-    afterEach(() => {
-      resetMocks();
-    });
-    it('should return a list of projects', async () => {
+    it('should return a list of organisations', async () => {
       mockResponses(
         [JSON.stringify(mockListProjectResponse)],
-        [JSON.stringify(mockProjectResponse)],
-        [JSON.stringify(mockProjectResponse)],
-        [JSON.stringify(mockListProjectResponse)],
-        [JSON.stringify(mockListProjectResponse)],
+        [JSON.stringify(mockOrgResponse)],
+        [JSON.stringify(mockOrgResponse)],
       );
-      const projects: Project[] = await org.listProjects();
-      expect(mock.calls.length).toBe(5); // TODO: VERY BAD, wait after API refactor before addressing to backend team
-      expect(projects.length).toEqual(2);
+      const orgs: Organization[] = await Organization.list();
+      expect(mock.calls.length).toBe(3);
+      expect(orgs.length).toEqual(1);
     });
   });
   describe('get an org', () => {

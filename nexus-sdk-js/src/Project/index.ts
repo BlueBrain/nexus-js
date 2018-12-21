@@ -6,12 +6,8 @@ import ElasticSearchView, {
   ElasticSearchViewResponse,
 } from '../views/ElasticSearchView';
 import SparqlView, { SparqlViewResponse } from '../views/SparqlView';
-import { getProject, listProjects } from './utils';
-
-export interface PrefixMapping {
-  prefix: string;
-  namespace: string;
-}
+import { getProject, listProjects, createProject } from './utils';
+import { PrefixMapping } from './types';
 
 export interface ProjectResponse {
   '@id': string;
@@ -53,6 +49,7 @@ export default class Project {
 
   static get = getProject;
   static list = listProjects;
+  static create = createProject;
 
   constructor(orgLabel: string, projectResponse: ProjectResponse) {
     this.orgLabel = orgLabel;

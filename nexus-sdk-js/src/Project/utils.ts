@@ -1,7 +1,8 @@
 import Project, { ProjectResponse } from '.';
 import { ListOrgsResponse } from '../Organization';
-import { httpGet } from '../utils/http';
+import { httpGet, httpPut } from '../utils/http';
 import { ListResourceResponse } from '../Resource';
+import { CreateProjectPayload } from './types';
 
 export async function getProject(
   orgLabel: string,
@@ -21,8 +22,8 @@ export async function getProject(
       resourceNumber: resourceResponse._total || 0,
     });
     return project;
-  } catch (e) {
-    return e;
+  } catch (error) {
+    return error;
   }
 }
 
@@ -53,7 +54,23 @@ export async function listProjects(orgLabel: string): Promise<Project[]> {
         async ({ projectName }) => await getProject(orgLabel, projectName),
       ),
     );
-  } catch (e) {
-    return e;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function createProject(
+  orgLabel: string,
+  projectLabel: string,
+  projectPayload: CreateProjectPayload,
+) {
+  try {
+    const projectResponse: ProjectResponse = await httpPut(
+      `/projects/${orgLabel}/${projectLabel}`,
+      projectPayload,
+    );
+    return new Project(orgLabel, projectResponse);
+  } catch (error) {
+    return error;
   }
 }

@@ -1,43 +1,119 @@
-# SDK for nexus
+[Status](#status) |
+[Getting Started](#getting-started) |
+[Documentation](#documentation) |
+[Development](#development) |
+[License](#license)
+
+# JS SDK for nexus
 
 ![Nexus.js](nexus-js-logo.png)
 
-## Develop
+## Status
 
-### With Node.js
+Pre-alpha
 
-- Install: `npm install`
-- Build: `npm run build`
-- Test: `npm run test`
-- Lint: `npm run lint`
-- Generate Documentation: `npm run documentation`
+### TODO list
 
-### With Docker
+#### Organizations
 
-Make sure you have already installed both [Docker Engine](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
+- [x] Get by label
+- [x] List Orgs // blocked, needs re-factor
+- [x] Create
+- [ ] Update
+- [ ] Delete
 
-- Install: `make install`
-- Build: `make build`
-- Test: `make test`
-- Lint: `make lint`
-- Generate Documentation: `make documentation`
+#### Projects
 
-## Usage
+- [x] Get by label
+- [x] List Projects
+- [ ] Create
+- [ ] Update
+- [ ] Delete
 
+<<<<<<< HEAD
 ```typescript
 // import the Nexus class
 
+=======
+#### Resources
+
+- [x] Get by <schema ID, resource ID>
+- [x] Get by self URL
+- [ ] Create
+- [x] Update
+- [ ] Delete
+
+#### Views
+
+- [ ] Get by id // blocked
+- [x] List Views
+- [ ] Create
+- [ ] Update
+- [ ] Delete
+
+#### Elasticsearch views
+
+- [ ] Create
+- [ ] Update
+- [ ] Delete
+- [x] Query
+- [x] Filter by type
+- [x] Filter by Constrained by
+
+#### Sparql view
+
+- [x] Query
+- [ ] Get incoming links
+- [ ] Get outgoing links
+
+#### Schemas
+
+#### Resolvers
+
+#### Data
+
+#### ACLs
+
+#### Permissions
+
+#### Realms
+
+## Getting started
+
+### Installation
+
+```bash
+npm i -S @bbp/nexus-sdk
+```
+
+### Add to your project
+
+```javascript
+>>>>>>> add menu + todo list
 // ES modules
 import Nexus from '@bbp/nexus-sdk';
 // Node.js
 const { Nexus } = require('@bbp/nexus-sdk');
 // in browser
+<<<<<<< HEAD
 const { Nexus } = nexusSdk; // global name exposed in window is nexusSdk
 
 // Create a Nexus instance (config is optional)
 const nexus: Nexus = new Nexus({
   environment: 'http://api.url', // optional
   token: 'my_bearer_token', // optional
+=======
+const { Nexus } = nexusSdk; // global name is window.nexusSdk
+```
+
+## Documentation
+
+```typescript
+// Create a Nexus instance (config is optional)
+const nexus: Nexus = new Nexus({
+  environment: 'http://api.url',
+  token: 'my_bearer_token',
+>>>>>>> add menu + todo list
 });
 
 // You can also setup your Nexus config with the static methods
@@ -92,9 +168,15 @@ Each class also has static methods wrapping and reflecting the API endpoints. Fo
 ```typescript
 import { Organization, Project, Resource } from '@bbp/nexus-sdk';
 
+<<<<<<< HEAD
 const org = Organization.get('org-label');
 const project = Project.get('org-label', 'project-label');
 const resource = Resource.get(
+=======
+const org: Organization = Organization.get('org-label');
+const project: Project = Project.get('org-label', 'project-label');
+const resource: Resource = Resource.get(
+>>>>>>> add menu + todo list
   'org-label',
   'project-label',
   'schema-id',
@@ -102,6 +184,29 @@ const resource = Resource.get(
 );
 ```
 
+<<<<<<< HEAD
+=======
+## Development
+
+### With Node.js
+
+- Install: `npm install`
+- Build: `npm run build`
+- Test: `npm run test`
+- Lint: `npm run lint`
+- Generate Documentation: `npm run documentation`
+
+### With Docker
+
+Make sure you have already installed both [Docker Engine](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
+
+- Install: `make install`
+- Build: `make build`
+- Test: `make test`
+- Lint: `make lint`
+- Generate Documentation: `make documentation`
+
+>>>>>>> add menu + todo list
 # License
 
-- [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+- [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.)

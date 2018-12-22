@@ -2,7 +2,7 @@ import Project, { ProjectResponse } from '.';
 import { ListOrgsResponse } from '../Organization';
 import { httpGet, httpPut } from '../utils/http';
 import { ListResourceResponse } from '../Resource';
-import { CreateProjectPayload } from './types';
+import { CreateProjectPayload, ListProjectOptions } from './types';
 
 /**
  *
@@ -45,9 +45,22 @@ export async function getProject(
 }
 
 // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-export async function listProjects(orgLabel: string): Promise<Project[]> {
+export async function listProjects(
+  orgLabel: string,
+  options?: ListProjectOptions,
+): Promise<Project[]> {
+  let ops = '';
+  if (options) {
+    ops = Object.keys(options).reduce(
+      (currentOps, key) =>
+        currentOps.length === 0
+          ? `?${key}=${options[key]}`
+          : `${currentOps}&${key}=${options[key]}`,
+      '',
+    );
+  }
   try {
-    const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
+    const listOrgsResponse: ListOrgsResponse = await httpGet(`/projects${ops}`);
     if (listOrgsResponse.code || !listOrgsResponse._results) {
       return [];
     }

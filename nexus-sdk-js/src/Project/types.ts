@@ -8,3 +8,11 @@ export interface CreateProjectPayload {
   base: string;
   prefixMappings: PrefixMapping[];
 }
+
+export interface ListProjectOptions {
+  q?: string;
+  from?: number;
+  size?: number;
+  deprecated?: boolean;
+  [option: string]: any;
+}

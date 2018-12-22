@@ -5,7 +5,7 @@ import {
   mockViewsListResponse,
 } from '../../__mocks__/helpers';
 import { httpGet } from '../../utils/http';
-import { getProject } from '../utils';
+import { getProject, listProjects } from '../utils';
 import Nexus from '../../Nexus';
 
 const baseUrl = 'http://api.url';
@@ -67,6 +67,47 @@ describe('Project class', () => {
       getProject('myorg', 'myproject', { revision: 39, tag: 'v1.0.0' });
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/myproject?rev=39`,
+      );
+    });
+  });
+  // TODO: blocked by https://github.com/BlueBrain/nexus/issues/112
+  describe.skip('get an project', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+    it('call the /projects endpoint', async () => {
+      listProjects('myorg');
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg`);
+    });
+    it('set the full text search option', async () => {
+      listProjects('myorg', { q: 'what_is_this' });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg?q=what_is_this`,
+      );
+    });
+    it('set the from option', async () => {
+      listProjects('myorg', { from: 2 });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg?from=2`);
+    });
+    it('set the size option', async () => {
+      listProjects('myorg', { size: 50 });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg?size=50`);
+    });
+    it('set the deprecated option', async () => {
+      listProjects('myorg', { deprecated: true });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg?deprecated=true`,
+      );
+    });
+    it('set all the options', async () => {
+      listProjects('myorg', {
+        d: 'query',
+        from: 3,
+        size: 10,
+        deprecated: true,
+      });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg?q=query&from=3&size=10&deprecated=true`,
       );
     });
   });

@@ -1,6 +1,6 @@
 import Project, { ProjectResponse } from '.';
 import { ListOrgsResponse } from '../Organization';
-import { httpGet, httpPut } from '../utils/http';
+import { httpGet, httpPut, httpDelete } from '../utils/http';
 import { ListResourceResponse } from '../Resource';
 import { CreateProjectPayload, ListProjectOptions } from './types';
 
@@ -145,5 +145,20 @@ export async function tagProject(
     return new Project(orgLabel, projectResponse);
   } catch (error) {
     return error;
+  }
+}
+
+export async function deprecateProject(
+  orgLabel: string,
+  projectLabel: string,
+  rev: number = 1,
+): Promise<Project> {
+  try {
+    const projectResponse: ProjectResponse = await httpDelete(
+      `/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
+    );
+    return new Project(orgLabel, projectResponse);
+  } catch (error) {
+    throw new Error(error);
   }
 }

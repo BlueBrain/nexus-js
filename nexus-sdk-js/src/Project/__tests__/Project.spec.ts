@@ -11,6 +11,7 @@ import {
   createProject,
   updateProject,
   tagProject,
+  deprecateProject,
 } from '../utils';
 import Nexus from '../../Nexus';
 
@@ -173,6 +174,17 @@ describe('Project class', () => {
       );
       expect(mock.calls[0][1].body).toEqual(
         JSON.stringify({ tag: 'v1.0.0', rev: 10 }),
+      );
+    });
+  });
+  describe('deprecate an org', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+    it('updates the specific revision', async () => {
+      deprecateProject('myorg', 'myproject', 12);
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg/myproject?rev=12`,
       );
     });
   });

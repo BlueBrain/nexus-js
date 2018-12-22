@@ -7,7 +7,7 @@ import {
   mockOrgResponse,
   mockListResourceResponse,
 } from '../../__mocks__/helpers';
-import { getOrganization } from '../utils';
+import { getOrganization, updateOrganization } from '../utils';
 import { Nexus } from '../..';
 
 const baseUrl = 'http://api.url';
@@ -55,7 +55,7 @@ describe('Organization class', () => {
       expect(projects.length).toEqual(2);
     });
   });
-  describe('get orgs', () => {
+  describe('get org', () => {
     afterEach(() => {
       resetMocks();
     });
@@ -70,6 +70,19 @@ describe('Organization class', () => {
     it('set the rev option over the tag one', async () => {
       getOrganization('myorg', { revision: 39, tag: 'v1.0.0' });
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=39`);
+    });
+  });
+  describe('update org', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+    it('updates the specific revision', async () => {
+      updateOrganization('myorg', 12, 'new name');
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=12`);
+    });
+    it('call with revision 1 by default', async () => {
+      updateOrganization('myorg', undefined, 'new name');
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=1`);
     });
   });
 });

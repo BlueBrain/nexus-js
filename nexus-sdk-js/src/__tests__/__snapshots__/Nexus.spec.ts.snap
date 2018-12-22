@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Nexus class should throw an error 1`] = `"You need to provide a Nexus config."`;
-
-exports[`Nexus class should throw an error 2`] = `"No environment provided. Please specify your Nexus instance endpoint."`;

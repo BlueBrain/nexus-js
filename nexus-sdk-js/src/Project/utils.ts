@@ -110,11 +110,37 @@ export async function updateProject(
   projectLabel: string,
   rev: number,
   projectPayload: CreateProjectPayload,
-) {
+): Promise<Project> {
   try {
     const projectResponse: ProjectResponse = await httpPut(
       `/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
       projectPayload,
+    );
+    return new Project(orgLabel, projectResponse);
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function tagProject(
+  orgLabel: string,
+  projectLabel: string,
+  rev: number = 1,
+  {
+    tagName,
+    tagFromRev,
+  }: {
+    tagName: string;
+    tagFromRev: number;
+  },
+): Promise<Project> {
+  try {
+    const projectResponse: ProjectResponse = await httpPut(
+      `/projects/${orgLabel}/${projectLabel}/tags?rev=${rev}`,
+      {
+        tag: tagName,
+        rev: tagFromRev,
+      },
     );
     return new Project(orgLabel, projectResponse);
   } catch (error) {

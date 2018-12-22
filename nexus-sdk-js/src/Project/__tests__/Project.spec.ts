@@ -10,6 +10,7 @@ import {
   listProjects,
   createProject,
   updateProject,
+  tagProject,
 } from '../utils';
 import Nexus from '../../Nexus';
 
@@ -156,6 +157,23 @@ describe('Project class', () => {
         `${baseUrl}/projects/myorg/topsecret?rev=12`,
       );
       expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
+    });
+  });
+  describe('tag a project', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+    it('updates the specific revision', async () => {
+      tagProject('myorg', 'myproject', 12, {
+        tagName: 'v1.0.0',
+        tagFromRev: 10,
+      });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg/myproject/tags?rev=12`,
+      );
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ tag: 'v1.0.0', rev: 10 }),
+      );
     });
   });
 });

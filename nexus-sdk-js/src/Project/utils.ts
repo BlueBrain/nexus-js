@@ -4,14 +4,31 @@ import { httpGet, httpPut } from '../utils/http';
 import { ListResourceResponse } from '../Resource';
 import { CreateProjectPayload } from './types';
 
+/**
+ *
+ * @param orgLabel Organization label of the project
+ * @param projectLabel Project label to get
+ * @param options<Object<revision, tag>> The specific tag OR revision to fetch
+ */
 export async function getProject(
   orgLabel: string,
   projectLabel: string,
+  options?: { revision?: number; tag?: string },
 ): Promise<Project> {
   try {
+    // check if we have options
+    let ops;
+    if (options) {
+      // it's rev or tag, not both. We take rev over tag
+      if (options.revision) {
+        ops = `?rev=${options.revision}`;
+      } else if (options.tag) {
+        ops = `?tag=${options.tag}`;
+      }
+    }
     // Get project details
     const projectResponse: ProjectResponse = await httpGet(
-      `/projects/${orgLabel}/${projectLabel}`,
+      `/projects/${orgLabel}/${projectLabel}${ops}`,
     );
     // We want to know how many resources the project has
     const resourceResponse: ListResourceResponse = await httpGet(

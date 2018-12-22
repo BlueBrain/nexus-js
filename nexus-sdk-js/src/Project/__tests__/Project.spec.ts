@@ -1,11 +1,15 @@
+import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
 import Project, { ProjectResponse } from '../index';
 import {
   mockProjectResponse,
   mockViewsListResponse,
 } from '../../__mocks__/helpers';
 import { httpGet } from '../../utils/http';
+import { getProject } from '../utils';
+import Nexus from '../../Nexus';
 
-jest.mock('../../utils/http');
+const baseUrl = 'http://api.url';
+Nexus.setEnvironment(baseUrl);
 
 describe('Project class', () => {
   it('Should create a Project instance', () => {
@@ -19,7 +23,7 @@ describe('Project class', () => {
     expect(p.updatedAt.toISOString()).toEqual(mockProjectResponse._updatedAt);
   });
 
-  describe('listElasticSearchViews()', () => {
+  describe.skip('listElasticSearchViews()', () => {
     const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
 
     // Mock the elastic earch views response
@@ -41,6 +45,29 @@ describe('Project class', () => {
       expect.assertions(1);
       const myViews = await p.listElasticSearchViews();
       expect(myViews.length).toEqual(1);
+    });
+  });
+  describe('get an project', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+    it('set the rev option', async () => {
+      getProject('myorg', 'myproject', { revision: 21 });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg/myproject?rev=21`,
+      );
+    });
+    it('set the tag option', async () => {
+      getProject('myorg', 'myproject', { tag: 'v1.0.0' });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg/myproject?tag=v1.0.0`,
+      );
+    });
+    it('set the rev option over the tag one', async () => {
+      getProject('myorg', 'myproject', { revision: 39, tag: 'v1.0.0' });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg/myproject?rev=39`,
+      );
     });
   });
 });

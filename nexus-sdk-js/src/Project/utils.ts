@@ -104,3 +104,20 @@ export async function createProject(
     return error;
   }
 }
+
+export async function updateProject(
+  orgLabel: string,
+  projectLabel: string,
+  rev: number,
+  projectPayload: CreateProjectPayload,
+) {
+  try {
+    const projectResponse: ProjectResponse = await httpPut(
+      `/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
+      projectPayload,
+    );
+    return new Project(orgLabel, projectResponse);
+  } catch (error) {
+    return error;
+  }
+}

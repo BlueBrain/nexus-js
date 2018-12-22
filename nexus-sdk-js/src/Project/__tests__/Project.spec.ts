@@ -5,7 +5,12 @@ import {
   mockViewsListResponse,
 } from '../../__mocks__/helpers';
 import { httpGet } from '../../utils/http';
-import { getProject, listProjects, createProject } from '../utils';
+import {
+  getProject,
+  listProjects,
+  createProject,
+  updateProject,
+} from '../utils';
 import Nexus from '../../Nexus';
 
 const baseUrl = 'http://api.url';
@@ -128,6 +133,28 @@ describe('Project class', () => {
       };
       createProject('myorg', 'topsecret', projectOptions);
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg/topsecret`);
+      expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
+    });
+  });
+  describe('update a project', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+    it('set the rev option', async () => {
+      const projectOptions = {
+        base: 'http://base.com',
+        name: 'This is top secret',
+        prefixMappings: [
+          {
+            prefix: 'name',
+            namespace: 'http://schema.org/name',
+          },
+        ],
+      };
+      updateProject('myorg', 'topsecret', 12, projectOptions);
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg/topsecret?rev=12`,
+      );
       expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
     });
   });

@@ -5,7 +5,7 @@ import {
   mockViewsListResponse,
 } from '../../__mocks__/helpers';
 import { httpGet } from '../../utils/http';
-import { getProject, listProjects } from '../utils';
+import { getProject, listProjects, createProject } from '../utils';
 import Nexus from '../../Nexus';
 
 const baseUrl = 'http://api.url';
@@ -47,7 +47,7 @@ describe('Project class', () => {
       expect(myViews.length).toEqual(1);
     });
   });
-  describe('get an project', () => {
+  describe('get a project', () => {
     afterEach(() => {
       resetMocks();
     });
@@ -71,7 +71,7 @@ describe('Project class', () => {
     });
   });
   // TODO: blocked by https://github.com/BlueBrain/nexus/issues/112
-  describe.skip('get an project', () => {
+  describe.skip('list projects', () => {
     afterEach(() => {
       resetMocks();
     });
@@ -109,6 +109,26 @@ describe('Project class', () => {
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg?q=query&from=3&size=10&deprecated=true`,
       );
+    });
+  });
+  describe('create a project', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+    it('set the rev option', async () => {
+      const projectOptions = {
+        base: 'http://base.com',
+        name: 'This is top secret',
+        prefixMappings: [
+          {
+            prefix: 'name',
+            namespace: 'http://schema.org/name',
+          },
+        ],
+      };
+      createProject('myorg', 'topsecret', projectOptions);
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg/topsecret`);
+      expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
     });
   });
 });

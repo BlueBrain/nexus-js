@@ -1,6 +1,6 @@
 import { Resource, Organization } from '..';
 import { OrgResponse, ListOrgsResponse } from '.';
-import { httpPut, httpGet } from '../utils/http';
+import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
 /**
@@ -141,6 +141,25 @@ export async function tagOrganization(
         tag: tagName,
         rev: tagFromRev,
       },
+    );
+    return new Organization(orgResponse);
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+/**
+ *
+ * @param orgLabel Label of the Org to be deprecated
+ * @param rev Last know revision
+ */
+export async function deprecateOrganization(
+  orgLabel: string,
+  rev: number = 1,
+): Promise<Organization> {
+  try {
+    const orgResponse: OrgResponse = await httpDelete(
+      `/orgs/${orgLabel}?rev=${rev}`,
     );
     return new Organization(orgResponse);
   } catch (error) {

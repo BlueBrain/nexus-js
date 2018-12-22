@@ -3,6 +3,11 @@ import { OrgResponse, ListOrgsResponse } from '.';
 import { httpPut, httpGet } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
+/**
+ *
+ * @param label The label of your organization
+ * @param name The name of your organization
+ */
 export async function createOrganization(
   label: string,
   name: string,
@@ -22,8 +27,13 @@ export async function createOrganization(
 }
 
 // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
+/**
+ *
+ * @param orgLabel The organization label to fetch
+ * @param Object<revision, tag> The specific tag OR revision to fetch
+ */
 export async function getOrganization(
-  name: string,
+  orgLabel: string,
   options?: { revision?: number; tag?: string },
 ): Promise<Organization> {
   try {
@@ -37,14 +47,14 @@ export async function getOrganization(
         ops = `?tag=${options.tag}`;
       }
     }
-    const orgResponse: OrgResponse = await httpGet(`/orgs/${name}${ops}`);
+    const orgResponse: OrgResponse = await httpGet(`/orgs/${orgLabel}${ops}`);
     // we want to know how many projects there are per organisation
     const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
     const projectNumber: number = listOrgsResponse._results
       ? listOrgsResponse._results.reduce((prev, org) => {
           const split = org._id.split('/');
           const orgName = split.slice(split.length - 2, split.length - 1)[0];
-          if (orgName === name) {
+          if (orgName === orgLabel) {
             return prev + 1;
           }
           return prev;
@@ -83,16 +93,53 @@ export async function listOrganizations(): Promise<Organization[]> {
   }
 }
 
+/**
+ *
+ * @param orgLabel Current organization label
+ * @param rev Last known revision
+ * @param newName Knew name the organization will be called with
+ */
 export async function updateOrganization(
   orgLabel: string,
   rev: number = 1,
-  name: string,
+  newName: string,
 ): Promise<Organization> {
   try {
     const orgResponse: OrgResponse = await httpPut(
       `/orgs/${orgLabel}?rev=${rev}`,
       {
-        name,
+        name: newName,
+      },
+    );
+    return new Organization(orgResponse);
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+/**
+ *
+ * @param orgLabel Current organization label
+ * @param rev Last know revision
+ * @param Object<{tagName, revision}> The name of the tag and revision number to tag the organization from
+ */
+export async function tagOrganization(
+  orgLabel: string,
+  rev: number = 1,
+  {
+    tagName,
+    tagFromRev,
+  }: {
+    tagName: string;
+    tagFromRev: number;
+  },
+): Promise<Organization> {
+  try {
+    const orgResponse: OrgResponse = await httpPut(
+      `/orgs/${orgLabel}/tags?rev=${rev}`,
+      {
+        tag: tagName,
+        rev: tagFromRev,
       },
     );
     return new Organization(orgResponse);

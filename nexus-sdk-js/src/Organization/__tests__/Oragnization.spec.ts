@@ -7,7 +7,11 @@ import {
   mockOrgResponse,
   mockListResourceResponse,
 } from '../../__mocks__/helpers';
+import { getOrganization } from '../utils';
+import { Nexus } from '../..';
 
+const baseUrl = 'http://api.url';
+Nexus.setEnvironment(baseUrl);
 const org = new Organization(mockOrgResponse);
 
 describe('Organization class', () => {
@@ -49,6 +53,23 @@ describe('Organization class', () => {
       const projects: Project[] = await org.listProjects();
       expect(mock.calls.length).toBe(5); // TODO: VERY BAD, wait after API refactor before addressing to backend team
       expect(projects.length).toEqual(2);
+    });
+  });
+  describe('get orgs', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+    it('set the rev option', async () => {
+      getOrganization('myorg', { revision: 12 });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=12`);
+    });
+    it('set the tag option', async () => {
+      getOrganization('myorg', { tag: 'v1.0.0' });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?tag=v1.0.0`);
+    });
+    it('set the rev option over the tag one', async () => {
+      getOrganization('myorg', { revision: 39, tag: 'v1.0.0' });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=39`);
     });
   });
 });

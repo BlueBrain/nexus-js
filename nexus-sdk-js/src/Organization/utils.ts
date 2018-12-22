@@ -22,9 +22,19 @@ export async function createOrganization(
 }
 
 // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-export async function getOrganization(name: string): Promise<Organization> {
+export async function getOrganization(name: string, options?: { revision?: number, tag?: string }): Promise<Organization> {
   try {
-    const orgResponse: OrgResponse = await httpGet(`/orgs/${name}`);
+    // check if we have options
+    let ops ;
+    if (options) {
+      // it's rev or tag, not both. We take rev over tag
+      if(options.revision) {
+        ops = `?rev=${options.revision}`;
+      } else if(options.tag) {
+        ops = `?tag=${options.tag}`;
+      }
+    }
+    const orgResponse: OrgResponse = await httpGet(`/orgs/${name}${ops}`);
     // we want to know how many projects there are per organisation
     const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
     const projectNumber: number = listOrgsResponse._results

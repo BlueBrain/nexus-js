@@ -79,7 +79,7 @@ export async function listOrganizations(
       (currentOps, key) =>
         currentOps.length === 0
           ? `?${key}=${options[key]}`
-          : `&${key}=${options[key]}`,
+          : `${currentOps}&${key}=${options[key]}`,
       '',
     );
   }

@@ -3,6 +3,8 @@ import {
   createOrganization,
   getOrganization,
   listOrganizations,
+  deprecateOrganization,
+  updateOrganization,
 } from './utils';
 
 export interface ListOrgsResponse {
@@ -57,8 +59,10 @@ export default class Organization {
   projectNumber: number;
 
   static get = getOrganization;
-  static create = createOrganization;
   static list = listOrganizations;
+  static create = createOrganization;
+  static update = updateOrganization;
+  static deprecate = deprecateOrganization;
 
   constructor(organizationResponse: OrgResponse) {
     this.context = organizationResponse['@context'];

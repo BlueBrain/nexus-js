@@ -1,5 +1,5 @@
 import { Resource, Organization } from '..';
-import { OrgResponse, ListOrgsResponse } from '.';
+import { OrgResponse, ListOrgsResponse, ListOrgsOptions } from '.';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
@@ -69,7 +69,20 @@ export async function getOrganization(
 }
 
 // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-export async function listOrganizations(): Promise<Organization[]> {
+// cannot implement list orgs options until then...
+export async function listOrganizations(
+  options?: ListOrgsOptions,
+): Promise<Organization[]> {
+  let ops;
+  if (options) {
+    ops = Object.keys(options).reduce(
+      (currentOps, key) =>
+        currentOps.length === 0
+          ? `?${key}=${options[key]}`
+          : `&${key}=${options[key]}`,
+      '',
+    );
+  }
   try {
     const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
     if (listOrgsResponse.code || !listOrgsResponse._results) {

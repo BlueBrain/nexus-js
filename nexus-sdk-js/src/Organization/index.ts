@@ -19,6 +19,14 @@ export interface ListOrgsResponse {
   message?: string;
 }
 
+export interface ListOrgsOptions {
+  full_text_search?: string;
+  from?: number;
+  size?: number;
+  deprecated?: boolean;
+  [key: string]: any;
+}
+
 export interface OrgResponse {
   '@context': string;
   '@id': string;

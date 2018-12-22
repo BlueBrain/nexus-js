@@ -5,6 +5,7 @@ import {
   listOrganizations,
   deprecateOrganization,
   updateOrganization,
+  tagOrganization,
 } from './utils';
 
 export interface ListOrgsResponse {
@@ -62,6 +63,7 @@ export default class Organization {
   static list = listOrganizations;
   static create = createOrganization;
   static update = updateOrganization;
+  static tag = tagOrganization;
   static deprecate = deprecateOrganization;
 
   constructor(organizationResponse: OrgResponse) {

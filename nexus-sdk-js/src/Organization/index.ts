@@ -3,6 +3,9 @@ import {
   createOrganization,
   getOrganization,
   listOrganizations,
+  deprecateOrganization,
+  updateOrganization,
+  tagOrganization,
 } from './utils';
 
 export interface ListOrgsResponse {
@@ -17,6 +20,14 @@ export interface ListOrgsResponse {
   }[];
   code?: string;
   message?: string;
+}
+
+export interface ListOrgsOptions {
+  full_text_search?: string;
+  from?: number;
+  size?: number;
+  deprecated?: boolean;
+  [key: string]: any;
 }
 
 export interface OrgResponse {
@@ -49,8 +60,11 @@ export default class Organization {
   projectNumber: number;
 
   static get = getOrganization;
-  static create = createOrganization;
   static list = listOrganizations;
+  static create = createOrganization;
+  static update = updateOrganization;
+  static tag = tagOrganization;
+  static deprecate = deprecateOrganization;
 
   constructor(organizationResponse: OrgResponse) {
     this.context = organizationResponse['@context'];

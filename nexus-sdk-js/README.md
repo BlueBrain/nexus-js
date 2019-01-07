@@ -19,8 +19,8 @@ Pre-alpha
 - [x] Get by label
 - [x] List Orgs // blocked, needs re-factor
 - [x] Create
-- [ ] Update
-- [ ] Delete
+- [x] Update
+- [x] Delete
 
 #### Projects
 

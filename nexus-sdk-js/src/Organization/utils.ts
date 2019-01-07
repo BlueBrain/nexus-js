@@ -1,8 +1,13 @@
 import { Resource, Organization } from '..';
-import { OrgResponse, ListOrgsResponse } from '.';
-import { httpPut, httpGet } from '../utils/http';
+import { OrgResponse, ListOrgsResponse, ListOrgsOptions } from '.';
+import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
+/**
+ *
+ * @param label The label of your organization
+ * @param name The name of your organization
+ */
 export async function createOrganization(
   label: string,
   name: string,
@@ -22,16 +27,34 @@ export async function createOrganization(
 }
 
 // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-export async function getOrganization(name: string): Promise<Organization> {
+/**
+ *
+ * @param orgLabel The organization label to fetch
+ * @param Object<revision, tag> The specific tag OR revision to fetch
+ */
+export async function getOrganization(
+  orgLabel: string,
+  options?: { revision?: number; tag?: string },
+): Promise<Organization> {
   try {
-    const orgResponse: OrgResponse = await httpGet(`/orgs/${name}`);
+    // check if we have options
+    let ops = '';
+    if (options) {
+      // it's rev or tag, not both. We take rev over tag
+      if (options.revision) {
+        ops = `?rev=${options.revision}`;
+      } else if (options.tag) {
+        ops = `?tag=${options.tag}`;
+      }
+    }
+    const orgResponse: OrgResponse = await httpGet(`/orgs/${orgLabel}${ops}`);
     // we want to know how many projects there are per organisation
     const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
     const projectNumber: number = listOrgsResponse._results
       ? listOrgsResponse._results.reduce((prev, org) => {
           const split = org._id.split('/');
           const orgName = split.slice(split.length - 2, split.length - 1)[0];
-          if (orgName === name) {
+          if (orgName === orgLabel) {
             return prev + 1;
           }
           return prev;
@@ -46,7 +69,20 @@ export async function getOrganization(name: string): Promise<Organization> {
 }
 
 // TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-export async function listOrganizations(): Promise<Organization[]> {
+// cannot implement list orgs options until then...
+export async function listOrganizations(
+  options?: ListOrgsOptions,
+): Promise<Organization[]> {
+  let ops;
+  if (options) {
+    ops = Object.keys(options).reduce(
+      (currentOps, key) =>
+        currentOps.length === 0
+          ? `?${key}=${options[key]}`
+          : `${currentOps}&${key}=${options[key]}`,
+      '',
+    );
+  }
   try {
     const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
     if (listOrgsResponse.code || !listOrgsResponse._results) {
@@ -67,5 +103,79 @@ export async function listOrganizations(): Promise<Organization[]> {
     );
   } catch (e) {
     throw new Error(`ListOrgsError: ${e}`);
+  }
+}
+
+/**
+ *
+ * @param orgLabel Current organization label
+ * @param rev Last known revision
+ * @param newName Knew name the organization will be called with
+ */
+export async function updateOrganization(
+  orgLabel: string,
+  rev: number = 1,
+  newName: string,
+): Promise<Organization> {
+  try {
+    const orgResponse: OrgResponse = await httpPut(
+      `/orgs/${orgLabel}?rev=${rev}`,
+      {
+        name: newName,
+      },
+    );
+    return new Organization(orgResponse);
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+/**
+ *
+ * @param orgLabel Current organization label
+ * @param rev Last know revision
+ * @param Object<{tagName, revision}> The name of the tag and revision number to tag the organization from
+ */
+export async function tagOrganization(
+  orgLabel: string,
+  rev: number = 1,
+  {
+    tagName,
+    tagFromRev,
+  }: {
+    tagName: string;
+    tagFromRev: number;
+  },
+): Promise<Organization> {
+  try {
+    const orgResponse: OrgResponse = await httpPut(
+      `/orgs/${orgLabel}/tags?rev=${rev}`,
+      {
+        tag: tagName,
+        rev: tagFromRev,
+      },
+    );
+    return new Organization(orgResponse);
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+/**
+ *
+ * @param orgLabel Label of the Org to be deprecated
+ * @param rev Last know revision
+ */
+export async function deprecateOrganization(
+  orgLabel: string,
+  rev: number = 1,
+): Promise<Organization> {
+  try {
+    const orgResponse: OrgResponse = await httpDelete(
+      `/orgs/${orgLabel}?rev=${rev}`,
+    );
+    return new Organization(orgResponse);
+  } catch (error) {
+    throw new Error(error);
   }
 }

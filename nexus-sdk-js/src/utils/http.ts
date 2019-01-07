@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch';
+import fetch, { Headers } from 'cross-fetch';
 import store from '../store';
 
 type httpTypes = 'json' | 'text' | 'arrayBuffer' | 'blob';
@@ -119,4 +119,16 @@ export function httpPut(
     .catch(parseError);
 }
 
-export const httpDelete = () => {};
+export function httpDelete(url: string, useBase: boolean = true): Promise<any> {
+  const {
+    api: { baseUrl },
+  } = store.getState();
+  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  return fetch(fetchURL, {
+    headers: getHeaders(),
+    method: 'DELETE',
+  })
+    .then(checkStatus)
+    .then(r => parseResponse(r))
+    .catch(parseError);
+}

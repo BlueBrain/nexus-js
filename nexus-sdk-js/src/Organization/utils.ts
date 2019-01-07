@@ -38,7 +38,7 @@ export async function getOrganization(
 ): Promise<Organization> {
   try {
     // check if we have options
-    let ops;
+    let ops = '';
     if (options) {
       // it's rev or tag, not both. We take rev over tag
       if (options.revision) {

@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch';
+import fetch, { Headers } from 'cross-fetch';
 import store from '../store';
 
 type httpTypes = 'json' | 'text' | 'arrayBuffer' | 'blob';

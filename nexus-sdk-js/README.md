@@ -27,8 +27,8 @@ Pre-alpha
 - [x] Get by label
 - [x] List Projects
 - [x] Create
-- [ ] Update
-- [ ] Delete
+- [x] Update
+- [x] Delete
 
 #### Resources
 

@@ -11,7 +11,7 @@ import {
   tagOrganization,
   deprecateOrganization,
 } from '../utils';
-import { Nexus } from '../..';
+import Nexus from '../..';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);

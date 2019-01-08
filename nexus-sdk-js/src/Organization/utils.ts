@@ -1,5 +1,9 @@
-import Organization, { OrgResponse, ListOrgsResponse } from '.';
-import { httpPut, httpGet } from '../utils/http';
+import Organization, {
+  OrgResponse,
+  ListOrgsResponse,
+  ListOrgsOptions,
+} from '.';
+import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
 /**

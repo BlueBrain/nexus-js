@@ -1,4 +1,4 @@
-import { PaginationSettings, PaginatedList } from '..';
+import { PaginationSettings, PaginatedList } from '../utils/types';
 import Resource, { ListResourceResponse, ResourceResponse } from '.';
 import { httpGet, httpPut } from '../utils/http';
 

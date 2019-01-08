@@ -8,7 +8,7 @@ const umdName = 'nexusSdk';
 export default [
   // Browser Development
   {
-    input: 'src/index.ts',
+    input: 'src/Nexus.ts',
     output: {
       file: `dist/${libName}.js`,
       format: 'umd',
@@ -25,7 +25,7 @@ export default [
 
   // Browser Production
   {
-    input: 'src/index.ts',
+    input: 'src/Nexus.ts',
     output: {
       file: `dist/${libName}.min.js`,
       format: 'umd',
@@ -46,5 +46,15 @@ export default [
         },
       }),
     ],
+  },
+
+  // Node.js
+  {
+    input: 'src/Nexus.ts',
+    output: {
+      file: `lib/Nexus.js`,
+      format: 'cjs',
+    },
+    plugins: [typescript()],
   },
 ];

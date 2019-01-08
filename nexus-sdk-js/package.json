@@ -12,14 +12,14 @@
     "type": "git",
     "url": "git+https://github.com/BlueBrain/nexus-webapp-commons/tree/master/nexus-sdk-js"
   },
-  "main": "lib/index.js",
-  "module": "es/index.js",
+  "main": "lib/Nexus.js",
+  "module": "es/Nexus.js",
   "unpkg": "dist/nexus-sdk.js",
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest",
     "lint": "tslint src/**/*",
-    "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd",
+    "build": "npm run clean && npm run build:es && npm run build:umd",
     "build:commonjs": "tsc --module commonjs --target es5 --outDir lib",
     "build:es": "tsc --module es2015 --target es5 --outDir es",
     "build:umd": "rollup -c",

@@ -147,7 +147,7 @@ Each class also has static methods wrapping and reflecting the API endpoints. Fo
 ```typescript
 import { Organization, Project, Resource } from '@bbp/nexus-sdk';
 // or
-const { Organization, Project, Resource } = Nexus;
+const { Organization, Project, Resource } = require('@bbp/nexus-sdk');
 
 const org: Organization = Organization.get('org-label');
 const project: Project = Project.get('org-label', 'project-label');

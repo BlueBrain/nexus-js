@@ -1,6 +1,5 @@
 import { resetMocks, mock, mockResponses } from 'jest-fetch-mock';
 import Organization from '../';
-import Project from '../../Project';
 import {
   mockListProjectResponse,
   mockOrgResponse,

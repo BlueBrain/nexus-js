@@ -2,7 +2,6 @@ import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
 import Project, { ProjectResponse } from '../index';
 import {
   mockProjectResponse,
-  mockViewsListResponse,
   mockListResourceResponse,
   mockListProjectResponse,
 } from '../../__mocks__/helpers';

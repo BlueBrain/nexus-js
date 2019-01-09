@@ -188,7 +188,7 @@ describe('ElasticSearchView class', () => {
       );
     });
 
-    it('should return Promise<ElasticSearchViewAggrigationResponse>', async () => {
+    it('should return Promise<ElasticSearchViewAggregationResponse>', async () => {
       const view = new ElasticSearchView(
         orgLabel,
         projectLabel,

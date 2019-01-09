@@ -5,6 +5,7 @@ import { ViewsListResponse } from '../views';
 import {
   ElasticSearchViewResponse,
   ElasticSearchViewQueryResponse,
+  ElasticSearchViewAggrigationResponse,
 } from '../views/ElasticSearchView';
 import { SparqlViewResponse } from '../views/SparqlView';
 
@@ -232,6 +233,53 @@ export const mockElasticSearchViewResponse: ElasticSearchViewResponse = mockView
 
 export const mockSparqlViewResponse: SparqlViewResponse = mockViewsListResponse
   ._results[1] as SparqlViewResponse;
+
+export const mockElasticSearchViewAggregationResponse: ElasticSearchViewAggrigationResponse = {
+  aggregations: {
+    schemas: {
+      buckets: [
+        {
+          doc_count: 971,
+          key: 'https://neuroshapes.org/dash/reconstructedpatchedcell',
+        },
+        {
+          doc_count: 701,
+          key: 'https://neuroshapes.org/dash/labeledcell',
+        },
+        {
+          doc_count: 661,
+          key: 'https://neuroshapes.org/dash/patchedcell',
+        },
+        {
+          doc_count: 401,
+          key: 'https://neuroshapes.org/dash/slice',
+        },
+        {
+          doc_count: 396,
+          key: 'https://neuroshapes.org/dash/subject',
+        },
+        {
+          doc_count: 119,
+          key: 'https://neuroshapes.org/dash/reconstruction',
+        },
+        {
+          doc_count: 74,
+          key: 'https://bluebrain.github.io/nexus/schemas/shacl-20170720.ttl',
+        },
+        {
+          doc_count: 15,
+          key: 'https://neuroshapes.org/dash/person',
+        },
+        {
+          doc_count: 3,
+          key: 'https://bluebrain.github.io/nexus/schemas/resource.json',
+        },
+      ],
+      doc_count_error_upper_bound: 0,
+      sum_other_doc_count: 0,
+    },
+  },
+};
 
 export const mockElasticSearchViewQueryResponse: ElasticSearchViewQueryResponse = {
   _shards: {

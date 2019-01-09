@@ -2,6 +2,7 @@ import ElasticSearchView, { ElasticSearchViewResponse } from '../index';
 import {
   mockElasticSearchViewResponse,
   mockElasticSearchViewQueryResponse,
+  mockElasticSearchViewAggregationResponse,
   mockResourceResponse,
 } from '../../../__mocks__/helpers';
 import { httpPost, httpGet } from '../../../utils/http';
@@ -55,7 +56,7 @@ describe('ElasticSearchView class', () => {
   });
 
   // Skipping for now as it throw unhandled promise rejection errors.
-  describe.skip('query()', () => {
+  describe('query()', () => {
     const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
     const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
 
@@ -86,7 +87,7 @@ describe('ElasticSearchView class', () => {
       expect(mockHttpPost).toBeCalledWith(view.queryURL, myQuery);
     });
 
-    it.skip('should throw an error if httpPost crashes', async () => {
+    it('should throw an error if httpPost crashes', async () => {
       const view = new ElasticSearchView(
         orgLabel,
         projectLabel,
@@ -135,6 +136,67 @@ describe('ElasticSearchView class', () => {
       const data = await view.query(myQuery);
       expect(data).toHaveProperty('total', 3341);
       expect(data).toHaveProperty('results');
+    });
+  });
+
+  // Skipping for now as it throw unhandled promise rejection errors.
+  describe('aggregation()', () => {
+    const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
+    const mockAggregationQuery = {
+      aggs: {
+        schemas: {
+          terms: { field: '_constrainedBy' },
+        },
+      },
+    };
+    beforeEach(() => {
+      // Mock our query response
+      mockHttpPost.mockImplementation(async () => {
+        return mockElasticSearchViewAggregationResponse;
+      });
+    });
+
+    afterEach(() => {
+      mockHttpPost.mockReset();
+    });
+    it('should call httpPost method with the query object and URL', () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      view.aggregation(mockAggregationQuery);
+      expect(mockHttpPost).toBeCalledWith(view.queryURL, mockAggregationQuery);
+    });
+
+    it('should throw an error if httpPost crashes', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const message = 'some error message';
+      mockHttpPost.mockImplementation(async () => {
+        try {
+          throw new Error(message);
+        } catch (error) {
+          throw error;
+        }
+      });
+      await expect(view.aggregation(mockAggregationQuery)).rejects.toThrow(
+        Error,
+      );
+    });
+
+    it('should return Promise<ElasticSearchViewAggrigationResponse>', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      expect.assertions(1);
+      const data = await view.aggregation(mockAggregationQuery);
+      expect(data).toHaveProperty('aggregations');
     });
   });
 

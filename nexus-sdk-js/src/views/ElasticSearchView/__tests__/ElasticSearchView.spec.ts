@@ -2,11 +2,21 @@ import ElasticSearchView, { ElasticSearchViewResponse } from '../index';
 import {
   mockElasticSearchViewResponse,
   mockElasticSearchViewQueryResponse,
+  mockElasticSearchViewAggregationResponse,
   mockResourceResponse,
 } from '../../../__mocks__/helpers';
 import { httpPost, httpGet } from '../../../utils/http';
+import {
+  resetMocks,
+  mockResponse,
+  mock,
+  mockResponses,
+  mockReject,
+} from 'jest-fetch-mock';
+import Nexus from '../../../Nexus';
 
-jest.mock('../../../utils/http');
+const baseUrl = 'http://api.url';
+Nexus.setEnvironment(baseUrl);
 
 function testClassProperties(
   view: ElasticSearchView,
@@ -54,27 +64,14 @@ describe('ElasticSearchView class', () => {
     expect(view.queryURL).toEqual(expectedQueryURL);
   });
 
-  // Skipping for now as it throw unhandled promise rejection errors.
-  describe.skip('query()', () => {
-    const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
-    const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
-
+  describe('query()', () => {
     beforeEach(() => {
       // Mock our query response
-      mockHttpPost.mockImplementation(async () => {
-        return mockElasticSearchViewQueryResponse;
-      });
-
-      // Mock the getResourcebyId response
-      mockHttpGet.mockImplementation(async () => {
-        return mockResourceResponse;
-      });
+      mockResponse(JSON.stringify(mockElasticSearchViewQueryResponse));
     });
 
-    afterEach(() => {
-      mockHttpPost.mockReset();
-      mockHttpGet.mockReset();
-    });
+    afterEach(() => resetMocks());
+
     it('should call httpPost method with the query object and URL', () => {
       const view = new ElasticSearchView(
         orgLabel,
@@ -83,10 +80,11 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       view.query(myQuery);
-      expect(mockHttpPost).toBeCalledWith(view.queryURL, myQuery);
+      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
     });
 
-    it.skip('should throw an error if httpPost crashes', async () => {
+    it('should throw an error if httpPost crashes', async () => {
       const view = new ElasticSearchView(
         orgLabel,
         projectLabel,
@@ -94,13 +92,7 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       const message = 'some error message';
-      mockHttpPost.mockImplementation(async () => {
-        try {
-          throw new Error(message);
-        } catch (error) {
-          throw error;
-        }
-      });
+      mockReject(Error(message));
       await expect(view.query(myQuery)).rejects.toThrow(Error);
     });
 
@@ -121,7 +113,8 @@ describe('ElasticSearchView class', () => {
       }/_search?from=${myPaginationSettings.from}&size=${
         myPaginationSettings.size
       }`;
-      expect(mockHttpPost).toBeCalledWith(expectedQueryURL, myQuery);
+      expect(mock.calls[0][0]).toEqual(baseUrl + expectedQueryURL);
+      expect(mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
     });
 
     it('should return Promise<PaginatedList<Resource>>', async () => {
@@ -138,23 +131,66 @@ describe('ElasticSearchView class', () => {
     });
   });
 
+  // Skipping for now as it throw unhandled promise rejection errors.
+  describe('aggregation()', () => {
+    const mockAggregationQuery = {
+      aggs: {
+        schemas: {
+          terms: { field: '_constrainedBy' },
+        },
+      },
+    };
+    beforeEach(() => {
+      // Mock our query response
+      mockResponse(JSON.stringify(mockElasticSearchViewAggregationResponse));
+    });
+
+    afterEach(() => resetMocks());
+    it('should call httpPost method with the query object and URL', () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      view.aggregation(mockAggregationQuery);
+      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify(mockAggregationQuery),
+      );
+    });
+
+    it('should throw an error if httpPost crashes', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const message = 'some error message';
+      mockReject(Error(message));
+      await expect(view.aggregation(mockAggregationQuery)).rejects.toThrow(
+        Error,
+      );
+    });
+
+    it('should return Promise<ElasticSearchViewAggregationResponse>', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      expect.assertions(1);
+      const data = await view.aggregation(mockAggregationQuery);
+      expect(data).toHaveProperty('aggregations');
+    });
+  });
+
   describe('filterByType()', () => {
-    const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
-    const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
-    // Mock our query response
-    mockHttpPost.mockImplementation(async () => {
-      return mockElasticSearchViewQueryResponse;
+    beforeEach(() => {
+      // Mock our query response
+      mockResponse(JSON.stringify(mockElasticSearchViewQueryResponse));
     });
 
-    // Mock the getResourcebyId response
-    mockHttpGet.mockImplementation(async () => {
-      return mockResourceResponse;
-    });
-
-    afterEach(() => {
-      mockHttpPost.mockClear();
-      mockHttpGet.mockClear();
-    });
+    afterEach(() => resetMocks());
 
     it('should call the ES endpoint with the proper query', () => {
       const filterType =
@@ -179,7 +215,9 @@ describe('ElasticSearchView class', () => {
           },
         },
       };
-      expect(mockHttpPost).toBeCalledWith(view.queryURL, expectedQuery);
+
+      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
     });
 
     it('should call the ES endpoint and use a filter query with two types', () => {
@@ -212,27 +250,18 @@ describe('ElasticSearchView class', () => {
           },
         },
       };
-      expect(mockHttpPost).toBeCalledWith(view.queryURL, expectedQuery);
+      expect(mock.calls[1][0]).toEqual(baseUrl + view.queryURL);
+      expect(mock.calls[1][1].body).toEqual(JSON.stringify(expectedQuery));
     });
   });
 
   describe('filterByConstrainedBy()', () => {
-    const mockHttpPost = <jest.Mock<typeof httpPost>>httpPost;
-    const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
-    // Mock our query response
-    mockHttpPost.mockImplementation(async () => {
-      return mockElasticSearchViewQueryResponse;
+    beforeEach(() => {
+      // Mock our query response
+      mockResponse(JSON.stringify(mockElasticSearchViewQueryResponse));
     });
 
-    // Mock the getResourcebyId response
-    mockHttpGet.mockImplementation(async () => {
-      return mockResourceResponse;
-    });
-
-    afterEach(() => {
-      mockHttpPost.mockClear();
-      mockHttpGet.mockClear();
-    });
+    afterEach(() => resetMocks());
 
     it('should call the ES endpoint with the proper query', () => {
       const constrainedBy = 'https://neuroshapes.org/dash/person';
@@ -247,7 +276,8 @@ describe('ElasticSearchView class', () => {
           term: { _constrainedBy: constrainedBy },
         },
       };
-      expect(mockHttpPost).toBeCalledWith(view.queryURL, expectedQuery);
+      expect(mock.calls[1][0]).toEqual(baseUrl + view.queryURL);
+      expect(mock.calls[1][1].body).toEqual(JSON.stringify(expectedQuery));
     });
   });
 });

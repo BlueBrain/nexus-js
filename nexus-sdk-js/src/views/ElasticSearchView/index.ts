@@ -56,7 +56,22 @@ export interface ElasticSearchViewQueryResponse {
   took: number;
 }
 
-class ElasticSeachView {
+export interface Bucket {
+  key: string;
+  doc_count: number;
+}
+
+export interface ElasticSearchViewAggregationResponse {
+  aggregations: {
+    [key: string]: {
+      doc_count_error_upper_bound: number;
+      sum_other_doc_count: number;
+      buckets: Bucket[];
+    };
+  };
+}
+
+class ElasticSearchView {
   id: string;
   type: string[];
   uuid: string;
@@ -94,7 +109,7 @@ class ElasticSeachView {
    * @param {string[]} types
    * @param {PaginationSettings} [pagination]
    * @returns {Promise<PaginatedList<Resource>>}
-   * @memberof ElasticSeachView
+   * @memberof ElasticSearchView
    */
   async filterByTypes(
     types: string[],
@@ -117,7 +132,7 @@ class ElasticSeachView {
    * @param {string} constrainedBy
    * @param {PaginationSettings} [pagination]
    * @returns {Promise<PaginatedList<Resource>>}
-   * @memberof ElasticSeachView
+   * @memberof ElasticSearchView
    */
   async filterByConstrainedBy(
     constrainedBy: string,
@@ -139,7 +154,7 @@ class ElasticSeachView {
    * @param {Object} elasticSearchQuery
    * @param {PaginationSettings} [pagination]
    * @returns {Promise<PaginatedList<Resource>>}
-   * @memberof ElasticSeachView
+   * @memberof ElasticSearchView
    */
   async query(
     elasticSearchQuery: Object,
@@ -177,6 +192,33 @@ class ElasticSeachView {
       throw new ViewQueryError(error.message);
     }
   }
+
+  /**
+   * Query aggregations in elastic search
+   * using an elastic search Aggregation Query (as a JS Object) as input
+   * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html
+   *
+   * @param {Object} ElasticSearchAggregationQuery
+   * @returns {Promise<ElasticSearchViewAggregationResponse>}
+   * @memberof ElasticSearchView
+   */
+  async aggregation(
+    elasticSearchAggregationQuery: Object,
+  ): Promise<ElasticSearchViewAggregationResponse> {
+    try {
+      // Aggregations don't have pagination, so we simply use the queryURL
+      // unlike in the query method
+      const requestURL = this.queryURL;
+
+      const response: ElasticSearchViewAggregationResponse = await httpPost(
+        requestURL,
+        elasticSearchAggregationQuery,
+      );
+      return response;
+    } catch (error) {
+      throw new ViewQueryError(error.message);
+    }
+  }
 }
 
-export default ElasticSeachView;
+export default ElasticSearchView;

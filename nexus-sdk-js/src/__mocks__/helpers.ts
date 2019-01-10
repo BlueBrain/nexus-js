@@ -5,7 +5,7 @@ import { ViewsListResponse } from '../views';
 import {
   ElasticSearchViewResponse,
   ElasticSearchViewQueryResponse,
-  ElasticSearchViewAggrigationResponse,
+  ElasticSearchViewAggregationResponse,
 } from '../views/ElasticSearchView';
 import { SparqlViewResponse } from '../views/SparqlView';
 
@@ -234,7 +234,7 @@ export const mockElasticSearchViewResponse: ElasticSearchViewResponse = mockView
 export const mockSparqlViewResponse: SparqlViewResponse = mockViewsListResponse
   ._results[1] as SparqlViewResponse;
 
-export const mockElasticSearchViewAggregationResponse: ElasticSearchViewAggrigationResponse = {
+export const mockElasticSearchViewAggregationResponse: ElasticSearchViewAggregationResponse = {
   aggregations: {
     schemas: {
       buckets: [

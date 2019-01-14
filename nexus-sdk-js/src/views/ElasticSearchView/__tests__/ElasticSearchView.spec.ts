@@ -25,8 +25,6 @@ function testClassProperties(
   expect(view.id).toEqual(response['@id']);
   expect(view.type).toEqual(response['@type']);
   expect(view.uuid).toEqual(response._uuid);
-  expect(view.mapping).toEqual(response.mapping);
-  expect(view.includeMetadata).toEqual(response.includeMetadata);
   expect(view.rev).toEqual(response._rev);
   expect(view.deprecated).toEqual(response._deprecated);
 }

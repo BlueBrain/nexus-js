@@ -2,21 +2,6 @@ import { httpPost } from '../../utils/http';
 import { PaginatedList, PaginationSettings } from '../../utils/types';
 import Resource, { ResourceResponseCommon } from '../../Resource';
 
-// This is an Elastic Search Mapping
-// https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
-export interface Mapping {
-  dynamic?: boolean;
-  properties: {
-    [key: string]: any;
-  };
-}
-
-// List of SingleElasticSearchViews aggregated into an AggregateElasticSearchView
-export type ViewsInAggregate = {
-    project: string;
-    viewId: string;
-}[];
-
 // When getting a ESView by ID.
 export interface ElasticSearchViewResponse {
   '@id': string;
@@ -24,16 +9,7 @@ export interface ElasticSearchViewResponse {
   _uuid: string;
   _rev: number;
   _deprecated: boolean;
-}
-
-export interface SingleElasticSearchViewResponse extends ElasticSearchViewResponse {
-  includeMetadata: boolean;
-  mapping: Mapping;
-  sourceAsText: boolean;
-}
-
-export interface AggregateElasticSearchViewResponse extends ElasticSearchViewResponse {
-  views: ViewsInAggregate;
+  [key: string]: any;
 }
 
 // Original Source is an optional setting from Elastic Search Views configured with
@@ -225,33 +201,5 @@ export default class ElasticSearchView {
     } catch (error) {
       throw new ViewQueryError(error.message);
     }
-  }
-}
-
-export class SingleElasticSearchView extends ElasticSearchView {
-  includeMetadata: boolean;
-  mapping: Mapping;
-  sourceAsText: boolean;
-  constructor(
-    orgLabel: string,
-    projectLabel: string,
-    elasticSearchViewResponse: SingleElasticSearchViewResponse,
-  ) {
-    super(orgLabel, projectLabel, elasticSearchViewResponse);
-    this.includeMetadata = elasticSearchViewResponse['includeMetadata'];
-    this.mapping = elasticSearchViewResponse['mapping'];
-    this.sourceAsText = elasticSearchViewResponse['sourceAsText'];
-  }
-}
-
-export class AggregateElasticSearchView extends ElasticSearchView {
-  views: ViewsInAggregate;
-  constructor(
-    orgLabel: string,
-    projectLabel: string,
-    elasticSearchViewResponse: AggregateElasticSearchViewResponse,
-  ) {
-    super(orgLabel, projectLabel, elasticSearchViewResponse)
-    this.views = elasticSearchViewResponse['views'];
   }
 }

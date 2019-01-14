@@ -11,16 +11,29 @@ export interface Mapping {
   };
 }
 
+// List of SingleElasticSearchViews aggregated into an AggregateElasticSearchView
+export type ViewsInAggregate = {
+    project: string;
+    viewId: string;
+}[];
+
 // When getting a ESView by ID.
 export interface ElasticSearchViewResponse {
   '@id': string;
   '@type': string[];
   _uuid: string;
+  _rev: number;
+  _deprecated: boolean;
+}
+
+export interface SingleElasticSearchViewResponse extends ElasticSearchViewResponse {
   includeMetadata: boolean;
   mapping: Mapping;
   sourceAsText: boolean;
-  _rev: number;
-  _deprecated: boolean;
+}
+
+export interface AggregateElasticSearchViewResponse extends ElasticSearchViewResponse {
+  views: ViewsInAggregate;
 }
 
 // Original Source is an optional setting from Elastic Search Views configured with
@@ -39,7 +52,7 @@ export interface ElasticSearchHit {
 
 export class ViewQueryError extends Error {}
 
-// This represents the vanilla Elastic Search resonse
+// This represents the vanilla Elastic Search response
 export interface ElasticSearchViewQueryResponse {
   _shards: {
     failed: number;
@@ -71,13 +84,10 @@ export interface ElasticSearchViewAggregationResponse {
   };
 }
 
-class ElasticSearchView {
+export default class ElasticSearchView {
   id: string;
   type: string[];
   uuid: string;
-  includeMetadata: boolean;
-  mapping: Mapping;
-  sourceAsText: boolean;
   rev: number;
   deprecated: boolean;
   orgLabel: string;
@@ -93,9 +103,6 @@ class ElasticSearchView {
     this.id = elasticSearchViewResponse['@id'];
     this.type = elasticSearchViewResponse['@type'];
     this.uuid = elasticSearchViewResponse['_uuid'];
-    this.includeMetadata = elasticSearchViewResponse['includeMetadata'];
-    this.mapping = elasticSearchViewResponse['mapping'];
-    this.sourceAsText = elasticSearchViewResponse['sourceAsText'];
     this.rev = elasticSearchViewResponse['_rev'];
     this.deprecated = elasticSearchViewResponse['_deprecated'];
     this.queryURL = `/views/${this.orgLabel}/${this.projectLabel}/${
@@ -221,4 +228,30 @@ class ElasticSearchView {
   }
 }
 
-export default ElasticSearchView;
+export class SingleElasticSearchView extends ElasticSearchView {
+  includeMetadata: boolean;
+  mapping: Mapping;
+  sourceAsText: boolean;
+  constructor(
+    orgLabel: string,
+    projectLabel: string,
+    elasticSearchViewResponse: SingleElasticSearchViewResponse,
+  ) {
+    super(orgLabel, projectLabel, elasticSearchViewResponse);
+    this.includeMetadata = elasticSearchViewResponse['includeMetadata'];
+    this.mapping = elasticSearchViewResponse['mapping'];
+    this.sourceAsText = elasticSearchViewResponse['sourceAsText'];
+  }
+}
+
+export class AggregateElasticSearchView extends ElasticSearchView {
+  views: ViewsInAggregate;
+  constructor(
+    orgLabel: string,
+    projectLabel: string,
+    elasticSearchViewResponse: AggregateElasticSearchViewResponse,
+  ) {
+    super(orgLabel, projectLabel, elasticSearchViewResponse)
+    this.views = elasticSearchViewResponse['views'];
+  }
+}

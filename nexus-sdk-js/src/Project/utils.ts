@@ -17,7 +17,7 @@ export async function getProject(
 ): Promise<Project> {
   try {
     // check if we have options
-    let ops;
+    let ops: string = '';
     if (options) {
       // it's rev or tag, not both. We take rev over tag
       if (options.revision) {

@@ -1,5 +1,8 @@
-import { Resource, Organization } from '..';
-import { OrgResponse, ListOrgsResponse, ListOrgsOptions } from '.';
+import Organization, {
+  OrgResponse,
+  ListOrgsResponse,
+  ListOrgsOptions,
+} from '.';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
@@ -73,7 +76,7 @@ export async function getOrganization(
 export async function listOrganizations(
   options?: ListOrgsOptions,
 ): Promise<Organization[]> {
-  let ops;
+  let ops = '';
   if (options) {
     ops = Object.keys(options).reduce(
       (currentOps, key) =>

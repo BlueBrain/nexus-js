@@ -11,16 +11,32 @@ export interface Mapping {
   };
 }
 
+// Identifies a view that is part of an AggregateElasticView
+export interface ViewsAggregation {
+  project: string;
+  viewId: string;
+}
+
 // When getting a ESView by ID.
 export interface ElasticSearchViewResponse {
+  '@context'?: string[];
   '@id': string;
   '@type': string[];
   _uuid: string;
-  includeMetadata: boolean;
-  mapping: Mapping;
-  sourceAsText: boolean;
   _rev: number;
   _deprecated: boolean;
+  _self?: string;
+  _constrainedBy?: string;
+  _project?: string;
+  _createdAt?: string;
+  _createdBy?: string;
+  _updatedAt?: string;
+  _updatedBy?: string;
+  includeMetadata?: boolean;
+  mapping?: Mapping;
+  resourceSchemas?: string[];
+  sourceAsText?: boolean;
+  views?: ViewsAggregation[];
 }
 
 // Original Source is an optional setting from Elastic Search Views configured with
@@ -39,7 +55,7 @@ export interface ElasticSearchHit {
 
 export class ViewQueryError extends Error {}
 
-// This represents the vanilla Elastic Search resonse
+// This represents the vanilla Elastic Search response
 export interface ElasticSearchViewQueryResponse {
   _shards: {
     failed: number;
@@ -71,13 +87,10 @@ export interface ElasticSearchViewAggregationResponse {
   };
 }
 
-class ElasticSearchView {
+export default class ElasticSearchView {
   id: string;
   type: string[];
   uuid: string;
-  includeMetadata: boolean;
-  mapping: Mapping;
-  sourceAsText: boolean;
   rev: number;
   deprecated: boolean;
   orgLabel: string;
@@ -93,9 +106,6 @@ class ElasticSearchView {
     this.id = elasticSearchViewResponse['@id'];
     this.type = elasticSearchViewResponse['@type'];
     this.uuid = elasticSearchViewResponse['_uuid'];
-    this.includeMetadata = elasticSearchViewResponse['includeMetadata'];
-    this.mapping = elasticSearchViewResponse['mapping'];
-    this.sourceAsText = elasticSearchViewResponse['sourceAsText'];
     this.rev = elasticSearchViewResponse['_rev'];
     this.deprecated = elasticSearchViewResponse['_deprecated'];
     this.queryURL = `/views/${this.orgLabel}/${this.projectLabel}/${
@@ -220,5 +230,3 @@ class ElasticSearchView {
     }
   }
 }
-
-export default ElasticSearchView;

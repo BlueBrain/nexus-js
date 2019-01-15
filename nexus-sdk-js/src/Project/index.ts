@@ -1,7 +1,7 @@
 import Resource, { ListResourceResponse } from '../Resource';
 import { httpGet } from '../utils/http';
 import { PaginationSettings, PaginatedList } from '../utils/types';
-import { ViewsListResponse } from '../views';
+import { ViewsListResponse, ViewResponse } from '../views';
 import ElasticSearchView, {
   ElasticSearchViewResponse,
 } from '../views/ElasticSearchView';
@@ -15,6 +15,15 @@ import {
   updateProject,
 } from './utils';
 import { PrefixMapping } from './types';
+
+const isElasticSearchView = (viewResponse: ViewResponse): viewResponse is ElasticSearchViewResponse => {
+  const validTypes = ['ElasticView', 'AggregateElasticView'];
+  return viewResponse['@type'].some(type => validTypes.includes(type));
+}
+
+const isSparqlView = (viewResponse: ViewResponse): viewResponse is SparqlViewResponse => {
+  return viewResponse['@type'].some(type => type === 'SparqlView');
+}
 
 export interface ProjectResponse {
   '@id': string;
@@ -98,13 +107,40 @@ export default class Project {
 
   // The current API does not support pagination / filtering of views
   // This should be fixed when possible and converted to signature
+  // Promise<PaginatedList<(ElasticSearchView | SparqlView)>>
+  async listViews(): Promise<(ElasticSearchView | SparqlView)[]> {
+    try {
+      const viewURL = `/views/${this.orgLabel}/${this.label}`;
+      const viewListResponse: ViewsListResponse = await httpGet(viewURL);
+      const views: (ElasticSearchView | SparqlView)[] = viewListResponse._results
+        .filter(viewResponse => isElasticSearchView(viewResponse) || isSparqlView(viewResponse))
+        .map(
+          viewResponse =>
+            isElasticSearchView(viewResponse) ? new ElasticSearchView(
+              this.orgLabel,
+              this.label,
+              viewResponse as ElasticSearchViewResponse,
+            ) : new SparqlView(
+              this.orgLabel,
+              this.label,
+              viewResponse as SparqlViewResponse,
+            ),
+        );
+      return views;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // The current API does not support pagination / filtering of views
+  // This should be fixed when possible and converted to signature
   // Promise<PaginatedList<ElasticSearchView>>
   async listElasticSearchViews(): Promise<ElasticSearchView[]> {
     try {
       const viewURL = `/views/${this.orgLabel}/${this.label}`;
       const viewListResponse: ViewsListResponse = await httpGet(viewURL);
       const elasticSearchViews: ElasticSearchView[] = viewListResponse._results
-        .filter(entry => entry['@type'].includes('ElasticView'))
+        .filter(viewResponse => isElasticSearchView(viewResponse))
         .map(
           elasticSearchViewResponse =>
             new ElasticSearchView(
@@ -125,7 +161,7 @@ export default class Project {
       const viewURL = `/views/${this.orgLabel}/${this.label}`;
       const viewListResponse: ViewsListResponse = await httpGet(viewURL);
       const sparqlViews: SparqlView[] = viewListResponse._results
-        .filter(entry => entry['@type'].includes('SparqlView'))
+        .filter(viewResponse => isSparqlView(viewResponse))
         .map(
           sparqlViewResponse =>
             new SparqlView(

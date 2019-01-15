@@ -166,6 +166,45 @@ export default class ElasticSearchView {
    * @returns {Promise<PaginatedList<Resource>>}
    * @memberof ElasticSearchView
    */
+  async rawQuery(
+    elasticSearchQuery: Object,
+    pagination?: PaginationSettings,
+  ): Promise<PaginatedList<ElasticSearchHit>> {
+    try {
+      const requestURL = pagination
+        ? `${this.queryURL}?from=${pagination.from}&size=${pagination.size}`
+        : this.queryURL;
+
+      const response: ElasticSearchViewQueryResponse = await httpPost(
+        requestURL,
+        elasticSearchQuery,
+      );
+
+      const total: number = response.hits.total;
+
+      // Expand the data for each item in the list
+      // By fetching each item by ID
+      const results: ElasticSearchHit[] = response.hits.hits;
+
+      return {
+        total,
+        results,
+      };
+    } catch (error) {
+      throw new ViewQueryError(error.message);
+    }
+  }
+
+  /**
+   * Search for resources located in a project
+   * using an elastic search Query (as a JS Object) as input
+   * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html
+   *
+   * @param {Object} elasticSearchQuery
+   * @param {PaginationSettings} [pagination]
+   * @returns {Promise<PaginatedList<Resource>>}
+   * @memberof ElasticSearchView
+   */
   async query(
     elasticSearchQuery: Object,
     pagination?: PaginationSettings,

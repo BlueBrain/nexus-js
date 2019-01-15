@@ -36,10 +36,10 @@ describe('http module', () => {
       const response: JSON = await httpGet('/endpoint');
       expect(response).toEqual(payload);
     });
-    it.skip('should throw an error', async () => {
+    it('should throw an error', async () => {
       const payload = { message: 'error' };
       mockResponse(JSON.stringify(payload), { status: 404 });
-      expect(() => httpGet('')).toThrowError();
+      await expect(httpGet('')).rejects.toThrow(Error);
     });
   });
 });

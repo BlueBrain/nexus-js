@@ -84,7 +84,6 @@ export function httpGet(url: string, useBase: boolean = true): Promise<any> {
     .then(checkStatus)
     .then(r => parseResponse(r))
     .catch(e => {
-      console.log('I throw');
       throw e;
     });
 }

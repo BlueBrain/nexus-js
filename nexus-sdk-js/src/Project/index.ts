@@ -132,6 +132,22 @@ export default class Project {
     }
   }
 
+  // TODO: refactor once we can fetch views per IDs (broken just now)
+  async getView(viewId: string): Promise<ElasticSearchView | SparqlView> {
+    try {
+      const views = await this.listViews();
+      const view = views.find(view => view.id === viewId);
+
+      if (!view) {
+        throw new Error(`Not found: view "${viewId}" for project "${this.label}" in organization "${this.orgLabel}"`);
+      }
+
+      return view;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // The current API does not support pagination / filtering of views
   // This should be fixed when possible and converted to signature
   // Promise<PaginatedList<ElasticSearchView>>
@@ -147,13 +163,12 @@ export default class Project {
   // TODO: refactor once we can fetch views per IDs (broken just now)
   async getElasticSearchDefaultView(): Promise<ElasticSearchView> {
     try {
-      const elasticSearchViews = await this.listElasticSearchViews();
-      const elasticSearchDefaultView = elasticSearchViews.find(view => view['id'] === 'nxv:defaultElasticIndex');
+      const elasticSearchDefaultView = await this.getView('nxv:defaultElasticIndex');
 
-      if (!elasticSearchDefaultView) {
-        throw new Error(`No ElasticSearch default view detected for project ${this.label} in organisation ${this.orgLabel}.
-          We cannot run a query.
-          There should be a built-in default ElasticSearch view. Something is wrong on the server-side, ask an administrator.`);
+      if (!(elasticSearchDefaultView instanceof ElasticSearchView)) {
+        throw new Error(`Cannot load default ElasticSearch view for project ${this.label} in organization ${this.orgLabel}.
+        We cannot run a query.
+        Something is wrong on the server-side, ask an administrator.`);
       }
 
       return elasticSearchDefaultView;
@@ -165,16 +180,12 @@ export default class Project {
   // TODO: refactor once we can fetch views per IDs (broken just now)
   async getSparqlView(): Promise<SparqlView> {
     try {
-      const views = await this.listViews();
-      const sparqlViews = views.filter((view): view is SparqlView => view instanceof SparqlView);
+      const sparqlDefaultView = await this.getView('nxv:defaultSparqlIndex');
 
-      // There has to be only be 1 SPARQL view per project, but just in case let's be explicit
-      const sparqlDefaultView = sparqlViews.find(view => view['id'] === 'nxv:defaultSparqlIndex');
-
-      if (!sparqlDefaultView) {
-        throw new Error(`No SPARQL View detected for project ${this.label} in organisation ${this.orgLabel}.
+      if (!(sparqlDefaultView instanceof SparqlView)) {
+        throw new Error(`Cannot load default SPARQL view for project ${this.label} in organization ${this.orgLabel}.
           We cannot run a query.
-          There should be a built-in default SPARQL view. Something is wrong on the server-side, ask an administrator.`);
+          Something is wrong on the server-side, ask an administrator.`);
       }
 
       return sparqlDefaultView;

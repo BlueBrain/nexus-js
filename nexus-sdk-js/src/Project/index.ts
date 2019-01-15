@@ -137,19 +137,18 @@ export default class Project {
   // Promise<PaginatedList<ElasticSearchView>>
   async listElasticSearchViews(): Promise<ElasticSearchView[]> {
     try {
-      const viewURL = `/views/${this.orgLabel}/${this.label}`;
-      const viewListResponse: ViewsListResponse = await httpGet(viewURL);
-      const elasticSearchViews: ElasticSearchView[] = viewListResponse._results
-        .filter(viewResponse => isElasticSearchView(viewResponse))
-        .map(
-          elasticSearchViewResponse =>
-            new ElasticSearchView(
-              this.orgLabel,
-              this.label,
-              elasticSearchViewResponse as ElasticSearchViewResponse,
-            ),
-        );
-      return elasticSearchViews;
+      const views = await this.listViews();
+      return views.filter((view): view is ElasticSearchView => view instanceof ElasticSearchView);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // TODO: refactor once we can fetch views per IDs (broken just now)
+  async getElasticSearchDefaultView(): Promise<ElasticSearchView | undefined> {
+    try {
+      const elasticSearchViews = await this.listElasticSearchViews();
+      return elasticSearchViews.find(view => view['id'] === 'nxv:defaultElasticIndex');
     } catch (error) {
       throw error;
     }
@@ -158,18 +157,8 @@ export default class Project {
   // TODO: refactor once we can fetch views per IDs (broken just now)
   async getSparqlView(): Promise<SparqlView> {
     try {
-      const viewURL = `/views/${this.orgLabel}/${this.label}`;
-      const viewListResponse: ViewsListResponse = await httpGet(viewURL);
-      const sparqlViews: SparqlView[] = viewListResponse._results
-        .filter(viewResponse => isSparqlView(viewResponse))
-        .map(
-          sparqlViewResponse =>
-            new SparqlView(
-              this.orgLabel,
-              this.label,
-              sparqlViewResponse as SparqlViewResponse,
-            ),
-        );
+      const views = await this.listViews();
+      const sparqlViews = views.filter((view): view is SparqlView => view instanceof SparqlView);
       return sparqlViews[0];
     } catch (error) {
       throw error;

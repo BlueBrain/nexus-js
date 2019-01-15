@@ -2,14 +2,41 @@ import { httpPost } from '../../utils/http';
 import { PaginatedList, PaginationSettings } from '../../utils/types';
 import Resource, { ResourceResponseCommon } from '../../Resource';
 
+// This is an Elastic Search Mapping
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
+export interface Mapping {
+  dynamic?: boolean;
+  properties: {
+    [key: string]: any;
+  };
+}
+
+// Identifies a view that is part of an AggregateElasticView
+export interface ViewsAggregation {
+  project: string;
+  viewId: string;
+}
+
 // When getting a ESView by ID.
 export interface ElasticSearchViewResponse {
+  '@context'?: string[];
   '@id': string;
   '@type': string[];
   _uuid: string;
   _rev: number;
   _deprecated: boolean;
-  [key: string]: any;
+  _self?: string;
+  _constrainedBy?: string;
+  _project?: string;
+  _createdAt?: string;
+  _createdBy?: string;
+  _updatedAt?: string;
+  _updatedBy?: string;
+  includeMetadata?: boolean;
+  mapping?: Mapping;
+  resourceSchemas?: string[];
+  sourceAsText?: boolean;
+  views?: ViewsAggregation[];
 }
 
 // Original Source is an optional setting from Elastic Search Views configured with

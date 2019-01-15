@@ -29,7 +29,7 @@ const getHeaders = (
 };
 
 const checkStatus = (response: Response): Response => {
-  if (response.status >= 300) {
+  if (response.status >= 400) {
     throw new Error(response.statusText);
   }
   return response;

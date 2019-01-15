@@ -145,10 +145,18 @@ export default class Project {
   }
 
   // TODO: refactor once we can fetch views per IDs (broken just now)
-  async getElasticSearchDefaultView(): Promise<ElasticSearchView | undefined> {
+  async getElasticSearchDefaultView(): Promise<ElasticSearchView> {
     try {
       const elasticSearchViews = await this.listElasticSearchViews();
-      return elasticSearchViews.find(view => view['id'] === 'nxv:defaultElasticIndex');
+      const elasticSearchDefaultView = elasticSearchViews.find(view => view['id'] === 'nxv:defaultElasticIndex');
+
+      if (!elasticSearchDefaultView) {
+        throw new Error(`No ElasticSearch default view detected for project ${this.label} in organisation ${this.orgLabel}.
+          We cannot run a query.
+          There should be a built-in default ElasticSearch view. Something is wrong on the server-side, ask an administrator.`);
+      }
+
+      return elasticSearchDefaultView;
     } catch (error) {
       throw error;
     }
@@ -159,7 +167,17 @@ export default class Project {
     try {
       const views = await this.listViews();
       const sparqlViews = views.filter((view): view is SparqlView => view instanceof SparqlView);
-      return sparqlViews[0];
+
+      // There has to be only be 1 SPARQL view per project, but just in case let's be explicit
+      const sparqlDefaultView = sparqlViews.find(view => view['id'] === 'nxv:defaultSparqlIndex');
+
+      if (!sparqlDefaultView) {
+        throw new Error(`No SPARQL View detected for project ${this.label} in organisation ${this.orgLabel}.
+          We cannot run a query.
+          There should be a built-in default SPARQL view. Something is wrong on the server-side, ask an administrator.`);
+      }
+
+      return sparqlDefaultView;
     } catch (error) {
       throw error;
     }

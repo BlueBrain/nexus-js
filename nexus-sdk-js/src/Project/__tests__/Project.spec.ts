@@ -123,6 +123,7 @@ describe('Project class', () => {
       );
     });
   });
+
   describe('create a project', () => {
     beforeEach(() => {
       mockResponse('{}');

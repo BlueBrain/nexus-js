@@ -68,6 +68,11 @@ const parseResponse = (response: Response, parser = jsonParser): any => {
   }
 };
 
+const parseJsonError = async (error: Response): Promise<JSON> => {
+  const payload: JSON = await error.json();
+  return payload;
+};
+
 export function httpGet(url: string, useBase: boolean = true): Promise<any> {
   const {
     api: { baseUrl },
@@ -79,7 +84,8 @@ export function httpGet(url: string, useBase: boolean = true): Promise<any> {
     .then(checkStatus)
     .then(r => parseResponse(r))
     .catch(e => {
-      throw new Error(e.message);
+      console.log('I throw');
+      throw e;
     });
 }
 
@@ -99,7 +105,7 @@ export function httpPost<T = Object>(
     .then(checkStatus)
     .then(r => parseResponse(r))
     .catch(e => {
-      throw new Error(e.message);
+      throw e;
     });
 }
 
@@ -120,7 +126,7 @@ export function httpPut(
     .then(checkStatus)
     .then(r => parseResponse(r))
     .catch(e => {
-      throw new Error(e.message);
+      throw e;
     });
 }
 
@@ -136,6 +142,6 @@ export function httpDelete(url: string, useBase: boolean = true): Promise<any> {
     .then(checkStatus)
     .then(r => parseResponse(r))
     .catch(e => {
-      throw new Error(e.message);
+      throw e;
     });
 }

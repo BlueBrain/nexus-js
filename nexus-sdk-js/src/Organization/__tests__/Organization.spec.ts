@@ -43,6 +43,7 @@ describe('Organization class', () => {
       expect(project.resourceNumber).toEqual(1);
     });
   });
+
   describe('list Projects', () => {
     afterEach(() => {
       resetMocks();
@@ -60,6 +61,7 @@ describe('Organization class', () => {
       expect(projects.length).toEqual(2);
     });
   });
+
   describe('get an org', () => {
     beforeEach(() => {
       mockResponses(
@@ -83,6 +85,7 @@ describe('Organization class', () => {
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=39`);
     });
   });
+
   describe('update an org', () => {
     beforeEach(() => {
       mockResponses([JSON.stringify(mockOrgResponse)]);
@@ -102,6 +105,7 @@ describe('Organization class', () => {
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=1`);
     });
   });
+
   describe('tag an org', () => {
     beforeEach(() => {
       mockResponses([JSON.stringify(mockOrgResponse)]);
@@ -117,6 +121,7 @@ describe('Organization class', () => {
       );
     });
   });
+
   describe('deprecate an org', () => {
     beforeEach(() => {
       mockResponses([JSON.stringify(mockOrgResponse)]);

@@ -118,7 +118,7 @@ export async function updateProject(
     );
     return new Project(orgLabel, projectResponse);
   } catch (error) {
-    return error;
+    throw new Error(error.message);
   }
 }
 

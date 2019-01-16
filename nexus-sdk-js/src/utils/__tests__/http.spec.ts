@@ -1,4 +1,4 @@
-import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
+import { resetMocks, mockResponse, mock } from 'jest-fetch-mock';
 import { httpGet } from '../http';
 import Nexus from '../../Nexus';
 import { Headers } from 'cross-fetch';

@@ -16,6 +16,10 @@ import {
 } from './utils';
 import { PrefixMapping } from './types';
 
+// IDs for the views that are automatically created with a project
+const ES_DEFAULT_VIEW_ID = 'nxv:defaultElasticIndex';
+const SPARQL_DEFAULT_VIEW_ID = 'nxv:defaultSparqlIndex';
+
 const isElasticSearchView = (viewResponse: ViewResponse): viewResponse is ElasticSearchViewResponse => {
   const validTypes = ['ElasticView', 'AggregateElasticView'];
   return viewResponse['@type'].some(type => validTypes.includes(type));
@@ -160,10 +164,14 @@ export default class Project {
     }
   }
 
-  // TODO: refactor once we can fetch views per IDs (broken just now)
+  /**
+   * Get the default ElasticSearch view for the current project.
+   *
+   * This is the one you can use to load resources.
+   */
   async getElasticSearchDefaultView(): Promise<ElasticSearchView> {
     try {
-      const elasticSearchDefaultView = await this.getView('nxv:defaultElasticIndex');
+      const elasticSearchDefaultView = await this.getView(ES_DEFAULT_VIEW_ID);
 
       if (!(elasticSearchDefaultView instanceof ElasticSearchView)) {
         throw new Error(`Cannot load default ElasticSearch view for project ${this.label} in organization ${this.orgLabel}.
@@ -177,10 +185,14 @@ export default class Project {
     }
   }
 
-  // TODO: refactor once we can fetch views per IDs (broken just now)
+  /**
+   * Get the default (and only) SPARQL view for the current project.
+   *
+   * Queries the triple-store (RDF) directly. For advanced uses.
+   */
   async getSparqlView(): Promise<SparqlView> {
     try {
-      const sparqlDefaultView = await this.getView('nxv:defaultSparqlIndex');
+      const sparqlDefaultView = await this.getView(SPARQL_DEFAULT_VIEW_ID);
 
       if (!(sparqlDefaultView instanceof SparqlView)) {
         throw new Error(`Cannot load default SPARQL view for project ${this.label} in organization ${this.orgLabel}.

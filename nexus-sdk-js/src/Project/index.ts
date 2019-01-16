@@ -82,37 +82,18 @@ export default class Project {
     pagination?: PaginationSettings,
   ): Promise<PaginatedList<Resource>> {
     try {
-      const requestURL = pagination
-        ? `${this.projectResourceURL}?from=${pagination.from}&size=${
-            pagination.size
-          }`
-        : this.projectResourceURL;
-
-      const listResourceResponses: ListResourceResponse = await httpGet(
-        requestURL,
-      );
-
-      const total: number = listResourceResponses._total;
-
-      // Expand the data for each item in the list
-      // By fetching each item by ID
-      const results: Resource[] = await Promise.all(
-        listResourceResponses._results.map(async resource => {
-          return await this.getResource(resource['_self']);
-        }),
-      );
-
-      return {
-        total,
-        results,
-      };
-    } catch (e) {
-      return e;
+      return await Resource.list(this.orgLabel, this.label, pagination);
+    } catch (error) {
+      throw error;
     }
   }
 
   async getResource(id: string): Promise<Resource> {
-    return await Resource.getSelf(id, this.orgLabel, this.label);
+    try {
+      return await Resource.getSelf(id, this.orgLabel, this.label);
+    } catch (error) {
+      throw error;
+    }
   }
 
   // The current API does not support pagination / filtering of views

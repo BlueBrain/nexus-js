@@ -29,6 +29,9 @@ const getHeaders = (
 };
 
 const checkStatus = (response: Response): Response => {
+  if (response.status >= 400) {
+    throw new Error(response.statusText);
+  }
   return response;
 };
 
@@ -65,8 +68,9 @@ const parseResponse = (response: Response, parser = jsonParser): any => {
   }
 };
 
-const parseError = (error: Error): Error => {
-  throw new Error(error.message);
+const parseJsonError = async (error: Response): Promise<JSON> => {
+  const payload: JSON = await error.json();
+  return payload;
 };
 
 export function httpGet(url: string, useBase: boolean = true): Promise<any> {
@@ -79,7 +83,9 @@ export function httpGet(url: string, useBase: boolean = true): Promise<any> {
   })
     .then(checkStatus)
     .then(r => parseResponse(r))
-    .catch(parseError);
+    .catch(e => {
+      throw e;
+    });
 }
 
 export function httpPost<T = Object>(
@@ -97,7 +103,9 @@ export function httpPost<T = Object>(
   })
     .then(checkStatus)
     .then(r => parseResponse(r))
-    .catch(parseError);
+    .catch(e => {
+      throw e;
+    });
 }
 
 export function httpPut(
@@ -116,7 +124,9 @@ export function httpPut(
   })
     .then(checkStatus)
     .then(r => parseResponse(r))
-    .catch(parseError);
+    .catch(e => {
+      throw e;
+    });
 }
 
 export function httpDelete(url: string, useBase: boolean = true): Promise<any> {
@@ -130,5 +140,7 @@ export function httpDelete(url: string, useBase: boolean = true): Promise<any> {
   })
     .then(checkStatus)
     .then(r => parseResponse(r))
-    .catch(parseError);
+    .catch(e => {
+      throw e;
+    });
 }

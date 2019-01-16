@@ -1,5 +1,5 @@
 import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
-import Organization, { OrgResponse } from '../';
+import Organization from '../';
 import Project from '../../Project';
 import {
   mockProjectResponse,
@@ -43,6 +43,7 @@ describe('Organization class', () => {
       expect(project.resourceNumber).toEqual(1);
     });
   });
+
   describe('list Projects', () => {
     afterEach(() => {
       resetMocks();
@@ -60,24 +61,35 @@ describe('Organization class', () => {
       expect(projects.length).toEqual(2);
     });
   });
+
   describe('get an org', () => {
+    beforeEach(() => {
+      mockResponses(
+        [JSON.stringify(mockOrgResponse)],
+        [JSON.stringify(mockListProjectResponse)],
+      );
+    });
     afterEach(() => {
       resetMocks();
     });
     it('set the rev option', async () => {
-      getOrganization('myorg', { revision: 12 });
+      await getOrganization('myorg', { revision: 12 });
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=12`);
     });
     it('set the tag option', async () => {
-      getOrganization('myorg', { tag: 'v1.0.0' });
+      await getOrganization('myorg', { tag: 'v1.0.0' });
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?tag=v1.0.0`);
     });
     it('set the rev option over the tag one', async () => {
-      getOrganization('myorg', { revision: 39, tag: 'v1.0.0' });
+      await getOrganization('myorg', { revision: 39, tag: 'v1.0.0' });
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=39`);
     });
   });
+
   describe('update an org', () => {
+    beforeEach(() => {
+      mockResponses([JSON.stringify(mockOrgResponse)]);
+    });
     afterEach(() => {
       resetMocks();
     });
@@ -93,7 +105,11 @@ describe('Organization class', () => {
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=1`);
     });
   });
+
   describe('tag an org', () => {
+    beforeEach(() => {
+      mockResponses([JSON.stringify(mockOrgResponse)]);
+    });
     afterEach(() => {
       resetMocks();
     });
@@ -105,7 +121,11 @@ describe('Organization class', () => {
       );
     });
   });
+
   describe('deprecate an org', () => {
+    beforeEach(() => {
+      mockResponses([JSON.stringify(mockOrgResponse)]);
+    });
     afterEach(() => {
       resetMocks();
     });

@@ -40,7 +40,7 @@ export async function getProject(
     });
     return project;
   } catch (error) {
-    return error;
+    throw new Error(error.message);
   }
 }
 
@@ -85,7 +85,7 @@ export async function listProjects(
       ),
     );
   } catch (error) {
-    return error;
+    throw new Error(error.message);
   }
 }
 
@@ -101,7 +101,7 @@ export async function createProject(
     );
     return new Project(orgLabel, projectResponse);
   } catch (error) {
-    return error;
+    throw new Error(error.message);
   }
 }
 
@@ -118,7 +118,7 @@ export async function updateProject(
     );
     return new Project(orgLabel, projectResponse);
   } catch (error) {
-    return error;
+    throw new Error(error.message);
   }
 }
 
@@ -144,7 +144,7 @@ export async function tagProject(
     );
     return new Project(orgLabel, projectResponse);
   } catch (error) {
-    return error;
+    throw new Error(error.message);
   }
 }
 

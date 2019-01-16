@@ -1,10 +1,9 @@
-import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
-import Project, { ProjectResponse } from '../index';
+import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
+import Project from '../index';
 import {
   mockProjectResponse,
   mockViewsListResponse,
 } from '../../__mocks__/helpers';
-import { httpGet } from '../../utils/http';
 import {
   getProject,
   listProjects,
@@ -30,84 +29,90 @@ describe('Project class', () => {
     expect(p.updatedAt.toISOString()).toEqual(mockProjectResponse._updatedAt);
   });
 
-  describe.skip('listElasticSearchViews()', () => {
-    const mockHttpGet = <jest.Mock<typeof httpGet>>httpGet;
-
-    // Mock the elastic earch views response
-    mockHttpGet.mockImplementation(async () => mockViewsListResponse);
-
-    afterEach(() => {
-      mockHttpGet.mockClear();
+  describe('listElasticSearchViews()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockViewsListResponse), { status: 200 });
     });
 
-    it('should call httpGet method with the proper get views url', () => {
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should call httpGet method with the proper get views url', async () => {
       const p = new Project('my-org', mockProjectResponse);
-      const myViews = p.listElasticSearchViews();
+      await p.listElasticSearchViews();
       const viewURL = `/views/${p.orgLabel}/${p.label}`;
-      expect(mockHttpGet).toBeCalledWith(viewURL);
+      expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);
     });
 
     it('should return a just list of ElasticSearchViews from a response that includes multiple view types', async () => {
       const p = new Project('my-org', mockProjectResponse);
-      expect.assertions(1);
       const myViews = await p.listElasticSearchViews();
       expect(myViews.length).toEqual(1);
     });
   });
+
   describe('get a project', () => {
+    beforeEach(() => {
+      mockResponse('{}');
+    });
     afterEach(() => {
       resetMocks();
     });
     it('set the rev option', async () => {
-      getProject('myorg', 'myproject', { revision: 21 });
+      await getProject('myorg', 'myproject', { revision: 21 });
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/myproject?rev=21`,
       );
     });
     it('set the tag option', async () => {
-      getProject('myorg', 'myproject', { tag: 'v1.0.0' });
+      await getProject('myorg', 'myproject', { tag: 'v1.0.0' });
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/myproject?tag=v1.0.0`,
       );
     });
     it('set the rev option over the tag one', async () => {
-      getProject('myorg', 'myproject', { revision: 39, tag: 'v1.0.0' });
+      await getProject('myorg', 'myproject', { revision: 39, tag: 'v1.0.0' });
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/myproject?rev=39`,
       );
     });
   });
+
   // TODO: blocked by https://github.com/BlueBrain/nexus/issues/112
   describe.skip('list projects', () => {
+    beforeEach(() => {
+      mockResponse('{}');
+    });
     afterEach(() => {
       resetMocks();
     });
     it('call the /projects endpoint', async () => {
-      listProjects('myorg');
+      await listProjects('myorg');
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg`);
     });
     it('set the full text search option', async () => {
-      listProjects('myorg', { q: 'what_is_this' });
+      await listProjects('myorg', { q: 'what_is_this' });
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg?q=what_is_this`,
       );
     });
     it('set the from option', async () => {
-      listProjects('myorg', { from: 2 });
+      await listProjects('myorg', { from: 2 });
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg?from=2`);
     });
     it('set the size option', async () => {
-      listProjects('myorg', { size: 50 });
+      await listProjects('myorg', { size: 50 });
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg?size=50`);
     });
     it('set the deprecated option', async () => {
-      listProjects('myorg', { deprecated: true });
+      await listProjects('myorg', { deprecated: true });
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg?deprecated=true`,
       );
     });
     it('set all the options', async () => {
-      listProjects('myorg', {
+      await listProjects('myorg', {
         d: 'query',
         from: 3,
         size: 10,
@@ -118,7 +123,11 @@ describe('Project class', () => {
       );
     });
   });
+
   describe('create a project', () => {
+    beforeEach(() => {
+      mockResponse('{}');
+    });
     afterEach(() => {
       resetMocks();
     });
@@ -133,12 +142,16 @@ describe('Project class', () => {
           },
         ],
       };
-      createProject('myorg', 'topsecret', projectOptions);
+      await createProject('myorg', 'topsecret', projectOptions);
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg/topsecret`);
       expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
     });
   });
+
   describe('update a project', () => {
+    beforeEach(() => {
+      mockResponse('{}');
+    });
     afterEach(() => {
       resetMocks();
     });
@@ -153,19 +166,23 @@ describe('Project class', () => {
           },
         ],
       };
-      updateProject('myorg', 'topsecret', 12, projectOptions);
+      await updateProject('myorg', 'topsecret', 12, projectOptions);
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/topsecret?rev=12`,
       );
       expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
     });
   });
+
   describe('tag a project', () => {
+    beforeEach(() => {
+      mockResponse('{}');
+    });
     afterEach(() => {
       resetMocks();
     });
     it('updates the specific revision', async () => {
-      tagProject('myorg', 'myproject', 12, {
+      await tagProject('myorg', 'myproject', 12, {
         tagName: 'v1.0.0',
         tagFromRev: 10,
       });
@@ -177,12 +194,16 @@ describe('Project class', () => {
       );
     });
   });
-  describe('deprecate an org', () => {
+
+  describe('deprecate a project', () => {
+    beforeEach(() => {
+      mockResponse('{}');
+    });
     afterEach(() => {
       resetMocks();
     });
     it('updates the specific revision', async () => {
-      deprecateProject('myorg', 'myproject', 12);
+      await deprecateProject('myorg', 'myproject', 12);
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/myproject?rev=12`,
       );

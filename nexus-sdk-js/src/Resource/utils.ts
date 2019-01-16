@@ -58,18 +58,28 @@ export async function listResources(
 
     // Expand the data for each item in the list
     // By fetching each item by ID
-    const results: Resource[] = await Promise.all(
+    const allResults: (Resource | undefined)[] = await Promise.all(
       listResourceResponses._results.map(async resource => {
-        return await getSelfResource(resource['_self'], orgLabel, projectLabel);
+        try {
+          return await getSelfResource(
+            resource['_self'],
+            orgLabel,
+            projectLabel,
+          );
+        } catch (error) {
+          console.log(error);
+          return Promise.resolve(undefined);
+        }
       }),
     );
-
+    // @ts-ignore
+    const results: Resource[] = allResults.filter(r => r !== undefined) || [];
     return {
       total,
       results,
     };
-  } catch (e) {
-    return e;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -99,7 +109,7 @@ export async function updateSelfResource(
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 
@@ -128,6 +138,6 @@ export async function updateResource(
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }

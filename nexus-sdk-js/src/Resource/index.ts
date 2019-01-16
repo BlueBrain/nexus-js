@@ -4,6 +4,7 @@ import {
   getSelfResource,
   updateResource,
   updateSelfResource,
+  listResources,
 } from './utils';
 
 export const RESOURCE_METADATA_KEYS = [
@@ -75,6 +76,7 @@ export default class Resource<T = {}> {
   static get = getResource;
   static updateSelf = updateSelfResource;
   static update = updateResource;
+  static list = listResources;
 
   static formatName(raw: ResourceResponseCommon): string {
     const formattedNameValue =

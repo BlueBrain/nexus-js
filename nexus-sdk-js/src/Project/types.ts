@@ -5,8 +5,8 @@ export interface PrefixMapping {
 
 export interface CreateProjectPayload {
   name: string;
-  base: string;
-  prefixMappings: PrefixMapping[];
+  base?: string;
+  prefixMappings?: PrefixMapping[];
 }
 
 export interface ListProjectOptions {

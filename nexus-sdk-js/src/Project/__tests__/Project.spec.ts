@@ -65,15 +65,17 @@ describe('Project class', () => {
 
     it('should call httpGet method with the proper get views url', async () => {
       const p = new Project('my-org', mockProjectResponse);
-      await p.getView("nxv:defaultElasticIndex");
+      await p.getView('nxv:defaultElasticIndex');
       const viewURL = `/views/${p.orgLabel}/${p.label}`;
       expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);
     });
 
     it('should return the view with the corresponding ID, be it SPARQL or ElasticSearch', async () => {
       const p = new Project('my-org', mockProjectResponse);
-      const myView: ElasticSearchView | SparqlView = await p.getView("nxv:defaultSparqlIndex");
-      expect(myView.id).toEqual("nxv:defaultSparqlIndex");
+      const myView: ElasticSearchView | SparqlView = await p.getView(
+        'nxv:defaultSparqlIndex',
+      );
+      expect(myView.id).toEqual('nxv:defaultSparqlIndex');
     });
   });
 
@@ -156,7 +158,7 @@ describe('Project class', () => {
     afterEach(() => {
       resetMocks();
     });
-    it('set the rev option', async () => {
+    it('should call the expected URL with payload', async () => {
       const projectOptions = {
         base: 'http://base.com',
         name: 'This is top secret',
@@ -171,6 +173,18 @@ describe('Project class', () => {
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg/topsecret`);
       expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
     });
+    it('should only pass the required fields (name)', async () => {
+      const projectOptions = {
+        name: 'This is top secret',
+        base: undefined,
+        prefixMappings: undefined,
+      };
+      await createProject('myorg', 'topsecret', projectOptions);
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg/topsecret`);
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ name: 'This is top secret' }),
+      );
+    });
   });
 
   describe('update a project', () => {
@@ -180,7 +194,7 @@ describe('Project class', () => {
     afterEach(() => {
       resetMocks();
     });
-    it('set the rev option', async () => {
+    it('should call the expected URL with rev and payload', async () => {
       const projectOptions = {
         base: 'http://base.com',
         name: 'This is top secret',
@@ -196,6 +210,20 @@ describe('Project class', () => {
         `${baseUrl}/projects/myorg/topsecret?rev=12`,
       );
       expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
+    });
+    it('should only pass the required fields (name)', async () => {
+      const projectOptions = {
+        name: 'This is top secret',
+        base: undefined,
+        prefixMappings: undefined,
+      };
+      await updateProject('myorg', 'topsecret', 12, projectOptions);
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/projects/myorg/topsecret?rev=12`,
+      );
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ name: 'This is top secret' }),
+      );
     });
   });
 

@@ -86,7 +86,6 @@ describe('Sparql View class', () => {
   it('Should convert JSON payload into class attributes', () => {
     testClassProperties(view, mockSparqlViewResponse);
   });
-  // Skip it for now, need to mock the inner HTTP Response
   it('should get the Sparql view', async () => {
     mockResponse(JSON.stringify(mockViewsListResponse));
     const view: SparqlView = await SparqlView.get(orgLabel, projectLabel);

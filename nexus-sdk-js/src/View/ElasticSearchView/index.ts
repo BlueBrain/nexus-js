@@ -1,6 +1,7 @@
 import { httpPost } from '../../utils/http';
 import { PaginatedList, PaginationSettings } from '../../utils/types';
 import Resource, { ResourceResponseCommon } from '../../Resource';
+import { getElasticSearchView } from '../utils';
 
 // This is an Elastic Search Mapping
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
@@ -49,7 +50,7 @@ export interface ElasticSearchHit {
   _score: number;
   _id: string;
   _index: string;
-  _source: ElasticSearchResourceResponse;
+  _source: ElasticSearchResourceResponse | object;
   _type: string;
 }
 
@@ -113,6 +114,8 @@ export default class ElasticSearchView {
     }/_search`;
   }
 
+  static get = getElasticSearchView;
+
   /**
    * Convenience method to help in filtering a project by @Types
    *
@@ -157,17 +160,56 @@ export default class ElasticSearchView {
   }
 
   /**
+   * Search in a project
+   * using an elastic search Query (as a JS Object) as input
+   * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html
+   *
+   * @param {object} elasticSearchQuery
+   * @param {PaginationSettings} [pagination]
+   * @returns {Promise<PaginatedList<ElasticSearchHit>>}
+   * @memberof ElasticSearchView
+   */
+  async rawQuery(
+    elasticSearchQuery: object,
+    pagination?: PaginationSettings,
+  ): Promise<PaginatedList<ElasticSearchHit>> {
+    try {
+      const requestURL = pagination
+        ? `${this.queryURL}?from=${pagination.from}&size=${pagination.size}`
+        : this.queryURL;
+
+      const response: ElasticSearchViewQueryResponse = await httpPost(
+        requestURL,
+        elasticSearchQuery,
+      );
+
+      const total: number = response.hits.total;
+
+      // Expand the data for each item in the list
+      // By fetching each item by ID
+      const results: ElasticSearchHit[] = response.hits.hits;
+
+      return {
+        total,
+        results,
+      };
+    } catch (error) {
+      throw new ViewQueryError(error.message);
+    }
+  }
+
+  /**
    * Search for resources located in a project
    * using an elastic search Query (as a JS Object) as input
    * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html
    *
-   * @param {Object} elasticSearchQuery
+   * @param {object} elasticSearchQuery
    * @param {PaginationSettings} [pagination]
    * @returns {Promise<PaginatedList<Resource>>}
    * @memberof ElasticSearchView
    */
   async query(
-    elasticSearchQuery: Object,
+    elasticSearchQuery: object,
     pagination?: PaginationSettings,
   ): Promise<PaginatedList<Resource>> {
     try {
@@ -187,7 +229,7 @@ export default class ElasticSearchView {
       const results: Resource[] = await Promise.all(
         response.hits.hits.map(async resource => {
           return await Resource.getSelf(
-            resource._source['_self'],
+            (resource._source as ElasticSearchResourceResponse)['_self'],
             this.orgLabel,
             this.projectLabel,
           );
@@ -208,12 +250,12 @@ export default class ElasticSearchView {
    * using an elastic search Aggregation Query (as a JS Object) as input
    * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html
    *
-   * @param {Object} ElasticSearchAggregationQuery
+   * @param {object} ElasticSearchAggregationQuery
    * @returns {Promise<ElasticSearchViewAggregationResponse>}
    * @memberof ElasticSearchView
    */
   async aggregation(
-    elasticSearchAggregationQuery: Object,
+    elasticSearchAggregationQuery: object,
   ): Promise<ElasticSearchViewAggregationResponse> {
     try {
       // Aggregations don't have pagination, so we simply use the queryURL

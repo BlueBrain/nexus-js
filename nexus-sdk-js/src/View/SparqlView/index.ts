@@ -1,5 +1,6 @@
 import { httpPost } from '../../utils/http';
 import { SparqlViewQueryException } from './exceptions';
+import { getSparqlView } from '../utils';
 
 interface SparqlQuery {
   content: string;
@@ -57,6 +58,8 @@ export default class SparqlView {
       this.id
     }/sparql`;
   }
+
+  static get = getSparqlView;
 
   async query(sparqlQuery: string): Promise<SparqlViewQueryResponse> {
     try {

@@ -55,9 +55,12 @@ export async function listResources(
     );
 
     const total: number = listResourceResponses._total;
-
     // Expand the data for each item in the list
     // By fetching each item by ID
+    // Promise.all returns everything or nothing
+    // we need to return undefined if one project
+    // fails to get fetched
+    // TODO: return list of errors as well BlueBrain/nexus#351
     const allResults: (Resource | undefined)[] = await Promise.all(
       listResourceResponses._results.map(async resource => {
         try {
@@ -72,8 +75,9 @@ export async function listResources(
         }
       }),
     );
-    // @ts-ignore
-    const results: Resource[] = allResults.filter(r => r !== undefined) || [];
+    const results: Resource[] = allResults.filter(
+      r => r !== undefined,
+    ) as Resource[];
     return {
       total,
       results,

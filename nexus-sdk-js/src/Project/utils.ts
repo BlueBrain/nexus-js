@@ -79,11 +79,25 @@ export async function listProjects(
       })
       .filter(({ orgName }) => orgName === orgLabel);
 
-    return Promise.all(
-      filteredOrgNames.map(
-        async ({ projectName }) => await getProject(orgLabel, projectName),
-      ),
+    // Promise.all returns everything or nothing
+    // we need to return undefined if one project
+    // fails to get fetched
+    // TODO: return list of errors as well BlueBrain/nexus#351
+    const allProjects: (Project | undefined)[] = await Promise.all(
+      filteredOrgNames.map(async ({ projectName }) => {
+        try {
+          return await getProject(orgLabel, projectName);
+        } catch (error) {
+          console.log(error);
+          return Promise.resolve(undefined);
+        }
+      }),
     );
+
+    const projects: Project[] = allProjects.filter(
+      project => project !== undefined,
+    ) as Project[];
+    return projects;
   } catch (error) {
     throw new Error(error.message);
   }

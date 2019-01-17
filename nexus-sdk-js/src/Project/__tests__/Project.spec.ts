@@ -13,6 +13,8 @@ import {
   deprecateProject,
 } from '../utils';
 import Nexus from '../../Nexus';
+import ElasticSearchView from '../../View/ElasticSearchView';
+import SparqlView from '../../View/SparqlView';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
@@ -29,7 +31,7 @@ describe('Project class', () => {
     expect(p.updatedAt.toISOString()).toEqual(mockProjectResponse._updatedAt);
   });
 
-  describe('listElasticSearchViews()', () => {
+  describe('listViews()', () => {
     beforeEach(() => {
       mockResponse(JSON.stringify(mockViewsListResponse), { status: 200 });
     });
@@ -40,15 +42,38 @@ describe('Project class', () => {
 
     it('should call httpGet method with the proper get views url', async () => {
       const p = new Project('my-org', mockProjectResponse);
-      await p.listElasticSearchViews();
+      await p.listViews();
       const viewURL = `/views/${p.orgLabel}/${p.label}`;
       expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);
     });
 
-    it('should return a just list of ElasticSearchViews from a response that includes multiple view types', async () => {
+    it('should return a list of ElasticSearchViews or SparqlView from a response that includes multiple view types', async () => {
       const p = new Project('my-org', mockProjectResponse);
-      const myViews = await p.listElasticSearchViews();
-      expect(myViews.length).toEqual(1);
+      const myViews = await p.listViews();
+      expect(myViews.length).toEqual(2);
+    });
+  });
+
+  describe('getView()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockViewsListResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should call httpGet method with the proper get views url', async () => {
+      const p = new Project('my-org', mockProjectResponse);
+      await p.getView("nxv:defaultElasticIndex");
+      const viewURL = `/views/${p.orgLabel}/${p.label}`;
+      expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);
+    });
+
+    it('should return the view with the corresponding ID, be it SPARQL or ElasticSearch', async () => {
+      const p = new Project('my-org', mockProjectResponse);
+      const myView: ElasticSearchView | SparqlView = await p.getView("nxv:defaultSparqlIndex");
+      expect(myView.id).toEqual("nxv:defaultSparqlIndex");
     });
   });
 

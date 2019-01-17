@@ -1,13 +1,13 @@
 import { ProjectResponse } from '../Project';
 import { ListOrgsResponse, OrgResponse } from '../Organization';
 import { ResourceResponse, ListResourceResponse } from '../Resource';
-import { ViewsListResponse } from '../views';
+import { ViewsListResponse } from '../View/utils';
 import {
   ElasticSearchViewResponse,
   ElasticSearchViewQueryResponse,
   ElasticSearchViewAggregationResponse,
-} from '../views/ElasticSearchView';
-import { SparqlViewResponse } from '../views/SparqlView';
+} from '../View/ElasticSearchView';
+import { SparqlViewResponse } from '../View/SparqlView';
 
 export const mockOrgResponse: OrgResponse = {
   '@context': 'https://bluebrain.github.io/nexus/contexts/organization',

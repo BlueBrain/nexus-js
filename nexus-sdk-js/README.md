@@ -40,14 +40,16 @@ Pre-alpha
 
 #### Views
 
-- [ ] Get by id // blocked
+- [x] Get by id
 - [x] List Views
 - [ ] Create
 - [ ] Update
 - [ ] Delete
 
-#### Elasticsearch views
+#### ElasticSearch views
 
+- [x] Get default view for a Project
+- [x] Get by id
 - [ ] Create
 - [ ] Update
 - [ ] Delete
@@ -55,8 +57,9 @@ Pre-alpha
 - [x] Filter by type
 - [x] Filter by Constrained by
 
-#### Sparql view
+#### SPARQL view
 
+- [x] Get default view for a Project
 - [x] Query
 - [ ] Get incoming links
 - [ ] Get outgoing links
@@ -127,10 +130,22 @@ const resources: PaginatedList<Resource> = await myProject.listResources(paginat
 // Get a specific resource
 const myResource: Resource = await myProject.getResource('schema-id', 'my-resource-id');
 
-// Fetch all Elastic Search View instances in a Project
-const myViews: ElasticSearchView[] = await myProject.listElasticSearchViews()
+// Fetch all View instances in a Project
+const myViews: (ElasticSearchView | SparqlView)[] = await myProject.listViews();
 
-// Query a project with Elastic Search
+// Fetch a view by ID
+const myViewById: ElasticSearchView | SparqlView = await myProject.getView('my-view-id');
+
+// Fetch an ElasticSearch view by ID (for user-defined views)
+const myElasticSearchView: ElasticSearchView = await myProject.getElasticSearchView('my-view-id');
+
+// Query an ElasticSearch view and retrieve raw results as returned by ElasticSearch
+const rawResults: PaginatedList<ElasticSearchHit> = await myElasticSearchView.rawQuery({});
+
+// Fetch the default ElasticSearch view for a project
+const myView: ElasticSearchView = await myProject.getElasticSearchView();
+
+// Query a project with the default ElasticSearch view and retrieve Resources
 const searchAll: PaginatedList<Resource> = await myView.query({});
 
 // ESView Query Convenience Method

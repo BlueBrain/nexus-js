@@ -2,7 +2,7 @@ import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
 import SparqlView, {
   SparqlViewResponse,
   SparqlViewQueryResponse,
-} from '../index';
+} from '../../SparqlView';
 import {
   mockSparqlViewResponse,
   mockProjectResponse,
@@ -78,7 +78,7 @@ describe('Sparql View class', () => {
     resetMocks();
   });
   const orgLabel = 'my-org';
-  const projectLabel = 'my-project';
+  const projectLabel = 'example';
   const view = new SparqlView(orgLabel, projectLabel, mockSparqlViewResponse);
   it('Should create a SparqlView instance', () => {
     expect(view).toBeInstanceOf(SparqlView);
@@ -86,9 +86,10 @@ describe('Sparql View class', () => {
   it('Should convert JSON payload into class attributes', () => {
     testClassProperties(view, mockSparqlViewResponse);
   });
+  // Skip it for now, need to mock the inner HTTP Response
   it('should get the Sparql view', async () => {
     mockResponse(JSON.stringify(mockViewsListResponse));
-    const view: SparqlView = await project.getSparqlView();
+    const view: SparqlView = await SparqlView.get(orgLabel, projectLabel);
     expect(mock.calls.length).toBe(1);
     expect(view.id).toBe(mockSparqlViewResponse['@id']);
     expect(view.deprecated).toBe(mockSparqlViewResponse._deprecated);
@@ -103,16 +104,14 @@ describe('Sparql View class', () => {
     afterEach(() => {
       resetMocks();
     });
-    it('should get the Sparql view', async () => {
+    it('should query the Sparql view', async () => {
       mockResponses(
-        [JSON.stringify(mockViewsListResponse)],
         [JSON.stringify(mockSparlQueryResponse)],
       );
-      const view: SparqlView = await project.getSparqlView();
       const result: SparqlViewQueryResponse = await view.query(
         'SELECT * where {?s ?p ?o} LIMIT 3',
       );
-      expect(mock.calls.length).toBe(2);
+      expect(mock.calls.length).toBe(1);
       expect(result.head.vars.length).toBe(3);
     });
   });

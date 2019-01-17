@@ -1,4 +1,4 @@
-import ElasticSearchView, { ElasticSearchViewResponse } from '../index';
+import ElasticSearchView, { ElasticSearchViewResponse } from '../../ElasticSearchView';
 import {
   mockElasticSearchViewResponse,
   mockElasticSearchViewQueryResponse,
@@ -133,7 +133,79 @@ describe('ElasticSearchView class', () => {
     });
   });
 
-  // Skipping for now as it throw unhandled promise rejection errors.
+  describe('rawQuery()', () => {
+    afterEach(() => resetMocks());
+
+    it('should call httpPost method with the query object and URL', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const myQuery = {};
+      mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse)],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      );
+      await view.rawQuery(myQuery);
+      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
+    });
+
+    it('should throw an error if httpPost crashes', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const myQuery = {};
+      mockReject(new Error('very bad'));
+
+      await expect(view.rawQuery(myQuery)).rejects.toThrow(Error);
+    });
+
+    it('should be able to make query with <PaginationSettings>', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const myQuery = {};
+      const myPaginationSettings = {
+        from: 2,
+        size: 20,
+      };
+      mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse)],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      );
+      await view.rawQuery(myQuery, myPaginationSettings);
+      const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${
+        view.id
+      }/_search?from=${myPaginationSettings.from}&size=${
+        myPaginationSettings.size
+      }`;
+      expect(mock.calls[0][0]).toEqual(baseUrl + expectedQueryURL);
+      expect(mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
+    });
+
+    it('should return Promise<PaginatedList<ElasticSearchHit>>', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      const myQuery = {};
+      mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse)],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      );
+      const data = await view.rawQuery(myQuery);
+      expect(data).toHaveProperty('total', 3341);
+      expect(data).toHaveProperty('results');
+    });
+  });
+
   describe('aggregation()', () => {
     const mockAggregationQuery = {
       aggs: {

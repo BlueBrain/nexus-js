@@ -1,11 +1,9 @@
 import Resource, { ListResourceResponse } from '../Resource';
 import { httpGet } from '../utils/http';
 import { PaginationSettings, PaginatedList } from '../utils/types';
-import { ViewsListResponse, ViewResponse } from '../views';
-import ElasticSearchView, {
-  ElasticSearchViewResponse,
-} from '../views/ElasticSearchView';
-import SparqlView, { SparqlViewResponse } from '../views/SparqlView';
+import View from '../View';
+import ElasticSearchView from '../View/ElasticSearchView';
+import SparqlView from '../View/SparqlView';
 import {
   getProject,
   listProjects,
@@ -15,19 +13,6 @@ import {
   updateProject,
 } from './utils';
 import { PrefixMapping } from './types';
-
-// IDs for the views that are automatically created with a project
-const ES_DEFAULT_VIEW_ID = 'nxv:defaultElasticIndex';
-const SPARQL_DEFAULT_VIEW_ID = 'nxv:defaultSparqlIndex';
-
-const isElasticSearchView = (viewResponse: ViewResponse): viewResponse is ElasticSearchViewResponse => {
-  const validTypes = ['ElasticView', 'AggregateElasticView'];
-  return viewResponse['@type'].some(type => validTypes.includes(type));
-}
-
-const isSparqlView = (viewResponse: ViewResponse): viewResponse is SparqlViewResponse => {
-  return viewResponse['@type'].some(type => type === 'SparqlView');
-}
 
 export interface ProjectResponse {
   '@id': string;
@@ -109,100 +94,19 @@ export default class Project {
     }
   }
 
-  // The current API does not support pagination / filtering of views
-  // This should be fixed when possible and converted to signature
-  // Promise<PaginatedList<(ElasticSearchView | SparqlView)>>
   async listViews(): Promise<(ElasticSearchView | SparqlView)[]> {
-    try {
-      const viewURL = `/views/${this.orgLabel}/${this.label}`;
-      const viewListResponse: ViewsListResponse = await httpGet(viewURL);
-      const views: (ElasticSearchView | SparqlView)[] = viewListResponse._results
-        .filter(viewResponse => isElasticSearchView(viewResponse) || isSparqlView(viewResponse))
-        .map(
-          viewResponse =>
-            isElasticSearchView(viewResponse) ? new ElasticSearchView(
-              this.orgLabel,
-              this.label,
-              viewResponse as ElasticSearchViewResponse,
-            ) : new SparqlView(
-              this.orgLabel,
-              this.label,
-              viewResponse as SparqlViewResponse,
-            ),
-        );
-      return views;
-    } catch (error) {
-      throw error;
-    }
+    return View.list(this.orgLabel, this.label);
   }
 
-  // TODO: refactor once we can fetch views per IDs (broken just now)
   async getView(viewId: string): Promise<ElasticSearchView | SparqlView> {
-    try {
-      const views = await this.listViews();
-      const view = views.find(view => view.id === viewId);
-
-      if (!view) {
-        throw new Error(`Not found: view "${viewId}" for project "${this.label}" in organization "${this.orgLabel}"`);
-      }
-
-      return view;
-    } catch (error) {
-      throw error;
-    }
+    return View.get(this.orgLabel, this.label, viewId)
   }
 
-  // The current API does not support pagination / filtering of views
-  // This should be fixed when possible and converted to signature
-  // Promise<PaginatedList<ElasticSearchView>>
-  async listElasticSearchViews(): Promise<ElasticSearchView[]> {
-    try {
-      const views = await this.listViews();
-      return views.filter((view): view is ElasticSearchView => view instanceof ElasticSearchView);
-    } catch (error) {
-      throw error;
-    }
+  async getElasticSearchView(viewId?: string): Promise<ElasticSearchView> {
+    return ElasticSearchView.get(this.orgLabel, this.label, viewId);
   }
 
-  /**
-   * Get the default ElasticSearch view for the current project.
-   *
-   * This is the one you can use to load resources.
-   */
-  async getElasticSearchDefaultView(): Promise<ElasticSearchView> {
-    try {
-      const elasticSearchDefaultView = await this.getView(ES_DEFAULT_VIEW_ID);
-
-      if (!(elasticSearchDefaultView instanceof ElasticSearchView)) {
-        throw new Error(`Cannot load default ElasticSearch view for project ${this.label} in organization ${this.orgLabel}.
-        We cannot run a query.
-        Something is wrong on the server-side, ask an administrator.`);
-      }
-
-      return elasticSearchDefaultView;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  /**
-   * Get the default (and only) SPARQL view for the current project.
-   *
-   * Queries the triple-store (RDF) directly. For advanced uses.
-   */
   async getSparqlView(): Promise<SparqlView> {
-    try {
-      const sparqlDefaultView = await this.getView(SPARQL_DEFAULT_VIEW_ID);
-
-      if (!(sparqlDefaultView instanceof SparqlView)) {
-        throw new Error(`Cannot load default SPARQL view for project ${this.label} in organization ${this.orgLabel}.
-          We cannot run a query.
-          Something is wrong on the server-side, ask an administrator.`);
-      }
-
-      return sparqlDefaultView;
-    } catch (error) {
-      throw error;
-    }
+    return SparqlView.get(this.orgLabel, this.label);
   }
 }

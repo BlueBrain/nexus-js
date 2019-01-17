@@ -99,11 +99,26 @@ export async function listOrganizations(
         return orgName;
       })
       .filter((org, index, self) => self.indexOf(org) === index);
-
     // get orgs details
-    return Promise.all(
-      filteredOrgNames.map(async org => await getOrganization(org)),
+    // Promise.all returns everything or nothing
+    // we need to return undefined if one project
+    // fails to get fetched
+    // TODO: return list of errors as well BlueBrain/nexus#351
+    const allOrgs: (Organization | undefined)[] = await Promise.all(
+      filteredOrgNames.map(async org => {
+        try {
+          return await getOrganization(org);
+        } catch (error) {
+          console.log(error);
+          return Promise.resolve(undefined);
+        }
+      }),
     );
+
+    const orgs: Organization[] = allOrgs.filter(
+      org => org !== undefined,
+    ) as Organization[];
+    return orgs;
   } catch (e) {
     throw new Error(`ListOrgsError: ${e}`);
   }

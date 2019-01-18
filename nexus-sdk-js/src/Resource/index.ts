@@ -154,4 +154,14 @@ export default class Resource<T = {}> {
       this.projectLabel,
     );
   }
+
+  toJSON() {
+    return {
+      ...Object.getOwnPropertyNames(this).reduce((memo: any, key) => {
+        memo[key] = (this as any)[key];
+        return memo;
+      }, {}),
+      name: this.name,
+    };
+  }
 }

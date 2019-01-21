@@ -145,3 +145,29 @@ export async function updateResource(
     throw error;
   }
 }
+
+// export async function tagResource(
+//   orgLabel: string,
+//   projectLabel: string,
+//   rev: number = 1,
+//   {
+//     tagName,
+//     tagFromRev,
+//   }: {
+//     tagName: string;
+//     tagFromRev: number;
+//   },
+// ): Promise<Project> {
+//   try {
+//     const projectResponse: ProjectResponse = await httpPut(
+//       `/projects/${orgLabel}/${projectLabel}/tags?rev=${rev}`,
+//       {
+//         tag: tagName,
+//         rev: tagFromRev,
+//       },
+//     );
+//     return new Project(projectResponse);
+//   } catch (error) {
+//     throw new Error(error.message);
+//   }
+// }

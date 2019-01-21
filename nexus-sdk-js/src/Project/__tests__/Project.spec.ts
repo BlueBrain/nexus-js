@@ -3,13 +3,13 @@ import Project from '../index';
 import {
   mockProjectResponse,
   mockViewsListResponse,
+  mockListProjectResponse,
 } from '../../__mocks__/helpers';
 import {
   getProject,
   listProjects,
   createProject,
   updateProject,
-  tagProject,
   deprecateProject,
 } from '../utils';
 import Nexus from '../../Nexus';
@@ -19,7 +19,7 @@ import SparqlView from '../../View/SparqlView';
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
 
-describe.skip('Project class', () => {
+describe('Project class', () => {
   it('Should create a Project instance', () => {
     const p = new Project(mockProjectResponse);
     expect(p.id).toEqual(mockProjectResponse['@id']);
@@ -89,22 +89,9 @@ describe.skip('Project class', () => {
         `${baseUrl}/projects/myorg/myproject?rev=21`,
       );
     });
-    it('set the tag option', async () => {
-      await getProject('myorg', 'myproject', { tag: 'v1.0.0' });
-      expect(mock.calls[0][0]).toEqual(
-        `${baseUrl}/projects/myorg/myproject?tag=v1.0.0`,
-      );
-    });
-    it('set the rev option over the tag one', async () => {
-      await getProject('myorg', 'myproject', { revision: 39, tag: 'v1.0.0' });
-      expect(mock.calls[0][0]).toEqual(
-        `${baseUrl}/projects/myorg/myproject?rev=39`,
-      );
-    });
   });
 
-  // TODO: blocked by https://github.com/BlueBrain/nexus/issues/112
-  describe.skip('list projects', () => {
+  describe('list projects', () => {
     beforeEach(() => {
       mockResponse('{}');
     });
@@ -137,7 +124,7 @@ describe.skip('Project class', () => {
     });
     it('set all the options', async () => {
       await listProjects('myorg', {
-        d: 'query',
+        q: 'query',
         from: 3,
         size: 10,
         deprecated: true,
@@ -220,27 +207,6 @@ describe.skip('Project class', () => {
       );
       expect(mock.calls[0][1].body).toEqual(
         JSON.stringify({ name: 'This is top secret' }),
-      );
-    });
-  });
-
-  describe('tag a project', () => {
-    beforeEach(() => {
-      mockResponse('{}');
-    });
-    afterEach(() => {
-      resetMocks();
-    });
-    it('updates the specific revision', async () => {
-      await tagProject('myorg', 'myproject', 12, {
-        tagName: 'v1.0.0',
-        tagFromRev: 10,
-      });
-      expect(mock.calls[0][0]).toEqual(
-        `${baseUrl}/projects/myorg/myproject/tags?rev=12`,
-      );
-      expect(mock.calls[0][1].body).toEqual(
-        JSON.stringify({ tag: 'v1.0.0', rev: 10 }),
       );
     });
   });

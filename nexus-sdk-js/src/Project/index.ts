@@ -8,7 +8,6 @@ import {
   getProject,
   listProjects,
   createProject,
-  tagProject,
   deprecateProject,
   updateProject,
 } from './utils';
@@ -69,7 +68,6 @@ export default class Project {
   static list = listProjects;
   static create = createProject;
   static update = updateProject;
-  static tag = tagProject;
   static deprecate = deprecateProject;
 
   constructor(projectResponse: ProjectResponse) {

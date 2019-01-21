@@ -6,7 +6,7 @@ export interface ListOrgOptions {
   [key: string]: any;
 }
 
-export interface CreatOrgPayload {
+export interface CreateOrgPayload {
   description?: string;
 }
 export type Context = string | string[];

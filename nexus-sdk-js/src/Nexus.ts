@@ -1,6 +1,6 @@
 import store from './store';
 import Organization from './Organization';
-import { CreatOrgPayload } from './Organization/types';
+import { CreateOrgPayload } from './Organization/types';
 
 type NexusConfig = {
   environment?: string;
@@ -55,7 +55,7 @@ export default class Nexus {
 
   async createOrganization(
     label: string,
-    orgPayload?: CreatOrgPayload,
+    orgPayload?: CreateOrgPayload,
   ): Promise<Organization> {
     return Organization.create(label, orgPayload);
   }

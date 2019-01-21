@@ -14,12 +14,9 @@ describe('Nexus class', () => {
       resetMocks();
     });
     it('should return an organisation', async () => {
-      mockResponses(
-        [JSON.stringify(mockOrgResponse)],
-        [JSON.stringify(mockListProjectResponse)],
-      );
+      mockResponses([JSON.stringify(mockOrgResponse)]);
       const org: Organization = await nexus.getOrganization('myorg');
-      expect(mock.calls.length).toBe(2);
+      expect(mock.calls.length).toBe(1);
       expect(org).toBeInstanceOf(Organization);
       expect(org.label).toEqual('myorg');
     });
@@ -30,13 +27,9 @@ describe('Nexus class', () => {
       resetMocks();
     });
     it('should return a list of organisations', async () => {
-      mockResponses(
-        [JSON.stringify(mockListProjectResponse)],
-        [JSON.stringify(mockOrgResponse)],
-        [JSON.stringify(mockOrgResponse)],
-      );
+      mockResponses([JSON.stringify(mockListProjectResponse)]);
       const orgs: Organization[] = await nexus.listOrganizations();
-      expect(mock.calls.length).toBe(3);
+      expect(mock.calls.length).toBe(1);
       expect(orgs.length).toEqual(1);
     });
   });

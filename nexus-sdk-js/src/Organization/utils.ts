@@ -3,7 +3,7 @@ import Organization, {
   ListOrgResponse,
   OrgResponseCommon,
 } from '.';
-import { ListOrgOptions, CreatOrgPayload } from './types';
+import { ListOrgOptions, CreateOrgPayload } from './types';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
@@ -14,7 +14,7 @@ import { CreateOrganizationException } from './exceptions';
  */
 export async function createOrganization(
   label: string,
-  orgPayload?: CreatOrgPayload,
+  orgPayload?: CreateOrgPayload,
 ): Promise<Organization> {
   try {
     const orgResponse: OrgResponse = await httpPut(
@@ -94,14 +94,12 @@ export async function listOrganizations(
 export async function updateOrganization(
   orgLabel: string,
   rev: number = 1,
-  newName: string,
+  orgPayload: CreateOrgPayload,
 ): Promise<Organization> {
   try {
     const orgResponse: OrgResponse = await httpPut(
       `/orgs/${orgLabel}?rev=${rev}`,
-      {
-        name: newName,
-      },
+      orgPayload,
     );
     return new Organization(orgResponse);
   } catch (error) {

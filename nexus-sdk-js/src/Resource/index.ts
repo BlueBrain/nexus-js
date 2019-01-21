@@ -1,4 +1,4 @@
-import { Context, Distribution } from '../utils/types';
+import { Context } from './types';
 import {
   getResource,
   getSelfResource,
@@ -18,7 +18,6 @@ export const RESOURCE_METADATA_KEYS = [
   '_createdBy',
   '_updatedAt',
   '_updatedBy',
-  '_distribution',
   '_rev',
   '_deprecated',
 ];
@@ -35,7 +34,6 @@ export interface ResourceResponseCommon {
   _updatedBy: string;
   _rev: number;
   _deprecated: boolean;
-  _distribution?: Distribution;
   // This is for the rest of the dataset's data
   [key: string]: any;
 }
@@ -67,7 +65,6 @@ export default class Resource<T = {}> {
   readonly updatedBy: string;
   readonly rev: number;
   readonly deprecated: boolean;
-  readonly distribution?: Distribution | Distribution[];
   readonly data: T;
   readonly raw: ResourceResponseCommon;
   readonly resourceURL: string;
@@ -115,7 +112,6 @@ export default class Resource<T = {}> {
     this.createdBy = resourceResponse._createdBy;
     this.updatedAt = resourceResponse._updatedAt;
     this.updatedBy = resourceResponse._updatedBy;
-    this.distribution = resourceResponse._distribution;
     this.rev = resourceResponse._rev;
     this.deprecated = resourceResponse._deprecated;
     this.data = Object.keys(resourceResponse).reduce(

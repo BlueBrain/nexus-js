@@ -81,14 +81,14 @@ describe('Organization class', () => {
       resetMocks();
     });
     it('updates the specific revision', async () => {
-      updateOrganization('myorg', 12, 'new name');
+      updateOrganization('myorg', 12, { description: 'my new description' });
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=12`);
       expect(mock.calls[0][1].body).toEqual(
-        JSON.stringify({ name: 'new name' }),
+        JSON.stringify({ description: 'my new description' }),
       );
     });
     it('call with revision 1 by default', async () => {
-      updateOrganization('myorg', undefined, 'new name');
+      updateOrganization('myorg', undefined, {});
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=1`);
     });
   });

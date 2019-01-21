@@ -1,4 +1,8 @@
-import Project, { ProjectResponse } from '.';
+import Project, {
+  ProjectResponse,
+  ListProjectsResponse,
+  ProjectResponseCommon,
+} from '.';
 import { ListOrgsResponse } from '../Organization';
 import { httpGet, httpPut, httpDelete } from '../utils/http';
 import { ListResourceResponse } from '../Resource';
@@ -30,21 +34,12 @@ export async function getProject(
     const projectResponse: ProjectResponse = await httpGet(
       `/projects/${orgLabel}/${projectLabel}${ops}`,
     );
-    // We want to know how many resources the project has
-    const resourceResponse: ListResourceResponse = await httpGet(
-      `/resources/${orgLabel}/${projectLabel}`,
-    );
-    const project = new Project(orgLabel, {
-      ...projectResponse,
-      resourceNumber: resourceResponse._total || 0,
-    });
-    return project;
+    return new Project(projectResponse);
   } catch (error) {
     throw new Error(error.message);
   }
 }
 
-// TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
 export async function listProjects(
   orgLabel: string,
   options?: ListProjectOptions,
@@ -60,43 +55,19 @@ export async function listProjects(
     );
   }
   try {
-    const listOrgsResponse: ListOrgsResponse = await httpGet(`/projects${ops}`);
-    if (listOrgsResponse.code || !listOrgsResponse._results) {
+    const listProjectResponse: ListProjectsResponse = await httpGet(
+      `/projects/${orgLabel}${ops}`,
+    );
+    if (listProjectResponse.code || !listProjectResponse._results) {
       return [];
     }
-    // Get list of unique orgs names
-    const filteredOrgNames: {
-      orgName: string;
-      projectName: string;
-    }[] = listOrgsResponse._results
-      .map(org => {
-        const split = org._id.split('/');
-        const [orgName, projectName] = split.slice(
-          split.length - 2,
-          split.length,
-        );
-        return { orgName, projectName };
-      })
-      .filter(({ orgName }) => orgName === orgLabel);
-
-    // Promise.all returns everything or nothing
-    // we need to return undefined if one project
-    // fails to get fetched
-    // TODO: return list of errors as well BlueBrain/nexus#351
-    const allProjects: (Project | undefined)[] = await Promise.all(
-      filteredOrgNames.map(async ({ projectName }) => {
-        try {
-          return await getProject(orgLabel, projectName);
-        } catch (error) {
-          console.log(error);
-          return Promise.resolve(undefined);
-        }
-      }),
+    const projects: Project[] = listProjectResponse._results.map(
+      (commonResponse: ProjectResponseCommon) =>
+        new Project({
+          ...commonResponse,
+          '@context': listProjectResponse['@context'],
+        }),
     );
-
-    const projects: Project[] = allProjects.filter(
-      project => project !== undefined,
-    ) as Project[];
     return projects;
   } catch (error) {
     throw new Error(error.message);
@@ -113,7 +84,7 @@ export async function createProject(
       `/projects/${orgLabel}/${projectLabel}`,
       projectPayload,
     );
-    return new Project(orgLabel, projectResponse);
+    return new Project({ ...projectResponse, ...projectPayload });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -130,7 +101,7 @@ export async function updateProject(
       `/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
       projectPayload,
     );
-    return new Project(orgLabel, projectResponse);
+    return new Project({ ...projectResponse, ...projectPayload });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -156,7 +127,7 @@ export async function tagProject(
         rev: tagFromRev,
       },
     );
-    return new Project(orgLabel, projectResponse);
+    return new Project(projectResponse);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -171,7 +142,7 @@ export async function deprecateProject(
     const projectResponse: ProjectResponse = await httpDelete(
       `/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
     );
-    return new Project(orgLabel, projectResponse);
+    return new Project(projectResponse);
   } catch (error) {
     throw new Error(error);
   }

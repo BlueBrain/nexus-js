@@ -12,54 +12,56 @@ import {
   deprecateProject,
   updateProject,
 } from './utils';
-import { PrefixMapping } from './types';
+import { ApiMapping, Context } from './types';
 
-export interface ProjectResponse {
+export interface ProjectResponseCommon {
   '@id': string;
-  '@context': string;
   '@type': string;
-  code?: string;
-  label: string;
-  name: string;
   base: string;
+  vocab: string;
+  apiMappings: ApiMapping[];
+  _label: string;
+  _organizationLabel: string;
+  _organizationUuid: string;
+  _uuid: string;
   _rev: number;
   _deprecated: boolean;
   _createdAt: string;
   _createdBy: string;
   _updatedAt: string;
   _updatedBy: string;
-  prefixMappings: PrefixMapping[];
-  resourceNumber: number;
-  _label?: string;
-  _uuid?: string;
-  _self?: string;
-  _constrainedBy?: string;
 }
 
 export interface ListProjectsResponse {
-  '@context': string;
   _total: number;
   _links?: any;
   _results?: ProjectResponse[];
+  '@context'?: Context;
   code?: string;
   message?: string;
 }
 
+export interface ProjectResponse extends ProjectResponseCommon {
+  '@context'?: Context;
+}
+
 export default class Project {
-  orgLabel: string;
+  context?: Context;
   id: string;
-  context: string;
   type: string;
-  label: string;
-  name: string;
   base: string;
-  version: number;
+  vocab: string;
+  apiMappings: ApiMapping[];
+  label: string;
+  orgLabel: string;
+  orgUuid: string;
+  uuid: string;
+  rev: number;
   deprecated: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  prefixMappings: PrefixMapping[];
-  resourceNumber: number;
-  private projectResourceURL: string;
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
 
   static get = getProject;
   static list = listProjects;
@@ -68,21 +70,23 @@ export default class Project {
   static tag = tagProject;
   static deprecate = deprecateProject;
 
-  constructor(orgLabel: string, projectResponse: ProjectResponse) {
-    this.orgLabel = orgLabel;
-    this.id = projectResponse['@id'];
+  constructor(projectResponse: ProjectResponse) {
     this.context = projectResponse['@context'];
+    this.id = projectResponse['@id'];
     this.type = projectResponse['@type'];
-    this.label = projectResponse['label'];
-    this.name = projectResponse.name;
     this.base = projectResponse.base;
-    this.version = projectResponse._rev;
+    this.vocab = projectResponse.vocab;
+    this.apiMappings = projectResponse.apiMappings;
+    this.label = projectResponse._label;
+    this.orgLabel = projectResponse._organizationLabel;
+    this.orgUuid = projectResponse._organizationUuid;
+    this.uuid = projectResponse._uuid;
+    this.rev = projectResponse._rev;
     this.deprecated = projectResponse._deprecated;
-    this.createdAt = new Date(projectResponse._createdAt);
-    this.updatedAt = new Date(projectResponse._updatedAt);
-    this.prefixMappings = projectResponse.prefixMappings;
-    this.resourceNumber = projectResponse.resourceNumber;
-    this.projectResourceURL = `/resources/${this.orgLabel}/${this.label}`;
+    this.createdAt = projectResponse._createdAt;
+    this.createdBy = projectResponse._createdBy;
+    this.updatedAt = projectResponse._updatedAt;
+    this.updatedBy = projectResponse._updatedBy;
   }
 
   async listResources(
@@ -108,7 +112,7 @@ export default class Project {
   }
 
   async getView(viewId: string): Promise<ElasticSearchView | SparqlView> {
-    return View.get(this.orgLabel, this.label, viewId)
+    return View.get(this.orgLabel, this.label, viewId);
   }
 
   async getElasticSearchView(viewId?: string): Promise<ElasticSearchView> {

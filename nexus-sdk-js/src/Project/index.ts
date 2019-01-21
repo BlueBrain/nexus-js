@@ -36,6 +36,15 @@ export interface ProjectResponse {
   _constrainedBy?: string;
 }
 
+export interface ListProjectsResponse {
+  '@context': string;
+  _total: number;
+  _links?: any;
+  _results?: ProjectResponse[];
+  code?: string;
+  message?: string;
+}
+
 export default class Project {
   orgLabel: string;
   id: string;

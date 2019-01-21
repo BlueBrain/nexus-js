@@ -2,7 +2,9 @@ import Organization, {
   OrgResponse,
   ListOrgsResponse,
   ListOrgsOptions,
+  OrgPayload,
 } from '.';
+import { ListProjectsResponse } from '../Project';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
@@ -51,18 +53,9 @@ export async function getOrganization(
       }
     }
     const orgResponse: OrgResponse = await httpGet(`/orgs/${orgLabel}${ops}`);
-    // we want to know how many projects there are per organisation
-    const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
-    const projectNumber: number = listOrgsResponse._results
-      ? listOrgsResponse._results.reduce((prev, org) => {
-          const split = org._id.split('/');
-          const orgName = split.slice(split.length - 2, split.length - 1)[0];
-          if (orgName === orgLabel) {
-            return prev + 1;
-          }
-          return prev;
-        }, 0)
-      : 0;
+    // we want to know how many projects there are per organization
+    const listProjectsResponse: ListProjectsResponse = await httpGet(`/orgs/${orgLabel}`);
+    const projectNumber: number = listProjectsResponse._total;
 
     const org = new Organization({ ...orgResponse, projectNumber });
     return org;
@@ -71,8 +64,6 @@ export async function getOrganization(
   }
 }
 
-// TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-// cannot implement list orgs options until then...
 export async function listOrganizations(
   options?: ListOrgsOptions,
 ): Promise<Organization[]> {
@@ -87,37 +78,15 @@ export async function listOrganizations(
     );
   }
   try {
-    const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
+    const listOrgsResponse: ListOrgsResponse = await httpGet(`/orgs${ops}`);
     if (listOrgsResponse.code || !listOrgsResponse._results) {
       return [];
     }
-    // Get list of unique orgs names
-    const filteredOrgNames: string[] = listOrgsResponse._results
-      .map(org => {
-        const split = org._id.split('/');
-        const orgName = split.slice(split.length - 2, split.length - 1)[0];
-        return orgName;
-      })
-      .filter((org, index, self) => self.indexOf(org) === index);
-    // get orgs details
-    // Promise.all returns everything or nothing
-    // we need to return undefined if one project
-    // fails to get fetched
-    // TODO: return list of errors as well BlueBrain/nexus#351
-    const allOrgs: (Organization | undefined)[] = await Promise.all(
-      filteredOrgNames.map(async org => {
-        try {
-          return await getOrganization(org);
-        } catch (error) {
-          console.log(error);
-          return Promise.resolve(undefined);
-        }
-      }),
+
+    const orgs: Organization[] = listOrgsResponse._results.map(
+      (response: OrgResponse) => new Organization({...response, projectNumber: 0} as OrgPayload)
     );
 
-    const orgs: Organization[] = allOrgs.filter(
-      org => org !== undefined,
-    ) as Organization[];
     return orgs;
   } catch (e) {
     throw new Error(`ListOrgsError: ${e}`);

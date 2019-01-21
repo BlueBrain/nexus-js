@@ -12,12 +12,7 @@ export interface ListOrgsResponse {
   '@context': string;
   _total: number;
   _links?: any;
-  _results?: {
-    _id: string;
-    _source: {
-      '@id': string;
-    };
-  }[];
+  _results?: OrgResponse[];
   code?: string;
   message?: string;
 }
@@ -34,18 +29,16 @@ export interface OrgResponse {
   '@context': string;
   '@id': string;
   '@type': string;
-  label: string;
-  _self: string;
-  _constrainedBy: string;
+  _label: string;
   _createdAt: string;
   _createdBy: string;
   _updatedAt: string;
-  name: string;
   _updatedBy: string;
   _deprecated: boolean;
   _rev: number;
   _uuid: string;
-  projectNumber: number;
+  projectNumber?: number;
+
 }
 
 export default class Organization {
@@ -53,7 +46,6 @@ export default class Organization {
   id: string;
   type: string;
   label: string;
-  name: string;
   deprecated: boolean;
   rev: number;
   uuid: string;
@@ -70,13 +62,14 @@ export default class Organization {
     this.context = organizationResponse['@context'];
     this.id = organizationResponse['@id'];
     this.type = organizationResponse['@type'];
-    this.label = organizationResponse.label;
-    this.name = organizationResponse.name;
+    this.label = organizationResponse._label;
     this.deprecated = organizationResponse._deprecated;
     this.rev = organizationResponse._rev;
     this.uuid = organizationResponse._uuid;
-    this.projectNumber = organizationResponse.projectNumber;
+    this.projectNumber = organizationResponse.projectNumber || 0;
   }
+
+
 
   async getProject(projectLabel: string): Promise<Project> {
     return Project.get(this.label, projectLabel);

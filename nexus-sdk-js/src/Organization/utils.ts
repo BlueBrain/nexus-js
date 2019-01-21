@@ -14,7 +14,7 @@ import { CreateOrganizationException } from './exceptions';
  */
 export async function createOrganization(
   label: string,
-  orgPayload: CreatOrgPayload,
+  orgPayload?: CreatOrgPayload,
 ): Promise<Organization> {
   try {
     const orgResponse: OrgResponse = await httpPut(

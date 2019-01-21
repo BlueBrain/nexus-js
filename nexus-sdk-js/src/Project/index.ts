@@ -30,6 +30,7 @@ export interface ProjectResponseCommon {
   _createdBy: string;
   _updatedAt: string;
   _updatedBy: string;
+  description?: string;
 }
 
 export interface ListProjectsResponse {
@@ -62,6 +63,7 @@ export default class Project {
   createdBy: string;
   updatedAt: string;
   updatedBy: string;
+  description?: string;
 
   static get = getProject;
   static list = listProjects;
@@ -87,6 +89,7 @@ export default class Project {
     this.createdBy = projectResponse._createdBy;
     this.updatedAt = projectResponse._updatedAt;
     this.updatedBy = projectResponse._updatedBy;
+    this.description = projectResponse.description;
   }
 
   async listResources(

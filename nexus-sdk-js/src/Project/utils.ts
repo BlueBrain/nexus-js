@@ -3,9 +3,7 @@ import Project, {
   ListProjectsResponse,
   ProjectResponseCommon,
 } from '.';
-import { ListOrgsResponse } from '../Organization';
 import { httpGet, httpPut, httpDelete } from '../utils/http';
-import { ListResourceResponse } from '../Resource';
 import { CreateProjectPayload, ListProjectOptions } from './types';
 
 /**

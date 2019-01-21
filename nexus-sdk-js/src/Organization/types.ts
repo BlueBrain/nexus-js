@@ -1,4 +1,4 @@
-export interface ListOrgsOptions {
+export interface ListOrgOptions {
   full_text_search?: string;
   from?: number;
   size?: number;

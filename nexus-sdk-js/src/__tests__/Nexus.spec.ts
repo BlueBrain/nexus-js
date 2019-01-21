@@ -22,7 +22,6 @@ describe('Nexus class', () => {
       expect(mock.calls.length).toBe(2);
       expect(org).toBeInstanceOf(Organization);
       expect(org.label).toEqual('myorg');
-      expect(org.projectNumber).toEqual(2);
     });
   });
 

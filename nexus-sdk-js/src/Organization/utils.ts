@@ -1,9 +1,9 @@
 import Organization, {
   OrgResponse,
-  ListOrgsResponse,
+  ListOrgResponse,
   OrgResponseCommon,
 } from '.';
-import { ListOrgsOptions, CreatOrgPayload } from './types';
+import { ListOrgOptions, CreatOrgPayload } from './types';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
@@ -40,11 +40,8 @@ export async function getOrganization(
     // check if we have options
     let ops = '';
     if (options) {
-      // it's rev or tag, not both. We take rev over tag
       if (options.revision) {
         ops = `?rev=${options.revision}`;
-      } else if (options.tag) {
-        ops = `?tag=${options.tag}`;
       }
     }
     const orgResponse: OrgResponse = await httpGet(`/orgs/${orgLabel}${ops}`);
@@ -56,35 +53,35 @@ export async function getOrganization(
 }
 
 export async function listOrganizations(
-  options?: ListOrgsOptions,
+  options?: ListOrgOptions,
 ): Promise<Organization[]> {
   let ops = '';
   if (options) {
     ops = Object.keys(options).reduce(
       (currentOps, key) =>
         currentOps.length === 0
-          ? `?${key}=${options[key]}`
-          : `${currentOps}&${key}=${options[key]}`,
+          ? `?${key}=${encodeURIComponent(options[key])}`
+          : `${currentOps}&${key}=${encodeURIComponent(options[key])}`,
       '',
     );
   }
   try {
-    const listOrgsResponse: ListOrgsResponse = await httpGet(`/orgs${ops}`);
-    if (listOrgsResponse.code || !listOrgsResponse._results) {
+    const listOrgResponse: ListOrgResponse = await httpGet(`/orgs${ops}`);
+    if (listOrgResponse.code || !listOrgResponse._results) {
       return [];
     }
 
-    const orgs: Organization[] = listOrgsResponse._results.map(
+    const orgs: Organization[] = listOrgResponse._results.map(
       (commonResponse: OrgResponseCommon) =>
         new Organization({
           ...commonResponse,
-          '@context': listOrgsResponse['@context'],
+          '@context': listOrgResponse['@context'],
         }),
     );
 
     return orgs;
   } catch (e) {
-    throw new Error(`ListOrgsError: ${e}`);
+    throw new Error(e);
   }
 }
 
@@ -104,37 +101,6 @@ export async function updateOrganization(
       `/orgs/${orgLabel}?rev=${rev}`,
       {
         name: newName,
-      },
-    );
-    return new Organization(orgResponse);
-  } catch (error) {
-    throw new Error(error);
-  }
-}
-
-/**
- *
- * @param orgLabel Current organization label
- * @param rev Last know revision
- * @param Object<{tagName, revision}> The name of the tag and revision number to tag the organization from
- */
-export async function tagOrganization(
-  orgLabel: string,
-  rev: number = 1,
-  {
-    tagName,
-    tagFromRev,
-  }: {
-    tagName: string;
-    tagFromRev: number;
-  },
-): Promise<Organization> {
-  try {
-    const orgResponse: OrgResponse = await httpPut(
-      `/orgs/${orgLabel}/tags?rev=${rev}`,
-      {
-        tag: tagName,
-        rev: tagFromRev,
       },
     );
     return new Organization(orgResponse);

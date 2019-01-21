@@ -1,73 +1,26 @@
-import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
+import { resetMocks, mock, mockResponses } from 'jest-fetch-mock';
 import Organization from '../';
-import Project from '../../Project';
-import {
-  mockProjectResponse,
-  mockListProjectResponse,
-  mockOrgResponse,
-  mockListResourceResponse,
-} from '../../__mocks__/helpers';
+import { mockListOrgResponse, mockOrgResponse } from '../../__mocks__/helpers';
 import {
   getOrganization,
   updateOrganization,
-  tagOrganization,
   deprecateOrganization,
+  listOrganizations,
 } from '../utils';
 import { Nexus } from '../..';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
 const org = new Organization(mockOrgResponse);
-
 describe('Organization class', () => {
   it('should create an Org instance', () => {
     expect(org).toBeInstanceOf(Organization);
-    expect(org.name).toEqual(mockOrgResponse.name);
-    expect(org.label).toEqual(mockOrgResponse.label);
-    expect(org.projectNumber).toEqual(mockOrgResponse.projectNumber);
-  });
-
-  describe('get Project', () => {
-    afterEach(() => {
-      resetMocks();
-    });
-    it('should return a project', async () => {
-      mockResponses(
-        [JSON.stringify(mockProjectResponse)],
-        [JSON.stringify(mockListResourceResponse)],
-      );
-      const project: Project = await org.getProject('project');
-      expect(mock.calls.length).toBe(2);
-      expect(project).toBeInstanceOf(Project);
-      expect(project.id).toEqual(mockProjectResponse['@id']);
-      expect(project.resourceNumber).toEqual(1);
-    });
-  });
-
-  describe('list Projects', () => {
-    afterEach(() => {
-      resetMocks();
-    });
-    it('should return a list of projects', async () => {
-      mockResponses(
-        [JSON.stringify(mockListProjectResponse)],
-        [JSON.stringify(mockProjectResponse)],
-        [JSON.stringify(mockProjectResponse)],
-        [JSON.stringify(mockListProjectResponse)],
-        [JSON.stringify(mockListProjectResponse)],
-      );
-      const projects: Project[] = await org.listProjects();
-      expect(mock.calls.length).toBe(5); // TODO: VERY BAD, wait after API refactor before addressing to backend team
-      expect(projects.length).toEqual(2);
-    });
+    expect(org.label).toEqual(mockOrgResponse._label);
   });
 
   describe('get an org', () => {
     beforeEach(() => {
-      mockResponses(
-        [JSON.stringify(mockOrgResponse)],
-        [JSON.stringify(mockListProjectResponse)],
-      );
+      mockResponses([JSON.stringify(mockOrgResponse)]);
     });
     afterEach(() => {
       resetMocks();
@@ -76,13 +29,47 @@ describe('Organization class', () => {
       await getOrganization('myorg', { revision: 12 });
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=12`);
     });
-    it('set the tag option', async () => {
-      await getOrganization('myorg', { tag: 'v1.0.0' });
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?tag=v1.0.0`);
+  });
+
+  describe('list orgs', () => {
+    beforeEach(() => {
+      mockResponses([JSON.stringify(mockListOrgResponse)]);
     });
-    it('set the rev option over the tag one', async () => {
-      await getOrganization('myorg', { revision: 39, tag: 'v1.0.0' });
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=39`);
+    afterEach(() => {
+      resetMocks();
+    });
+    it('call the expected URL', async () => {
+      await listOrganizations();
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs`);
+    });
+    it('set size option', async () => {
+      await listOrganizations({ size: 12 });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs?size=12`);
+    });
+    it('set deprecated option', async () => {
+      await listOrganizations({ deprecated: true });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs?deprecated=true`);
+    });
+    it('set from option', async () => {
+      await listOrganizations({ from: 3 });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs?from=3`);
+    });
+    it('set full_text_search option', async () => {
+      await listOrganizations({ full_text_search: 'some_search with spaces' });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/orgs?full_text_search=some_search%20with%20spaces`,
+      );
+    });
+    it('set all options', async () => {
+      await listOrganizations({
+        full_text_search: 'some_search with spaces',
+        size: 12,
+        deprecated: true,
+        from: 3,
+      });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/orgs?full_text_search=some_search%20with%20spaces&size=12&deprecated=true&from=3`,
+      );
     });
   });
 
@@ -103,22 +90,6 @@ describe('Organization class', () => {
     it('call with revision 1 by default', async () => {
       updateOrganization('myorg', undefined, 'new name');
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=1`);
-    });
-  });
-
-  describe('tag an org', () => {
-    beforeEach(() => {
-      mockResponses([JSON.stringify(mockOrgResponse)]);
-    });
-    afterEach(() => {
-      resetMocks();
-    });
-    it('updates the specific revision', async () => {
-      tagOrganization('myorg', 12, { tagName: 'v1.0.0', tagFromRev: 10 });
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg/tags?rev=12`);
-      expect(mock.calls[0][1].body).toEqual(
-        JSON.stringify({ tag: 'v1.0.0', rev: 10 }),
-      );
     });
   });
 

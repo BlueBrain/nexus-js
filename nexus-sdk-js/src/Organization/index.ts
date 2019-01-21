@@ -5,7 +5,6 @@ import {
   listOrganizations,
   deprecateOrganization,
   updateOrganization,
-  tagOrganization,
 } from './utils';
 import { Context } from './types';
 
@@ -25,7 +24,7 @@ export interface OrgResponseCommon {
   description?: string;
 }
 
-export interface ListOrgsResponse {
+export interface ListOrgResponse {
   '@context': Context;
   _total: number;
   _results?: OrgResponseCommon[];
@@ -58,7 +57,6 @@ export default class Organization {
   static list = listOrganizations;
   static create = createOrganization;
   static update = updateOrganization;
-  static tag = tagOrganization;
   static deprecate = deprecateOrganization;
 
   constructor(organizationResponse: OrgResponse) {

@@ -1,5 +1,5 @@
-import { ProjectResponse } from '../Project';
-import { ListOrgsResponse, OrgResponse } from '../Organization';
+import { ProjectResponse, ListProjectsResponse } from '../Project';
+import { ListOrgResponse, OrgResponse } from '../Organization';
 import { ResourceResponse, ListResourceResponse } from '../Resource';
 import { ViewsListResponse } from '../View/utils';
 import {
@@ -10,31 +10,70 @@ import {
 import { SparqlViewResponse } from '../View/SparqlView';
 
 export const mockOrgResponse: OrgResponse = {
-  '@context': 'https://bluebrain.github.io/nexus/contexts/organization',
+  '@context': [
+    'https://bluebrain.github.io/nexus/contexts/resource.json',
+    'https://bluebrain.github.io/nexus/contexts/admin.json',
+  ],
   '@id': 'https://nexus.example.com/v1/orgs/myorg',
-  '@type': 'nxv:Organization',
-  name: 'myname',
-  label: 'myorg',
-  _uuid: '659aed73-4cde-4016-93ec-67cbd308ac25',
-  _self: 'https://nexus.example.com/v1/orgs/myorg',
-  _constrainedBy: 'nxs:organization',
+  '@type': 'Organization',
+  description: 'My Organization',
+  _label: 'myorg',
+  _uuid: 'bc0eba71-2a7f-40e8-ac90-5c97fc6f37d7',
+  _rev: 4,
+  _deprecated: true,
   _createdAt: '2018-09-18T09:58:00.801Z',
   _createdBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
   _updatedAt: '2018-09-18T10:01:00.801Z',
   _updatedBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
-  _rev: 4,
-  _deprecated: true,
-  projectNumber: 10,
+};
+
+export const mockListOrgResponse: ListOrgResponse = {
+  '@context': [
+    'https://bluebrain.github.io/nexus/contexts/admin.json',
+    'https://bluebrain.github.io/nexus/contexts/search.json',
+    'https://bluebrain.github.io/nexus/contexts/resource.json',
+  ],
+  _total: 2,
+  _results: [
+    {
+      '@id': 'https://nexus.example.com/v1/orgs/myorg',
+      '@type': 'Organization',
+      description: 'My Organization',
+      _label: 'myorg',
+      _uuid: 'bc0eba71-2a7f-40e8-ac90-5c97fc6f37d7',
+      _rev: 4,
+      _deprecated: true,
+      _createdAt: '2018-09-18T09:58:00.801Z',
+      _createdBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+      _updatedAt: '2018-09-18T10:01:00.801Z',
+      _updatedBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+    },
+    {
+      '@id': 'https://nexus.example.com/v1/orgs/myorg2',
+      '@type': 'Organization',
+      description: 'My Second Organization',
+      _label: 'myorg2',
+      _uuid: 'b42e5206-f81e-430b-808d-5dac2599153d',
+      _rev: 1,
+      _deprecated: false,
+      _createdAt: '2019-01-14T09:29:39.416Z',
+      _createdBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+      _updatedAt: '2019-01-14T09:29:39.416Z',
+      _updatedBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+    },
+  ],
 };
 
 export const mockProjectResponse: ProjectResponse = {
-  '@context': 'https://bluebrain.github.io/nexus/contexts/project',
+  '@context': [
+    'https://bluebrain.github.io/nexus/contexts/resource.json',
+    'https://bluebrain.github.io/nexus/contexts/admin.json',
+  ],
   '@id': 'https://nexus.example.com/v1/projects/myorg/myproject',
-  '@type': 'nxv:Project',
-  name: 'example project creation',
-  label: 'example',
+  '@type': 'Project',
   base: 'https://nexus.example.com/v1/myorg/myproject/',
-  prefixMappings: [
+  vocab: 'https://schema.org/',
+  apiMappings: [
     {
       prefix: 'person',
       namespace: 'http://example.com/some/person',
@@ -49,40 +88,48 @@ export const mockProjectResponse: ProjectResponse = {
     },
   ],
   _label: 'myproject',
-  _uuid: '968ad034-268a-4b07-aedd-219e3b2d8940',
-  _self: 'https://nexus.example.com/v1/projects/myorg/myproject',
-  _constrainedBy: 'nxs:project',
-  _createdAt: '2018-09-18T09:58:00.801Z',
-  _createdBy:
-    'https://nexus.example.com/v1/realms/myrealm/users/f:ad46ddd6-134e-44d6-ab70-bdf00f48dfce:someone',
-  _updatedAt: '2018-09-18T10:30:00.801Z',
-  _updatedBy:
-    'https://nexus.example.com/v1/realms/myrealm/users/f:ad46ddd6-134e-44d6-ab70-bdf00f48dfce:someone',
+  _organizationLabel: 'myorg',
+  _organizationUuid: 'bc0eba71-2a7f-40e8-ac90-5c97fc6f37d7',
+  _uuid: 'e622745d-5eea-4dc5-8318-58a3dd4101ff',
   _rev: 4,
   _deprecated: true,
-  resourceNumber: 563,
+  _createdAt: '2018-09-18T09:58:00.801Z',
+  _createdBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+  _updatedAt: '2018-09-18T10:30:00.801Z',
+  _updatedBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
 };
 
-export const mockListProjectResponse: ListOrgsResponse = {
-  '@context': 'https://nexus.example.com/v1/contexts/nexus/core/search/v0.1.0',
+export const mockListProjectResponse: ListProjectsResponse = {
+  '@context': [
+    'https://bluebrain.github.io/nexus/contexts/admin.json',
+    'https://bluebrain.github.io/nexus/contexts/search.json',
+    'https://bluebrain.github.io/nexus/contexts/resource.json',
+  ],
+  _total: 1,
   _results: [
     {
-      _id: 'https://nexus.example.com/v1/projects/myorg/example',
-      _source: {
-        '@id': 'https://nexus.example.com/v1/projects/myorg/example',
-      },
-    },
-    {
-      _id: 'https://nexus.example.com/v1/projects/myorg/myproject',
-      _source: {
-        '@id': 'https://nexus.example.com/v1/projects/myorg/myproject',
-      },
+      '@id': 'https://nexus.example.com/v1/projects/myorg/myproject',
+      '@type': 'Project',
+      base: 'http://nexus.example.com/',
+      vocab: 'http://schema.org/',
+      apiMappings: [
+        {
+          namespace: 'http://schema.org/',
+          prefix: 'schema',
+        },
+      ],
+      _uuid: 'e622745d-5eea-4dc5-8318-58a3dd4101ff',
+      _label: 'myproject',
+      _organizationUuid: 'bc0eba71-2a7f-40e8-ac90-5c97fc6f37d7',
+      _organizationLabel: 'myorg',
+      _rev: 4,
+      _deprecated: true,
+      _createdAt: '2018-09-18T09:58:00.801Z',
+      _createdBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+      _updatedAt: '2018-09-18T10:30:00.801Z',
+      _updatedBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
     },
   ],
-  _total: 2,
-  _links: {
-    _self: 'https://nexus.example.com/v1/projects',
-  },
 };
 
 export const mockResourceResponse: ResourceResponse = {

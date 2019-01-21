@@ -7,49 +7,52 @@ import {
   updateOrganization,
   tagOrganization,
 } from './utils';
+import { Context } from './types';
 
-export interface ListOrgsResponse {
-  '@context': string;
-  _total: number;
-  _links?: any;
-  _results?: OrgResponse[];
-  code?: string;
-  message?: string;
-}
-
-export interface ListOrgsOptions {
-  full_text_search?: string;
-  from?: number;
-  size?: number;
-  deprecated?: boolean;
-  [key: string]: any;
-}
-
-export interface OrgResponse {
-  '@context': string;
+export interface OrgResponseCommon {
   '@id': string;
   '@type': string;
+  _uuid: string;
   _label: string;
+  _rev: number;
+  _deprecated: boolean;
   _createdAt: string;
   _createdBy: string;
   _updatedAt: string;
   _updatedBy: string;
-  _deprecated: boolean;
-  _rev: number;
-  _uuid: string;
-  projectNumber?: number;
+  _self?: string;
+  _constrainedBy?: string;
+  description?: string;
+}
 
+export interface ListOrgsResponse {
+  '@context': Context;
+  _total: number;
+  _results?: OrgResponseCommon[];
+  _links?: any;
+  code?: string;
+  message?: string;
+}
+
+export interface OrgResponse extends OrgResponseCommon {
+  '@context': Context;
 }
 
 export default class Organization {
-  context: string;
+  context?: Context;
   id: string;
   type: string;
-  label: string;
-  deprecated: boolean;
-  rev: number;
   uuid: string;
-  projectNumber: number;
+  label: string;
+  rev: number;
+  deprecated: boolean;
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
+  self?: string;
+  constrainedBy?: string;
+  description?: string;
 
   static get = getOrganization;
   static list = listOrganizations;
@@ -62,14 +65,18 @@ export default class Organization {
     this.context = organizationResponse['@context'];
     this.id = organizationResponse['@id'];
     this.type = organizationResponse['@type'];
-    this.label = organizationResponse._label;
-    this.deprecated = organizationResponse._deprecated;
-    this.rev = organizationResponse._rev;
     this.uuid = organizationResponse._uuid;
-    this.projectNumber = organizationResponse.projectNumber || 0;
+    this.label = organizationResponse._label;
+    this.rev = organizationResponse._rev;
+    this.deprecated = organizationResponse._deprecated;
+    this.createdAt = organizationResponse._createdAt;
+    this.createdBy = organizationResponse._createdBy;
+    this.updatedAt = organizationResponse._updatedAt;
+    this.updatedBy = organizationResponse._updatedBy;
+    this.self = organizationResponse._self;
+    this.constrainedBy = organizationResponse._constrainedBy;
+    this.description = organizationResponse.description;
   }
-
-
 
   async getProject(projectLabel: string): Promise<Project> {
     return Project.get(this.label, projectLabel);

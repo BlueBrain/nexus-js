@@ -1,10 +1,9 @@
 import Organization, {
   OrgResponse,
   ListOrgsResponse,
-  ListOrgsOptions,
-  OrgPayload,
+  OrgResponseCommon,
 } from '.';
-import { ListProjectsResponse } from '../Project';
+import { ListOrgsOptions, CreatOrgPayload } from './types';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
@@ -15,23 +14,19 @@ import { CreateOrganizationException } from './exceptions';
  */
 export async function createOrganization(
   label: string,
-  name: string,
+  orgPayload: CreatOrgPayload,
 ): Promise<Organization> {
   try {
-    const orgResponse: OrgResponse = await httpPut(`/orgs/${label}`, {
-      name,
-    });
-    return new Organization({
-      ...orgResponse,
-      projectNumber: 0,
-      _deprecated: false,
-    });
+    const orgResponse: OrgResponse = await httpPut(
+      `/orgs/${label}`,
+      orgPayload,
+    );
+    return new Organization({ ...orgResponse, ...orgPayload });
   } catch (error) {
     throw new CreateOrganizationException(error.message);
   }
 }
 
-// TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
 /**
  *
  * @param orgLabel The organization label to fetch
@@ -53,11 +48,7 @@ export async function getOrganization(
       }
     }
     const orgResponse: OrgResponse = await httpGet(`/orgs/${orgLabel}${ops}`);
-    // we want to know how many projects there are per organization
-    const listProjectsResponse: ListProjectsResponse = await httpGet(`/orgs/${orgLabel}`);
-    const projectNumber: number = listProjectsResponse._total;
-
-    const org = new Organization({ ...orgResponse, projectNumber });
+    const org = new Organization(orgResponse);
     return org;
   } catch (e) {
     throw new Error(`ListOrgsError: ${e}`);
@@ -84,7 +75,11 @@ export async function listOrganizations(
     }
 
     const orgs: Organization[] = listOrgsResponse._results.map(
-      (response: OrgResponse) => new Organization({...response, projectNumber: 0} as OrgPayload)
+      (commonResponse: OrgResponseCommon) =>
+        new Organization({
+          ...commonResponse,
+          '@context': listOrgsResponse['@context'],
+        }),
     );
 
     return orgs;

@@ -13,7 +13,7 @@ export interface ResourceResponseError {
   ref: string;
 }
 
-export interface ResourceTagResponse {
+export interface ResourceListTagResponse {
   '@context': Context;
   tags: string[];
 }

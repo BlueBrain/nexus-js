@@ -1,8 +1,10 @@
-import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
+import { resetMocks, mock, mockResponse, mockResponses } from 'jest-fetch-mock';
 import Project from '../index';
 import {
   mockProjectResponse,
   mockViewsListResponse,
+  mockElasticSearchViewResponse,
+  mockSparqlViewResponse,
 } from '../../__mocks__/helpers';
 import {
   getProject,
@@ -51,22 +53,25 @@ describe('Project class', () => {
   });
 
   describe('getView()', () => {
-    beforeEach(() => {
-      mockResponse(JSON.stringify(mockViewsListResponse), { status: 200 });
-    });
-
     afterEach(() => {
       resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', async () => {
+      mockResponse(
+        JSON.stringify(mockElasticSearchViewResponse), { status: 200 }
+      );
       const p = new Project(mockProjectResponse);
-      await p.getView('nxv:defaultElasticIndex');
-      const viewURL = `/views/${p.orgLabel}/${p.label}`;
+      const viewId = 'nxv:defaultElasticIndex';
+      await p.getView(viewId);
+      const viewURL = `/views/${p.orgLabel}/${p.label}/${viewId}`;
       expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);
     });
 
     it('should return the view with the corresponding ID, be it SPARQL or ElasticSearch', async () => {
+      mockResponse(
+        JSON.stringify(mockSparqlViewResponse), { status: 200 }
+      );
       const p = new Project(mockProjectResponse);
       const myView: ElasticSearchView | SparqlView = await p.getView(
         'nxv:defaultSparqlIndex',

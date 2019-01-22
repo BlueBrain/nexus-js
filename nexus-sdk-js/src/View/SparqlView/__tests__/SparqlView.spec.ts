@@ -6,11 +6,10 @@ import SparqlView, {
 import {
   mockSparqlViewResponse,
   mockProjectResponse,
-  mockViewsListResponse,
 } from '../../../__mocks__/helpers';
 import Project from '../../../Project';
 
-const project = new Project('my-org', mockProjectResponse);
+const project = new Project(mockProjectResponse);
 const mockSparlQueryResponse: SparqlViewQueryResponse = {
   head: {
     vars: ['s', 'p', 'o'],
@@ -87,7 +86,7 @@ describe('Sparql View class', () => {
     testClassProperties(view, mockSparqlViewResponse);
   });
   it('should get the Sparql view', async () => {
-    mockResponse(JSON.stringify(mockViewsListResponse));
+    mockResponse(JSON.stringify(mockSparqlViewResponse));
     const view: SparqlView = await SparqlView.get(orgLabel, projectLabel);
     expect(mock.calls.length).toBe(1);
     expect(view.id).toBe(mockSparqlViewResponse['@id']);

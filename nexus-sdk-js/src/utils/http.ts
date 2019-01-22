@@ -92,11 +92,13 @@ export function httpPost<T = Object>(
   url: string,
   body?: T,
   config?: HttpConfig,
+  useBase: boolean = true,
 ): Promise<any> {
   const {
     api: { baseUrl },
   } = store.getState();
-  return fetch(`${baseUrl}${url}`, {
+  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  return fetch(fetchURL, {
     headers: getHeaders(config && config.extraHeaders),
     method: 'POST',
     body: prepareBody(body, config && config.sendAs),

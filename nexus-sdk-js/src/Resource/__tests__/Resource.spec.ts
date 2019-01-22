@@ -12,6 +12,10 @@ import {
   getResource,
   getSelfResource,
   createResource,
+  deprecateResource,
+  deprecateSelfResource,
+  tagSelfResource,
+  tagResource,
 } from '../utils';
 import Nexus from '../../Nexus';
 import { PaginatedList } from '../../utils/types';
@@ -360,6 +364,93 @@ describe('Resource class', () => {
           name: 'my name',
           description: 'something',
         }),
+      );
+    });
+  });
+
+  describe('deprecateResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should deprecate the resource', async () => {
+      deprecateResource('myorg', 'myproject', 'myschema', 'myresource', 2);
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myresource?rev=2`,
+      );
+      expect(mock.calls[0][1].method).toEqual('DELETE');
+    });
+  });
+
+  describe('deprecateSelfResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should deprecate the resource using the self url', async () => {
+      deprecateSelfResource('http://myresource.com', 3, 'myorg', 'myproject');
+
+      expect(mock.calls[0][0]).toEqual('http://myresource.com?rev=3');
+      expect(mock.calls[0][1].method).toEqual('DELETE');
+    });
+  });
+
+  describe('tagSelfResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should tag the resource', async () => {
+      tagResource('myorg', 'mylabel', 'myschema', 'myresource', 3, {
+        tagName: 'mytag',
+        tagFromRev: 2,
+      });
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/mylabel/myschema/myresource/tags?rev=3`,
+      );
+      expect(mock.calls[0][1].method).toEqual('POST');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ tag: 'mytag', rev: 2 }),
+      );
+    });
+  });
+
+  describe('tagSelfResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should tag the resource using the self url', async () => {
+      tagSelfResource(
+        'http://myresource.com',
+        3,
+        { tagName: 'mytag', tagFromRev: 2 },
+        'myorg',
+        'mylabel',
+      );
+
+      expect(mock.calls[0][0]).toEqual('http://myresource.com/tags?rev=3');
+      expect(mock.calls[0][1].method).toEqual('POST');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ tag: 'mytag', rev: 2 }),
       );
     });
   });

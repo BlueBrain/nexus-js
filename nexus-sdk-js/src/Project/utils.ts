@@ -31,7 +31,7 @@ export async function getProject(
     );
     return new Project(projectResponse);
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error);
   }
 }
 
@@ -65,7 +65,7 @@ export async function listProjects(
     );
     return projects;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error);
   }
 }
 
@@ -81,7 +81,7 @@ export async function createProject(
     );
     return new Project({ ...projectResponse, ...projectPayload });
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error);
   }
 }
 

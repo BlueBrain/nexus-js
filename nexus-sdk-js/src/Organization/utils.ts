@@ -47,8 +47,8 @@ export async function getOrganization(
     const orgResponse: OrgResponse = await httpGet(`/orgs/${orgLabel}${ops}`);
     const org = new Organization(orgResponse);
     return org;
-  } catch (e) {
-    throw new Error(`ListOrgsError: ${e}`);
+  } catch (error) {
+    throw new Error(`ListOrgsError: ${error}`);
   }
 }
 
@@ -80,8 +80,8 @@ export async function listOrganizations(
     );
 
     return orgs;
-  } catch (e) {
-    throw new Error(e);
+  } catch (error) {
+    throw new Error(error);
   }
 }
 

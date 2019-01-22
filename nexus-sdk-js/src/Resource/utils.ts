@@ -4,7 +4,7 @@ import Resource, {
   ResourceResponse,
   ResourceResponseCommon,
 } from '.';
-import { httpGet, httpPut, httpPost } from '../utils/http';
+import { httpGet, httpPut, httpPost, httpDelete } from '../utils/http';
 import { CreateResourcePayload } from './types';
 
 export async function getSelfResource(
@@ -199,6 +199,72 @@ export async function tagResource(
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
+  }
+}
+
+export async function tagSelfResource(
+  selfUrl: string,
+  rev: number = 1,
+  {
+    tagName,
+    tagFromRev,
+  }: {
+    tagName: string;
+    tagFromRev: number;
+  },
+  orgLabel: string,
+  projectLabel: string,
+): Promise<Resource> {
+  try {
+    const resourceResponse: ResourceResponse = await httpPost(
+      `${selfUrl}/tags?rev=${rev}`,
+      {
+        tag: tagName,
+        rev: tagFromRev,
+      },
+      undefined,
+      false,
+    );
+    return new Resource(orgLabel, projectLabel, resourceResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export function getTags() {}
+export function getSelfTags() {}
+
+export async function deprecateResource(
+  orgLabel: string,
+  projectLabel: string,
+  schemaId: string,
+  resourceId: string,
+  rev: number,
+): Promise<Resource> {
+  try {
+    const resourceResponse: ResourceResponse = await httpDelete(
+      `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}?rev=${rev}`,
+    );
+    return new Resource(orgLabel, projectLabel, resourceResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deprecateSelfResource(
+  selfUrl: string,
+  rev: number,
+  orgLabel: string,
+  projectLabel: string,
+): Promise<Resource> {
+  try {
+    const resourceResponse: ResourceResponse = await httpDelete(
+      `${selfUrl}?rev=${rev}`,
+      false,
+    );
+    return new Resource(orgLabel, projectLabel, resourceResponse);
+  } catch (error) {
+    throw error;
   }
 }

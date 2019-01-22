@@ -5,7 +5,7 @@ import Resource, {
   ResourceResponseCommon,
 } from '.';
 import { httpGet, httpPut, httpPost, httpDelete } from '../utils/http';
-import { CreateResourcePayload } from './types';
+import { CreateResourcePayload, ResourceTagResponse } from './types';
 
 export async function getSelfResource(
   selfUrl: string,
@@ -232,8 +232,33 @@ export async function tagSelfResource(
   }
 }
 
-export function getTags() {}
-export function getSelfTags() {}
+export async function listTags(
+  orgLabel: string,
+  projectLabel: string,
+  schemaId: string,
+  resourceId: string,
+): Promise<string[]> {
+  try {
+    const response: ResourceTagResponse = await httpGet(
+      `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}/tags`,
+    );
+    return response.tags;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function listSelfTags(selfUrl: string): Promise<string[]> {
+  try {
+    const response: ResourceTagResponse = await httpGet(
+      `${selfUrl}/tags`,
+      false,
+    );
+    return response.tags;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function deprecateResource(
   orgLabel: string,

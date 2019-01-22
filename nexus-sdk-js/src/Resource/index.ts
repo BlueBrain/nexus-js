@@ -10,6 +10,8 @@ import {
   deprecateResource,
   deprecateSelfResource,
   tagSelfResource,
+  listTags,
+  listSelfTags,
 } from './utils';
 
 export const RESOURCE_METADATA_KEYS = [
@@ -82,6 +84,8 @@ export default class Resource<T = {}> {
   static deprecateSelf = deprecateSelfResource;
   static tag = tagResource;
   static tagSelf = tagSelfResource;
+  static listTags = listTags;
+  static listSelfTags = listSelfTags;
   static formatName(raw: ResourceResponse): string {
     return (
       raw['skos:prefLabel'] ||

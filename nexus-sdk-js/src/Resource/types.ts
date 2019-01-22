@@ -13,6 +13,11 @@ export interface ResourceResponseError {
   ref: string;
 }
 
+export interface ResourceTagResponse {
+  '@context': Context;
+  tags: string[];
+}
+
 export interface CreateResourcePayload {
   resourceId?: string;
   type?: string[];

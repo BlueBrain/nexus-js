@@ -16,6 +16,8 @@ import {
   deprecateSelfResource,
   tagSelfResource,
   tagResource,
+  listTags,
+  listSelfTags,
 } from '../utils';
 import Nexus from '../../Nexus';
 import { PaginatedList } from '../../utils/types';
@@ -452,6 +454,40 @@ describe('Resource class', () => {
       expect(mock.calls[0][1].body).toEqual(
         JSON.stringify({ tag: 'mytag', rev: 2 }),
       );
+    });
+  });
+
+  describe('getTags()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should tag the resource', async () => {
+      listTags('myorg', 'myproject', 'myschema', 'myresource');
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myresource/tags`,
+      );
+    });
+  });
+
+  describe('getSelfTags()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should tag the resource', async () => {
+      listSelfTags('http://myresource.com');
+
+      expect(mock.calls[0][0]).toEqual('http://myresource.com/tags');
     });
   });
 });

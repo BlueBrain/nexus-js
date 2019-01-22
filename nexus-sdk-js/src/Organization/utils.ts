@@ -1,8 +1,9 @@
 import Organization, {
   OrgResponse,
-  ListOrgsResponse,
-  ListOrgsOptions,
+  ListOrgResponse,
+  OrgResponseCommon,
 } from '.';
+import { ListOrgOptions, CreateOrgPayload } from './types';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 
@@ -13,23 +14,19 @@ import { CreateOrganizationException } from './exceptions';
  */
 export async function createOrganization(
   label: string,
-  name: string,
+  orgPayload?: CreateOrgPayload,
 ): Promise<Organization> {
   try {
-    const orgResponse: OrgResponse = await httpPut(`/orgs/${label}`, {
-      name,
-    });
-    return new Organization({
-      ...orgResponse,
-      projectNumber: 0,
-      _deprecated: false,
-    });
+    const orgResponse: OrgResponse = await httpPut(
+      `/orgs/${label}`,
+      orgPayload,
+    );
+    return new Organization({ ...orgResponse, ...orgPayload });
   } catch (error) {
     throw new CreateOrganizationException(error.message);
   }
 }
 
-// TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
 /**
  *
  * @param orgLabel The organization label to fetch
@@ -43,84 +40,48 @@ export async function getOrganization(
     // check if we have options
     let ops = '';
     if (options) {
-      // it's rev or tag, not both. We take rev over tag
       if (options.revision) {
         ops = `?rev=${options.revision}`;
-      } else if (options.tag) {
-        ops = `?tag=${options.tag}`;
       }
     }
     const orgResponse: OrgResponse = await httpGet(`/orgs/${orgLabel}${ops}`);
-    // we want to know how many projects there are per organisation
-    const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
-    const projectNumber: number = listOrgsResponse._results
-      ? listOrgsResponse._results.reduce((prev, org) => {
-          const split = org._id.split('/');
-          const orgName = split.slice(split.length - 2, split.length - 1)[0];
-          if (orgName === orgLabel) {
-            return prev + 1;
-          }
-          return prev;
-        }, 0)
-      : 0;
-
-    const org = new Organization({ ...orgResponse, projectNumber });
+    const org = new Organization(orgResponse);
     return org;
-  } catch (e) {
-    throw new Error(`ListOrgsError: ${e}`);
+  } catch (error) {
+    throw new Error(`ListOrgsError: ${error}`);
   }
 }
 
-// TODO: refactor -> blocked by https://github.com/BlueBrain/nexus/issues/112
-// cannot implement list orgs options until then...
 export async function listOrganizations(
-  options?: ListOrgsOptions,
+  options?: ListOrgOptions,
 ): Promise<Organization[]> {
   let ops = '';
   if (options) {
     ops = Object.keys(options).reduce(
       (currentOps, key) =>
         currentOps.length === 0
-          ? `?${key}=${options[key]}`
-          : `${currentOps}&${key}=${options[key]}`,
+          ? `?${key}=${encodeURIComponent(options[key])}`
+          : `${currentOps}&${key}=${encodeURIComponent(options[key])}`,
       '',
     );
   }
   try {
-    const listOrgsResponse: ListOrgsResponse = await httpGet('/projects');
-    if (listOrgsResponse.code || !listOrgsResponse._results) {
+    const listOrgResponse: ListOrgResponse = await httpGet(`/orgs${ops}`);
+    if (listOrgResponse.code || !listOrgResponse._results) {
       return [];
     }
-    // Get list of unique orgs names
-    const filteredOrgNames: string[] = listOrgsResponse._results
-      .map(org => {
-        const split = org._id.split('/');
-        const orgName = split.slice(split.length - 2, split.length - 1)[0];
-        return orgName;
-      })
-      .filter((org, index, self) => self.indexOf(org) === index);
-    // get orgs details
-    // Promise.all returns everything or nothing
-    // we need to return undefined if one project
-    // fails to get fetched
-    // TODO: return list of errors as well BlueBrain/nexus#351
-    const allOrgs: (Organization | undefined)[] = await Promise.all(
-      filteredOrgNames.map(async org => {
-        try {
-          return await getOrganization(org);
-        } catch (error) {
-          console.log(error);
-          return Promise.resolve(undefined);
-        }
-      }),
+
+    const orgs: Organization[] = listOrgResponse._results.map(
+      (commonResponse: OrgResponseCommon) =>
+        new Organization({
+          ...commonResponse,
+          '@context': listOrgResponse['@context'],
+        }),
     );
 
-    const orgs: Organization[] = allOrgs.filter(
-      org => org !== undefined,
-    ) as Organization[];
     return orgs;
-  } catch (e) {
-    throw new Error(`ListOrgsError: ${e}`);
+  } catch (error) {
+    throw new Error(error);
   }
 }
 
@@ -133,45 +94,12 @@ export async function listOrganizations(
 export async function updateOrganization(
   orgLabel: string,
   rev: number = 1,
-  newName: string,
+  orgPayload: CreateOrgPayload,
 ): Promise<Organization> {
   try {
     const orgResponse: OrgResponse = await httpPut(
       `/orgs/${orgLabel}?rev=${rev}`,
-      {
-        name: newName,
-      },
-    );
-    return new Organization(orgResponse);
-  } catch (error) {
-    throw new Error(error);
-  }
-}
-
-/**
- *
- * @param orgLabel Current organization label
- * @param rev Last know revision
- * @param Object<{tagName, revision}> The name of the tag and revision number to tag the organization from
- */
-export async function tagOrganization(
-  orgLabel: string,
-  rev: number = 1,
-  {
-    tagName,
-    tagFromRev,
-  }: {
-    tagName: string;
-    tagFromRev: number;
-  },
-): Promise<Organization> {
-  try {
-    const orgResponse: OrgResponse = await httpPut(
-      `/orgs/${orgLabel}/tags?rev=${rev}`,
-      {
-        tag: tagName,
-        rev: tagFromRev,
-      },
+      orgPayload,
     );
     return new Organization(orgResponse);
   } catch (error) {

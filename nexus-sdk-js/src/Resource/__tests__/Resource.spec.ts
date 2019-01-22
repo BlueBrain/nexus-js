@@ -1,7 +1,30 @@
+import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
+import {
+  mockResourceResponse,
+  mockListResourceResponse,
+} from '../../__mocks__/helpers';
 import Resource, {
   ResourceResponse,
   ResourceResponseCommon,
 } from '../../Resource';
+import {
+  listResources,
+  getResource,
+  getSelfResource,
+  createResource,
+  deprecateResource,
+  deprecateSelfResource,
+  tagSelfResource,
+  tagResource,
+  listTags,
+  listSelfTags,
+} from '../utils';
+import Nexus from '../../Nexus';
+import { PaginatedList } from '../../utils/types';
+import { CreateResourcePayload } from '../types';
+
+const baseUrl = 'http://api.url';
+Nexus.setEnvironment(baseUrl);
 
 const mockListResponseWithStringType: ResourceResponseCommon = {
   '@id': 'https://neuroshapes.org/commons/annotation',
@@ -176,6 +199,295 @@ describe('Resource class', () => {
       });
       Resource.formatName = resource => resource.foo;
       expect(resource.name).toEqual(bar);
+    });
+  });
+
+  describe('listResources()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockListResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should call httpGet method with the proper get views url', async () => {
+      const resources: PaginatedList<Resource> = await listResources(
+        'myorg',
+        'myproject',
+      );
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/resources/myorg/myproject`);
+      expect(resources.total).toEqual(1);
+      expect(resources.results[0]).toBeInstanceOf(Resource);
+    });
+
+    it('should call httpGet method with the proper pagination', async () => {
+      listResources('myorg', 'myproject', { from: 2, size: 20 });
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject?from=2&size=20`,
+      );
+    });
+  });
+
+  describe('getResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should call httpGet method with the proper get views url', async () => {
+      const r: Resource = await getResource(
+        'myorg',
+        'myproject',
+        'myschema',
+        'myresource',
+      );
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myresource`,
+      );
+      expect(r).toBeInstanceOf(Resource);
+    });
+  });
+
+  describe('getSelfResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should call httpGet method with the proper get views url', async () => {
+      const r: Resource = await getSelfResource(
+        'http://myurl.com',
+        'myorg',
+        'myproject',
+      );
+      expect(mock.calls[0][0]).toEqual('http://myurl.com');
+      expect(r).toBeInstanceOf(Resource);
+    });
+  });
+
+  describe('createResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should POST the new resource', async () => {
+      const payload: CreateResourcePayload = {
+        context: {
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
+        },
+      };
+
+      createResource('myorg', 'myproject', 'myschema', payload);
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema`,
+      );
+      expect(mock.calls[0][1].method).toEqual('POST');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ '@context': payload.context }),
+      );
+    });
+
+    it('should POST the new resource with the expected payload', async () => {
+      const payload: CreateResourcePayload = {
+        context: {
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
+        },
+        type: ['ex:lol'],
+        name: 'my name',
+        description: 'something',
+      };
+
+      createResource('myorg', 'myproject', 'myschema', payload);
+
+      expect(mock.calls[0][1].method).toEqual('POST');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({
+          '@context': payload.context,
+          '@type': payload.type,
+          name: 'my name',
+          description: 'something',
+        }),
+      );
+    });
+
+    it('should PUT the new resource', async () => {
+      const payload: CreateResourcePayload = {
+        context: {
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
+        },
+        resourceId: 'myresource',
+      };
+
+      createResource('myorg', 'myproject', 'myschema', payload);
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myresource`,
+      );
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ '@context': payload.context }),
+      );
+    });
+
+    it('should PUT the new resource with the expected payload', async () => {
+      const payload: CreateResourcePayload = {
+        context: {
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
+        },
+        resourceId: 'myresource',
+        type: ['ex:lol'],
+        name: 'my name',
+        description: 'something',
+      };
+
+      createResource('myorg', 'myproject', 'myschema', payload);
+
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({
+          '@context': payload.context,
+          '@type': payload.type,
+          name: 'my name',
+          description: 'something',
+        }),
+      );
+    });
+  });
+
+  describe('deprecateResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should deprecate the resource', async () => {
+      deprecateResource('myorg', 'myproject', 'myschema', 'myresource', 2);
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myresource?rev=2`,
+      );
+      expect(mock.calls[0][1].method).toEqual('DELETE');
+    });
+  });
+
+  describe('deprecateSelfResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should deprecate the resource using the self url', async () => {
+      deprecateSelfResource('http://myresource.com', 3, 'myorg', 'myproject');
+
+      expect(mock.calls[0][0]).toEqual('http://myresource.com?rev=3');
+      expect(mock.calls[0][1].method).toEqual('DELETE');
+    });
+  });
+
+  describe('tagSelfResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should tag the resource', async () => {
+      tagResource('myorg', 'mylabel', 'myschema', 'myresource', 3, {
+        tagName: 'mytag',
+        tagFromRev: 2,
+      });
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/mylabel/myschema/myresource/tags?rev=3`,
+      );
+      expect(mock.calls[0][1].method).toEqual('POST');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ tag: 'mytag', rev: 2 }),
+      );
+    });
+  });
+
+  describe('tagSelfResource()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should tag the resource using the self url', async () => {
+      tagSelfResource(
+        'http://myresource.com',
+        3,
+        { tagName: 'mytag', tagFromRev: 2 },
+        'myorg',
+        'mylabel',
+      );
+
+      expect(mock.calls[0][0]).toEqual('http://myresource.com/tags?rev=3');
+      expect(mock.calls[0][1].method).toEqual('POST');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ tag: 'mytag', rev: 2 }),
+      );
+    });
+  });
+
+  describe('getTags()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should tag the resource', async () => {
+      listTags('myorg', 'myproject', 'myschema', 'myresource');
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myresource/tags`,
+      );
+    });
+  });
+
+  describe('getSelfTags()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should tag the resource', async () => {
+      listSelfTags('http://myresource.com');
+
+      expect(mock.calls[0][0]).toEqual('http://myresource.com/tags');
     });
   });
 });

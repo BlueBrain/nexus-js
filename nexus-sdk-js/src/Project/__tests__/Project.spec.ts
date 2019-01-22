@@ -1,15 +1,16 @@
-import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
+import { resetMocks, mock, mockResponse, mockResponses } from 'jest-fetch-mock';
 import Project from '../index';
 import {
   mockProjectResponse,
   mockViewsListResponse,
+  mockElasticSearchViewResponse,
+  mockSparqlViewResponse,
 } from '../../__mocks__/helpers';
 import {
   getProject,
   listProjects,
   createProject,
   updateProject,
-  tagProject,
   deprecateProject,
 } from '../utils';
 import Nexus from '../../Nexus';
@@ -21,14 +22,11 @@ Nexus.setEnvironment(baseUrl);
 
 describe('Project class', () => {
   it('Should create a Project instance', () => {
-    const p = new Project('my-org', mockProjectResponse);
+    const p = new Project(mockProjectResponse);
     expect(p.id).toEqual(mockProjectResponse['@id']);
-    expect(p.name).toEqual(mockProjectResponse.name);
     expect(p.base).toEqual(mockProjectResponse.base);
-    expect(p.version).toEqual(mockProjectResponse._rev);
+    expect(p.rev).toEqual(mockProjectResponse._rev);
     expect(p.deprecated).toEqual(mockProjectResponse._deprecated);
-    expect(p.createdAt.toISOString()).toEqual(mockProjectResponse._createdAt);
-    expect(p.updatedAt.toISOString()).toEqual(mockProjectResponse._updatedAt);
   });
 
   describe('listViews()', () => {
@@ -41,37 +39,40 @@ describe('Project class', () => {
     });
 
     it('should call httpGet method with the proper get views url', async () => {
-      const p = new Project('my-org', mockProjectResponse);
+      const p = new Project(mockProjectResponse);
       await p.listViews();
       const viewURL = `/views/${p.orgLabel}/${p.label}`;
       expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);
     });
 
     it('should return a list of ElasticSearchViews or SparqlView from a response that includes multiple view types', async () => {
-      const p = new Project('my-org', mockProjectResponse);
+      const p = new Project(mockProjectResponse);
       const myViews = await p.listViews();
       expect(myViews.length).toEqual(2);
     });
   });
 
   describe('getView()', () => {
-    beforeEach(() => {
-      mockResponse(JSON.stringify(mockViewsListResponse), { status: 200 });
-    });
-
     afterEach(() => {
       resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', async () => {
-      const p = new Project('my-org', mockProjectResponse);
-      await p.getView('nxv:defaultElasticIndex');
-      const viewURL = `/views/${p.orgLabel}/${p.label}`;
+      mockResponse(
+        JSON.stringify(mockElasticSearchViewResponse), { status: 200 }
+      );
+      const p = new Project(mockProjectResponse);
+      const viewId = 'nxv:defaultElasticIndex';
+      await p.getView(viewId);
+      const viewURL = `/views/${p.orgLabel}/${p.label}/${viewId}`;
       expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);
     });
 
     it('should return the view with the corresponding ID, be it SPARQL or ElasticSearch', async () => {
-      const p = new Project('my-org', mockProjectResponse);
+      mockResponse(
+        JSON.stringify(mockSparqlViewResponse), { status: 200 }
+      );
+      const p = new Project(mockProjectResponse);
       const myView: ElasticSearchView | SparqlView = await p.getView(
         'nxv:defaultSparqlIndex',
       );
@@ -92,22 +93,9 @@ describe('Project class', () => {
         `${baseUrl}/projects/myorg/myproject?rev=21`,
       );
     });
-    it('set the tag option', async () => {
-      await getProject('myorg', 'myproject', { tag: 'v1.0.0' });
-      expect(mock.calls[0][0]).toEqual(
-        `${baseUrl}/projects/myorg/myproject?tag=v1.0.0`,
-      );
-    });
-    it('set the rev option over the tag one', async () => {
-      await getProject('myorg', 'myproject', { revision: 39, tag: 'v1.0.0' });
-      expect(mock.calls[0][0]).toEqual(
-        `${baseUrl}/projects/myorg/myproject?rev=39`,
-      );
-    });
   });
 
-  // TODO: blocked by https://github.com/BlueBrain/nexus/issues/112
-  describe.skip('list projects', () => {
+  describe('list projects', () => {
     beforeEach(() => {
       mockResponse('{}');
     });
@@ -140,7 +128,7 @@ describe('Project class', () => {
     });
     it('set all the options', async () => {
       await listProjects('myorg', {
-        d: 'query',
+        q: 'query',
         from: 3,
         size: 10,
         deprecated: true,
@@ -223,27 +211,6 @@ describe('Project class', () => {
       );
       expect(mock.calls[0][1].body).toEqual(
         JSON.stringify({ name: 'This is top secret' }),
-      );
-    });
-  });
-
-  describe('tag a project', () => {
-    beforeEach(() => {
-      mockResponse('{}');
-    });
-    afterEach(() => {
-      resetMocks();
-    });
-    it('updates the specific revision', async () => {
-      await tagProject('myorg', 'myproject', 12, {
-        tagName: 'v1.0.0',
-        tagFromRev: 10,
-      });
-      expect(mock.calls[0][0]).toEqual(
-        `${baseUrl}/projects/myorg/myproject/tags?rev=12`,
-      );
-      expect(mock.calls[0][1].body).toEqual(
-        JSON.stringify({ tag: 'v1.0.0', rev: 10 }),
       );
     });
   });

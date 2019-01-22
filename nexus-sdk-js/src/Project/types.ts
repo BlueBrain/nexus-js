@@ -1,12 +1,13 @@
-export interface PrefixMapping {
+export interface ApiMapping {
   prefix: string;
   namespace: string;
 }
 
 export interface CreateProjectPayload {
-  name: string;
+  description?: string;
   base?: string;
-  prefixMappings?: PrefixMapping[];
+  vocab?: string;
+  apiMappings?: ApiMapping[];
 }
 
 export interface ListProjectOptions {
@@ -16,3 +17,5 @@ export interface ListProjectOptions {
   deprecated?: boolean;
   [option: string]: any;
 }
+
+export type Context = string | string[];

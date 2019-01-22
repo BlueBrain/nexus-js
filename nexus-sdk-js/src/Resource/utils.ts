@@ -1,6 +1,11 @@
 import { PaginationSettings, PaginatedList } from '..';
-import Resource, { ListResourceResponse, ResourceResponse } from '.';
-import { httpGet, httpPut } from '../utils/http';
+import Resource, {
+  ListResourceResponse,
+  ResourceResponse,
+  ResourceResponseCommon,
+} from '.';
+import { httpGet, httpPut, httpPost, httpDelete } from '../utils/http';
+import { CreateResourcePayload, ResourceListTagResponse } from './types';
 
 export async function getSelfResource(
   selfUrl: string,
@@ -44,8 +49,8 @@ export async function listResources(
   projectLabel: string,
   pagination?: PaginationSettings,
 ): Promise<PaginatedList<Resource>> {
-  const projectResourceURL = `/resources/${orgLabel}/${projectLabel}`;
   try {
+    const projectResourceURL = `/resources/${orgLabel}/${projectLabel}`;
     const requestURL = pagination
       ? `${projectResourceURL}?from=${pagination.from}&size=${pagination.size}`
       : projectResourceURL;
@@ -55,33 +60,57 @@ export async function listResources(
     );
 
     const total: number = listResourceResponses._total;
-    // Expand the data for each item in the list
-    // By fetching each item by ID
-    // Promise.all returns everything or nothing
-    // we need to return undefined if one project
-    // fails to get fetched
-    // TODO: return list of errors as well BlueBrain/nexus#351
-    const allResults: (Resource | undefined)[] = await Promise.all(
-      listResourceResponses._results.map(async resource => {
-        try {
-          return await getSelfResource(
-            resource['_self'],
-            orgLabel,
-            projectLabel,
-          );
-        } catch (error) {
-          console.log(error);
-          return Promise.resolve(undefined);
-        }
-      }),
+    const results: Resource[] = listResourceResponses._results.map(
+      (commonResponse: ResourceResponseCommon) =>
+        new Resource(orgLabel, projectLabel, {
+          ...commonResponse,
+          '@context': listResourceResponses['@context'],
+        }),
     );
-    const results: Resource[] = allResults.filter(
-      r => r !== undefined,
-    ) as Resource[];
+
     return {
       total,
       results,
     };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function createResource(
+  orgLabel: string,
+  projectLabel: string,
+  schemaId: string,
+  payload: CreateResourcePayload,
+): Promise<Resource> {
+  try {
+    let resource: Resource;
+    // if no resourceID provided, we post the new resource (Nexus will create the ID for us)
+    if (!payload.resourceId) {
+      const { context, type, ...rest } = payload;
+      const resourceResponse: ResourceResponse = await httpPost(
+        `/resources/${orgLabel}/${projectLabel}/${schemaId}`,
+        {
+          '@context': context,
+          '@type': type,
+          ...rest,
+        },
+      );
+      resource = new Resource(orgLabel, projectLabel, resourceResponse);
+    } else {
+      const { context, type, resourceId, ...rest } = payload;
+      const resourceResponse: ResourceResponse = await httpPut(
+        `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`,
+        {
+          '@context': context,
+          '@type': type,
+          ...rest,
+        },
+      );
+      resource = new Resource(orgLabel, projectLabel, resourceResponse);
+    }
+
+    return resource;
   } catch (error) {
     throw error;
   }
@@ -139,6 +168,125 @@ export async function updateResource(
         '@context': context,
         ...data,
       },
+    );
+    return new Resource(orgLabel, projectLabel, resourceResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function tagResource(
+  orgLabel: string,
+  projectLabel: string,
+  schemaId: string,
+  resourceId: string,
+  rev: number = 1,
+  {
+    tagName,
+    tagFromRev,
+  }: {
+    tagName: string;
+    tagFromRev: number;
+  },
+): Promise<Resource> {
+  try {
+    const resourceResponse: ResourceResponse = await httpPost(
+      `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}/tags?rev=${rev}`,
+      {
+        tag: tagName,
+        rev: tagFromRev,
+      },
+    );
+    return new Resource(orgLabel, projectLabel, resourceResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function tagSelfResource(
+  selfUrl: string,
+  rev: number = 1,
+  {
+    tagName,
+    tagFromRev,
+  }: {
+    tagName: string;
+    tagFromRev: number;
+  },
+  orgLabel: string,
+  projectLabel: string,
+): Promise<Resource> {
+  try {
+    const resourceResponse: ResourceResponse = await httpPost(
+      `${selfUrl}/tags?rev=${rev}`,
+      {
+        tag: tagName,
+        rev: tagFromRev,
+      },
+      undefined,
+      false,
+    );
+    return new Resource(orgLabel, projectLabel, resourceResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function listTags(
+  orgLabel: string,
+  projectLabel: string,
+  schemaId: string,
+  resourceId: string,
+): Promise<string[]> {
+  try {
+    const response: ResourceListTagResponse = await httpGet(
+      `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}/tags`,
+    );
+    return response.tags;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function listSelfTags(selfUrl: string): Promise<string[]> {
+  try {
+    const response: ResourceListTagResponse = await httpGet(
+      `${selfUrl}/tags`,
+      false,
+    );
+    return response.tags;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deprecateResource(
+  orgLabel: string,
+  projectLabel: string,
+  schemaId: string,
+  resourceId: string,
+  rev: number,
+): Promise<Resource> {
+  try {
+    const resourceResponse: ResourceResponse = await httpDelete(
+      `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}?rev=${rev}`,
+    );
+    return new Resource(orgLabel, projectLabel, resourceResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deprecateSelfResource(
+  selfUrl: string,
+  rev: number,
+  orgLabel: string,
+  projectLabel: string,
+): Promise<Resource> {
+  try {
+    const resourceResponse: ResourceResponse = await httpDelete(
+      `${selfUrl}?rev=${rev}`,
+      false,
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
   } catch (error) {

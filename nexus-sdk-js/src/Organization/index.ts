@@ -5,77 +5,75 @@ import {
   listOrganizations,
   deprecateOrganization,
   updateOrganization,
-  tagOrganization,
 } from './utils';
+import { Context } from './types';
 
-export interface ListOrgsResponse {
-  '@context': string;
+export interface OrgResponseCommon {
+  '@id': string;
+  '@type': string;
+  _uuid: string;
+  _label: string;
+  _rev: number;
+  _deprecated: boolean;
+  _createdAt: string;
+  _createdBy: string;
+  _updatedAt: string;
+  _updatedBy: string;
+  _self?: string;
+  _constrainedBy?: string;
+  description?: string;
+}
+
+export interface ListOrgResponse {
+  '@context': Context;
   _total: number;
+  _results?: OrgResponseCommon[];
   _links?: any;
-  _results?: {
-    _id: string;
-    _source: {
-      '@id': string;
-    };
-  }[];
   code?: string;
   message?: string;
 }
 
-export interface ListOrgsOptions {
-  full_text_search?: string;
-  from?: number;
-  size?: number;
-  deprecated?: boolean;
-  [key: string]: any;
-}
-
-export interface OrgResponse {
-  '@context': string;
-  '@id': string;
-  '@type': string;
-  label: string;
-  _self: string;
-  _constrainedBy: string;
-  _createdAt: string;
-  _createdBy: string;
-  _updatedAt: string;
-  name: string;
-  _updatedBy: string;
-  _deprecated: boolean;
-  _rev: number;
-  _uuid: string;
-  projectNumber: number;
+export interface OrgResponse extends OrgResponseCommon {
+  '@context': Context;
 }
 
 export default class Organization {
-  context: string;
+  context?: Context;
   id: string;
   type: string;
-  label: string;
-  name: string;
-  deprecated: boolean;
-  rev: number;
   uuid: string;
-  projectNumber: number;
+  label: string;
+  rev: number;
+  deprecated: boolean;
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
+  self?: string;
+  constrainedBy?: string;
+  description?: string;
 
   static get = getOrganization;
   static list = listOrganizations;
   static create = createOrganization;
   static update = updateOrganization;
-  static tag = tagOrganization;
   static deprecate = deprecateOrganization;
 
   constructor(organizationResponse: OrgResponse) {
     this.context = organizationResponse['@context'];
     this.id = organizationResponse['@id'];
     this.type = organizationResponse['@type'];
-    this.label = organizationResponse.label;
-    this.name = organizationResponse.name;
-    this.deprecated = organizationResponse._deprecated;
-    this.rev = organizationResponse._rev;
     this.uuid = organizationResponse._uuid;
-    this.projectNumber = organizationResponse.projectNumber;
+    this.label = organizationResponse._label;
+    this.rev = organizationResponse._rev;
+    this.deprecated = organizationResponse._deprecated;
+    this.createdAt = organizationResponse._createdAt;
+    this.createdBy = organizationResponse._createdBy;
+    this.updatedAt = organizationResponse._updatedAt;
+    this.updatedBy = organizationResponse._updatedBy;
+    this.self = organizationResponse._self;
+    this.constrainedBy = organizationResponse._constrainedBy;
+    this.description = organizationResponse.description;
   }
 
   async getProject(projectLabel: string): Promise<Project> {

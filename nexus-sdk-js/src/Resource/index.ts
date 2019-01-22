@@ -1,10 +1,17 @@
-import { Context, Distribution } from '../utils/types';
+import { Context } from './types';
 import {
   getResource,
   getSelfResource,
   updateResource,
   updateSelfResource,
   listResources,
+  createResource,
+  tagResource,
+  deprecateResource,
+  deprecateSelfResource,
+  tagSelfResource,
+  listTags,
+  listSelfTags,
 } from './utils';
 
 export const RESOURCE_METADATA_KEYS = [
@@ -18,7 +25,6 @@ export const RESOURCE_METADATA_KEYS = [
   '_createdBy',
   '_updatedAt',
   '_updatedBy',
-  '_distribution',
   '_rev',
   '_deprecated',
 ];
@@ -35,22 +41,19 @@ export interface ResourceResponseCommon {
   _updatedBy: string;
   _rev: number;
   _deprecated: boolean;
-  _distribution?: Distribution;
   // This is for the rest of the dataset's data
   [key: string]: any;
 }
 
 export interface ListResourceResponse {
-  '@context': Context;
+  '@context'?: Context;
   _total: number;
   _results: ResourceResponseCommon[];
 }
 
 export interface ResourceResponse extends ResourceResponseCommon {
-  '@context': Context;
+  '@context'?: Context;
 }
-
-export class ResourceError extends Error {}
 
 export default class Resource<T = {}> {
   readonly orgLabel: string;
@@ -67,47 +70,43 @@ export default class Resource<T = {}> {
   readonly updatedBy: string;
   readonly rev: number;
   readonly deprecated: boolean;
-  readonly distribution?: Distribution | Distribution[];
   readonly data: T;
-  readonly raw: ResourceResponseCommon;
+  readonly raw: ResourceResponse;
   readonly resourceURL: string;
 
   static getSelf = getSelfResource;
   static get = getResource;
+  static list = listResources;
+  static create = createResource;
   static updateSelf = updateSelfResource;
   static update = updateResource;
-  static list = listResources;
-
-  static formatName(raw: ResourceResponseCommon): string {
-    const formattedNameValue =
+  static deprecate = deprecateResource;
+  static deprecateSelf = deprecateSelfResource;
+  static tag = tagResource;
+  static tagSelf = tagSelfResource;
+  static listTags = listTags;
+  static listSelfTags = listSelfTags;
+  static formatName(raw: ResourceResponse): string {
+    return (
       raw['skos:prefLabel'] ||
       raw['rdfs:label'] ||
       raw['schema:name'] ||
       raw['label'] ||
       raw['name'] ||
-      raw['@id'];
-    return formattedNameValue;
+      raw['@id']
+    );
   }
 
   constructor(
     orgLabel: string,
     projectLabel: string,
-    resourceResponse: ResourceResponseCommon,
+    resourceResponse: ResourceResponse,
   ) {
     this.raw = resourceResponse;
     this.orgLabel = orgLabel;
     this.projectLabel = projectLabel;
     this.id = resourceResponse['@id'];
-    if (resourceResponse['@type']) {
-      if (Array.isArray(resourceResponse['@type'])) {
-        this.type = resourceResponse['@type'] as string[];
-      } else {
-        this.type = [resourceResponse['@type']] as string[];
-      }
-    }
-    if (resourceResponse['@context']) {
-      this.context = resourceResponse['@context'];
-    }
+    this.context = resourceResponse['@context'];
     this.self = resourceResponse._self;
     this.constrainedBy = resourceResponse._constrainedBy;
     this.project = resourceResponse._project;
@@ -115,9 +114,17 @@ export default class Resource<T = {}> {
     this.createdBy = resourceResponse._createdBy;
     this.updatedAt = resourceResponse._updatedAt;
     this.updatedBy = resourceResponse._updatedBy;
-    this.distribution = resourceResponse._distribution;
     this.rev = resourceResponse._rev;
     this.deprecated = resourceResponse._deprecated;
+    // make type an array of sting, even if we only get a single string
+    if (resourceResponse['@type']) {
+      if (Array.isArray(resourceResponse['@type'])) {
+        this.type = resourceResponse['@type'] as string[];
+      } else {
+        this.type = [resourceResponse['@type']] as string[];
+      }
+    }
+    // Put user custom fields in "data" key
     this.data = Object.keys(resourceResponse).reduce(
       (memo: any, key: string) => {
         if (!RESOURCE_METADATA_KEYS.includes(key)) {

@@ -39,16 +39,14 @@ export interface ResourceResponseCommon {
 }
 
 export interface ListResourceResponse {
-  '@context': Context;
+  '@context'?: Context;
   _total: number;
   _results: ResourceResponseCommon[];
 }
 
 export interface ResourceResponse extends ResourceResponseCommon {
-  '@context': Context;
+  '@context'?: Context;
 }
-
-export class ResourceError extends Error {}
 
 export default class Resource<T = {}> {
   readonly orgLabel: string;
@@ -66,7 +64,7 @@ export default class Resource<T = {}> {
   readonly rev: number;
   readonly deprecated: boolean;
   readonly data: T;
-  readonly raw: ResourceResponseCommon;
+  readonly raw: ResourceResponse;
   readonly resourceURL: string;
 
   static getSelf = getSelfResource;
@@ -74,37 +72,27 @@ export default class Resource<T = {}> {
   static updateSelf = updateSelfResource;
   static update = updateResource;
   static list = listResources;
-
-  static formatName(raw: ResourceResponseCommon): string {
-    const formattedNameValue =
+  static formatName(raw: ResourceResponse): string {
+    return (
       raw['skos:prefLabel'] ||
       raw['rdfs:label'] ||
       raw['schema:name'] ||
       raw['label'] ||
       raw['name'] ||
-      raw['@id'];
-    return formattedNameValue;
+      raw['@id']
+    );
   }
 
   constructor(
     orgLabel: string,
     projectLabel: string,
-    resourceResponse: ResourceResponseCommon,
+    resourceResponse: ResourceResponse,
   ) {
     this.raw = resourceResponse;
     this.orgLabel = orgLabel;
     this.projectLabel = projectLabel;
     this.id = resourceResponse['@id'];
-    if (resourceResponse['@type']) {
-      if (Array.isArray(resourceResponse['@type'])) {
-        this.type = resourceResponse['@type'] as string[];
-      } else {
-        this.type = [resourceResponse['@type']] as string[];
-      }
-    }
-    if (resourceResponse['@context']) {
-      this.context = resourceResponse['@context'];
-    }
+    this.context = resourceResponse['@context'];
     this.self = resourceResponse._self;
     this.constrainedBy = resourceResponse._constrainedBy;
     this.project = resourceResponse._project;
@@ -114,6 +102,15 @@ export default class Resource<T = {}> {
     this.updatedBy = resourceResponse._updatedBy;
     this.rev = resourceResponse._rev;
     this.deprecated = resourceResponse._deprecated;
+    // make type an array of sting, even if we only get a single string
+    if (resourceResponse['@type']) {
+      if (Array.isArray(resourceResponse['@type'])) {
+        this.type = resourceResponse['@type'] as string[];
+      } else {
+        this.type = [resourceResponse['@type']] as string[];
+      }
+    }
+    // Put user custom fields in "data" key
     this.data = Object.keys(resourceResponse).reduce(
       (memo: any, key: string) => {
         if (!RESOURCE_METADATA_KEYS.includes(key)) {

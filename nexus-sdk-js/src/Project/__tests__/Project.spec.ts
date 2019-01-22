@@ -3,7 +3,6 @@ import Project from '../index';
 import {
   mockProjectResponse,
   mockViewsListResponse,
-  mockListProjectResponse,
 } from '../../__mocks__/helpers';
 import {
   getProject,

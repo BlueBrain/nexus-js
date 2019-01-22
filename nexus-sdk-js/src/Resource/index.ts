@@ -6,6 +6,7 @@ import {
   updateSelfResource,
   listResources,
   createResource,
+  tagResource,
 } from './utils';
 
 export const RESOURCE_METADATA_KEYS = [
@@ -74,6 +75,7 @@ export default class Resource<T = {}> {
   static create = createResource;
   static updateSelf = updateSelfResource;
   static update = updateResource;
+  static tag = tagResource;
   static formatName(raw: ResourceResponse): string {
     return (
       raw['skos:prefLabel'] ||

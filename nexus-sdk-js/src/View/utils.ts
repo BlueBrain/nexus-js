@@ -16,11 +16,13 @@ const SPARQL_DEFAULT_VIEW_ID = 'nxv:defaultSparqlIndex';
 
 const isElasticSearchView = (viewResponse: ViewResponse): viewResponse is ElasticSearchViewResponse => {
   const validTypes = ['ElasticView', 'AggregateElasticView'];
-  return viewResponse['@type'].some(type => validTypes.includes(type));
+
+  // Types returned by the API may be extended (full URIs), so we check against the end of the string.
+  return viewResponse['@type'].some(type => validTypes.some(validType => type.endsWith(validType)));
 }
 
 const isSparqlView = (viewResponse: ViewResponse): viewResponse is SparqlViewResponse => {
-  return viewResponse['@type'].some(type => type === 'SparqlView');
+  return viewResponse['@type'].some(type => type.endsWith('SparqlView'));
 }
 
 // The current API does not support pagination / filtering of views
@@ -54,21 +56,22 @@ export async function listViews(orgLabel: string, projectLabel: string): Promise
  * Get any valid view of a project.
  *
  * Valid view types are ElasticSearch view and SPARQL view.
- *
- * TODO: refactor once we can fetch views per IDs (broken just now)
  */
 export async function getView(orgLabel: string, projectLabel: string, viewId: string): Promise<ElasticSearchView | SparqlView> {
   try {
-    const views = await listViews(orgLabel, projectLabel);
-    const view = views.find(view => view.id === viewId);
-
-    if (!view) {
-      throw new Error(`Not found: view "${viewId}" for project "${projectLabel}" in organization "${orgLabel}"`);
-    }
-
-    return view;
+    const viewURL = `/views/${orgLabel}/${projectLabel}/${viewId}`;
+    const viewResponse: ViewResponse = await httpGet(viewURL);
+    return isElasticSearchView(viewResponse) ? new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        viewResponse as ElasticSearchViewResponse,
+      ) : new SparqlView(
+        orgLabel,
+        projectLabel,
+        viewResponse as SparqlViewResponse,
+      );
   } catch (error) {
-    throw error;
+    throw new Error(`Not found: view "${viewId}" for project "${projectLabel}" in organization "${orgLabel}"`);
   }
 }
 

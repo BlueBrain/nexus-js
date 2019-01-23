@@ -1,3 +1,5 @@
+import { PaginationSettings } from '../utils/types';
+
 export type Context = string | string[];
 
 export interface RealmResponseCommon {
@@ -27,6 +29,7 @@ export interface ListRealmResponse {
   _results: RealmResponseCommon[];
 }
 
-export interface ListRealmOptions {
-  deprecated: boolean;
+export interface ListRealmOptions extends PaginationSettings {
+  deprecated?: boolean;
+  [key: string]: any;
 }

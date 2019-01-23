@@ -29,7 +29,9 @@ export interface ListRealmResponse {
   _results: RealmResponseCommon[];
 }
 
-export interface ListRealmOptions extends PaginationSettings {
+export interface ListRealmOptions {
+  from?: PaginationSettings['from'];
+  size?: PaginationSettings['size'];
   deprecated?: boolean;
   [key: string]: any;
 }

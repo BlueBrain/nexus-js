@@ -22,9 +22,9 @@ export async function getRealm(
   }
 }
 
-export async function listRealm(
+export async function listRealms(
   listRealmOptions: ListRealmOptions = {
-    from: 1,
+    from: 0,
     size: DEFAULT_LIST_SIZE,
   },
 ): Promise<PaginatedList<Realm>> {
@@ -32,7 +32,9 @@ export async function listRealm(
     let ops = '';
     if (listRealmOptions) {
       ops = Object.keys(listRealmOptions).reduce(
-        (acc, key) => `${acc === '' ? '' : ''}${key}=${listRealmOptions[key]}`,
+        (acc, key) =>
+          `${acc === '' ? '?' : `${acc}&`}${key}=${listRealmOptions[key]}`,
+        '',
       );
     }
     const listRealmResponse: ListRealmResponse = await httpGet(`/realms${ops}`);

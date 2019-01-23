@@ -21,6 +21,6 @@ export interface ResourceListTagResponse {
 export interface CreateResourcePayload {
   resourceId?: string;
   type?: string[];
-  context: { [field: string]: string };
+  context: { [field: string]: string } | any[];
   [field: string]: any;
 }

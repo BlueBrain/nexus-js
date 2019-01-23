@@ -1,11 +1,26 @@
-export type Permission = 'read' | 'write' | 'own';
+export type PermissionsEndpointResponse = {
+  "@context"?: string | string[];
+  "@id": string;
+  "@type": string;
+  permissions: string[];
+  _rev: number;
+  _createdAt: string;
+  _createdBy: string;
+  _updatedAt: string;
+  _updatedBy: string;
+}
 
-export type IdentityType = 'UserRef' | 'GroupRef' | 'AuthenticatedRef' | 'Anonymous';
+export type IdentityType = 'User' | 'Group' | 'Authenticated' | 'Anonymous';
+
+export type IdentitiesEndpointResponse = {
+  '@context'?: string | string[];
+  identities: IdentityResponse[];
+}
 
 export type IdentityResponse = {
   '@id': string;
   '@type': IdentityType;
-  sub?: string;
+  subject?: string;
   realm?: string;
   group?: string;
 };

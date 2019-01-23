@@ -1,4 +1,5 @@
 import { RealmResponse } from './types';
+import { getRealm, listRealms } from './utils';
 
 export default class Realm {
   context?: string | string[];
@@ -18,6 +19,9 @@ export default class Realm {
   updatedBy: string;
   rev: number;
   deprecated: boolean;
+
+  static get = getRealm;
+  static list = listRealms;
 
   constructor(realmResponse: RealmResponse) {
     this.context = realmResponse['@context'];

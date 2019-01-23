@@ -1,5 +1,4 @@
 import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
-import Realm from '../index';
 import Nexus from '../../Nexus';
 import { getRealm, listRealms } from '../utils';
 import { mockListRealmResponse } from '../__mocks__/mockReponses';

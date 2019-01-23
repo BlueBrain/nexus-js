@@ -28,7 +28,7 @@ export type IdentityResponse = {
 export type ACLResponse = {
   path: string;
   identity: IdentityResponse,
-  permissions: Permission[],
+  permissions: string[],
 };
 
 export class Identity {
@@ -46,7 +46,7 @@ export class Identity {
 
 export default class ACL {
   path: string;
-  permissions: Permission[];
+  permissions: string[];
   identity: Identity;
 
   constructor(aclResponse: ACLResponse) {

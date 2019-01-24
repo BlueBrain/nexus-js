@@ -131,6 +131,27 @@ export function httpPut(
     });
 }
 
+export function httpPatch(
+  url: string,
+  body?: Object,
+  useBase: boolean = true,
+): Promise<any> {
+  const {
+    api: { baseUrl },
+  } = store.getState();
+  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  return fetch(fetchURL, {
+    headers: getHeaders(),
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  })
+    .then(checkStatus)
+    .then(r => parseResponse(r))
+    .catch(e => {
+      throw e;
+    });
+}
+
 export function httpDelete(url: string, useBase: boolean = true): Promise<any> {
   const {
     api: { baseUrl },

@@ -182,8 +182,8 @@ export const mockViewsListResponse: ViewsListResponse = {
   _total: 2,
   _results: [
     {
-      '@id': 'nxv:defaultElasticIndex',
-      '@type': ['View', 'Alpha', 'ElasticView'],
+      '@id': 'nxv:defaultElasticSearchIndex',
+      '@type': ['View', 'Alpha', 'ElasticSearchView'],
       _uuid: '684bd815-9273-46f4-ac1c-0383d4a98254',
       includeMetadata: true,
       mapping: {

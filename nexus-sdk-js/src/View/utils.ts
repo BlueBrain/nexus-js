@@ -1,6 +1,8 @@
-import ElasticSearchView, { ElasticSearchViewResponse } from "./ElasticSearchView";
-import SparqlView, { SparqlViewResponse } from "./SparqlView";
-import { httpGet } from "../utils/http";
+import ElasticSearchView, {
+  ElasticSearchViewResponse,
+} from './ElasticSearchView';
+import SparqlView, { SparqlViewResponse } from './SparqlView';
+import { httpGet } from '../utils/http';
 
 export type ViewResponse = ElasticSearchViewResponse | SparqlViewResponse;
 
@@ -11,41 +13,59 @@ export interface ViewsListResponse {
 }
 
 // IDs for the views that are automatically created with a project
-const ES_DEFAULT_VIEW_ID = 'nxv:defaultElasticIndex';
-const SPARQL_DEFAULT_VIEW_ID = 'nxv:defaultSparqlIndex';
+const ES_DEFAULT_VIEW_ID: string = 'nxv:defaultElasticSearchIndex';
+const SPARQL_DEFAULT_VIEW_ID: string = 'nxv:defaultSparqlIndex';
 
-const isElasticSearchView = (viewResponse: ViewResponse): viewResponse is ElasticSearchViewResponse => {
-  const validTypes = ['ElasticView', 'AggregateElasticView'];
+const isElasticSearchView = (
+  viewResponse: ViewResponse,
+): viewResponse is ElasticSearchViewResponse => {
+  const validTypes: string[] = [
+    'ElasticSearchView',
+    'AggregateElasticSearchView',
+  ];
 
   // Types returned by the API may be extended (full URIs), so we check against the end of the string.
-  return viewResponse['@type'].some(type => validTypes.some(validType => type.endsWith(validType)));
-}
+  return viewResponse['@type'].some(type =>
+    validTypes.some(validType => type.endsWith(validType)),
+  );
+};
 
-const isSparqlView = (viewResponse: ViewResponse): viewResponse is SparqlViewResponse => {
+const isSparqlView = (
+  viewResponse: ViewResponse,
+): viewResponse is SparqlViewResponse => {
   return viewResponse['@type'].some(type => type.endsWith('SparqlView'));
-}
+};
 
 // The current API does not support pagination / filtering of views
 // This should be fixed when possible and converted to signature
 // Promise<PaginatedList<(ElasticSearchView | SparqlView)>>
-export async function listViews(orgLabel: string, projectLabel: string): Promise<(ElasticSearchView | SparqlView)[]> {
+export async function listViews(
+  orgLabel: string,
+  projectLabel: string,
+): Promise<(ElasticSearchView | SparqlView)[]> {
   try {
     const viewURL = `/views/${orgLabel}/${projectLabel}`;
     const viewListResponse: ViewsListResponse = await httpGet(viewURL);
-    const views: (ElasticSearchView | SparqlView)[] = viewListResponse._results
-      .filter(viewResponse => isElasticSearchView(viewResponse) || isSparqlView(viewResponse))
-      .map(
+    const views: (
+      | ElasticSearchView
+      | SparqlView)[] = viewListResponse._results
+      .filter(
         viewResponse =>
-          isElasticSearchView(viewResponse) ? new ElasticSearchView(
-            orgLabel,
-            projectLabel,
-            viewResponse as ElasticSearchViewResponse,
-          ) : new SparqlView(
-            orgLabel,
-            projectLabel,
-            viewResponse as SparqlViewResponse,
-          )
-        );
+          isElasticSearchView(viewResponse) || isSparqlView(viewResponse),
+      )
+      .map(viewResponse =>
+        isElasticSearchView(viewResponse)
+          ? new ElasticSearchView(
+              orgLabel,
+              projectLabel,
+              viewResponse as ElasticSearchViewResponse,
+            )
+          : new SparqlView(
+              orgLabel,
+              projectLabel,
+              viewResponse as SparqlViewResponse,
+            ),
+      );
     return views;
   } catch (error) {
     throw error;
@@ -57,21 +77,29 @@ export async function listViews(orgLabel: string, projectLabel: string): Promise
  *
  * Valid view types are ElasticSearch view and SPARQL view.
  */
-export async function getView(orgLabel: string, projectLabel: string, viewId: string): Promise<ElasticSearchView | SparqlView> {
+export async function getView(
+  orgLabel: string,
+  projectLabel: string,
+  viewId: string,
+): Promise<ElasticSearchView | SparqlView> {
   try {
     const viewURL = `/views/${orgLabel}/${projectLabel}/${viewId}`;
     const viewResponse: ViewResponse = await httpGet(viewURL);
-    return isElasticSearchView(viewResponse) ? new ElasticSearchView(
-        orgLabel,
-        projectLabel,
-        viewResponse as ElasticSearchViewResponse,
-      ) : new SparqlView(
-        orgLabel,
-        projectLabel,
-        viewResponse as SparqlViewResponse,
-      );
+    return isElasticSearchView(viewResponse)
+      ? new ElasticSearchView(
+          orgLabel,
+          projectLabel,
+          viewResponse as ElasticSearchViewResponse,
+        )
+      : new SparqlView(
+          orgLabel,
+          projectLabel,
+          viewResponse as SparqlViewResponse,
+        );
   } catch (error) {
-    throw new Error(`Not found: view "${viewId}" for project "${projectLabel}" in organization "${orgLabel}"`);
+    throw new Error(
+      `Not found: view "${viewId}" for project "${projectLabel}" in organization "${orgLabel}"`,
+    );
   }
 }
 
@@ -82,12 +110,18 @@ export async function getView(orgLabel: string, projectLabel: string, viewId: st
  * that is created automatically with a project and is usually
  * the one to query to load resources.
  */
-export async function getElasticSearchView(orgLabel: string, projectLabel: string, viewId: string = ES_DEFAULT_VIEW_ID): Promise<ElasticSearchView> {
+export async function getElasticSearchView(
+  orgLabel: string,
+  projectLabel: string,
+  viewId: string = ES_DEFAULT_VIEW_ID,
+): Promise<ElasticSearchView> {
   try {
     const view = await getView(orgLabel, projectLabel, viewId);
 
     if (!(view instanceof ElasticSearchView)) {
-      throw new Error(`Incorrect type (not an ElasticSearch view): view "${viewId}" for project "${projectLabel}" in organization "${orgLabel}"`);
+      throw new Error(
+        `Incorrect type (not an ElasticSearch view): view "${viewId}" for project "${projectLabel}" in organization "${orgLabel}"`,
+      );
     }
 
     return view;
@@ -101,11 +135,20 @@ export async function getElasticSearchView(orgLabel: string, projectLabel: strin
  *
  * Queries the triple-store (RDF) directly. For advanced uses.
  */
-export async function getSparqlView(orgLabel: string, projectLabel: string): Promise<SparqlView> {
+export async function getSparqlView(
+  orgLabel: string,
+  projectLabel: string,
+): Promise<SparqlView> {
   try {
-    const sparqlDefaultView = await getView(orgLabel, projectLabel, SPARQL_DEFAULT_VIEW_ID);
+    const sparqlDefaultView = await getView(
+      orgLabel,
+      projectLabel,
+      SPARQL_DEFAULT_VIEW_ID,
+    );
     if (!(sparqlDefaultView instanceof SparqlView)) {
-        throw new Error(`Incorrect type (not a SPARQL view): view "${SPARQL_DEFAULT_VIEW_ID}" for project "${projectLabel}" in organization "${orgLabel}"`);
+      throw new Error(
+        `Incorrect type (not a SPARQL view): view "${SPARQL_DEFAULT_VIEW_ID}" for project "${projectLabel}" in organization "${orgLabel}"`,
+      );
     }
     return sparqlDefaultView;
   } catch (error) {

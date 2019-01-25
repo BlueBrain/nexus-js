@@ -62,7 +62,7 @@ describe('Project class', () => {
         JSON.stringify(mockElasticSearchViewResponse), { status: 200 }
       );
       const p = new Project(mockProjectResponse);
-      const viewId = 'nxv:defaultElasticIndex';
+      const viewId = 'nxv:defaultElasticSearchIndex';
       await p.getView(viewId);
       const viewURL = `/views/${p.orgLabel}/${p.label}/${viewId}`;
       expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);

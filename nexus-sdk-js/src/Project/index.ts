@@ -1,5 +1,4 @@
-import Resource, { ListResourceResponse } from '../Resource';
-import { httpGet } from '../utils/http';
+import Resource from '../Resource';
 import { PaginationSettings, PaginatedList } from '../utils/types';
 import View from '../View';
 import ElasticSearchView from '../View/ElasticSearchView';

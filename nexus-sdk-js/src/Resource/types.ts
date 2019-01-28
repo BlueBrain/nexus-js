@@ -1,3 +1,29 @@
+export interface ResourceResponseCommon {
+  '@id': string;
+  '@type'?: string | string[];
+  _self: string;
+  _constrainedBy: string;
+  _project: string;
+  _createdAt: string;
+  _createdBy: string;
+  _updatedAt: string;
+  _updatedBy: string;
+  _rev: number;
+  _deprecated: boolean;
+  // This is for the rest of the dataset's data
+  [key: string]: any;
+}
+
+export interface ListResourceResponse {
+  '@context'?: Context;
+  _total: number;
+  _results: ResourceResponseCommon[];
+}
+
+export interface ResourceResponse extends ResourceResponseCommon {
+  '@context'?: Context;
+}
+
 export type Context = string | object;
 
 export interface ListResourceResponseError {
@@ -23,4 +49,12 @@ export interface CreateResourcePayload {
   type?: string[];
   context: { [field: string]: string };
   [field: string]: any;
+}
+
+export interface ListResourceOptions {
+  full_text_search?: string;
+  from?: number;
+  size?: number;
+  deprecated?: boolean;
+  [key: string]: any;
 }

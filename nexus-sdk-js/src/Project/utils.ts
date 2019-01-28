@@ -105,7 +105,7 @@ export async function updateProject(
 export async function deprecateProject(
   orgLabel: string,
   projectLabel: string,
-  rev: number = 1,
+  rev: number,
 ): Promise<Project> {
   try {
     const projectResponse: ProjectResponse = await httpDelete(

@@ -8,6 +8,7 @@ import {
 } from './utils';
 import { Context, CreateOrgPayload, OrgResponse } from './types';
 import { ListProjectOptions, CreateProjectPayload } from '../Project/types';
+import { PaginatedList } from '../utils/types';
 
 export default class Organization {
   context?: Context;
@@ -72,7 +73,9 @@ export default class Organization {
     }
   }
 
-  async listProjects(options?: ListProjectOptions): Promise<Project[]> {
+  async listProjects(
+    options?: ListProjectOptions,
+  ): Promise<PaginatedList<Project>> {
     try {
       return Project.list(this.label, options);
     } catch (error) {

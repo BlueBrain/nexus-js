@@ -11,7 +11,7 @@ import {
   deprecateProject,
   updateProject,
 } from './utils';
-import { ApiMapping, Context } from './types';
+import { ApiMapping, Context, CreateProjectPayload } from './types';
 
 export interface ProjectResponseCommon {
   '@id': string;
@@ -88,6 +88,27 @@ export default class Project {
     this.updatedAt = projectResponse._updatedAt;
     this.updatedBy = projectResponse._updatedBy;
     this.description = projectResponse.description;
+  }
+
+  async update(projectPayload: CreateProjectPayload): Promise<Project> {
+    try {
+      return Project.update(
+        this.orgLabel,
+        this.label,
+        this.rev,
+        projectPayload,
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deprecate(): Promise<Project> {
+    try {
+      return Project.deprecate(this.orgLabel, this.label, this.rev);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async listResources(

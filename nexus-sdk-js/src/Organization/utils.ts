@@ -73,7 +73,7 @@ export async function listOrganizations(
     if (listOrgResponse.code || !listOrgResponse._results) {
       return {
         total: 0,
-        index: 1,
+        index: 0,
         results: [],
       };
     }

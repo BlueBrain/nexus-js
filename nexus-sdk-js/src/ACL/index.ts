@@ -1,57 +1,28 @@
-export type PermissionsEndpointResponse = {
-  "@context"?: string | string[];
-  "@id": string;
-  "@type": string;
-  permissions: string[];
-  _rev: number;
-  _createdAt: string;
-  _createdBy: string;
-  _updatedAt: string;
-  _updatedBy: string;
-}
-
-export type IdentityType = 'User' | 'Group' | 'Authenticated' | 'Anonymous';
-
-export type IdentitiesEndpointResponse = {
-  '@context'?: string | string[];
-  identities: IdentityResponse[];
-}
-
-export type IdentityResponse = {
-  '@id': string;
-  '@type': IdentityType;
-  subject?: string;
-  realm?: string;
-  group?: string;
-};
-
-export type ACLResponse = {
-  path: string;
-  identity: IdentityResponse,
-  permissions: string[],
-};
-
-export class Identity {
-  id: string;
-  type: IdentityType;
-  realm?: string;
-  group?: string;
-  sub?: string;
-
-  constructor(identityResponse: IdentityResponse) {
-    this.id = identityResponse['@id'];
-    this.type = identityResponse['@type'];
-  }
-}
+import { IdentityType, IdentityResponse, ACLResponse } from './types';
 
 export default class ACL {
+  id: string;
+  type: IdentityType;
   path: string;
-  permissions: string[];
-  identity: Identity;
+  acl: {
+    permissions: string[];
+    identity: IdentityResponse;
+  }[];
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string;
+  rev: number;
 
   constructor(aclResponse: ACLResponse) {
-    this.path = aclResponse.path;
-    this.identity = new Identity(aclResponse.identity);
-    this.permissions = aclResponse.permissions;
+    this.id = aclResponse['@id'];
+    this.type = aclResponse['@type'];
+    this.path = aclResponse._path;
+    this.acl = aclResponse.acl;
+    this.createdAt = aclResponse._createdAt;
+    this.createdBy = aclResponse._createdBy;
+    this.updatedAt = aclResponse._updatedBy;
+    this.updatedBy = aclResponse._updatedBy;
+    this.rev = aclResponse._rev;
   }
 }

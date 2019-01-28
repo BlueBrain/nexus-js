@@ -1,10 +1,12 @@
-import Project, {
+import Project from '.';
+import { httpGet, httpPut, httpDelete } from '../utils/http';
+import {
+  CreateProjectPayload,
+  ListProjectOptions,
   ProjectResponse,
   ListProjectsResponse,
   ProjectResponseCommon,
-} from '.';
-import { httpGet, httpPut, httpDelete } from '../utils/http';
-import { CreateProjectPayload, ListProjectOptions } from './types';
+} from './types';
 import { PaginatedList } from '../utils/types';
 
 /**

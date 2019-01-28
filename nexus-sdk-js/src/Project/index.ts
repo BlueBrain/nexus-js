@@ -11,39 +11,12 @@ import {
   deprecateProject,
   updateProject,
 } from './utils';
-import { ApiMapping, Context, CreateProjectPayload } from './types';
-
-export interface ProjectResponseCommon {
-  '@id': string;
-  '@type': string;
-  base: string;
-  vocab: string;
-  apiMappings: ApiMapping[];
-  _label: string;
-  _organizationLabel: string;
-  _organizationUuid: string;
-  _uuid: string;
-  _rev: number;
-  _deprecated: boolean;
-  _createdAt: string;
-  _createdBy: string;
-  _updatedAt: string;
-  _updatedBy: string;
-  description?: string;
-}
-
-export interface ListProjectsResponse {
-  _total: number;
-  _links?: any;
-  _results?: ProjectResponse[];
-  '@context'?: Context;
-  code?: string;
-  message?: string;
-}
-
-export interface ProjectResponse extends ProjectResponseCommon {
-  '@context'?: Context;
-}
+import {
+  ApiMapping,
+  Context,
+  CreateProjectPayload,
+  ProjectResponse,
+} from './types';
 
 export default class Project {
   context?: Context;

@@ -1,6 +1,6 @@
 import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
 import Nexus from '../../Nexus';
-import { getRealm, listRealms } from '../utils';
+import { getRealm, listRealms, createRealm } from '../utils';
 import { mockListRealmResponse } from '../__mocks__/mockReponses';
 
 const baseUrl = 'http://api.url';
@@ -55,6 +55,47 @@ describe('Realm utils', () => {
       await listRealms({ from: 3, size: 10, deprecated: true });
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/realms?from=3&size=10&deprecated=true`,
+      );
+    });
+  });
+
+  describe('createRealm()', () => {
+    beforeEach(() => {
+      mockResponse('{}');
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should make a PUT request using the realmLabel and the required body', async () => {
+      await createRealm('myrealm', {
+        name: 'GITHUB',
+        openIdConfig: 'http://config.com',
+      });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/realms/myrealm`);
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({
+          name: 'GITHUB',
+          openIdConfig: 'http://config.com',
+        }),
+      );
+    });
+    it('should make a PUT request using the realmLabel and all options', async () => {
+      await createRealm('myrealm', {
+        name: 'GITHUB',
+        openIdConfig: 'http://config.com',
+        logo: 'github.png',
+      });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/realms/myrealm`);
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({
+          name: 'GITHUB',
+          openIdConfig: 'http://config.com',
+          logo: 'github.png',
+        }),
       );
     });
   });

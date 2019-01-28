@@ -35,3 +35,9 @@ export interface ListRealmOptions {
   deprecated?: boolean;
   [key: string]: any;
 }
+
+export interface CreateRealmPayload {
+  name: string;
+  openIdConfig: string;
+  logo?: string;
+}

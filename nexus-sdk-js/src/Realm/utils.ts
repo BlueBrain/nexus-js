@@ -1,10 +1,11 @@
-import { httpGet } from '../utils/http';
+import { httpGet, httpPut } from '../utils/http';
 import Realm from '.';
 import {
   RealmResponse,
   ListRealmOptions,
   ListRealmResponse,
   RealmResponseCommon,
+  CreateRealmPayload,
 } from './types';
 import { PaginatedList, DEFAULT_LIST_SIZE } from '../utils/types';
 
@@ -52,6 +53,21 @@ export async function listRealms(
     throw error;
   }
 }
-export async function createRealm() {}
+
+export async function createRealm(
+  realmLabel: string,
+  realmPayload: CreateRealmPayload,
+): Promise<Realm> {
+  try {
+    const realmResponse: RealmResponse = await httpPut(
+      `/realms/${realmLabel}`,
+      realmPayload,
+    );
+    return new Realm(realmResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function updateRealm() {}
 export async function deprecateRealm() {}

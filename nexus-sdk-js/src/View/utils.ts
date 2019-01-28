@@ -1,8 +1,8 @@
-import ElasticSearchView, {
-  ElasticSearchViewResponse,
-} from './ElasticSearchView';
-import SparqlView, { SparqlViewResponse } from './SparqlView';
+import ElasticSearchView from './ElasticSearchView';
+import SparqlView from './SparqlView';
 import { httpGet } from '../utils/http';
+import { ElasticSearchViewResponse } from './ElasticSearchView/types';
+import { SparqlViewResponse } from './SparqlView/types';
 
 export type ViewResponse = ElasticSearchViewResponse | SparqlViewResponse;
 

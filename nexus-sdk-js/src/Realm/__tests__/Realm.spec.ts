@@ -1,6 +1,12 @@
 import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
 import Nexus from '../../Nexus';
-import { getRealm, listRealms, createRealm, updateRealm } from '../utils';
+import {
+  getRealm,
+  listRealms,
+  createRealm,
+  updateRealm,
+  deprecateRealm,
+} from '../utils';
 import { mockListRealmResponse } from '../__mocks__/mockReponses';
 
 const baseUrl = 'http://api.url';
@@ -122,6 +128,22 @@ describe('Realm utils', () => {
           openIdConfig: 'http://config.com',
         }),
       );
+    });
+  });
+
+  describe('deprecateRealm()', () => {
+    beforeEach(() => {
+      mockResponse('{}');
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should make a DELETE request using the realmLabel and version', async () => {
+      await deprecateRealm('myrealm', 2);
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/realms/myrealm?rev=2`);
+      expect(mock.calls[0][1].method).toEqual('DELETE');
     });
   });
 });

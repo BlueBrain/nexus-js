@@ -1,4 +1,4 @@
-import { httpGet, httpPut } from '../utils/http';
+import { httpGet, httpPut, httpDelete } from '../utils/http';
 import Realm from '.';
 import {
   RealmResponse,
@@ -73,7 +73,7 @@ export async function updateRealm(
   realmLabel: string,
   rev: number,
   realmPayload: CreateRealmPayload,
-) {
+): Promise<Realm> {
   try {
     const realmResponse: RealmResponse = await httpPut(
       `/realms/${realmLabel}?rev=${rev}`,
@@ -84,4 +84,17 @@ export async function updateRealm(
     throw error;
   }
 }
-export async function deprecateRealm() {}
+
+export async function deprecateRealm(
+  realmLabel: string,
+  rev: number,
+): Promise<Realm> {
+  try {
+    const realmResponse: RealmResponse = await httpDelete(
+      `/realms/${realmLabel}?rev=${rev}`,
+    );
+    return new Realm(realmResponse);
+  } catch (error) {
+    throw error;
+  }
+}

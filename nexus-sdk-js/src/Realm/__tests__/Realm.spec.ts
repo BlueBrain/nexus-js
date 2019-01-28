@@ -1,6 +1,6 @@
 import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
 import Nexus from '../../Nexus';
-import { getRealm, listRealms, createRealm } from '../utils';
+import { getRealm, listRealms, createRealm, updateRealm } from '../utils';
 import { mockListRealmResponse } from '../__mocks__/mockReponses';
 
 const baseUrl = 'http://api.url';
@@ -95,6 +95,31 @@ describe('Realm utils', () => {
           name: 'GITHUB',
           openIdConfig: 'http://config.com',
           logo: 'github.png',
+        }),
+      );
+    });
+  });
+
+  describe('updateRealm()', () => {
+    beforeEach(() => {
+      mockResponse('{}');
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should make a PUT request using the realmLabel and version and the required body', async () => {
+      await updateRealm('myrealm', 2, {
+        name: 'GITHUB',
+        openIdConfig: 'http://config.com',
+      });
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/realms/myrealm?rev=2`);
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({
+          name: 'GITHUB',
+          openIdConfig: 'http://config.com',
         }),
       );
     });

@@ -69,5 +69,19 @@ export async function createRealm(
   }
 }
 
-export async function updateRealm() {}
+export async function updateRealm(
+  realmLabel: string,
+  rev: number,
+  realmPayload: CreateRealmPayload,
+) {
+  try {
+    const realmResponse: RealmResponse = await httpPut(
+      `/realms/${realmLabel}?rev=${rev}`,
+      realmPayload,
+    );
+    return new Realm(realmResponse);
+  } catch (error) {
+    throw error;
+  }
+}
 export async function deprecateRealm() {}

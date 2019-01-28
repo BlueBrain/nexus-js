@@ -1,5 +1,6 @@
-import { RealmResponse } from './types';
-import { getRealm, listRealms, createRealm } from './utils';
+import { RealmResponse, CreateRealmPayload } from './types';
+import { getRealm, listRealms, createRealm, updateRealm } from './utils';
+import { CreateOrgPayload } from '../Organization/types';
 
 export default class Realm {
   context?: string | string[];
@@ -23,6 +24,7 @@ export default class Realm {
   static get = getRealm;
   static list = listRealms;
   static create = createRealm;
+  static update = updateRealm;
 
   constructor(realmResponse: RealmResponse) {
     this.context = realmResponse['@context'];
@@ -42,5 +44,13 @@ export default class Realm {
     this.updatedBy = realmResponse._updatedBy;
     this.rev = realmResponse._rev;
     this.deprecated = realmResponse._deprecated;
+  }
+
+  async update(payload: CreateRealmPayload): Promise<Realm> {
+    try {
+      return Realm.update(this.label, this.rev, payload);
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -2,12 +2,7 @@ export type Context = string | string[];
 
 export type IdentityType = 'User' | 'Group' | 'Authenticated' | 'Anonymous';
 
-export interface IdentitiesEndpointResponse {
-  '@context'?: string | string[];
-  identities: IdentityResponse[];
-}
-
-export interface IdentityResponse {
+export interface Identity {
   '@id': string;
   '@type': IdentityType;
   subject?: string;
@@ -21,7 +16,7 @@ export interface ACLResponseCommon {
   _path: string;
   acl: {
     permissions: string[];
-    identity: IdentityResponse;
+    identity: Identity;
   }[];
   _createdAt: string;
   _createdBy: string;

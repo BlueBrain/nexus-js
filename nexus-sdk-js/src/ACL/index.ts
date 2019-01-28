@@ -1,4 +1,4 @@
-import { IdentityType, IdentityResponse, ACLResponse } from './types';
+import { IdentityType, Identity, ACLResponse } from './types';
 
 export default class ACL {
   id: string;
@@ -6,7 +6,7 @@ export default class ACL {
   path: string;
   acl: {
     permissions: string[];
-    identity: IdentityResponse;
+    identity: Identity;
   }[];
   createdAt: string;
   createdBy: string;

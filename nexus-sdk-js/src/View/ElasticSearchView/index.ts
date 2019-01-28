@@ -1,7 +1,8 @@
 import { httpPost } from '../../utils/http';
 import { PaginatedList, PaginationSettings } from '../../utils/types';
-import Resource, { ResourceResponseCommon } from '../../Resource';
+import Resource from '../../Resource';
 import { getElasticSearchView } from '../utils';
+import { ResourceResponseCommon } from '../../Resource/types';
 
 // This is an Elastic Search Mapping
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
@@ -43,14 +44,16 @@ export interface ElasticSearchViewResponse {
 // Original Source is an optional setting from Elastic Search Views configured with
 // the 'sourceInText' field set to true, which is the default behavior
 export interface ElasticSearchResourceResponse extends ResourceResponseCommon {
+  _self: string;
   _original_source?: string;
+  [key: string]: any;
 }
 
 export interface ElasticSearchHit {
   _score: number;
   _id: string;
   _index: string;
-  _source: ElasticSearchResourceResponse | object;
+  _source: ElasticSearchResourceResponse;
   _type: string;
 }
 
@@ -184,6 +187,7 @@ export default class ElasticSearchView {
       );
 
       const total: number = response.hits.total;
+      const index: number = (pagination && pagination.from) || 1;
 
       // Expand the data for each item in the list
       // By fetching each item by ID
@@ -191,6 +195,7 @@ export default class ElasticSearchView {
 
       return {
         total,
+        index,
         results,
       };
     } catch (error) {
@@ -223,6 +228,7 @@ export default class ElasticSearchView {
       );
 
       const total: number = response.hits.total;
+      const index: number = (pagination && pagination.from) || 1;
 
       // Expand the data for each item in the list
       // By fetching each item by ID
@@ -238,6 +244,7 @@ export default class ElasticSearchView {
 
       return {
         total,
+        index,
         results,
       };
     } catch (error) {

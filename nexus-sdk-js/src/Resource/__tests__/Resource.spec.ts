@@ -3,10 +3,7 @@ import {
   mockResourceResponse,
   mockListResourceResponse,
 } from '../../__mocks__/helpers';
-import Resource, {
-  ResourceResponse,
-  ResourceResponseCommon,
-} from '../../Resource';
+import Resource from '../../Resource';
 import {
   listResources,
   getResource,
@@ -21,7 +18,11 @@ import {
 } from '../utils';
 import Nexus from '../../Nexus';
 import { PaginatedList } from '../../utils/types';
-import { CreateResourcePayload } from '../types';
+import {
+  CreateResourcePayload,
+  ResourceResponseCommon,
+  ResourceResponse,
+} from '../types';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);

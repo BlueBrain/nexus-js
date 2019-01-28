@@ -1,6 +1,3 @@
-import { ProjectResponse, ListProjectsResponse } from '../Project';
-import { ListOrgResponse, OrgResponse } from '../Organization';
-import { ResourceResponse, ListResourceResponse } from '../Resource';
 import { ViewsListResponse } from '../View/utils';
 import {
   ElasticSearchViewResponse,
@@ -8,6 +5,9 @@ import {
   ElasticSearchViewAggregationResponse,
 } from '../View/ElasticSearchView';
 import { SparqlViewResponse } from '../View/SparqlView';
+import { OrgResponse, ListOrgResponse } from '../Organization/types';
+import { ProjectResponse, ListProjectsResponse } from '../Project/types';
+import { ResourceResponse, ListResourceResponse } from '../Resource/types';
 
 export const mockOrgResponse: OrgResponse = {
   '@context': [

@@ -1,9 +1,11 @@
-import Organization, {
+import Organization from '.';
+import {
+  ListOrgOptions,
+  CreateOrgPayload,
   OrgResponse,
   ListOrgResponse,
   OrgResponseCommon,
-} from '.';
-import { ListOrgOptions, CreateOrgPayload } from './types';
+} from './types';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 import { PaginatedList } from '../utils/types';

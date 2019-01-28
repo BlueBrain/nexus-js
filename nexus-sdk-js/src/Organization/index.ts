@@ -6,36 +6,9 @@ import {
   deprecateOrganization,
   updateOrganization,
 } from './utils';
-import { Context } from './types';
-
-export interface OrgResponseCommon {
-  '@id': string;
-  '@type': string;
-  _uuid: string;
-  _label: string;
-  _rev: number;
-  _deprecated: boolean;
-  _createdAt: string;
-  _createdBy: string;
-  _updatedAt: string;
-  _updatedBy: string;
-  _self?: string;
-  _constrainedBy?: string;
-  description?: string;
-}
-
-export interface ListOrgResponse {
-  '@context': Context;
-  _total: number;
-  _results?: OrgResponseCommon[];
-  _links?: any;
-  code?: string;
-  message?: string;
-}
-
-export interface OrgResponse extends OrgResponseCommon {
-  '@context': Context;
-}
+import { Context, CreateOrgPayload, OrgResponse } from './types';
+import { ListProjectOptions, CreateProjectPayload } from '../Project/types';
+import { PaginatedList } from '../utils/types';
 
 export default class Organization {
   context?: Context;
@@ -76,11 +49,76 @@ export default class Organization {
     this.description = organizationResponse.description;
   }
 
-  async getProject(projectLabel: string): Promise<Project> {
-    return Project.get(this.label, projectLabel);
+  async update(orgPayload: CreateOrgPayload): Promise<Organization> {
+    try {
+      return Organization.update(this.label, this.rev, orgPayload);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async listProjects(): Promise<Project[]> {
-    return Project.list(this.label);
+  async deprecate(): Promise<Organization> {
+    try {
+      return Organization.deprecate(this.label, this.rev);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getProject(projectLabel: string): Promise<Project> {
+    try {
+      return Project.get(this.label, projectLabel);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async listProjects(
+    options?: ListProjectOptions,
+  ): Promise<PaginatedList<Project>> {
+    try {
+      return Project.list(this.label, options);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createProject(
+    projectLabel: string,
+    projectPayload: CreateProjectPayload,
+  ): Promise<Project> {
+    try {
+      return Project.create(this.label, projectLabel, projectPayload);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateProject(
+    projectLabel: string,
+    projectRev: number,
+    projectPayload: CreateProjectPayload,
+  ): Promise<Project> {
+    try {
+      return Project.update(
+        this.label,
+        projectLabel,
+        projectRev,
+        projectPayload,
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deprecateProject(
+    projectLabel: string,
+    projectRev: number,
+  ): Promise<Project> {
+    try {
+      return Project.deprecate(this.label, projectLabel, projectRev);
+    } catch (error) {
+      throw error;
+    }
   }
 }

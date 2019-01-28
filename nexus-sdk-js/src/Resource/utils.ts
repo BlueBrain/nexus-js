@@ -1,11 +1,14 @@
-import { PaginationSettings, PaginatedList } from '..';
-import Resource, {
-  ListResourceResponse,
-  ResourceResponse,
-  ResourceResponseCommon,
-} from '.';
+import { PaginatedList } from '..';
+import Resource from '.';
 import { httpGet, httpPut, httpPost, httpDelete } from '../utils/http';
-import { CreateResourcePayload, ResourceListTagResponse } from './types';
+import {
+  CreateResourcePayload,
+  ResourceListTagResponse,
+  ListResourceOptions,
+  ResourceResponse,
+  ListResourceResponse,
+  ResourceResponseCommon,
+} from './types';
 
 export async function getSelfResource(
   selfUrl: string,
@@ -47,12 +50,12 @@ export async function getResource(
 export async function listResources(
   orgLabel: string,
   projectLabel: string,
-  pagination?: PaginationSettings,
+  options?: ListResourceOptions,
 ): Promise<PaginatedList<Resource>> {
   try {
     const projectResourceURL = `/resources/${orgLabel}/${projectLabel}`;
-    const requestURL = pagination
-      ? `${projectResourceURL}?from=${pagination.from}&size=${pagination.size}`
+    const requestURL = options
+      ? `${projectResourceURL}?from=${options.from}&size=${options.size}`
       : projectResourceURL;
 
     const listResourceResponses: ListResourceResponse = await httpGet(
@@ -60,6 +63,7 @@ export async function listResources(
     );
 
     const total: number = listResourceResponses._total;
+    const index: number = (options && options.from) || 1;
     const results: Resource[] = listResourceResponses._results.map(
       (commonResponse: ResourceResponseCommon) =>
         new Resource(orgLabel, projectLabel, {
@@ -70,6 +74,7 @@ export async function listResources(
 
     return {
       total,
+      index,
       results,
     };
   } catch (error) {

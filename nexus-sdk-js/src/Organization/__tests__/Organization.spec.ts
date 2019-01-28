@@ -87,10 +87,6 @@ describe('Organization class', () => {
         JSON.stringify({ description: 'my new description' }),
       );
     });
-    it('call with revision 1 by default', async () => {
-      updateOrganization('myorg', undefined, {});
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=1`);
-    });
   });
 
   describe('deprecate an org', () => {

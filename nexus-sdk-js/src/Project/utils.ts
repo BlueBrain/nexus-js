@@ -1,10 +1,13 @@
-import Project, {
+import Project from '.';
+import { httpGet, httpPut, httpDelete } from '../utils/http';
+import {
+  CreateProjectPayload,
+  ListProjectOptions,
   ProjectResponse,
   ListProjectsResponse,
   ProjectResponseCommon,
-} from '.';
-import { httpGet, httpPut, httpDelete } from '../utils/http';
-import { CreateProjectPayload, ListProjectOptions } from './types';
+} from './types';
+import { PaginatedList } from '../utils/types';
 
 /**
  *
@@ -38,7 +41,7 @@ export async function getProject(
 export async function listProjects(
   orgLabel: string,
   options?: ListProjectOptions,
-): Promise<Project[]> {
+): Promise<PaginatedList<Project>> {
   let ops = '';
   if (options) {
     ops = Object.keys(options).reduce(
@@ -54,7 +57,11 @@ export async function listProjects(
       `/projects/${orgLabel}${ops}`,
     );
     if (listProjectResponse.code || !listProjectResponse._results) {
-      return [];
+      return {
+        total: 0,
+        index: 0,
+        results: [],
+      };
     }
     const projects: Project[] = listProjectResponse._results.map(
       (commonResponse: ProjectResponseCommon) =>
@@ -63,7 +70,11 @@ export async function listProjects(
           '@context': listProjectResponse['@context'],
         }),
     );
-    return projects;
+    return {
+      total: listProjectResponse._total,
+      index: (options && options.from) || 1,
+      results: projects,
+    };
   } catch (error) {
     throw new Error(error);
   }
@@ -105,7 +116,7 @@ export async function updateProject(
 export async function deprecateProject(
   orgLabel: string,
   projectLabel: string,
-  rev: number = 1,
+  rev: number,
 ): Promise<Project> {
   try {
     const projectResponse: ProjectResponse = await httpDelete(

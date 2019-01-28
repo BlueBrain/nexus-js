@@ -1,11 +1,14 @@
-import Organization, {
+import Organization from '.';
+import {
+  ListOrgOptions,
+  CreateOrgPayload,
   OrgResponse,
   ListOrgResponse,
   OrgResponseCommon,
-} from '.';
-import { ListOrgOptions, CreateOrgPayload } from './types';
+} from './types';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
+import { PaginatedList } from '../utils/types';
 
 /**
  *
@@ -54,7 +57,7 @@ export async function getOrganization(
 
 export async function listOrganizations(
   options?: ListOrgOptions,
-): Promise<Organization[]> {
+): Promise<PaginatedList<Organization>> {
   let ops = '';
   if (options) {
     ops = Object.keys(options).reduce(
@@ -68,7 +71,11 @@ export async function listOrganizations(
   try {
     const listOrgResponse: ListOrgResponse = await httpGet(`/orgs${ops}`);
     if (listOrgResponse.code || !listOrgResponse._results) {
-      return [];
+      return {
+        total: 0,
+        index: 0,
+        results: [],
+      };
     }
 
     const orgs: Organization[] = listOrgResponse._results.map(
@@ -79,7 +86,11 @@ export async function listOrganizations(
         }),
     );
 
-    return orgs;
+    return {
+      total: listOrgResponse._total,
+      index: (options && options.from) || 1,
+      results: orgs,
+    };
   } catch (error) {
     throw new Error(error);
   }
@@ -93,7 +104,7 @@ export async function listOrganizations(
  */
 export async function updateOrganization(
   orgLabel: string,
-  rev: number = 1,
+  rev: number,
   orgPayload: CreateOrgPayload,
 ): Promise<Organization> {
   try {
@@ -114,7 +125,7 @@ export async function updateOrganization(
  */
 export async function deprecateOrganization(
   orgLabel: string,
-  rev: number = 1,
+  rev: number,
 ): Promise<Organization> {
   try {
     const orgResponse: OrgResponse = await httpDelete(

@@ -1,6 +1,7 @@
 import store from './store';
 import Organization from './Organization';
-import { CreateOrgPayload } from './Organization/types';
+import { CreateOrgPayload, ListOrgOptions } from './Organization/types';
+import { PaginatedList } from './utils/types';
 
 type NexusConfig = {
   environment?: string;
@@ -45,18 +46,51 @@ export default class Nexus {
     }
   }
 
-  async listOrganizations(): Promise<Organization[]> {
-    return Organization.list();
+  async getOrganization(label: string): Promise<Organization> {
+    return Organization.get(label);
   }
 
-  async getOrganization(name: string): Promise<Organization> {
-    return Organization.get(name);
+  async listOrganizations(
+    listOrgOptions?: ListOrgOptions,
+  ): Promise<PaginatedList<Organization>> {
+    try {
+      return Organization.list(listOrgOptions);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async createOrganization(
     label: string,
     orgPayload?: CreateOrgPayload,
   ): Promise<Organization> {
-    return Organization.create(label, orgPayload);
+    try {
+      return Organization.create(label, orgPayload);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateOrganization(
+    label: string,
+    rev: number,
+    orgPayload: CreateOrgPayload,
+  ): Promise<Organization> {
+    try {
+      return Organization.update(label, rev, orgPayload);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deprecateOrganization(
+    label: string,
+    rev: number,
+  ): Promise<Organization> {
+    try {
+      return Organization.deprecate(label, rev);
+    } catch (error) {
+      throw error;
+    }
   }
 }

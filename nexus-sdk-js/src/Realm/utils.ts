@@ -45,6 +45,7 @@ export async function listRealms(
 
     return {
       total: listRealmResponse._total,
+      index: (listRealmOptions && listRealmOptions.from) || 1,
       results: realms,
     };
   } catch (error) {

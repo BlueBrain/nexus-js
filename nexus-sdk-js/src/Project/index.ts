@@ -1,5 +1,4 @@
-import Resource, { ListResourceResponse } from '../Resource';
-import { httpGet } from '../utils/http';
+import Resource from '../Resource';
 import { PaginationSettings, PaginatedList } from '../utils/types';
 import View from '../View';
 import ElasticSearchView from '../View/ElasticSearchView';
@@ -11,39 +10,12 @@ import {
   deprecateProject,
   updateProject,
 } from './utils';
-import { ApiMapping, Context } from './types';
-
-export interface ProjectResponseCommon {
-  '@id': string;
-  '@type': string;
-  base: string;
-  vocab: string;
-  apiMappings: ApiMapping[];
-  _label: string;
-  _organizationLabel: string;
-  _organizationUuid: string;
-  _uuid: string;
-  _rev: number;
-  _deprecated: boolean;
-  _createdAt: string;
-  _createdBy: string;
-  _updatedAt: string;
-  _updatedBy: string;
-  description?: string;
-}
-
-export interface ListProjectsResponse {
-  _total: number;
-  _links?: any;
-  _results?: ProjectResponse[];
-  '@context'?: Context;
-  code?: string;
-  message?: string;
-}
-
-export interface ProjectResponse extends ProjectResponseCommon {
-  '@context'?: Context;
-}
+import {
+  ApiMapping,
+  Context,
+  CreateProjectPayload,
+  ProjectResponse,
+} from './types';
 
 export default class Project {
   context?: Context;
@@ -88,6 +60,27 @@ export default class Project {
     this.updatedAt = projectResponse._updatedAt;
     this.updatedBy = projectResponse._updatedBy;
     this.description = projectResponse.description;
+  }
+
+  async update(projectPayload: CreateProjectPayload): Promise<Project> {
+    try {
+      return Project.update(
+        this.orgLabel,
+        this.label,
+        this.rev,
+        projectPayload,
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deprecate(): Promise<Project> {
+    try {
+      return Project.deprecate(this.orgLabel, this.label, this.rev);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async listResources(

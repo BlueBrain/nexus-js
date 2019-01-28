@@ -1,10 +1,11 @@
-import { httpGet } from '../utils/http';
+import { httpGet, httpPut, httpDelete } from '../utils/http';
 import Realm from '.';
 import {
   RealmResponse,
   ListRealmOptions,
   ListRealmResponse,
   RealmResponseCommon,
+  CreateRealmPayload,
 } from './types';
 import { PaginatedList, DEFAULT_LIST_SIZE } from '../utils/types';
 
@@ -52,6 +53,48 @@ export async function listRealms(
     throw error;
   }
 }
-export async function createRealm() {}
-export async function updateRealm() {}
-export async function deprecateRealm() {}
+
+export async function createRealm(
+  realmLabel: string,
+  realmPayload: CreateRealmPayload,
+): Promise<Realm> {
+  try {
+    const realmResponse: RealmResponse = await httpPut(
+      `/realms/${realmLabel}`,
+      realmPayload,
+    );
+    return new Realm(realmResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateRealm(
+  realmLabel: string,
+  rev: number,
+  realmPayload: CreateRealmPayload,
+): Promise<Realm> {
+  try {
+    const realmResponse: RealmResponse = await httpPut(
+      `/realms/${realmLabel}?rev=${rev}`,
+      realmPayload,
+    );
+    return new Realm(realmResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deprecateRealm(
+  realmLabel: string,
+  rev: number,
+): Promise<Realm> {
+  try {
+    const realmResponse: RealmResponse = await httpDelete(
+      `/realms/${realmLabel}?rev=${rev}`,
+    );
+    return new Realm(realmResponse);
+  } catch (error) {
+    throw error;
+  }
+}

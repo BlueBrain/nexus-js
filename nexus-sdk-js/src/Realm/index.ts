@@ -1,5 +1,12 @@
-import { RealmResponse } from './types';
-import { getRealm, listRealms } from './utils';
+import { RealmResponse, CreateRealmPayload } from './types';
+import {
+  getRealm,
+  listRealms,
+  createRealm,
+  updateRealm,
+  deprecateRealm,
+} from './utils';
+import { CreateOrgPayload } from '../Organization/types';
 
 export default class Realm {
   context?: string | string[];
@@ -12,7 +19,7 @@ export default class Realm {
   authorizationEndpoint: string;
   tokenEndpoint: string;
   userInfoEndpoint: string;
-  endSessionEnpoint: string;
+  endSessionEndpoint: string;
   createdAt: string;
   createdBy: string;
   updatedAt: string;
@@ -22,6 +29,9 @@ export default class Realm {
 
   static get = getRealm;
   static list = listRealms;
+  static create = createRealm;
+  static update = updateRealm;
+  static deprecate = deprecateRealm;
 
   constructor(realmResponse: RealmResponse) {
     this.context = realmResponse['@context'];
@@ -34,12 +44,28 @@ export default class Realm {
     this.authorizationEndpoint = realmResponse._authorizationEndpoint;
     this.tokenEndpoint = realmResponse._tokenEndpoint;
     this.userInfoEndpoint = realmResponse._userInfoEndpoint;
-    this.endSessionEnpoint = realmResponse._endSessionEndpoint;
+    this.endSessionEndpoint = realmResponse._endSessionEndpoint;
     this.createdAt = realmResponse._createdAt;
     this.createdBy = realmResponse._createdBy;
     this.updatedAt = realmResponse._updatedAt;
     this.updatedBy = realmResponse._updatedBy;
     this.rev = realmResponse._rev;
     this.deprecated = realmResponse._deprecated;
+  }
+
+  async update(payload: CreateRealmPayload): Promise<Realm> {
+    try {
+      return Realm.update(this.label, this.rev, payload);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deprecate(): Promise<Realm> {
+    try {
+      return Realm.deprecate(this.label, this.rev);
+    } catch (error) {
+      throw error;
+    }
   }
 }

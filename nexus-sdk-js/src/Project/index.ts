@@ -9,6 +9,7 @@ import {
   createProject,
   deprecateProject,
   updateProject,
+  subscribe,
 } from './utils';
 import {
   ApiMapping,
@@ -41,6 +42,7 @@ export default class Project {
   static create = createProject;
   static update = updateProject;
   static deprecate = deprecateProject;
+  static subscribe = subscribe;
 
   constructor(projectResponse: ProjectResponse) {
     this.context = projectResponse['@context'];

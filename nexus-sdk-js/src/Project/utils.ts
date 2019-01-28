@@ -6,8 +6,10 @@ import {
   ProjectResponse,
   ListProjectsResponse,
   ProjectResponseCommon,
+  ProjectEventListeners,
 } from './types';
 import { PaginatedList } from '../utils/types';
+import { getEventSource } from '../utils/events';
 
 /**
  *
@@ -126,4 +128,18 @@ export async function deprecateProject(
   } catch (error) {
     throw new Error(error);
   }
+}
+
+export function subscribe(listeners: ProjectEventListeners): EventSource {
+  const event = getEventSource('/projects/event');
+  // set event listeners
+  listeners.onOpen && (event.onopen = listeners.onOpen);
+  listeners.onError && (event.onerror = listeners.onError);
+  listeners.onProjectCreated &&
+    event.addEventListener('ProjectCreated', listeners.onProjectCreated);
+  listeners.onProjectUpdated &&
+    event.addEventListener('ProjectUpdated', listeners.onProjectUpdated);
+  listeners.onProjectDeprecated &&
+    event.addEventListener('ProjectDeprecated', listeners.onProjectDeprecated);
+  return event;
 }

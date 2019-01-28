@@ -51,3 +51,32 @@ export interface ListProjectOptions {
 }
 
 export type Context = string | string[];
+
+export type ProjectEventType =
+  | 'ProjectCreated'
+  | 'ProjectUpdated'
+  | 'ProjectDeprecated';
+
+export interface ProjectEvent {
+  '@type': ProjectEventType;
+  _label: string;
+  _uuid: string;
+}
+
+export interface ProjectCreatedEvent extends ProjectEvent {
+  '@type': 'ProjectCreated';
+}
+export interface ProjectUpdatedEvent extends ProjectEvent {
+  '@type': 'ProjectCreated';
+}
+export interface ProjectDeprecatedEvent extends ProjectEvent {
+  '@type': 'ProjectCreated';
+}
+
+export interface ProjectEventListeners {
+  onOpen?(): void;
+  onError?(): void;
+  onProjectCreated?(): ProjectCreatedEvent;
+  onProjectUpdated?(): ProjectUpdatedEvent;
+  onProjectDeprecated?(): ProjectDeprecatedEvent;
+}

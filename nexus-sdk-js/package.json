@@ -31,6 +31,7 @@
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
+    "@types/eventsource": "^1.1.0",
     "@types/jest": "^23.3.5",
     "@types/node-fetch": "^2.1.4",
     "eslint": "^5.6.0",
@@ -78,6 +79,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "cross-fetch": "^3.0.0"
+    "cross-fetch": "^3.0.0",
+    "eventsource": "^1.0.7"
   }
 }

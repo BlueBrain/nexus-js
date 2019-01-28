@@ -22,9 +22,9 @@ describe('Realm utils', () => {
       resetMocks();
     });
 
-    it('should make a GET request using the realmLabel and rev=1', async () => {
+    it('should make a GET request using the realmLabel', async () => {
       await getRealm('myrealm');
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/realms/myrealm?rev=1`);
+      expect(mock.calls[0][0]).toEqual(`${baseUrl}/realms/myrealm`);
     });
     it('should make a GET request using the realmLabel and specific rev', async () => {
       await getRealm('myrealm', 12);

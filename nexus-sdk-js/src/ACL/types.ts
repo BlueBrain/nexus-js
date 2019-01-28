@@ -34,3 +34,5 @@ export interface ListACLResponse {
   _total: number;
   _results: ACLResponseCommon[];
 }
+
+export interface ListRealmOption {}

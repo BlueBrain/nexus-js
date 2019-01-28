@@ -11,11 +11,12 @@ import { PaginatedList, DEFAULT_LIST_SIZE } from '../utils/types';
 
 export async function getRealm(
   realmLabel: string,
-  rev: number = 1,
+  rev?: number,
 ): Promise<Realm> {
+  const ops = rev ? `?rev=${rev}` : '';
   try {
     const realmResponse: RealmResponse = await httpGet(
-      `/realms/${realmLabel}?rev=${rev}`,
+      `/realms/${realmLabel}${ops}`,
     );
     return new Realm(realmResponse);
   } catch (error) {

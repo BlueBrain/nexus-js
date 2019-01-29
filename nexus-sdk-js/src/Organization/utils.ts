@@ -5,10 +5,16 @@ import {
   OrgResponse,
   ListOrgResponse,
   OrgResponseCommon,
+  OrgCreatedEvent,
+  OrgUpdatedEvent,
+  OrgDeprecatedEvent,
+  OrgEventListeners,
+  OrgEventType,
 } from './types';
 import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 import { PaginatedList } from '../utils/types';
+import { getEventSource, parseMessageEventData } from '../utils/events';
 
 /**
  *
@@ -135,4 +141,33 @@ export async function deprecateOrganization(
   } catch (error) {
     throw new Error(error);
   }
+}
+
+export function subscribe(listeners: OrgEventListeners): EventSource {
+  const event: EventSource = getEventSource('/orgs/events');
+  //
+  // set event listeners
+  //
+  listeners.onOpen && (event.onopen = listeners.onOpen);
+  listeners.onError && (event.onerror = listeners.onError);
+  listeners.onOrgCreated &&
+    event.addEventListener(OrgEventType.OrgCreated, (event: Event) =>
+      parseMessageEventData<OrgCreatedEvent>(event as MessageEvent)(
+        listeners.onOrgCreated,
+      ),
+    );
+  listeners.onOrgUpdated &&
+    event.addEventListener(OrgEventType.OrgUpdated, (event: Event) =>
+      parseMessageEventData<OrgUpdatedEvent>(event as MessageEvent)(
+        listeners.onOrgUpdated,
+      ),
+    );
+  listeners.onOrgDeprecated &&
+    event.addEventListener(OrgEventType.OrgDeprecated, (event: Event) =>
+      parseMessageEventData<OrgDeprecatedEvent>(event as MessageEvent)(
+        listeners.onOrgDeprecated,
+      ),
+    );
+
+  return event;
 }

@@ -11,6 +11,7 @@ import {
   ProjectCreatedEvent,
   ProjectUpdatedEvent,
   ProjectDeprecatedEvent,
+  ProjectEventType,
 } from './types';
 import { PaginatedList } from '../utils/types';
 import { getEventSource, parseMessageEventData } from '../utils/events';
@@ -142,19 +143,19 @@ export function subscribe(listeners: ProjectEventListeners): EventSource {
   listeners.onOpen && (event.onopen = listeners.onOpen);
   listeners.onError && (event.onerror = listeners.onError);
   listeners.onProjectCreated &&
-    event.addEventListener('ProjectCreated', (event: Event) =>
+    event.addEventListener(ProjectEventType.ProjectCreated, (event: Event) =>
       parseMessageEventData<ProjectCreatedEvent>(event as MessageEvent)(
         listeners.onProjectCreated,
       ),
     );
   listeners.onProjectUpdated &&
-    event.addEventListener('ProjectUpdated', (event: Event) =>
+    event.addEventListener(ProjectEventType.ProjectUpdated, (event: Event) =>
       parseMessageEventData<ProjectUpdatedEvent>(event as MessageEvent)(
         listeners.onProjectUpdated,
       ),
     );
   listeners.onProjectDeprecated &&
-    event.addEventListener('ProjectDeprecated', (event: Event) =>
+    event.addEventListener(ProjectEventType.ProjectDeprecated, (event: Event) =>
       parseMessageEventData<ProjectDeprecatedEvent>(event as MessageEvent)(
         listeners.onProjectDeprecated,
       ),

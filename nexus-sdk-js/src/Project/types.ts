@@ -52,10 +52,11 @@ export interface ListProjectOptions {
 
 export type Context = string | string[];
 
-export type ProjectEventType =
-  | 'ProjectCreated'
-  | 'ProjectUpdated'
-  | 'ProjectDeprecated';
+export enum ProjectEventType {
+  ProjectCreated = 'ProjectCreated',
+  ProjectUpdated = 'ProjectUpdated',
+  ProjectDeprecated = 'ProjectDeprecated',
+}
 
 export interface ProjectEvent {
   '@context': Context;
@@ -72,13 +73,13 @@ export interface ProjectEvent {
 }
 
 export interface ProjectCreatedEvent extends ProjectEvent {
-  '@type': 'ProjectCreated';
+  '@type': ProjectEventType.ProjectCreated;
 }
 export interface ProjectUpdatedEvent extends ProjectEvent {
-  '@type': 'ProjectCreated';
+  '@type': ProjectEventType.ProjectCreated;
 }
 export interface ProjectDeprecatedEvent extends ProjectEvent {
-  '@type': 'ProjectCreated';
+  '@type': ProjectEventType.ProjectCreated;
 }
 
 export interface ProjectEventListeners {

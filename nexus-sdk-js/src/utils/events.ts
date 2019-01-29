@@ -1,6 +1,6 @@
+// @ts-ignore
+import EventSource = require('eventsource');
 import store from '../store';
-// tslint:disable-next-line:variable-name
-// const EventSource = require('eventsource');
 
 // TODO: speak to backend to figure out token
 const getHeaders = (): EventSourceInit => {

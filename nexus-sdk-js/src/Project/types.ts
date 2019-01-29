@@ -58,8 +58,16 @@ export type ProjectEventType =
   | 'ProjectDeprecated';
 
 export interface ProjectEvent {
+  '@context': Context;
   '@type': ProjectEventType;
+  apiMappings: ApiMapping[];
+  base: string;
+  description: string;
+  vocab: string;
+  _instant: string;
   _label: string;
+  _rev: number;
+  _subject: string;
   _uuid: string;
 }
 
@@ -76,7 +84,7 @@ export interface ProjectDeprecatedEvent extends ProjectEvent {
 export interface ProjectEventListeners {
   onOpen?(): void;
   onError?(): void;
-  onProjectCreated?(): ProjectCreatedEvent;
-  onProjectUpdated?(): ProjectUpdatedEvent;
-  onProjectDeprecated?(): ProjectDeprecatedEvent;
+  onProjectCreated?(event: ProjectCreatedEvent): void;
+  onProjectUpdated?(event: ProjectUpdatedEvent): void;
+  onProjectDeprecated?(event: ProjectDeprecatedEvent): void;
 }

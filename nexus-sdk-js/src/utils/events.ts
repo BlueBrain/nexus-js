@@ -1,20 +1,23 @@
 import store from '../store';
-const EventSource = require('eventsource');
+// tslint:disable-next-line:variable-name
+// const EventSource = require('eventsource');
 
 // TODO: speak to backend to figure out token
-const getHeaders = () => {
+const getHeaders = (): EventSourceInit => {
   const {
     auth: { accessToken },
   } = store.getState();
   let extraHeaders = {};
   if (accessToken) {
     extraHeaders = {
-      Authorization: `Bearer ${accessToken}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     };
   }
   return {
-    ...extraHeaders,
     withCredentials: true,
+    ...extraHeaders,
   };
 };
 
@@ -24,3 +27,9 @@ export function getEventSource(url: string): EventSource {
   } = store.getState();
   return new EventSource(baseUrl + url, getHeaders());
 }
+
+export const parseMessageEventData = <T>(
+  event: MessageEvent,
+): ((callback?: ((data: T) => void)) => void) => (
+  callback?: ((data: T) => void),
+): void => callback && callback(JSON.parse(event.data));

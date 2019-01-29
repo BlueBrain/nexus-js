@@ -7,9 +7,13 @@ import {
   ListProjectsResponse,
   ProjectResponseCommon,
   ProjectEventListeners,
+  ProjectEvent,
+  ProjectCreatedEvent,
+  ProjectUpdatedEvent,
+  ProjectDeprecatedEvent,
 } from './types';
 import { PaginatedList } from '../utils/types';
-import { getEventSource } from '../utils/events';
+import { getEventSource, parseMessageEventData } from '../utils/events';
 
 /**
  *
@@ -131,15 +135,30 @@ export async function deprecateProject(
 }
 
 export function subscribe(listeners: ProjectEventListeners): EventSource {
-  const event = getEventSource('/projects/event');
+  const event: EventSource = getEventSource('/projects/events');
+  //
   // set event listeners
+  //
   listeners.onOpen && (event.onopen = listeners.onOpen);
   listeners.onError && (event.onerror = listeners.onError);
   listeners.onProjectCreated &&
-    event.addEventListener('ProjectCreated', listeners.onProjectCreated);
+    event.addEventListener('ProjectCreated', (event: Event) =>
+      parseMessageEventData<ProjectCreatedEvent>(event as MessageEvent)(
+        listeners.onProjectCreated,
+      ),
+    );
   listeners.onProjectUpdated &&
-    event.addEventListener('ProjectUpdated', listeners.onProjectUpdated);
+    event.addEventListener('ProjectUpdated', (event: Event) =>
+      parseMessageEventData<ProjectUpdatedEvent>(event as MessageEvent)(
+        listeners.onProjectUpdated,
+      ),
+    );
   listeners.onProjectDeprecated &&
-    event.addEventListener('ProjectDeprecated', listeners.onProjectDeprecated);
+    event.addEventListener('ProjectDeprecated', (event: Event) =>
+      parseMessageEventData<ProjectDeprecatedEvent>(event as MessageEvent)(
+        listeners.onProjectDeprecated,
+      ),
+    );
+
   return event;
 }

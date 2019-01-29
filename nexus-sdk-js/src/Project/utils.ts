@@ -6,8 +6,17 @@ import {
   ProjectResponse,
   ListProjectsResponse,
   ProjectResponseCommon,
+  ProjectEventListeners,
+  ProjectEvent,
+  ProjectCreatedEvent,
+  ProjectUpdatedEvent,
+  ProjectDeprecatedEvent,
+  ProjectEventType,
 } from './types';
 import { PaginatedList } from '../utils/types';
+import { getEventSource, parseMessageEventData } from '../utils/events';
+// @ts-ignore
+import EventSource = require('eventsource');
 
 /**
  *
@@ -126,4 +135,32 @@ export async function deprecateProject(
   } catch (error) {
     throw new Error(error);
   }
+}
+
+export function subscribe(listeners: ProjectEventListeners): EventSource {
+  const event: EventSource = getEventSource('/projects/events');
+
+  // set event listeners
+  listeners.onOpen && (event.onopen = listeners.onOpen);
+  listeners.onError && (event.onerror = listeners.onError);
+  listeners.onProjectCreated &&
+    event.addEventListener(ProjectEventType.ProjectCreated, (event: Event) =>
+      parseMessageEventData<ProjectCreatedEvent>(event as MessageEvent)(
+        listeners.onProjectCreated,
+      ),
+    );
+  listeners.onProjectUpdated &&
+    event.addEventListener(ProjectEventType.ProjectUpdated, (event: Event) =>
+      parseMessageEventData<ProjectUpdatedEvent>(event as MessageEvent)(
+        listeners.onProjectUpdated,
+      ),
+    );
+  listeners.onProjectDeprecated &&
+    event.addEventListener(ProjectEventType.ProjectDeprecated, (event: Event) =>
+      parseMessageEventData<ProjectDeprecatedEvent>(event as MessageEvent)(
+        listeners.onProjectDeprecated,
+      ),
+    );
+
+  return event;
 }

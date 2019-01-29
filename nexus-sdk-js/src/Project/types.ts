@@ -51,3 +51,41 @@ export interface ListProjectOptions {
 }
 
 export type Context = string | string[];
+
+export enum ProjectEventType {
+  ProjectCreated = 'ProjectCreated',
+  ProjectUpdated = 'ProjectUpdated',
+  ProjectDeprecated = 'ProjectDeprecated',
+}
+
+export interface ProjectEvent {
+  '@context': Context;
+  '@type': ProjectEventType;
+  apiMappings: ApiMapping[];
+  base: string;
+  description: string;
+  vocab: string;
+  _instant: string;
+  _label: string;
+  _rev: number;
+  _subject: string;
+  _uuid: string;
+}
+
+export interface ProjectCreatedEvent extends ProjectEvent {
+  '@type': ProjectEventType.ProjectCreated;
+}
+export interface ProjectUpdatedEvent extends ProjectEvent {
+  '@type': ProjectEventType.ProjectCreated;
+}
+export interface ProjectDeprecatedEvent extends ProjectEvent {
+  '@type': ProjectEventType.ProjectCreated;
+}
+
+export interface ProjectEventListeners {
+  onOpen?(): void;
+  onError?(): void;
+  onProjectCreated?(event: ProjectCreatedEvent): void;
+  onProjectUpdated?(event: ProjectUpdatedEvent): void;
+  onProjectDeprecated?(event: ProjectDeprecatedEvent): void;
+}

@@ -5,6 +5,7 @@ import {
   listOrganizations,
   deprecateOrganization,
   updateOrganization,
+  subscribe,
 } from './utils';
 import { Context, CreateOrgPayload, OrgResponse } from './types';
 import { ListProjectOptions, CreateProjectPayload } from '../Project/types';
@@ -31,6 +32,7 @@ export default class Organization {
   static create = createOrganization;
   static update = updateOrganization;
   static deprecate = deprecateOrganization;
+  static subscribe = subscribe;
 
   constructor(organizationResponse: OrgResponse) {
     this.context = organizationResponse['@context'];

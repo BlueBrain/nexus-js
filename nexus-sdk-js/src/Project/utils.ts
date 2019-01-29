@@ -15,6 +15,8 @@ import {
 } from './types';
 import { PaginatedList } from '../utils/types';
 import { getEventSource, parseMessageEventData } from '../utils/events';
+// @ts-ignore
+import EventSource = require('eventsource');
 
 /**
  *
@@ -137,9 +139,8 @@ export async function deprecateProject(
 
 export function subscribe(listeners: ProjectEventListeners): EventSource {
   const event: EventSource = getEventSource('/projects/events');
-  //
+
   // set event listeners
-  //
   listeners.onOpen && (event.onopen = listeners.onOpen);
   listeners.onError && (event.onerror = listeners.onError);
   listeners.onProjectCreated &&

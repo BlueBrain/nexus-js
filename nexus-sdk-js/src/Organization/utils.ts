@@ -15,6 +15,8 @@ import { httpPut, httpGet, httpDelete } from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 import { PaginatedList } from '../utils/types';
 import { getEventSource, parseMessageEventData } from '../utils/events';
+// @ts-ignore
+import EventSource = require('eventsource');
 
 /**
  *
@@ -145,9 +147,8 @@ export async function deprecateOrganization(
 
 export function subscribe(listeners: OrgEventListeners): EventSource {
   const event: EventSource = getEventSource('/orgs/events');
-  //
+
   // set event listeners
-  //
   listeners.onOpen && (event.onopen = listeners.onOpen);
   listeners.onError && (event.onerror = listeners.onError);
   listeners.onOrgCreated &&

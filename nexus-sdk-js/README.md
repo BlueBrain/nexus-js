@@ -16,32 +16,34 @@ Pre-alpha
 
 #### Organizations
 
-- [x] Get by label
-- [x] List Orgs // blocked, needs re-factor
+- [x] Get
+- [x] List
 - [x] Create
 - [x] Update
-- [x] Delete
+- [x] Deprecate
+- [x] Events
 
 #### Projects
 
-- [x] Get by label
-- [x] List Projects
+- [x] Get
+- [x] List
 - [x] Create
 - [x] Update
-- [x] Delete
+- [x] Deprecate
+- [x] Events
 
 #### Resources
 
-- [x] Get by <schema ID, resource ID>
-- [x] Get by self URL
-- [ ] Create
+- [x] Get
+- [x] List
+- [x] Create
 - [x] Update
-- [ ] Delete
+- [x] Deprecate
 
 #### Views
 
-- [x] Get by id
-- [x] List Views
+- [x] Get
+- [x] List
 - [ ] Create
 - [ ] Update
 - [ ] Delete
@@ -49,7 +51,7 @@ Pre-alpha
 #### ElasticSearch views
 
 - [x] Get default view for a Project
-- [x] Get by id
+- [x] Get
 - [ ] Create
 - [ ] Update
 - [ ] Delete
@@ -76,6 +78,12 @@ Pre-alpha
 
 #### Realms
 
+- [x] Get
+- [x] List
+- [x] Create
+- [x] Update
+- [x] Deprecate
+
 ## Getting started
 
 ### Installation
@@ -98,49 +106,71 @@ const { Nexus } = nexusSdk; // global name is window.nexusSdk
 ## Documentation
 
 ```typescript
-// Create a Nexus instance (config is optional)
-const nexus: Nexus = new Nexus({
-  environment: 'http://api.url',
-  token: 'my_bearer_token',
-});
-
-// You can also setup your Nexus config with the static methods
+// You can setup your Nexus config with the static methods
 Nexus.setEnvironment('http://api.url');
 Nexus.setToken('my_bearer_token');
 Nexus.removeToken();
+```
 
-// List all organisations
-const orgs: Organization[] = await nexus.listOrganizations();
+### Organizations
+
+```typescript
+// List organisations
+const orgs: PaginatedList<Organization> = await Organization.list({
+  from: 1,
+  size: 100,
+});
 
 // Get a specific organisation
-const myOrg: Organization = await nexus.getOrganization('my-org');
+const myOrg: Organization = await Organization.get('my-org');
 
 // Create an Organisation
-const myNewOrg = await nexus.createOrganization('myorglabel', 'MyOrgName');
+const myNewOrg = await Organization.create(
+  'myorglabel',
+  'my organization description',
+);
+```
 
+### Projects
+
+```typescript
 // List all the projects that belong to an organisation
 const projects: Project[] = await myOrg.listProjects();
 
 // Get a specific project
 const myProject: Project = await myOrg.getProject('my-project');
+```
 
+### Resources
+
+```typescript
 // List all the resources that belong to a project
 const resources: PaginatedList<Resource> = await myProject.listResources(pagination?: PaginationSettings);
 
 // Get a specific resource
 const myResource: Resource = await myProject.getResource('schema-id', 'my-resource-id');
+```
 
+### Views
+
+```typescript
 // Fetch all View instances in a Project
 const myViews: (ElasticSearchView | SparqlView)[] = await myProject.listViews();
 
 // Fetch a view by ID
-const myViewById: ElasticSearchView | SparqlView = await myProject.getView('my-view-id');
+const myViewById: ElasticSearchView | SparqlView = await myProject.getView(
+  'my-view-id',
+);
 
 // Fetch an ElasticSearch view by ID (for user-defined views)
-const myElasticSearchView: ElasticSearchView = await myProject.getElasticSearchView('my-view-id');
+const myElasticSearchView: ElasticSearchView = await myProject.getElasticSearchView(
+  'my-view-id',
+);
 
 // Query an ElasticSearch view and retrieve raw results as returned by ElasticSearch
-const rawResults: PaginatedList<ElasticSearchHit> = await myElasticSearchView.rawQuery({});
+const rawResults: PaginatedList<
+  ElasticSearchHit
+> = await myElasticSearchView.rawQuery({});
 
 // Fetch the default ElasticSearch view for a project
 const myView: ElasticSearchView = await myProject.getElasticSearchView();
@@ -150,17 +180,23 @@ const searchAll: PaginatedList<Resource> = await myView.query({});
 
 // ESView Query Convenience Method
 // Filter a project by Type (using AND)
-const filteredByType: PaginatedList<Resource> = await myView.filterByTypes(["someType"])
+const filteredByType: PaginatedList<Resource> = await myView.filterByTypes([
+  'someType',
+]);
 
 // ESView Query Convenience Method
 // Filter a project by resources matching a schema ("_constrainedBy")
-const filteredByConstrainedBy: PaginatedList<Resource> = await myView.filterByConstrainedBy("someSchema")
+const filteredByConstrainedBy: PaginatedList<
+  Resource
+> = await myView.filterByConstrainedBy('someSchema');
 
 // Fetch the Sparql View instance on a Project
 const sparqlView: SparqlView = await myProject.getSparqlView();
 
 // Query a Project with Sparql
-const response: SparqlQueryViewResponse = sparqlView.query('SELECT * where {?s ?p ?o} LIMIT 50');
+const response: SparqlQueryViewResponse = sparqlView.query(
+  'SELECT * where {?s ?p ?o} LIMIT 50',
+);
 ```
 
 Each class also has static methods wrapping and reflecting the API endpoints. For example:

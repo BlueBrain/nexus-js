@@ -116,19 +116,19 @@ Nexus.removeToken();
 
 ```typescript
 // List organisations
-const orgs: PaginatedList<Organization> = await Organization.list({
+const paginatedOrgs: PaginatedList<Organization> = await Organization.list({
   from: 1,
   size: 100,
-});
+}); // returns { index: 1, size: 100, result: Organization[] }
 
 // Get a specific organisation
-const myOrg: Organization = await Organization.get('my-org');
-
-// Create an Organisation
-const myNewOrg = await Organization.create(
-  'myorglabel',
-  'my organization description',
-);
+Organization.get(orgLabel: string) : Organization;
+// Create an org
+Organization.create(orgLabel: string, orgDescription: string) : Organization;
+// Update an org
+Organization.update(orgLabel: string, orgRev: number, orgPayload: CreateOrgPayload): Organization;
+// Deprecate an org
+const myOrg: Organization = Organization.deprecate('myorglabel', 2);
 ```
 
 ### Projects

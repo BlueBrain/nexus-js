@@ -26,7 +26,7 @@ describe('Organization class', () => {
       resetMocks();
     });
     it('set the rev option', async () => {
-      await getOrganization('myorg', { revision: 12 });
+      await getOrganization('myorg', { rev: 12 });
       expect(mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=12`);
     });
   });

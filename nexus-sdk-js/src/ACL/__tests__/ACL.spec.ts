@@ -1,8 +1,11 @@
 import Nexus from '../../Nexus';
 import { resetMocks, mockResponse, mock } from 'jest-fetch-mock';
-import { mockACLResponse } from '../__mocks__/mockResponses';
+import {
+  mockACLResponse,
+  mockListACLResponse,
+} from '../__mocks__/mockResponses';
 import ACL from '..';
-import { getACL } from '../utils';
+import { getACL, listACL } from '../utils';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
@@ -22,14 +25,16 @@ describe('ACL utils', () => {
   describe('utils()', () => {
     describe('getAcl()', () => {
       beforeEach(() => {
-        mockResponse('{}');
+        mockResponse(JSON.stringify(mockACLResponse));
       });
       afterEach(() => {
         resetMocks();
       });
-      it('should make a GET request', async () => {
-        await getACL('myorg');
+      it('should make a GET request and return an ACL', async () => {
+        const acl = await getACL('myorg');
         expect(mock.calls[0][0]).toEqual(`${baseUrl}/acls/myorg`);
+        expect(acl).toBeInstanceOf(ACL);
+        expect(acl).toMatchSnapshot();
       });
       it('should make a GET request with rev query param', async () => {
         await getACL('myorg', { rev: 12 });
@@ -44,6 +49,20 @@ describe('ACL utils', () => {
         expect(mock.calls[0][0]).toEqual(
           `${baseUrl}/acls/myorg?rev=34&self=true`,
         );
+      });
+    });
+    describe('getAcl()', () => {
+      beforeEach(() => {
+        mockResponse(JSON.stringify(mockListACLResponse));
+      });
+      afterEach(() => {
+        resetMocks();
+      });
+      it('should make a GET request and return a PaginatedList of ACL', async () => {
+        const listOfACLs = await listACL('myorg');
+        expect(mock.calls[0][0]).toEqual(`${baseUrl}/acls/myorg/*`);
+        expect(listOfACLs.total).toEqual(2);
+        expect(listOfACLs.results).toMatchSnapshot();
       });
     });
   });

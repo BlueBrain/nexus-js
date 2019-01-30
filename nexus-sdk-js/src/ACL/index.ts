@@ -1,5 +1,5 @@
 import { IdentityType, Identity, ACLResponse } from './types';
-import { getACL } from './utils';
+import { getACL, listACL } from './utils';
 
 export default class ACL {
   id: string;
@@ -16,6 +16,7 @@ export default class ACL {
   rev: number;
 
   static get = getACL;
+  static list = listACL;
 
   constructor(aclResponse: ACLResponse) {
     this.id = aclResponse['@id'];

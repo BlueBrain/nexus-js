@@ -49,3 +49,152 @@ ACL {
   "updatedBy": "https://nexus.example.com/v1/realms/myrealm/users/john",
 }
 `;
+
+exports[`ACL utils utils() getAcl() should make a GET request and return a PaginatedList of ACL 1`] = `
+Array [
+  ACL {
+    "acl": Array [
+      Object {
+        "identity": Object {
+          "@id": "https://nexus.example.com/v1/realm/groups/two",
+          "@type": "Group",
+          "group": "two",
+          "realm": "myrealm",
+        },
+        "permissions": Array [
+          "read",
+          "write",
+        ],
+      },
+    ],
+    "createdAt": "2018-09-17T14:55:42.939Z",
+    "createdBy": "https://nexus.example.com/v1/realms/myrealm/users/john",
+    "id": "https://nexus.example.com/v1/acls/myorg/myproj",
+    "path": "/myorg/myproj",
+    "rev": 1,
+    "type": "Authenticated",
+    "updatedAt": "https://nexus.example.com/v1/realms/myrealm/users/john",
+    "updatedBy": "https://nexus.example.com/v1/realms/myrealm/users/john",
+  },
+  ACL {
+    "acl": Array [
+      Object {
+        "identity": Object {
+          "@id": "https://nexus.example.com/v1/realms/myrealm/users/me",
+          "@type": "User",
+          "realm": "myrealm",
+          "subject": "me",
+        },
+        "permissions": Array [
+          "read",
+        ],
+      },
+    ],
+    "createdAt": "2018-09-17T14:00:42.939Z",
+    "createdBy": "https://nexus.example.com/v1/realms/myrealm/users/alice",
+    "id": "https://nexus.example.com/v1/acls/myorg/myproj2",
+    "path": "/myorg/myproj2",
+    "rev": 2,
+    "type": "Anonymous",
+    "updatedAt": "https://nexus.example.com/v1/realms/myrealm/users/alice",
+    "updatedBy": "https://nexus.example.com/v1/realms/myrealm/users/alice",
+  },
+  ACL {
+    "acl": Array [
+      Object {
+        "identity": Object {
+          "@id": "https://nexus.example.com/v1/realm/groups/two",
+          "@type": "Group",
+          "group": "two",
+          "realm": "myrealm",
+        },
+        "permissions": Array [
+          "read",
+          "write",
+        ],
+      },
+    ],
+    "createdAt": "2018-09-17T14:55:42.939Z",
+    "createdBy": "https://nexus.example.com/v1/realms/myrealm/users/john",
+    "id": "https://nexus.example.com/v1/acls/myorg/myproj",
+    "path": "/myorg/myproj",
+    "rev": 1,
+    "type": "Authenticated",
+    "updatedAt": "https://nexus.example.com/v1/realms/myrealm/users/john",
+    "updatedBy": "https://nexus.example.com/v1/realms/myrealm/users/john",
+  },
+  ACL {
+    "acl": Array [
+      Object {
+        "identity": Object {
+          "@id": "https://nexus.example.com/v1/realms/myrealm/users/me",
+          "@type": "User",
+          "realm": "myrealm",
+          "subject": "me",
+        },
+        "permissions": Array [
+          "read",
+        ],
+      },
+    ],
+    "createdAt": "2018-09-17T14:00:42.939Z",
+    "createdBy": "https://nexus.example.com/v1/realms/myrealm/users/alice",
+    "id": "https://nexus.example.com/v1/acls/myorg/myproj2",
+    "path": "/myorg/myproj2",
+    "rev": 2,
+    "type": "Anonymous",
+    "updatedAt": "https://nexus.example.com/v1/realms/myrealm/users/alice",
+    "updatedBy": "https://nexus.example.com/v1/realms/myrealm/users/alice",
+  },
+]
+`;
+
+exports[`ACL utils utils() getAcl() should make a GET request and return an ACL 1`] = `
+ACL {
+  "acl": Array [
+    Object {
+      "identity": Object {
+        "@id": "https://nexus.example.com/v1/realms/myrealm/groups/a-group",
+        "@type": "Group",
+        "group": "a-group",
+        "realm": "myrealm",
+      },
+      "permissions": Array [
+        "read",
+      ],
+    },
+    Object {
+      "identity": Object {
+        "@id": "https://nexus.example.com/v1/realms/myrealm/groups/some-group",
+        "@type": "Group",
+        "group": "some-group",
+        "realm": "myrealm",
+      },
+      "permissions": Array [
+        "read",
+        "write",
+      ],
+    },
+    Object {
+      "identity": Object {
+        "@id": "https://nexus.example.com/v1/realms/myrealm/users/user",
+        "@type": "User",
+        "realm": "myrealm",
+        "subject": "alice",
+      },
+      "permissions": Array [
+        "acls/read",
+        "acls/write",
+      ],
+    },
+  ],
+  "createdAt": "2018-09-18T09:58:00.801Z",
+  "createdBy": "https://nexus.example.com/v1/realms/myrealm/users/john",
+  "id": "https://nexus.example.com/v1/acls/org1",
+  "path": "/org1",
+  "rev": 1,
+  "type": "User",
+  "updatedAt": "https://nexus.example.com/v1/realms/myrealm/users/john",
+  "updatedBy": "https://nexus.example.com/v1/realms/myrealm/users/john",
+}
+`;

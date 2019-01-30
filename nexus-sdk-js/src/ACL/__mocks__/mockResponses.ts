@@ -94,5 +94,47 @@ export const mockListACLResponse: ListACLResponse = {
       _updatedAt: '2018-09-17T14:05:42.939Z',
       _updatedBy: 'https://nexus.example.com/v1/realms/myrealm/users/alice',
     },
+    {
+      '@id': 'https://nexus.example.com/v1/acls/myorg/myproj',
+      '@type': 'Authenticated',
+      acl: [
+        {
+          permissions: ['read', 'write'],
+          identity: {
+            '@id': 'https://nexus.example.com/v1/realm/groups/two',
+            '@type': 'Group',
+            realm: 'myrealm',
+            group: 'two',
+          },
+        },
+      ],
+      _path: '/myorg/myproj',
+      _rev: 1,
+      _createdAt: '2018-09-17T14:55:42.939Z',
+      _createdBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+      _updatedAt: '2018-09-17T15:05:42.939Z',
+      _updatedBy: 'https://nexus.example.com/v1/realms/myrealm/users/john',
+    },
+    {
+      '@id': 'https://nexus.example.com/v1/acls/myorg/myproj2',
+      '@type': 'Anonymous',
+      acl: [
+        {
+          permissions: ['read'],
+          identity: {
+            '@id': 'https://nexus.example.com/v1/realms/myrealm/users/me',
+            '@type': 'User',
+            realm: 'myrealm',
+            subject: 'me',
+          },
+        },
+      ],
+      _path: '/myorg/myproj2',
+      _rev: 2,
+      _createdAt: '2018-09-17T14:00:42.939Z',
+      _createdBy: 'https://nexus.example.com/v1/realms/myrealm/users/alice',
+      _updatedAt: '2018-09-17T14:05:42.939Z',
+      _updatedBy: 'https://nexus.example.com/v1/realms/myrealm/users/alice',
+    },
   ],
 };

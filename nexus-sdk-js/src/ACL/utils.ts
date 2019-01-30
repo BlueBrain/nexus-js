@@ -18,5 +18,3 @@ export async function getACL(
     throw error;
   }
 }
-
-getACL('asd');

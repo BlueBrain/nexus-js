@@ -1,6 +1,6 @@
 import { ACLResponse, ListACLResponse } from '../types';
 
-const mockACLResponse: ACLResponse = {
+export const mockACLResponse: ACLResponse = {
   '@context': [
     'https://bluebrain.github.io/nexus/contexts/resource.json',
     'https://bluebrain.github.io/nexus/contexts/acls.json',
@@ -44,7 +44,7 @@ const mockACLResponse: ACLResponse = {
   _rev: 1,
 };
 
-const mockListACLResponse: ListACLResponse = {
+export const mockListACLResponse: ListACLResponse = {
   '@context': [
     'https://bluebrain.github.io/nexus/contexts/resource.json',
     'https://bluebrain.github.io/nexus/contexts/iam.json',

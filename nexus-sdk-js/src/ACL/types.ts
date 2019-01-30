@@ -35,4 +35,11 @@ export interface ListACLResponse {
   _results: ACLResponseCommon[];
 }
 
-export interface ListRealmOption {}
+export interface ListRealmOption {
+  from?: number;
+  size?: number;
+  rev?: number;
+  ancestors?: true;
+  self?: boolean;
+  [key: string]: any;
+}

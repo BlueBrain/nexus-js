@@ -50,7 +50,7 @@ ACL {
 }
 `;
 
-exports[`ACL utils utils() getAcl() should make a GET request and return a PaginatedList of ACL 1`] = `
+exports[`ACL utils utils() listAcl() should make a GET request and return a PaginatedList of ACL 1`] = `
 Array [
   ACL {
     "acl": Array [
@@ -147,54 +147,4 @@ Array [
     "updatedBy": "https://nexus.example.com/v1/realms/myrealm/users/alice",
   },
 ]
-`;
-
-exports[`ACL utils utils() getAcl() should make a GET request and return an ACL 1`] = `
-ACL {
-  "acl": Array [
-    Object {
-      "identity": Object {
-        "@id": "https://nexus.example.com/v1/realms/myrealm/groups/a-group",
-        "@type": "Group",
-        "group": "a-group",
-        "realm": "myrealm",
-      },
-      "permissions": Array [
-        "read",
-      ],
-    },
-    Object {
-      "identity": Object {
-        "@id": "https://nexus.example.com/v1/realms/myrealm/groups/some-group",
-        "@type": "Group",
-        "group": "some-group",
-        "realm": "myrealm",
-      },
-      "permissions": Array [
-        "read",
-        "write",
-      ],
-    },
-    Object {
-      "identity": Object {
-        "@id": "https://nexus.example.com/v1/realms/myrealm/users/user",
-        "@type": "User",
-        "realm": "myrealm",
-        "subject": "alice",
-      },
-      "permissions": Array [
-        "acls/read",
-        "acls/write",
-      ],
-    },
-  ],
-  "createdAt": "2018-09-18T09:58:00.801Z",
-  "createdBy": "https://nexus.example.com/v1/realms/myrealm/users/john",
-  "id": "https://nexus.example.com/v1/acls/org1",
-  "path": "/org1",
-  "rev": 1,
-  "type": "User",
-  "updatedAt": "https://nexus.example.com/v1/realms/myrealm/users/john",
-  "updatedBy": "https://nexus.example.com/v1/realms/myrealm/users/john",
-}
 `;

@@ -8,6 +8,7 @@ import {
   CreateRealmPayload,
 } from './types';
 import { PaginatedList, DEFAULT_LIST_SIZE } from '../utils/types';
+import { buildQueryParams } from '../utils';
 
 export async function getRealm(
   realmLabel: string,
@@ -31,15 +32,10 @@ export async function listRealms(
   },
 ): Promise<PaginatedList<Realm>> {
   try {
-    let ops = '';
-    if (listRealmOptions) {
-      ops = Object.keys(listRealmOptions).reduce(
-        (acc, key) =>
-          `${acc === '' ? '?' : `${acc}&`}${key}=${listRealmOptions[key]}`,
-        '',
-      );
-    }
-    const listRealmResponse: ListRealmResponse = await httpGet(`/realms${ops}`);
+    const opts = buildQueryParams(listRealmOptions);
+    const listRealmResponse: ListRealmResponse = await httpGet(
+      `/realms${opts}`,
+    );
     const realms = listRealmResponse._results.map(
       (r: RealmResponseCommon) =>
         new Realm({ ...r, '@context': listRealmResponse['@context'] }),

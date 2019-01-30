@@ -9,6 +9,7 @@ import {
   ListResourceResponse,
   ResourceResponseCommon,
 } from './types';
+import { buildQueryParams } from '../utils';
 
 export async function getSelfResource(
   selfUrl: string,
@@ -53,15 +54,10 @@ export async function listResources(
   options?: ListResourceOptions,
 ): Promise<PaginatedList<Resource>> {
   try {
-    const projectResourceURL = `/resources/${orgLabel}/${projectLabel}`;
-    const requestURL = options
-      ? `${projectResourceURL}?from=${options.from}&size=${options.size}`
-      : projectResourceURL;
-
+    const opts = buildQueryParams(options);
     const listResourceResponses: ListResourceResponse = await httpGet(
-      requestURL,
+      `/resources/${orgLabel}/${projectLabel}${opts}`,
     );
-
     const total: number = listResourceResponses._total;
     const index: number = (options && options.from) || 1;
     const results: Resource[] = listResourceResponses._results.map(

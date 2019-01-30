@@ -17,6 +17,7 @@ import { PaginatedList } from '../utils/types';
 import { getEventSource, parseMessageEventData } from '../utils/events';
 // @ts-ignore
 import EventSource = require('eventsource');
+import { buildQueryParams } from '../utils';
 
 /**
  *
@@ -45,17 +46,11 @@ export async function createOrganization(
  */
 export async function getOrganization(
   orgLabel: string,
-  options?: { revision?: number; tag?: string },
+  options?: { rev?: number; tag?: string },
 ): Promise<Organization> {
   try {
-    // check if we have options
-    let ops = '';
-    if (options) {
-      if (options.revision) {
-        ops = `?rev=${options.revision}`;
-      }
-    }
-    const orgResponse: OrgResponse = await httpGet(`/orgs/${orgLabel}${ops}`);
+    const opts = buildQueryParams(options);
+    const orgResponse: OrgResponse = await httpGet(`/orgs/${orgLabel}${opts}`);
     const org = new Organization(orgResponse);
     return org;
   } catch (error) {
@@ -66,18 +61,9 @@ export async function getOrganization(
 export async function listOrganizations(
   options?: ListOrgOptions,
 ): Promise<PaginatedList<Organization>> {
-  let ops = '';
-  if (options) {
-    ops = Object.keys(options).reduce(
-      (currentOps, key) =>
-        currentOps.length === 0
-          ? `?${key}=${encodeURIComponent(options[key])}`
-          : `${currentOps}&${key}=${encodeURIComponent(options[key])}`,
-      '',
-    );
-  }
+  const opts = buildQueryParams(options);
   try {
-    const listOrgResponse: ListOrgResponse = await httpGet(`/orgs${ops}`);
+    const listOrgResponse: ListOrgResponse = await httpGet(`/orgs${opts}`);
     if (listOrgResponse.code || !listOrgResponse._results) {
       return {
         total: 0,

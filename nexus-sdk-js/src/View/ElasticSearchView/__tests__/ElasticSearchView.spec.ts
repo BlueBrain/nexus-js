@@ -1,4 +1,4 @@
-import ElasticSearchView, { ElasticSearchViewResponse } from '../../ElasticSearchView';
+import ElasticSearchView from '../../ElasticSearchView';
 import {
   mockElasticSearchViewResponse,
   mockElasticSearchViewQueryResponse,
@@ -12,6 +12,7 @@ import {
   mockReject,
 } from 'jest-fetch-mock';
 import Nexus from '../../../Nexus';
+import { ElasticSearchViewResponse } from '../types';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);

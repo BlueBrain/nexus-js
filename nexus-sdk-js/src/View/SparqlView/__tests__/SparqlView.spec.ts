@@ -1,13 +1,11 @@
 import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
-import SparqlView, {
-  SparqlViewResponse,
-  SparqlViewQueryResponse,
-} from '../../SparqlView';
+import SparqlView from '../../SparqlView';
 import {
   mockSparqlViewResponse,
   mockProjectResponse,
 } from '../../../__mocks__/helpers';
 import Project from '../../../Project';
+import { SparqlViewQueryResponse, SparqlViewResponse } from '../types';
 
 const project = new Project(mockProjectResponse);
 const mockSparlQueryResponse: SparqlViewQueryResponse = {
@@ -103,9 +101,7 @@ describe('Sparql View class', () => {
       resetMocks();
     });
     it('should query the Sparql view', async () => {
-      mockResponses(
-        [JSON.stringify(mockSparlQueryResponse)],
-      );
+      mockResponses([JSON.stringify(mockSparlQueryResponse)]);
       const result: SparqlViewQueryResponse = await view.query(
         'SELECT * where {?s ?p ?o} LIMIT 3',
       );

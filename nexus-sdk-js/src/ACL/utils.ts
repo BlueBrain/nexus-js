@@ -1,8 +1,13 @@
 import ACL from '.';
-import { ACLResponse, ListACLResponse, ListRealmOption } from './types';
-import { httpGet } from '../utils/http';
+import {
+  ListACLResponse,
+  ListRealmOption,
+  Identity,
+  ACLPayload,
+} from './types';
+import { httpGet, httpPut, httpPatch, httpDelete } from '../utils/http';
 import { buildQueryParams } from '../utils';
-import { PaginatedList, PaginationSettings } from '../utils/types';
+import { PaginatedList } from '../utils/types';
 
 export async function listACL(
   path: string,
@@ -23,6 +28,74 @@ export async function listACL(
       index: (options && options.from) || 1,
       results: acls,
     };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function createACL(
+  path: string,
+  payload: ACLPayload[],
+): Promise<any> {
+  try {
+    const response = await httpPut(`/acls/${path}`, { acl: payload });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function replaceACL(
+  path: string,
+  rev: number,
+  payload: ACLPayload[],
+): Promise<any> {
+  try {
+    const response = await httpPut(`/acls/${path}?rev=${rev}`, {
+      acl: payload,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function subtractACL(
+  path: string,
+  rev: number,
+  payload: ACLPayload[],
+): Promise<any> {
+  try {
+    const response = await httpPatch(`/acls/${path}?rev=${rev}`, {
+      '@type': 'Subtract',
+      acl: payload,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function appendACL(
+  path: string,
+  rev: number,
+  payload: ACLPayload[],
+): Promise<any> {
+  try {
+    const response = await httpPatch(`/acls/${path}?rev=${rev}`, {
+      '@type': 'Append',
+      acl: payload,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteACL(path: string, rev: number): Promise<any> {
+  try {
+    const response = await httpDelete(`/acls/${path}?rev=${rev}`);
+    return response;
   } catch (error) {
     throw error;
   }

@@ -35,6 +35,17 @@ export interface ListACLResponse {
   _results: ACLResponseCommon[];
 }
 
+export interface ACLOperationSuccess {
+  '@context': Context;
+  '@id': string;
+  '@type': 'AccessControlList';
+  _createdAt: string;
+  _createdBy: string;
+  _updatedAt: string;
+  _updatedBy: string;
+  _rev: number;
+}
+
 export interface ListRealmOption {
   from?: number;
   size?: number;
@@ -42,4 +53,13 @@ export interface ListRealmOption {
   ancestors?: true;
   self?: boolean;
   [key: string]: any;
+}
+
+export interface ACLPayload {
+  permissions: string[];
+  identity: {
+    subject?: string;
+    realm?: string;
+    group?: string;
+  };
 }

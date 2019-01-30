@@ -1,29 +1,24 @@
 import Nexus from '../../Nexus';
 import { resetMocks, mockResponse, mock } from 'jest-fetch-mock';
 import {
-  mockACLResponse,
   mockListACLResponse,
+  mockACLOperationSuccess,
 } from '../__mocks__/mockResponses';
-import ACL from '..';
-import { listACL } from '../utils';
+import {
+  listACL,
+  createACL,
+  replaceACL,
+  subtractACL,
+  appendACL,
+  deleteACL,
+} from '../utils';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
 
 describe('ACL utils', () => {
-  describe('ACL class', () => {
-    it('should return an instance of ACL', () => {
-      const acl = new ACL(mockACLResponse);
-      expect(acl).toBeInstanceOf(ACL);
-    });
-    it('should match snapshot', async () => {
-      const acl = new ACL(mockACLResponse);
-      expect(acl).toMatchSnapshot();
-    });
-  });
-
   describe('utils()', () => {
-    describe('listAcl()', () => {
+    describe('listACL()', () => {
       beforeEach(() => {
         mockResponse(JSON.stringify(mockListACLResponse));
       });
@@ -59,6 +54,103 @@ describe('ACL utils', () => {
         expect(mock.calls[0][0]).toEqual(
           `${baseUrl}/acls/myorg?rev=34&ancestors=true&self=true`,
         );
+      });
+    });
+    describe('createACL()', () => {
+      beforeEach(() => {
+        mockResponse(JSON.stringify(mockACLOperationSuccess));
+      });
+      afterEach(() => {
+        resetMocks();
+      });
+      it('should make a PUT request', async () => {
+        const acls = [
+          {
+            permissions: ['project/read'],
+            identity: { realm: 'github', group: 'asd' },
+          },
+        ];
+        await createACL('my/path/', acls);
+        expect(mock.calls[0][0]).toEqual(`${baseUrl}/acls/my/path/`);
+        expect(mock.calls[0][1].method).toEqual('PUT');
+        expect(mock.calls[0][1].body).toEqual(JSON.stringify({ acl: acls }));
+      });
+    });
+    describe('replaceACL()', () => {
+      beforeEach(() => {
+        mockResponse(JSON.stringify(mockACLOperationSuccess));
+      });
+      afterEach(() => {
+        resetMocks();
+      });
+      it('should make a PUT request', async () => {
+        const acls = [
+          {
+            permissions: ['project/read'],
+            identity: { realm: 'github', group: 'asd' },
+          },
+        ];
+        await replaceACL('my/path/', 2, acls);
+        expect(mock.calls[0][0]).toEqual(`${baseUrl}/acls/my/path/?rev=2`);
+        expect(mock.calls[0][1].method).toEqual('PUT');
+        expect(mock.calls[0][1].body).toEqual(JSON.stringify({ acl: acls }));
+      });
+    });
+    describe('subtractACL()', () => {
+      beforeEach(() => {
+        mockResponse(JSON.stringify(mockACLOperationSuccess));
+      });
+      afterEach(() => {
+        resetMocks();
+      });
+      it('should make a PATCH request', async () => {
+        const acls = [
+          {
+            permissions: ['project/read'],
+            identity: { realm: 'github', group: 'asd' },
+          },
+        ];
+        await subtractACL('my/path/', 2, acls);
+        expect(mock.calls[0][0]).toEqual(`${baseUrl}/acls/my/path/?rev=2`);
+        expect(mock.calls[0][1].method).toEqual('PATCH');
+        expect(mock.calls[0][1].body).toEqual(
+          JSON.stringify({ '@type': 'Subtract', acl: acls }),
+        );
+      });
+    });
+    describe('appendACL()', () => {
+      beforeEach(() => {
+        mockResponse(JSON.stringify(mockACLOperationSuccess));
+      });
+      afterEach(() => {
+        resetMocks();
+      });
+      it('should make a PATCH request', async () => {
+        const acls = [
+          {
+            permissions: ['project/read'],
+            identity: { realm: 'github', group: 'asd' },
+          },
+        ];
+        await appendACL('my/path/', 2, acls);
+        expect(mock.calls[0][0]).toEqual(`${baseUrl}/acls/my/path/?rev=2`);
+        expect(mock.calls[0][1].method).toEqual('PATCH');
+        expect(mock.calls[0][1].body).toEqual(
+          JSON.stringify({ '@type': 'Append', acl: acls }),
+        );
+      });
+    });
+    describe('deleteACL()', () => {
+      beforeEach(() => {
+        mockResponse(JSON.stringify(mockACLOperationSuccess));
+      });
+      afterEach(() => {
+        resetMocks();
+      });
+      it('should make a DELETE request', async () => {
+        await deleteACL('my/path/', 2);
+        expect(mock.calls[0][0]).toEqual(`${baseUrl}/acls/my/path/?rev=2`);
+        expect(mock.calls[0][1].method).toEqual('DELETE');
       });
     });
   });

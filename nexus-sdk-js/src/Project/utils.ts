@@ -7,7 +7,6 @@ import {
   ListProjectsResponse,
   ProjectResponseCommon,
   ProjectEventListeners,
-  ProjectEvent,
   ProjectCreatedEvent,
   ProjectUpdatedEvent,
   ProjectDeprecatedEvent,
@@ -17,6 +16,7 @@ import { PaginatedList } from '../utils/types';
 import { getEventSource, parseMessageEventData } from '../utils/events';
 // @ts-ignore
 import EventSource = require('eventsource');
+import { buildQueryParams } from '../utils';
 
 /**
  *
@@ -51,16 +51,7 @@ export async function listProjects(
   orgLabel: string,
   options?: ListProjectOptions,
 ): Promise<PaginatedList<Project>> {
-  let ops = '';
-  if (options) {
-    ops = Object.keys(options).reduce(
-      (currentOps, key) =>
-        currentOps.length === 0
-          ? `?${key}=${options[key]}`
-          : `${currentOps}&${key}=${options[key]}`,
-      '',
-    );
-  }
+  const ops = buildQueryParams(options);
   try {
     const listProjectResponse: ListProjectsResponse = await httpGet(
       `/projects/${orgLabel}${ops}`,

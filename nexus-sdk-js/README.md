@@ -112,106 +112,196 @@ Nexus.setToken('my_bearer_token');
 Nexus.removeToken();
 ```
 
+The SDK follows the same pattern for all entities (organizations, projects, resources, realms, etc...):
+
+- an entity is a class that can be instantiated with the result payload of the REST API
+- they expose static methods like `get`, `list`, `create`, `update` and `deprecate` i.e.: `Resource.create(/* args */)`
+- they have methods for self-modifications and children access i.e.: `orgInstance.listProjects()`, `projectInstance.deprecate()`
+
 ### Organizations
 
 ```typescript
-// List organisations
-const paginatedOrgs: PaginatedList<Organization> = await Organization.list({
-  from: 1,
-  size: 100,
-}); // returns { index: 1, size: 100, result: Organization[] }
+import { Organization } from '@bbp/nexus-sdk';
 
-// Get a specific organisation
-Organization.get(orgLabel: string) : Organization;
-// Create an org
-Organization.create(orgLabel: string, orgDescription: string) : Organization;
-// Update an org
-Organization.update(orgLabel: string, orgRev: number, orgPayload: CreateOrgPayload): Organization;
-// Deprecate an org
-const myOrg: Organization = Organization.deprecate('myorglabel', 2);
+Organization.get = (orgLabel: string, options?: undefined | object): Promise<Organization>;
+
+Organization.list = (options?: ListOrgOptions): Promise<PaginatedList<Organization>>;
+
+Organization.create = (label: string, orgPayload?: CreateOrgPayload): Promise<Organization>;
+
+Organization.update = (orgLabel: string, rev: number, orgPayload: CreateOrgPayload): Promise<Organization>;
+
+Organization.deprecate = (orgLabel: string, rev: number): Promise<Organization>;
+
+Organization.subscribe = (listeners: OrgEventListeners): EventSource;
+
+orgInstance.update(orgPayload: CreateOrgPayload): Promise<Organization>;
+
+orgInstance.deprecate(): Promise<Organization>;
+
+orgInstance.getProject(projectLabel: string): Promise<Project>;
+
+orgInstance.listProjects(): Promise<PaginatedList<Project>>;
+
+orgInstance.createProject(projectLabel: string, projectPayload: CreateProjectPayload): Promise<Project>;
+
+orgInstance.updateProject(projectLabel: string, projectRev: number, projectPayload: CreateProjectPayload): Promise<Project>;
+
+orgInstance.deprecateProject(projectLabel: string, projectRev: number): Promise<Project>
 ```
 
 ### Projects
 
 ```typescript
-// List all the projects that belong to an organisation
-const projects: Project[] = await myOrg.listProjects();
+import { Project } from '@bbp/nexus-sdk';
 
-// Get a specific project
-const myProject: Project = await myOrg.getProject('my-project');
+Project.get = (orgLabel: string, projectLabel: string, options?: undefined | object): Promise<Project>;
+
+Project.list = (orgLabel: string, options?: ListProjectOptions): Promise<PaginatedList<Project>>;
+
+Project.create = (orgLabel: string, projectLabel: string, projectPayload: CreateProjectPayload): Promise<Project>;
+
+Project.update = (orgLabel: string, projectLabel: string, rev: number, projectPayload: CreateProjectPayload): Promise<Project>;
+
+Project.deprecate = (orgLabel: string, projectLabel: string, rev: number): Promise<Project>;
+
+Project.subscribe = (listeners: ProjectEventListeners): EventSource;
+
+projectInstance.update(projectPayload: CreateProjectPayload): Promise<Project>;
+
+projectInstance.deprecate(): Promise<Project>
+
+projectInstance.getResource(id: string): Promise<Resource>;
+
+projectInstance.listResource(pagination?: PaginationSettings): Promise<PaginatedList<Resource>>;
+
+projectInstance.getView(viewId: string): Promise<ElasticSearchView | SparqlView>;
+
+projectInstance.listViews(): Promise<(ElasticSearchView | SparqlView)[]>
+
+projectInstance.getSparqlView(): Promise<SparqlView>;
+
+projectInstance.getElasticSearchView(viewId?: undefined | string): Promise<ElasticSearchView>;
+
 ```
 
 ### Resources
 
 ```typescript
-// List all the resources that belong to a project
-const resources: PaginatedList<Resource> = await myProject.listResources(pagination?: PaginationSettings);
+import { Resource } from '@bbp/nexus-sdk';
 
-// Get a specific resource
-const myResource: Resource = await myProject.getResource('schema-id', 'my-resource-id');
+Resource.get = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string): Promise<Resource>;
+Resource.getSelf = (selfUrl: string, orgLabel: string, projectLabel: string): Promise<Resource>;
+
+Resource.list = (orgLabel: string, projectLabel: string, options?: ListResourceOptions): Promise<PaginatedList<Resource>>;
+
+Resource.listTags = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string): Promise<string[]>;
+Resource.listSelfTags = (selfUrl: string): Promise<string[]>;
+
+Resource.create = (orgLabel: string, projectLabel: string, schemaId: string, payload: CreateResourcePayload): Promise<Resource>;
+
+Resource.tag = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string, rev?: number, {
+    tagName,
+    tagFromRev,
+  }: {
+    tagName: string;
+    tagFromRev: number;
+  }): Promise<Resource>;
+Resource.tagSelf = (selfUrl: string, rev?: number, {
+    tagName,
+    tagFromRev,
+  }: {
+    tagName: string;
+    tagFromRev: number;
+  }, orgLabel: string, projectLabel: string): Promise<Resource>;
+
+Resource.update = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string, rev: number, {
+    context,
+    ...data
+  }: {
+    context: { [field: string]: string };
+    [field: string]: any;
+  }): Promise<Resource>;
+Resource.updateSelf = (selfUrl: string, rev: number, {
+    context,
+    ...data
+  }: {
+    context: { [field: string]: string };
+    [field: string]: any;
+  }, orgLabel: string, projectLabel: string): Promise<Resource>;
+
+Resource.deprecate = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string, rev: number): Promise<Resource>;
+Resource.deprecateSelf = (selfUrl: string, rev: number, orgLabel: string, projectLabel: string): Promise<Resource>;
+
+resourceInstance.update({
+    context,
+    ...data
+  }: {
+    context: { [field: string]: string };
+    [field: string]: any;
+  }): Promise<Resource>;
 ```
 
 ### Views
 
 ```typescript
-// Fetch all View instances in a Project
-const myViews: (ElasticSearchView | SparqlView)[] = await myProject.listViews();
+import { View, ElasticSearchView, SparqlView } from '@bbp/nexus-sdk';
 
-// Fetch a view by ID
-const myViewById: ElasticSearchView | SparqlView = await myProject.getView(
-  'my-view-id',
-);
+View.get = (orgLabel: string, projectLabel: string, viewId: string): Promise<ElasticSearchView | SparqlView>;
 
-// Fetch an ElasticSearch view by ID (for user-defined views)
-const myElasticSearchView: ElasticSearchView = await myProject.getElasticSearchView(
-  'my-view-id',
-);
+View.list = (orgLabel: string, projectLabel: string): Promise<(ElasticSearchView | SparqlView)[]>;
 
-// Query an ElasticSearch view and retrieve raw results as returned by ElasticSearch
-const rawResults: PaginatedList<
-  ElasticSearchHit
-> = await myElasticSearchView.rawQuery({});
+ElasticSearchView.get = (orgLabel: string, projectLabel: string, viewId?: string): Promise<ElasticSearchView>;
 
-// Fetch the default ElasticSearch view for a project
-const myView: ElasticSearchView = await myProject.getElasticSearchView();
+SparqlView.get = (orgLabel: string, projectLabel: string): Promise<SparqlView>;
+
+elasticSearchInstance.aggregation(elasticSearchAggregationQuery: object): Promise<ElasticSearchViewAggregationResponse>;
+
+elasticSearchInstance.filterByConstrainedBy(constrainedBy: string, pagination?: PaginationSettings): Promise<PaginatedList<Resource>>;
+
+elasticSearchInstance.filterByTypes(types: string[], pagination?: PaginationSettings): Promise<PaginatedList<Resource>>;
 
 // Query a project with the default ElasticSearch view and retrieve Resources
-const searchAll: PaginatedList<Resource> = await myView.query({});
+elasticSearchInstance.query(elasticSearchQuery: object, pagination?: PaginationSettings): Promise<PaginatedList<Resource>>;
 
-// ESView Query Convenience Method
-// Filter a project by Type (using AND)
-const filteredByType: PaginatedList<Resource> = await myView.filterByTypes([
-  'someType',
-]);
+// Query an ElasticSearch view and retrieve raw results as returned by ElasticSearch
+elasticSearchInstance.rawQuery(elasticSearchQuery: object, pagination?: PaginationSettings): Promise<PaginatedList<ElasticSearchHit>>;
 
-// ESView Query Convenience Method
-// Filter a project by resources matching a schema ("_constrainedBy")
-const filteredByConstrainedBy: PaginatedList<
-  Resource
-> = await myView.filterByConstrainedBy('someSchema');
-
-// Fetch the Sparql View instance on a Project
-const sparqlView: SparqlView = await myProject.getSparqlView();
-
-// Query a Project with Sparql
-const response: SparqlQueryViewResponse = sparqlView.query(
-  'SELECT * where {?s ?p ?o} LIMIT 50',
-);
+sparqlInstance.query(sparqlQuery: string): Promise<SparqlViewQueryResponse>;
 ```
 
-Each class also has static methods wrapping and reflecting the API endpoints. For example:
+### Realm
 
 ```typescript
-import { Organization, Project, Resource } from '@bbp/nexus-sdk';
+import { Realm } from '@bbp/nexus-sdk';
 
-const org: Organization = Organization.get('org-label');
-const project: Project = Project.get('org-label', 'project-label');
-const resource: Resource = Resource.get(
-  'org-label',
-  'project-label',
-  'schema-id',
-  'resource-id',
-);
+Realm.get = (realmLabel: string, rev?: undefined | number): Promise<Realm>;
+
+Realm.list = (listRealmOptions?: ListRealmOptions): Promise<PaginatedList<Realm>>;
+
+Realm.create = (realmLabel: string, realmPayload: CreateRealmPayload): Promise<Realm>;
+
+Realm.update = (realmLabel: string, rev: number, realmPayload: CreateRealmPayload): Promise<Realm>;
+
+Realm.deprecate = (realmLabel: string, rev: number): Promise<Realm>;
+```
+
+### ACL
+
+```typescript
+import { ACL } from '@bbp/nexus-sdk';
+
+ACL.list = (path: string, options?: ListRealmOption): Promise<PaginatedList<ACL>>;
+
+ACL.create = (path: string, payload: ACLPayload[]): Promise<any>;
+
+ACL.append = (path: string, rev: number, payload: ACLPayload[]): Promise<any>;
+
+ACL.subtract = (path: string, rev: number, payload: ACLPayload[]): Promise<any>;
+
+ACL.replace = (path: string, rev: number, payload: ACLPayload[]): Promise<any>;
+
+ACL.delete = (path: string, rev: number): Promise<any>;
 ```
 
 ## Development

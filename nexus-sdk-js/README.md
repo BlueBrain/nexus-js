@@ -74,6 +74,13 @@ Pre-alpha
 
 #### ACLs
 
+- [x] List
+- [x] Create
+- [x] Append
+- [x] Subtract
+- [x] Replace
+- [x] Delete
+
 #### Permissions
 
 #### Realms

@@ -7,7 +7,7 @@ export default class Schema {
   readonly context: Context;
   readonly id: string;
   readonly type: string;
-  readonly shapes: Shape[];
+  readonly shapes?: Shape[];
   readonly self: string;
   readonly constrainedBy: string;
   readonly project: string;

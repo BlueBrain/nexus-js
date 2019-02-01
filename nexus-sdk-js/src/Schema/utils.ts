@@ -18,9 +18,9 @@ export async function getSchema(
   options?: { rev?: number; tag?: string },
 ): Promise<Schema> {
   const opts = buildQueryParams(options);
-  const projectResourceURL = `/schemas/${orgLabel}/${projectLabel}/${schemaId}${opts}`;
+  const projectSchemaURL = `/schemas/${orgLabel}/${projectLabel}/${schemaId}${opts}`;
   try {
-    const schemaResponse: SchemaResponse = await httpGet(projectResourceURL);
+    const schemaResponse: SchemaResponse = await httpGet(projectSchemaURL);
     const schema = new Schema(orgLabel, projectLabel, schemaResponse);
     return schema;
   } catch (error) {
@@ -58,10 +58,9 @@ export async function listSchemas(
   }
 }
 
-export async function createResource(
+export async function createSchema(
   orgLabel: string,
   projectLabel: string,
-  schemaId: string,
   payload: CreateSchemaPayload,
 ): Promise<Schema> {
   try {
@@ -69,25 +68,25 @@ export async function createResource(
     // if no schemaID provided, we POST the new schema (Nexus will create the ID for us)
     if (!payload.schemaId) {
       const { context, ...rest } = payload;
-      const resourceResponse: SchemaResponse = await httpPost(
-        `/schemas/${orgLabel}/${projectLabel}/${schemaId}`,
+      const schemaResponse: SchemaResponse = await httpPost(
+        `/schemas/${orgLabel}/${projectLabel}`,
         {
           '@context': context,
           ...rest,
         },
       );
-      schema = new Schema(orgLabel, projectLabel, resourceResponse);
+      schema = new Schema(orgLabel, projectLabel, schemaResponse);
     } else {
       // Otherwise, it's a PUT request
       const { context, schemaId, ...rest } = payload;
-      const resourceResponse: SchemaResponse = await httpPut(
+      const schemaResponse: SchemaResponse = await httpPut(
         `/schemas/${orgLabel}/${projectLabel}/${schemaId}`,
         {
           '@context': context,
           ...rest,
         },
       );
-      schema = new Schema(orgLabel, projectLabel, resourceResponse);
+      schema = new Schema(orgLabel, projectLabel, schemaResponse);
     }
 
     return schema;
@@ -103,11 +102,11 @@ export async function updateSchema(
   rev: number,
   payload: CreateSchemaPayload,
 ): Promise<Schema> {
-  const schemaResourceURL = `/schemas/${orgLabel}/${projectLabel}/${schemaId}`;
+  const schemaURL = `/schemas/${orgLabel}/${projectLabel}/${schemaId}`;
   try {
     const { context, ...rest } = payload;
     const schemaResponse: SchemaResponse = await httpPut(
-      `${schemaResourceURL}?rev=${rev}`,
+      `${schemaURL}?rev=${rev}`,
       {
         '@context': context,
         ...rest,
@@ -133,14 +132,14 @@ export async function tagSchema(
   },
 ): Promise<Schema> {
   try {
-    const resourceResponse: SchemaResponse = await httpPost(
+    const schemaResponse: SchemaResponse = await httpPost(
       `/schemas/${orgLabel}/${projectLabel}/${schemaId}/tags?rev=${rev}`,
       {
         tag: tagName,
         rev: tagFromRev,
       },
     );
-    return new Schema(orgLabel, projectLabel, resourceResponse);
+    return new Schema(orgLabel, projectLabel, schemaResponse);
   } catch (error) {
     throw error;
   }
@@ -168,10 +167,10 @@ export async function deprecateSchema(
   rev: number,
 ): Promise<Schema> {
   try {
-    const resourceResponse: SchemaResponse = await httpDelete(
+    const schemaResponse: SchemaResponse = await httpDelete(
       `/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
     );
-    return new Schema(orgLabel, projectLabel, resourceResponse);
+    return new Schema(orgLabel, projectLabel, schemaResponse);
   } catch (error) {
     throw error;
   }

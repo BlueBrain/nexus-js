@@ -1,21 +1,22 @@
 export type Context = string | object;
 
+export type Property = {
+  datatype: string;
+  minCount: number;
+  path: string;
+};
+
 export type Shape = {
   '@id': string;
   '@type': string;
-  nodeKing: string;
-  property: {
-    datatype: string;
-    minCount: number;
-    path: string;
-  };
+  nodeKind: string;
+  property: Property[];
   targetClass: string;
 };
 
 export interface SchemaResponseCommon {
   '@id': string;
-  '@type': 'Schema';
-  shapes: Shape[];
+  '@type': string;
   _self: string;
   _constrainedBy: string;
   _project: string;
@@ -35,6 +36,7 @@ export interface ListSchemaResponse {
 
 export interface SchemaResponse extends SchemaResponseCommon {
   '@context': Context;
+  shapes?: Shape[];
 }
 
 export interface ListSchemaResponseError {

@@ -181,7 +181,7 @@ export async function tagResource(
   projectLabel: string,
   schemaId: string,
   resourceId: string,
-  rev: number = 1,
+  rev: number,
   {
     tagName,
     tagFromRev,
@@ -206,7 +206,7 @@ export async function tagResource(
 
 export async function tagSelfResource(
   selfUrl: string,
-  rev: number = 1,
+  rev: number,
   {
     tagName,
     tagFromRev,

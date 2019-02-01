@@ -68,6 +68,12 @@ Pre-alpha
 
 #### Schemas
 
+- [x] Get
+- [x] List
+- [x] Create
+- [x] Update
+- [x] Deprecate
+
 #### Resolvers
 
 #### Data
@@ -192,6 +198,39 @@ projectInstance.getElasticSearchView(viewId?: undefined | string): Promise<Elast
 
 ```
 
+### Schemas
+
+```typescript
+import { Schema } from '@bbp/nexus-sdk';
+
+Schema.get = (orgLabel: string, projectLabel: string, schemaId: string): Promise<Schema>;
+
+Schema.list = (orgLabel: string, projectLabel: string, options?: ListSchemaOptions): Promise<PaginatedList<Schema>>;
+
+Schema.listTags = (orgLabel: string, projectLabel: string, schemaId: string): Promise<string[]>;
+
+Schema.create = (orgLabel: string, projectLabel: string, payload: CreateSchemaPayload): Promise<Schema>;
+
+Schema.tag = (orgLabel: string, projectLabel: string, schemaId: string, rev: number, {
+    tagName,
+    tagFromRev,
+  }: {
+    tagName: string;
+    tagFromRev: number;
+  }): Promise<Schema>;
+
+Schema.update = (orgLabel: string, projectLabel: string, schemaId: string, rev: number, {
+    context,
+    ...data
+  }: {
+    context: { [field: string]: string };
+    [field: string]: any;
+  }): Promise<Schema>;
+
+Schema.deprecate = (orgLabel: string, projectLabel: string, schemaId: string, rev: number): Promise<Schema>;
+
+```
+
 ### Resources
 
 ```typescript
@@ -207,14 +246,14 @@ Resource.listSelfTags = (selfUrl: string): Promise<string[]>;
 
 Resource.create = (orgLabel: string, projectLabel: string, schemaId: string, payload: CreateResourcePayload): Promise<Resource>;
 
-Resource.tag = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string, rev?: number, {
+Resource.tag = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string, rev: number, {
     tagName,
     tagFromRev,
   }: {
     tagName: string;
     tagFromRev: number;
   }): Promise<Resource>;
-Resource.tagSelf = (selfUrl: string, rev?: number, {
+Resource.tagSelf = (selfUrl: string, rev: number, {
     tagName,
     tagFromRev,
   }: {

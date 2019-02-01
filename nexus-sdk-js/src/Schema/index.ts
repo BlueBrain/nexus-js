@@ -1,4 +1,13 @@
 import { Context, SchemaResponse, Shape } from './types';
+import {
+  getSchema,
+  listSchemas,
+  createSchema,
+  updateSchema,
+  tagSchema,
+  listSchemaTags,
+  deprecateSchema,
+} from './utils';
 
 export default class Schema {
   readonly raw: SchemaResponse;
@@ -17,6 +26,14 @@ export default class Schema {
   readonly updatedBy: string;
   readonly rev: number;
   readonly deprecated: boolean;
+
+  static get = getSchema;
+  static list = listSchemas;
+  static create = createSchema;
+  static update = updateSchema;
+  static tag = tagSchema;
+  static listTags = listSchemaTags;
+  static deprecate = deprecateSchema;
 
   constructor(
     orgLabel: string,

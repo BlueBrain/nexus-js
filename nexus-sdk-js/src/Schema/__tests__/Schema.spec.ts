@@ -107,35 +107,35 @@ describe('Schema class', () => {
         }),
       );
     });
-  });
 
-  it('should PUT the new schema', async () => {
-    const payload: CreateSchemaPayload = {
-      context: {
-        name: 'http://schema.org/name',
-        description: 'http://schema.org/description',
-      },
-      shapes: [
-        {
-          '@id': 'http://some-id.com',
-          '@type': 'some:type',
-          nodeKind: 'myKindOfNode',
-          property: [{ datatype: 'type', minCount: 2, path: '/my/path' }],
-          targetClass: 'myTarget',
+    it('should PUT the new schema', async () => {
+      const payload: CreateSchemaPayload = {
+        context: {
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
         },
-      ],
-      schemaId: 'myschema',
-    };
+        shapes: [
+          {
+            '@id': 'http://some-id.com',
+            '@type': 'some:type',
+            nodeKind: 'myKindOfNode',
+            property: [{ datatype: 'type', minCount: 2, path: '/my/path' }],
+            targetClass: 'myTarget',
+          },
+        ],
+        schemaId: 'myschema',
+      };
 
-    createSchema('myorg', 'myproject', payload);
+      createSchema('myorg', 'myproject', payload);
 
-    expect(mock.calls[0][0]).toEqual(
-      `${baseUrl}/schemas/myorg/myproject/myschema`,
-    );
-    expect(mock.calls[0][1].method).toEqual('PUT');
-    expect(mock.calls[0][1].body).toEqual(
-      JSON.stringify({ '@context': payload.context, shapes: payload.shapes }),
-    );
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/schemas/myorg/myproject/myschema`,
+      );
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ '@context': payload.context, shapes: payload.shapes }),
+      );
+    });
   });
 
   describe('deprecateSchema()', () => {

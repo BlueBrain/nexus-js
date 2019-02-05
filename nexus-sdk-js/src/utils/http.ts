@@ -110,6 +110,31 @@ export function httpPost<T = Object>(
     });
 }
 
+export function httpPostFile<File>(
+  url: string,
+  file: any,
+  config?: HttpConfig,
+): Promise<any> {
+  const body = new FormData();
+  body.append(file.name, file);
+  const {
+    api: { baseUrl },
+  } = store.getState();
+  return fetch(`${baseUrl}${url}`, {
+    body,
+    headers: {
+      ...getHeaders(config && config.extraHeaders),
+      'Content-Type': 'multipart/form-data;',
+    },
+    method: 'POST',
+  })
+    .then(checkStatus)
+    .then(r => parseResponse(r))
+    .catch(e => {
+      throw e;
+    });
+}
+
 export function httpPut(
   url: string,
   body?: Object,

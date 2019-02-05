@@ -1,22 +1,10 @@
-import Project from '.';
-import { httpGet, httpPut, httpDelete } from '../utils/http';
-import {
-  CreateProjectPayload,
-  ListProjectOptions,
+import Project, {
   ProjectResponse,
   ListProjectsResponse,
   ProjectResponseCommon,
-  ProjectEventListeners,
-  ProjectCreatedEvent,
-  ProjectUpdatedEvent,
-  ProjectDeprecatedEvent,
-  ProjectEventType,
-} from './types';
-import { PaginatedList } from '../utils/types';
-import { getEventSource, parseMessageEventData } from '../utils/events';
-// @ts-ignore
-import EventSource = require('eventsource');
-import { buildQueryParams } from '../utils';
+} from '.';
+import { httpGet, httpPut, httpDelete } from '../utils/http';
+import { CreateProjectPayload, ListProjectOptions } from './types';
 
 /**
  *
@@ -50,18 +38,23 @@ export async function getProject(
 export async function listProjects(
   orgLabel: string,
   options?: ListProjectOptions,
-): Promise<PaginatedList<Project>> {
-  const ops = buildQueryParams(options);
+): Promise<Project[]> {
+  let ops = '';
+  if (options) {
+    ops = Object.keys(options).reduce(
+      (currentOps, key) =>
+        currentOps.length === 0
+          ? `?${key}=${options[key]}`
+          : `${currentOps}&${key}=${options[key]}`,
+      '',
+    );
+  }
   try {
     const listProjectResponse: ListProjectsResponse = await httpGet(
       `/projects/${orgLabel}${ops}`,
     );
     if (listProjectResponse.code || !listProjectResponse._results) {
-      return {
-        total: 0,
-        index: 0,
-        results: [],
-      };
+      return [];
     }
     const projects: Project[] = listProjectResponse._results.map(
       (commonResponse: ProjectResponseCommon) =>
@@ -70,11 +63,7 @@ export async function listProjects(
           '@context': listProjectResponse['@context'],
         }),
     );
-    return {
-      total: listProjectResponse._total,
-      index: (options && options.from) || 1,
-      results: projects,
-    };
+    return projects;
   } catch (error) {
     throw new Error(error);
   }
@@ -116,7 +105,7 @@ export async function updateProject(
 export async function deprecateProject(
   orgLabel: string,
   projectLabel: string,
-  rev: number,
+  rev: number = 1,
 ): Promise<Project> {
   try {
     const projectResponse: ProjectResponse = await httpDelete(
@@ -126,32 +115,4 @@ export async function deprecateProject(
   } catch (error) {
     throw new Error(error);
   }
-}
-
-export function subscribe(listeners: ProjectEventListeners): EventSource {
-  const event: EventSource = getEventSource('/projects/events');
-
-  // set event listeners
-  listeners.onOpen && (event.onopen = listeners.onOpen);
-  listeners.onError && (event.onerror = listeners.onError);
-  listeners.onProjectCreated &&
-    event.addEventListener(ProjectEventType.ProjectCreated, (event: Event) =>
-      parseMessageEventData<ProjectCreatedEvent>(event as MessageEvent)(
-        listeners.onProjectCreated,
-      ),
-    );
-  listeners.onProjectUpdated &&
-    event.addEventListener(ProjectEventType.ProjectUpdated, (event: Event) =>
-      parseMessageEventData<ProjectUpdatedEvent>(event as MessageEvent)(
-        listeners.onProjectUpdated,
-      ),
-    );
-  listeners.onProjectDeprecated &&
-    event.addEventListener(ProjectEventType.ProjectDeprecated, (event: Event) =>
-      parseMessageEventData<ProjectDeprecatedEvent>(event as MessageEvent)(
-        listeners.onProjectDeprecated,
-      ),
-    );
-
-  return event;
 }

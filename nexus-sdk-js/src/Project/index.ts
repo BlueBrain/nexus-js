@@ -118,4 +118,8 @@ export default class Project {
   async getSparqlView(): Promise<SparqlView> {
     return SparqlView.get(this.orgLabel, this.label);
   }
+
+  // async postFile(file: File): Promise<any> {
+  //   return await httpPostFile(this.filesURL, file);
+  // }
 }

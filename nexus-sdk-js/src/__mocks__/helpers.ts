@@ -1,13 +1,13 @@
+import { ProjectResponse, ListProjectsResponse } from '../Project';
+import { ListOrgResponse, OrgResponse } from '../Organization';
+import { ResourceResponse, ListResourceResponse } from '../Resource';
 import { ViewsListResponse } from '../View/utils';
-import { OrgResponse, ListOrgResponse } from '../Organization/types';
-import { ProjectResponse, ListProjectsResponse } from '../Project/types';
-import { ResourceResponse, ListResourceResponse } from '../Resource/types';
 import {
   ElasticSearchViewResponse,
-  ElasticSearchViewAggregationResponse,
   ElasticSearchViewQueryResponse,
-} from '../View/ElasticSearchView/types';
-import { SparqlViewResponse } from '../View/SparqlView/types';
+  ElasticSearchViewAggregationResponse,
+} from '../View/ElasticSearchView';
+import { SparqlViewResponse } from '../View/SparqlView';
 
 export const mockOrgResponse: OrgResponse = {
   '@context': [
@@ -182,8 +182,8 @@ export const mockViewsListResponse: ViewsListResponse = {
   _total: 2,
   _results: [
     {
-      '@id': 'nxv:defaultElasticSearchIndex',
-      '@type': ['View', 'Alpha', 'ElasticSearchView'],
+      '@id': 'nxv:defaultElasticIndex',
+      '@type': ['View', 'Alpha', 'ElasticView'],
       _uuid: '684bd815-9273-46f4-ac1c-0383d4a98254',
       includeMetadata: true,
       mapping: {
@@ -374,3 +374,25 @@ export const mockElasticSearchViewQueryResponse: ElasticSearchViewQueryResponse 
   timed_out: false,
   took: 8,
 };
+
+export const mockFileResponse: ElasticSearchViewQueryResponse = {
+  "@context": "https://bluebrain.github.io/nexus/contexts/resource.json",
+  "@id": "schema:b9fa7dba-1da4-4cb6-99f8-661779ebbc3c",
+  "@type": "File",
+  "_bytes": 89859,
+  "_digest": {
+      "_algorithm": "SHA-256",
+      "_value": "f3ffad24d3aaad96ae533201a0dc8b6cc4299dc7889256b880b36b0f2ffca9c1"
+  },
+  "_filename": "Screenshot 2019-01-16 at 10.45.06.png",
+  "_mediaType": "image/png",
+  "_self": "http://dev.nexus.ocp.bbp.epfl.ch/v1/files/broman/first/base:b9fa7dba-1da4-4cb6-99f8-661779ebbc3c",
+  "_constrainedBy": "nxs:file.json",
+  "_project": "http://admin.dev.nexus.ocp.bbp.epfl.ch/v1/projects/broman/first",
+  "_createdAt": "2019-01-21T16:27:10.698Z",
+  "_createdBy": "http://dev.nexus.ocp.bbp.epfl.ch/v1/anonymous",
+  "_updatedAt": "2019-01-21T16:27:10.698Z",
+  "_updatedBy": "http://dev.nexus.ocp.bbp.epfl.ch/v1/anonymous",
+  "_rev": 1,
+  "_deprecated": false
+}

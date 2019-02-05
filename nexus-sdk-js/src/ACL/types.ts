@@ -10,6 +10,11 @@ export interface Identity {
   group?: string;
 }
 
+export interface IdentityResponse {
+  '@context': Context;
+  identities: Identity[];
+}
+
 export interface ACLResponseCommon {
   '@id': string;
   '@type': IdentityType;

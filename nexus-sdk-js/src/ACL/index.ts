@@ -6,6 +6,7 @@ import {
   subtractACL,
   appendACL,
   deleteACL,
+  listIdentities,
 } from './utils';
 
 export default class ACL {
@@ -28,6 +29,7 @@ export default class ACL {
   static subtract = subtractACL;
   static append = appendACL;
   static delete = deleteACL;
+  static listIdentities = listIdentities;
 
   constructor(aclResponse: ACLResponse) {
     this.id = aclResponse['@id'];

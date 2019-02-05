@@ -98,3 +98,29 @@ Array [
   },
 ]
 `;
+
+exports[`ACL utils utils() listIdentities() should return a list of Identities 1`] = `
+Array [
+  Object {
+    "@id": "https://nexus.example.com/v1/anonymous",
+    "@type": "Anonymous",
+  },
+  Object {
+    "@id": "https://nexus.example.com/v1/realms/nexusdev/authenticated",
+    "@type": "Authenticated",
+    "realm": "nexusdev",
+  },
+  Object {
+    "@id": "https://nexus.example.com/v1/realms/nexusdev/groups/test-group",
+    "@type": "Group",
+    "group": "test-group",
+    "realm": "nexusdev",
+  },
+  Object {
+    "@id": "https://nexus.example.com/v1/realms/nexusdev/users/test-user",
+    "@type": "User",
+    "realm": "nexusdev",
+    "subject": "test-user",
+  },
+]
+`;

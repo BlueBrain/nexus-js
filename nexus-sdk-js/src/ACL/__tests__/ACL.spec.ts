@@ -3,6 +3,7 @@ import { resetMocks, mockResponse, mock } from 'jest-fetch-mock';
 import {
   mockListACLResponse,
   mockACLOperationSuccess,
+  mockIdentitiesResponse,
 } from '../__mocks__/mockResponses';
 import {
   listACL,
@@ -11,6 +12,7 @@ import {
   subtractACL,
   appendACL,
   deleteACL,
+  listIdentities,
 } from '../utils';
 
 const baseUrl = 'http://api.url';
@@ -151,6 +153,19 @@ describe('ACL utils', () => {
         await deleteACL('my/path/', 2);
         expect(mock.calls[0][0]).toEqual(`${baseUrl}/acls/my/path/?rev=2`);
         expect(mock.calls[0][1].method).toEqual('DELETE');
+      });
+    });
+    describe('listIdentities()', () => {
+      beforeEach(() => {
+        mockResponse(JSON.stringify(mockIdentitiesResponse));
+      });
+      afterEach(() => {
+        resetMocks();
+      });
+      it('should return a list of Identities', async () => {
+        const indetities = await listIdentities();
+        expect(mock.calls[0][0]).toEqual(`${baseUrl}/identities`);
+        expect(indetities).toMatchSnapshot();
       });
     });
   });

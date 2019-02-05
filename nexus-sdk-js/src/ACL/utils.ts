@@ -4,6 +4,7 @@ import {
   ListRealmOption,
   Identity,
   ACLPayload,
+  IdentityResponse,
 } from './types';
 import { httpGet, httpPut, httpPatch, httpDelete } from '../utils/http';
 import { buildQueryParams } from '../utils';
@@ -96,6 +97,15 @@ export async function deleteACL(path: string, rev: number): Promise<any> {
   try {
     const response = await httpDelete(`/acls/${path}?rev=${rev}`);
     return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function listIdentities(): Promise<Identity[]> {
+  try {
+    const identityResponse: IdentityResponse = await httpGet('/identities');
+    return identityResponse.identities;
   } catch (error) {
     throw error;
   }

@@ -35,10 +35,11 @@ export async function getSelfResource(
 export async function getResource(
   orgLabel: string,
   projectLabel: string,
-  schemaId: string | null = WILDCARD_SCHEMA,
+  schemaId: string | null,
   resourceId: string,
 ): Promise<Resource> {
-  const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`;
+  const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId ||
+    WILDCARD_SCHEMA}/${resourceId}`;
   try {
     const resourceResponse: ResourceResponse = await httpGet(
       projectResourceURL,

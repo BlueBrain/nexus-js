@@ -17,6 +17,7 @@ import {
   CreateProjectPayload,
   ProjectResponse,
 } from './types';
+import { WILDCARD_SCHEMA_ID } from '../Schema';
 
 export default class Project {
   context?: Context;
@@ -97,11 +98,10 @@ export default class Project {
 
   async getResource(id: string): Promise<Resource> {
     try {
-      const wildcardSchemaId = '_';
       return await Resource.get(
         this.orgLabel,
         this.label,
-        wildcardSchemaId,
+        WILDCARD_SCHEMA_ID,
         id,
       );
     } catch (error) {

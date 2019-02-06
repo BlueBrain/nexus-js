@@ -17,6 +17,7 @@ import {
   CreateProjectPayload,
   ProjectResponse,
 } from './types';
+import { WILDCARD_SCHEMA_ID } from '../Schema';
 
 export default class Project {
   context?: Context;
@@ -97,7 +98,12 @@ export default class Project {
 
   async getResource(id: string): Promise<Resource> {
     try {
-      return await Resource.getSelf(id, this.orgLabel, this.label);
+      return await Resource.get(
+        this.orgLabel,
+        this.label,
+        WILDCARD_SCHEMA_ID,
+        id,
+      );
     } catch (error) {
       throw error;
     }

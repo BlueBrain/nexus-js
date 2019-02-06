@@ -9,6 +9,8 @@ import {
   deprecateSchema,
 } from './utils';
 
+export const WILDCARD_SCHEMA_ID = '_';
+
 export default class Schema {
   readonly raw: SchemaResponse;
   readonly orgLabel: string;

@@ -11,8 +11,6 @@ import {
 } from './types';
 import { buildQueryParams } from '../utils';
 
-const WILDCARD_SCHEMA = '_';
-
 export async function getSelfResource(
   selfUrl: string,
   orgLabel: string,
@@ -35,11 +33,10 @@ export async function getSelfResource(
 export async function getResource(
   orgLabel: string,
   projectLabel: string,
-  schemaId: string | null,
+  schemaId: string,
   resourceId: string,
 ): Promise<Resource> {
-  const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId ||
-    WILDCARD_SCHEMA}/${resourceId}`;
+  const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`;
   try {
     const resourceResponse: ResourceResponse = await httpGet(
       projectResourceURL,

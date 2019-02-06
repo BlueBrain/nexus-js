@@ -97,7 +97,13 @@ export default class Project {
 
   async getResource(id: string): Promise<Resource> {
     try {
-      return await Resource.get(this.orgLabel, this.label, null, id);
+      const wildcardSchemaId = '_';
+      return await Resource.get(
+        this.orgLabel,
+        this.label,
+        wildcardSchemaId,
+        id,
+      );
     } catch (error) {
       throw error;
     }

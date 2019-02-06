@@ -97,7 +97,7 @@ export default class Project {
 
   async getResource(id: string): Promise<Resource> {
     try {
-      return await Resource.getSelf(id, this.orgLabel, this.label);
+      return await Resource.get(this.orgLabel, this.label, '_', id);
     } catch (error) {
       throw error;
     }

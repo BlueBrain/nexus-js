@@ -78,6 +78,7 @@ export function httpGet(url: string, useBase: boolean = true): Promise<any> {
     api: { baseUrl },
   } = store.getState();
   const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  console.log({ fetchURL });
   return fetch(fetchURL, {
     headers: getHeaders(),
   })

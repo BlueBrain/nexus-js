@@ -372,4 +372,4 @@ Make sure you have already installed both [Docker Engine](https://docs.docker.co
 
 # License
 
-- [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.)
+- [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)

@@ -33,7 +33,7 @@ export default class Resource<T = {}> {
   readonly orgLabel: string;
   readonly projectLabel: string;
   readonly context?: Context;
-  readonly type?: string[];
+  readonly type: string[];
   readonly self: string;
   readonly id: string;
   readonly constrainedBy: string;
@@ -91,12 +91,10 @@ export default class Resource<T = {}> {
     this.rev = resourceResponse._rev;
     this.deprecated = resourceResponse._deprecated;
     // make type an array of sting, even if we only get a single string
-    if (resourceResponse['@type']) {
-      if (Array.isArray(resourceResponse['@type'])) {
-        this.type = resourceResponse['@type'] as string[];
-      } else {
-        this.type = [resourceResponse['@type']] as string[];
-      }
+    if (Array.isArray(resourceResponse['@type'])) {
+      this.type = resourceResponse['@type'] as string[];
+    } else {
+      this.type = [resourceResponse['@type']] as string[];
     }
     // Put user custom fields in "data" key
     this.data = Object.keys(resourceResponse).reduce(

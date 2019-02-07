@@ -1,6 +1,6 @@
 export interface ResourceResponseCommon {
   '@id': string;
-  '@type'?: string | string[];
+  '@type': string | string[];
   _self: string;
   _constrainedBy: string;
   _project: string;
@@ -46,7 +46,7 @@ export interface ResourceListTagResponse {
 
 export interface CreateResourcePayload {
   resourceId?: string;
-  type?: string[];
+  type: string[];
   context: { [field: string]: string };
   [field: string]: any;
 }

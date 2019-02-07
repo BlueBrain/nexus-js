@@ -125,11 +125,11 @@ Nexus.setToken('my_bearer_token');
 Nexus.removeToken();
 ```
 
-The SDK follows the same pattern for all entities (organizations, projects, resources, realms, etc...):
+The SDK follows the same pattern when dealing with an organization, project, resource, realm, acl, etc...:
 
-- an entity is a class that can be instantiated with the result payload of the REST API
-- they expose static methods like `get`, `list`, `create`, `update` and `deprecate` i.e.: `Resource.create(/* args */)`
-- they have methods for self-modifications and children access i.e.: `orgInstance.listProjects()`, `projectInstance.deprecate()`
+- represented by a class that can be instantiated with the result payload of the REST API
+- the class exposes static methods like `get`, `list`, `create`, `update` and `deprecate` i.e.: `Resource.create(/* args */)`
+- instance of a class have methods for self-modifications, children access and other convenience methods i.e.: `orgInstance.listProjects()`, `projectInstance.deprecate(), elasticSearchViewInstance.filterByTypes()`
 
 ### Organizations
 

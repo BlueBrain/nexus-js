@@ -21,7 +21,7 @@ Pre-alpha
 - [x] Create
 - [x] Update
 - [x] Deprecate
-- [x] Events
+- [x] Events (experimental)
 
 #### Projects
 
@@ -30,7 +30,7 @@ Pre-alpha
 - [x] Create
 - [x] Update
 - [x] Deprecate
-- [x] Events
+- [x] Events (experimental)
 
 #### Resources
 
@@ -146,8 +146,6 @@ Organization.update = (orgLabel: string, rev: number, orgPayload: CreateOrgPaylo
 
 Organization.deprecate = (orgLabel: string, rev: number): Promise<Organization>;
 
-Organization.subscribe = (listeners: OrgEventListeners): EventSource;
-
 orgInstance.update(orgPayload: CreateOrgPayload): Promise<Organization>;
 
 orgInstance.deprecate(): Promise<Organization>;
@@ -161,6 +159,9 @@ orgInstance.createProject(projectLabel: string, projectPayload: CreateProjectPay
 orgInstance.updateProject(projectLabel: string, projectRev: number, projectPayload: CreateProjectPayload): Promise<Project>;
 
 orgInstance.deprecateProject(projectLabel: string, projectRev: number): Promise<Project>
+
+// EXPERIMENTAL
+Organization.subscribe = (listeners: OrgEventListeners): EventSource;
 ```
 
 ### Projects
@@ -178,8 +179,6 @@ Project.update = (orgLabel: string, projectLabel: string, rev: number, projectPa
 
 Project.deprecate = (orgLabel: string, projectLabel: string, rev: number): Promise<Project>;
 
-Project.subscribe = (listeners: ProjectEventListeners): EventSource;
-
 projectInstance.update(projectPayload: CreateProjectPayload): Promise<Project>;
 
 projectInstance.deprecate(): Promise<Project>
@@ -196,6 +195,8 @@ projectInstance.getSparqlView(): Promise<SparqlView>;
 
 projectInstance.getElasticSearchView(viewId?: undefined | string): Promise<ElasticSearchView>;
 
+// EXPERIMENTAL
+Project.subscribe = (listeners: ProjectEventListeners): EventSource;
 ```
 
 ### Schemas

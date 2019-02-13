@@ -338,7 +338,7 @@ Realm.deprecate = (realmLabel: string, rev: number): Promise<Realm>;
 ```typescript
 import { ACL } from '@bbp/nexus-sdk';
 
-ACL.list = (path: string, options?: ListACLOption): Promise<PaginatedList<ACL>>;
+ACL.list = (path: string, options?: ListACLOptions): Promise<PaginatedList<ACL>>;
 
 ACL.create = (path: string, payload: ACLPayload[]): Promise<any>;
 

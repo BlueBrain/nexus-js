@@ -51,7 +51,7 @@ export interface ACLOperationSuccess {
   _rev: number;
 }
 
-export interface ListRealmOption {
+export interface ListACLOption {
   from?: number;
   size?: number;
   rev?: number;

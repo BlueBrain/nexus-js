@@ -1,7 +1,7 @@
 import ACL from '.';
 import {
   ListACLResponse,
-  ListACLOption,
+  ListACLOptions,
   Identity,
   ACLPayload,
   IdentityResponse,
@@ -12,7 +12,7 @@ import { PaginatedList } from '../utils/types';
 
 export async function listACL(
   path: string,
-  options?: ListACLOption,
+  options?: ListACLOptions,
 ): Promise<PaginatedList<ACL>> {
   try {
     const opts = buildQueryParams(options);

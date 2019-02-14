@@ -23,6 +23,7 @@ import {
   CreateResourcePayload,
   ResourceResponseCommon,
   ResourceResponse,
+  UpdateResourcePayload,
 } from '../types';
 
 const baseUrl = 'http://api.url';
@@ -515,7 +516,7 @@ describe('Resource class', () => {
     });
 
     it('should PUT to update the resource', async () => {
-      const updatePayload: CreateResourcePayload = {
+      const updatePayload: UpdateResourcePayload = {
         context: {
           name: 'http://schema.org/name',
           description: 'http://schema.org/description',
@@ -539,6 +540,31 @@ describe('Resource class', () => {
       expect(mock.calls[0][1].body).toEqual(
         JSON.stringify({
           '@context': updatePayload.context,
+          myFancyField: updatePayload.myFancyField,
+        }),
+      );
+    });
+
+    it('should PUT to update the resource even with no context', async () => {
+      const updatePayload: UpdateResourcePayload = {
+        myFancyField: 'hello!',
+      };
+
+      updateResource(
+        'myorg',
+        'myproject',
+        'myschema',
+        'myId',
+        1,
+        updatePayload,
+      );
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myId?rev=1`,
+      );
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({
           myFancyField: updatePayload.myFancyField,
         }),
       );

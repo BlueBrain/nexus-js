@@ -51,6 +51,12 @@ export interface CreateResourcePayload {
   [field: string]: any;
 }
 
+export interface UpdateResourcePayload {
+  type?: string[];
+  context?: { [field: string]: string };
+  [field: string]: any;
+}
+
 export interface ListResourceOptions {
   full_text_search?: string;
   from?: number;

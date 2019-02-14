@@ -155,7 +155,7 @@ export async function updateResource(
     context,
     ...data
   }: {
-    context: Context;
+    context?: Context;
     [field: string]: any;
   },
 ): Promise<Resource> {

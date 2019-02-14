@@ -15,6 +15,7 @@ import {
   tagResource,
   listTags,
   listSelfTags,
+  updateResource,
 } from '../utils';
 import Nexus from '../../Nexus';
 import { PaginatedList } from '../../utils/types';
@@ -501,6 +502,46 @@ describe('Resource class', () => {
       listSelfTags('http://myresource.com');
 
       expect(mock.calls[0][0]).toEqual('http://myresource.com/tags');
+    });
+  });
+
+  describe('updateSelf()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should PUT to update the resource', async () => {
+      const updatePayload: CreateResourcePayload = {
+        context: {
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
+        },
+        myFancyField: 'hello!',
+      };
+
+      updateResource(
+        'myorg',
+        'myproject',
+        'myschema',
+        'myId',
+        1,
+        updatePayload,
+      );
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myId?rev=1`,
+      );
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({
+          '@context': updatePayload.context,
+          myFancyField: updatePayload.myFancyField,
+        }),
+      );
     });
   });
 });

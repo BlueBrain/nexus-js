@@ -155,6 +155,18 @@ describe('Resource class', () => {
       }>('testOrg', 'testProject', mockGetByIDResponse);
       expect(resource.data.banana).toBeUndefined();
     });
+
+    it('should create a resourceURL where the last url segment is a URL-encoded ID', () => {
+      const resource = new Resource<{
+        subject: string;
+      }>('testOrg', 'testProject', mockGetByIDResponse);
+
+      const expectedURL = `/resources/testOrg/testProject/resource/${encodeURIComponent(
+        mockGetByIDResponse['@id'],
+      )}`;
+
+      expect(resource.resourceURL).toEqual(expectedURL);
+    });
   });
 
   describe('.name', () => {

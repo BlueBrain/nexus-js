@@ -163,7 +163,7 @@ describe('Resource class', () => {
         subject: string;
       }>('testOrg', 'testProject', mockGetByIDResponse);
 
-      const expectedURL = `/resources/testOrg/testProject/resource/${encodeURIComponent(
+      const expectedURL = `/resources/testOrg/testProject/_/${encodeURIComponent(
         mockGetByIDResponse['@id'],
       )}`;
 

@@ -121,6 +121,31 @@ export function httpPut(
     });
 }
 
+export function httpPostFile(
+  url: string,
+  file: any,
+  config?: HttpConfig,
+): Promise<any> {
+  const body = new FormData();
+  body.append(file.name, file);
+  const {
+    api: { baseUrl },
+  } = store.getState();
+  return fetch(`${baseUrl}${url}`, {
+    body,
+    headers: {
+      ...getHeaders(config && config.extraHeaders),
+      'Content-Type': 'multipart/form-data;',
+    },
+    method: 'POST',
+  })
+    .then(checkStatus)
+    .then(r => parseResponse(r))
+    .catch(e => {
+      throw e;
+    });
+}
+
 export function httpPatch(
   url: string,
   body?: Object,

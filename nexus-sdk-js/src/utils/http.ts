@@ -64,13 +64,22 @@ const parseResponse = (response: Response, parser = jsonParser): any => {
   }
 };
 
-export function httpGet(url: string, useBase: boolean = true): Promise<any> {
+const parseJsonError = async (error: Response): Promise<JSON> => {
+  const payload: JSON = await error.json();
+  return payload;
+};
+
+export function httpGet(
+  url: string,
+  useBase: boolean = true,
+  config?: HttpConfig,
+): Promise<any> {
   const {
     api: { baseUrl },
   } = store.getState();
   const fetchURL = useBase ? `${baseUrl}${url}` : url;
   return fetch(fetchURL, {
-    headers: getHeaders(),
+    headers: getHeaders(config && config.extraHeaders),
   })
     .then(checkStatus)
     .then(r => parseResponse(r))
@@ -124,20 +133,19 @@ export function httpPut(
 
 export function httpPostFile(
   url: string,
-  file: any,
+  file: File,
   config?: HttpConfig,
 ): Promise<FileResponse> {
   const body = new FormData();
-  body.append(file.name, file);
+  body.append('file', file);
   const {
     api: { baseUrl },
   } = store.getState();
   return fetch(`${baseUrl}${url}`, {
     body,
-    headers: {
-      ...getHeaders(config && config.extraHeaders),
-      'Content-Type': 'multipart/form-data;',
-    },
+    headers: getHeaders({
+      ...(config && config.extraHeaders),
+    }),
     method: 'POST',
   })
     .then(checkStatus)

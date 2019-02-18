@@ -11,14 +11,19 @@ import {
   Context,
 } from './types';
 import { buildQueryParams } from '../utils';
+import { access } from 'fs';
 
 export async function getSelfResource(
   selfUrl: string,
   orgLabel: string,
   projectLabel: string,
+  accept?: string,
 ): Promise<Resource> {
   try {
-    const resourceResponse: ResourceResponse = await httpGet(selfUrl, false);
+    // Always receive MetaData
+    const resourceResponse: ResourceResponse = await httpGet(selfUrl, false, {
+      extraHeaders: { Accept: accept ? accept : 'application/json' },
+    });
 
     // TODO: build somehow
     // const orgLabel = '';
@@ -36,11 +41,16 @@ export async function getResource(
   projectLabel: string,
   schemaId: string,
   resourceId: string,
+  accept?: string,
 ): Promise<Resource> {
   const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`;
   try {
     const resourceResponse: ResourceResponse = await httpGet(
       projectResourceURL,
+      false,
+      {
+        extraHeaders: { Accept: accept ? accept : 'application/json' },
+      },
     );
     const resource = new Resource(orgLabel, projectLabel, resourceResponse);
     return resource;

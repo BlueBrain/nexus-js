@@ -110,7 +110,7 @@ export default class Resource<T = {}> {
     );
     this.resourceURL = `/resources/${this.orgLabel}/${
       this.projectLabel
-    }/resource/${encodeURIComponent(this.id)}`;
+    }/_/${encodeURIComponent(this.id)}`;
   }
 
   get name(): string {

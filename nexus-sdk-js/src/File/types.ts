@@ -16,8 +16,8 @@ export interface FileResponse {
   _project: string;
   _rev: 1;
   _deprecated: false;
-  _createdAt: Date;
+  _createdAt: string;
   _createdBy: string;
-  _updatedAt: Date;
+  _updatedAt: string;
   _updatedBy: string;
 }

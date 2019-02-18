@@ -18,6 +18,7 @@ import {
   ProjectResponse,
 } from './types';
 import { WILDCARD_SCHEMA_ID } from '../Schema';
+import File from '../File';
 
 export default class Project {
   context?: Context;
@@ -104,6 +105,14 @@ export default class Project {
         WILDCARD_SCHEMA_ID,
         id,
       );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createFile(file: any): Promise<File> {
+    try {
+      return await File.create(this.orgLabel, this.label, file);
     } catch (error) {
       throw error;
     }

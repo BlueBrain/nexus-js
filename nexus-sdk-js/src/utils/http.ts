@@ -1,5 +1,6 @@
 import fetch, { Headers } from 'cross-fetch';
 import store from '../store';
+import { FileResponse } from '../File/types';
 
 type httpTypes = 'json' | 'text' | 'arrayBuffer' | 'blob';
 
@@ -125,7 +126,7 @@ export function httpPostFile(
   url: string,
   file: any,
   config?: HttpConfig,
-): Promise<any> {
+): Promise<FileResponse> {
   const body = new FormData();
   body.append(file.name, file);
   const {

@@ -315,6 +315,48 @@ describe('Resource class', () => {
       );
     });
 
+    it('should PUT the new resource with an ID', async () => {
+      const payload: CreateResourcePayload = {
+        context: {
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
+        },
+        resourceId: 'myID',
+      };
+
+      createResource('myorg', 'myproject', 'myschema', payload);
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myID`,
+      );
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ '@context': payload.context }),
+      );
+    });
+
+    it('should PUT a resource with resourceID with URIencoded URL', async () => {
+      const payload: CreateResourcePayload = {
+        context: {
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
+        },
+        resourceId: 'https://mywebsite.com',
+      };
+
+      createResource('myorg', 'myproject', 'myschema', payload);
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/${encodeURIComponent(
+          'https://mywebsite.com',
+        )}`,
+      );
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({ '@context': payload.context }),
+      );
+    });
+
     it('should POST the new resource with the expected payload', async () => {
       const payload: CreateResourcePayload = {
         context: {

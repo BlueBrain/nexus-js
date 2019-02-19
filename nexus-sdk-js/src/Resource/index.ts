@@ -29,15 +29,6 @@ export const RESOURCE_METADATA_KEYS = [
   '_deprecated',
 ];
 
-const isValidUrl = (string: string) => {
-  try {
-    new URL(string);
-    return true;
-  } catch (_) {
-    return false;
-  }
-};
-
 export default class Resource<T = {}> {
   readonly orgLabel: string;
   readonly projectLabel: string;

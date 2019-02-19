@@ -70,7 +70,6 @@ export default class Resource<T = {}> {
       // TODO move to File Class ?
       raw['_filename'] ||
       raw['@id'];
-    console.log({ name, raw });
     return name;
   }
 

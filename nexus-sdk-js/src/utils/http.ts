@@ -10,7 +10,10 @@ interface HttpConfig {
 }
 
 const getHeaders = (
-  headers: { [key: string]: string } = { 'Content-Type': 'application/json' },
+  headers: { [key: string]: string } = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
 ): Headers => {
   const {
     auth: { accessToken },
@@ -43,14 +46,6 @@ function jsonParser(response: Response): Promise<Object> {
   }
 }
 
-function textParser(response: Response): Promise<string> {
-  try {
-    return response.text();
-  } catch (error) {
-    throw new Error(error.message);
-  }
-}
-
 function prepareBody<T = object>(body: T, as: httpTypes = 'json'): any {
   switch (as) {
     case 'text':
@@ -66,11 +61,6 @@ const parseResponse = (response: Response, parser = jsonParser): any => {
   } catch (error) {
     throw new Error(error.message);
   }
-};
-
-const parseJsonError = async (error: Response): Promise<JSON> => {
-  const payload: JSON = await error.json();
-  return payload;
 };
 
 export function httpGet(url: string, useBase: boolean = true): Promise<any> {

@@ -61,14 +61,16 @@ export default class Resource<T = {}> {
   static listTags = listTags;
   static listSelfTags = listSelfTags;
   static formatName(raw: ResourceResponse): string {
-    return (
+    const name =
       raw['skos:prefLabel'] ||
       raw['rdfs:label'] ||
       raw['schema:name'] ||
       raw['label'] ||
       raw['name'] ||
-      raw['@id']
-    );
+      // TODO move to File Class ?
+      raw['_filename'] ||
+      raw['@id'];
+    return name;
   }
 
   constructor(

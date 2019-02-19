@@ -27,7 +27,11 @@ describe('http module', () => {
       mockResponse('{}');
       httpGet('/service');
       expect(mock.calls[0][1].headers).toEqual(
-        new Headers({ 'Content-Type': 'application/json', mode: 'cors' }),
+        new Headers({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          mode: 'cors',
+        }),
       );
     });
     it('should successfully parse JSON', async () => {

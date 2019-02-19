@@ -110,7 +110,7 @@ export default class Resource<T = {}> {
     );
     this.resourceURL = `/resources/${this.orgLabel}/${
       this.projectLabel
-    }/resource/${this.id}`;
+    }/_/${encodeURIComponent(this.id)}`;
   }
 
   get name(): string {
@@ -121,7 +121,7 @@ export default class Resource<T = {}> {
     context,
     ...data
   }: {
-    context: { [field: string]: string };
+    context?: Context;
     [field: string]: any;
   }): Promise<Resource> {
     return Resource.updateSelf(
@@ -129,7 +129,7 @@ export default class Resource<T = {}> {
       this.rev,
       {
         context,
-        data,
+        ...data,
       },
       this.orgLabel,
       this.projectLabel,

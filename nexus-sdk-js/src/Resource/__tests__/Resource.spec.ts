@@ -15,6 +15,7 @@ import {
   tagResource,
   listTags,
   listSelfTags,
+  updateResource,
 } from '../utils';
 import Nexus from '../../Nexus';
 import { PaginatedList } from '../../utils/types';
@@ -22,6 +23,7 @@ import {
   CreateResourcePayload,
   ResourceResponseCommon,
   ResourceResponse,
+  UpdateResourcePayload,
 } from '../types';
 
 const baseUrl = 'http://api.url';
@@ -154,6 +156,18 @@ describe('Resource class', () => {
         banana: string;
       }>('testOrg', 'testProject', mockGetByIDResponse);
       expect(resource.data.banana).toBeUndefined();
+    });
+
+    it('should create a resourceURL where the last url segment is a URL-encoded ID', () => {
+      const resource = new Resource<{
+        subject: string;
+      }>('testOrg', 'testProject', mockGetByIDResponse);
+
+      const expectedURL = `/resources/testOrg/testProject/_/${encodeURIComponent(
+        mockGetByIDResponse['@id'],
+      )}`;
+
+      expect(resource.resourceURL).toEqual(expectedURL);
     });
   });
 
@@ -489,6 +503,71 @@ describe('Resource class', () => {
       listSelfTags('http://myresource.com');
 
       expect(mock.calls[0][0]).toEqual('http://myresource.com/tags');
+    });
+  });
+
+  describe('updateSelf()', () => {
+    beforeEach(() => {
+      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+    });
+
+    afterEach(() => {
+      resetMocks();
+    });
+
+    it('should PUT to update the resource', async () => {
+      const updatePayload: UpdateResourcePayload = {
+        context: {
+          name: 'http://schema.org/name',
+          description: 'http://schema.org/description',
+        },
+        myFancyField: 'hello!',
+      };
+
+      updateResource(
+        'myorg',
+        'myproject',
+        'myschema',
+        'myId',
+        1,
+        updatePayload,
+      );
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myId?rev=1`,
+      );
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({
+          '@context': updatePayload.context,
+          myFancyField: updatePayload.myFancyField,
+        }),
+      );
+    });
+
+    it('should PUT to update the resource even with no context', async () => {
+      const updatePayload: UpdateResourcePayload = {
+        myFancyField: 'hello!',
+      };
+
+      updateResource(
+        'myorg',
+        'myproject',
+        'myschema',
+        'myId',
+        1,
+        updatePayload,
+      );
+
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myId?rev=1`,
+      );
+      expect(mock.calls[0][1].method).toEqual('PUT');
+      expect(mock.calls[0][1].body).toEqual(
+        JSON.stringify({
+          myFancyField: updatePayload.myFancyField,
+        }),
+      );
     });
   });
 });

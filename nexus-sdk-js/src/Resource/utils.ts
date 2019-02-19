@@ -8,6 +8,7 @@ import {
   ResourceResponse,
   ListResourceResponse,
   ResourceResponseCommon,
+  Context,
 } from './types';
 import { buildQueryParams } from '../utils';
 
@@ -124,7 +125,7 @@ export async function updateSelfResource(
     context,
     ...data
   }: {
-    context: { [field: string]: string };
+    context?: Context;
     [field: string]: any;
   },
   orgLabel: string,
@@ -137,9 +138,6 @@ export async function updateSelfResource(
         '@context': context,
         ...data,
       },
-      // TODO: build somehow
-      // const orgLabel = '';
-      // const projectLabel = '';
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
   } catch (error) {
@@ -157,7 +155,7 @@ export async function updateResource(
     context,
     ...data
   }: {
-    context: { [field: string]: string };
+    context?: Context;
     [field: string]: any;
   },
 ): Promise<Resource> {

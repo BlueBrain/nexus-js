@@ -102,7 +102,9 @@ export async function createResource(
     } else {
       const { context, type, resourceId, ...rest } = payload;
       const resourceResponse: ResourceResponse = await httpPut(
-        `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`,
+        `/resources/${orgLabel}/${projectLabel}/${schemaId}/${encodeURIComponent(
+          resourceId,
+        )}`,
         {
           '@context': context,
           '@type': type,

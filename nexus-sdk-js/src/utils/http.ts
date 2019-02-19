@@ -4,9 +4,18 @@ import { FileResponse } from '../File/types';
 
 enum ReceiveAsTypes {
   JSON = 'json',
+  TEXT = 'text',
+  ARRAY_BUFFER = 'arrayBuffer',
+  BLOB = 'blob',
+  BASE64 = 'base64',
 }
 
-type httpTypes = 'json' | 'text' | 'arrayBuffer' | 'blob' | 'base64';
+type httpTypes =
+  | ReceiveAsTypes.JSON
+  | ReceiveAsTypes.TEXT
+  | ReceiveAsTypes.ARRAY_BUFFER
+  | ReceiveAsTypes.BLOB
+  | ReceiveAsTypes.BASE64;
 
 interface HttpConfig {
   sendAs?: httpTypes;

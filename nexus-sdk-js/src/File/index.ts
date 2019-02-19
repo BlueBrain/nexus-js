@@ -1,5 +1,5 @@
 import { FileResponse } from './types';
-import { createFile } from './utils';
+import { createFile, getFile, getFileMetaData } from './utils';
 import { Context } from '../Resource/types';
 
 export default class File {
@@ -20,6 +20,8 @@ export default class File {
   readonly raw: FileResponse;
 
   static create = createFile;
+  static get = getFileMetaData;
+  static getFile = getFile;
 
   constructor(
     orgLabel: string,

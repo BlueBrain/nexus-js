@@ -2,7 +2,11 @@ import fetch, { Headers } from 'cross-fetch';
 import store from '../store';
 import { FileResponse } from '../File/types';
 
-type httpTypes = 'json' | 'text' | 'arrayBuffer' | 'blob';
+enum ReceiveAsTypes {
+  JSON = 'json',
+}
+
+type httpTypes = 'json' | 'text' | 'arrayBuffer' | 'blob' | 'base64';
 
 interface HttpConfig {
   sendAs?: httpTypes;
@@ -56,6 +60,15 @@ function prepareBody<T = object>(body: T, as: httpTypes = 'json'): any {
   }
 }
 
+function prepareResponse<T = object>(body: T, as: httpTypes = 'json'): any {
+  switch (as) {
+    case 'text':
+      return String(body);
+    default:
+      return JSON.stringify(body);
+  }
+}
+
 const parseResponse = (response: Response, parser = jsonParser): any => {
   try {
     return parser(response);
@@ -82,7 +95,11 @@ export function httpGet(
     headers: getHeaders(config && config.extraHeaders),
   })
     .then(checkStatus)
-    .then(r => parseResponse(r))
+    .then(r => {
+      if (config && config.sendAs) {
+      }
+      parseResponse(r);
+    })
     .catch(e => {
       throw e;
     });
@@ -191,3 +208,21 @@ export function httpDelete(url: string, useBase: boolean = true): Promise<any> {
       throw e;
     });
 }
+
+// fetch(request, options).then((response) => {
+//   response.arrayBuffer().then((buffer) => {
+//     var base64Flag = 'data:image/jpeg;base64,';
+//     var imageStr = arrayBufferToBase64(buffer);
+
+//     document.querySelector('img').src = base64Flag + imageStr;
+//   });
+// });
+
+// function arrayBufferToBase64(buffer) {
+//   var binary = '';
+//   var bytes = [].slice.call(new Uint8Array(buffer));
+
+//   bytes.forEach((b) => binary += String.fromCharCode(b));
+
+//   return window.btoa(binary);
+// };

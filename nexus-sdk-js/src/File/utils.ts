@@ -8,7 +8,7 @@ export async function createFile(
   file: File,
 ): Promise<NexusFile> {
   try {
-    const fileResponse: FileResponse = await httpPost(
+    const fileResponse: FileResponse = await httpPost<File>(
       `/files/${orgLabel}/${projectLabel}`,
       file,
       { sendAs: HttpConfigTypes.FILE },

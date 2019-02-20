@@ -99,9 +99,9 @@ Pre-alpha
 
 #### Files
 
-- [x] Get
+- [ ] Get
 - [ ] List
-- [ ] Create
+- [x] Create
 - [ ] Update
 - [ ] Deprecate
 
@@ -301,14 +301,6 @@ resourceInstance.update({
 
 ```typescript
 import { File } from '@bbp/nexus-sdk';
-
-File.get = (orgLabel: string, projectLabel: string, resourceId: string): Promise<File>;
-File.getSelf = (selfUrl: string, orgLabel: string, projectLabel: string): Promise<File>;
-
-File.list = (orgLabel: string, projectLabel: string, options?: ListResourceOptions): Promise<PaginatedList<File>>;
-
-File.listTags = (orgLabel: string, projectLabel: string, resourceId: string): Promise<string[]>;
-File.listSelfTags = (selfUrl: string): Promise<string[]>;
 
 File.create = (orgLabel: string, projectLabel: string, payload: CreateFilePayload): Promise<File>;
 ```

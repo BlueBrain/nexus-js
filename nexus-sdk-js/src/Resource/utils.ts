@@ -11,7 +11,6 @@ import {
   Context,
 } from './types';
 import { buildQueryParams } from '../utils';
-import { access } from 'fs';
 
 export async function getSelfResource(
   selfUrl: string,

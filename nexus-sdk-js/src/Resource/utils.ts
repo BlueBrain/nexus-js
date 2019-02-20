@@ -17,12 +17,11 @@ export async function getSelfResource(
   selfUrl: string,
   orgLabel: string,
   projectLabel: string,
-  accept?: string,
 ): Promise<Resource> {
   try {
     // Always receive MetaData
-    const resourceResponse: ResourceResponse = await httpGet(selfUrl, false, {
-      extraHeaders: { Accept: accept ? accept : 'application/json' },
+    const resourceResponse: ResourceResponse = await httpGet(selfUrl, {
+      useBase: false,
     });
 
     // TODO: build somehow
@@ -41,16 +40,11 @@ export async function getResource(
   projectLabel: string,
   schemaId: string,
   resourceId: string,
-  accept?: string,
 ): Promise<Resource> {
   const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`;
   try {
     const resourceResponse: ResourceResponse = await httpGet(
       projectResourceURL,
-      false,
-      {
-        extraHeaders: { Accept: accept ? accept : 'application/json' },
-      },
     );
     const resource = new Resource(orgLabel, projectLabel, resourceResponse);
     return resource;
@@ -234,8 +228,7 @@ export async function tagSelfResource(
         tag: tagName,
         rev: tagFromRev,
       },
-      undefined,
-      false,
+      { useBase: false },
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
   } catch (error) {
@@ -261,10 +254,9 @@ export async function listTags(
 
 export async function listSelfTags(selfUrl: string): Promise<string[]> {
   try {
-    const response: ResourceListTagResponse = await httpGet(
-      `${selfUrl}/tags`,
-      false,
-    );
+    const response: ResourceListTagResponse = await httpGet(`${selfUrl}/tags`, {
+      useBase: false,
+    });
     return response.tags;
   } catch (error) {
     throw error;

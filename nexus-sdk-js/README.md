@@ -97,6 +97,14 @@ Pre-alpha
 - [x] Update
 - [x] Deprecate
 
+#### Files
+
+- [x] Get
+- [ ] List
+- [ ] Create
+- [ ] Update
+- [ ] Deprecate
+
 ## Getting started
 
 ### Installation
@@ -287,6 +295,22 @@ resourceInstance.update({
     context: { [field: string]: string };
     [field: string]: any;
   }): Promise<Resource>;
+```
+
+### Files
+
+```typescript
+import { File } from '@bbp/nexus-sdk';
+
+File.get = (orgLabel: string, projectLabel: string, resourceId: string): Promise<File>;
+File.getSelf = (selfUrl: string, orgLabel: string, projectLabel: string): Promise<File>;
+
+File.list = (orgLabel: string, projectLabel: string, options?: ListResourceOptions): Promise<PaginatedList<File>>;
+
+File.listTags = (orgLabel: string, projectLabel: string, resourceId: string): Promise<string[]>;
+File.listSelfTags = (selfUrl: string): Promise<string[]>;
+
+File.create = (orgLabel: string, projectLabel: string, payload: CreateFilePayload): Promise<File>;
 ```
 
 ### Views

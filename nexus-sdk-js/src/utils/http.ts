@@ -23,6 +23,7 @@ export type httpTypes =
 interface HttpConfig {
   sendAs?: httpTypes;
   receiveAs?: httpTypes;
+  useBase?: boolean;
   extraHeaders?: { [key: string]: string };
 }
 
@@ -107,43 +108,45 @@ const parseJsonError = async (error: Response): Promise<JSON> => {
   return payload;
 };
 
-export function httpGet(
-  url: string,
-  useBase: boolean = true,
-  config?: HttpConfig,
-): Promise<any> {
+const GET_DEFAULT_HTTP_CONFIG = {
+  useBase: true,
+};
+
+export function httpGet(url: string, config?: HttpConfig): Promise<any> {
+  const squashedConfig: HttpConfig = { ...GET_DEFAULT_HTTP_CONFIG, ...config };
   const {
     api: { baseUrl },
   } = store.getState();
-  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
   return fetch(fetchURL, {
-    headers: getHeaders(config && config.extraHeaders),
+    headers: getHeaders(squashedConfig.extraHeaders),
   })
     .then(checkStatus)
-    .then(r => {
-      if (config && config.sendAs) {
-      }
-      parseResponse(r);
-    })
+    .then(r => parseResponse(r))
     .catch(e => {
       throw e;
     });
 }
 
+const POST_DEFAULT_HTTP_CONFIG = {
+  useBase: true,
+  sendAs: HttpConfigTypes.JSON,
+};
+
 export function httpPost<T = BodyInit>(
   url: string,
   body?: T,
   config?: HttpConfig,
-  useBase: boolean = true,
 ): Promise<any> {
+  const squashedConfig: HttpConfig = { ...POST_DEFAULT_HTTP_CONFIG, ...config };
   const {
     api: { baseUrl },
   } = store.getState();
-  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
   return fetch(fetchURL, {
-    headers: getHeaders(config && config.extraHeaders),
+    headers: getHeaders(squashedConfig.extraHeaders),
     method: 'POST',
-    body: prepareBody(body as BodyInit | undefined, config && config.sendAs),
+    body: prepareBody(body as BodyInit | undefined, squashedConfig.sendAs),
   })
     .then(checkStatus)
     .then(r => parseResponse(r))

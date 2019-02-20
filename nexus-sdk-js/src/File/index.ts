@@ -1,5 +1,5 @@
 import { FileResponse } from './types';
-import { createFile, getFileMetaData } from './utils';
+import { createFile } from './utils';
 import { Context } from '../Resource/types';
 
 export default class File {
@@ -17,11 +17,16 @@ export default class File {
   readonly updatedBy: string;
   readonly rev: number;
   readonly deprecated: boolean;
+  readonly mediaType: string;
+  readonly filename: string;
+  readonly digest: {
+    algorithm: string;
+    value: string;
+  };
+  readonly bytes: number;
   readonly raw: FileResponse;
 
   static create = createFile;
-  static get = getFileMetaData;
-  // static getFile = getFile;
 
   constructor(
     orgLabel: string,
@@ -43,5 +48,12 @@ export default class File {
     this.updatedBy = fileResponse._updatedBy;
     this.rev = fileResponse._rev;
     this.deprecated = fileResponse._deprecated;
+    this.bytes = fileResponse._bytes;
+    this.digest = {
+      algorithm: fileResponse._digest._algorithm,
+      value: fileResponse._digest._value,
+    };
+    this.filename = fileResponse._filename;
+    this.mediaType = fileResponse._mediaType;
   }
 }

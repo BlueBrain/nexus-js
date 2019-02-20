@@ -1,21 +1,24 @@
 import fetch, { Headers } from 'cross-fetch';
 import store from '../store';
 import { FileResponse } from '../File/types';
+import { BodyInit } from 'node-fetch';
 
-enum ReceiveAsTypes {
+export enum HttpConfigTypes {
   JSON = 'json',
   TEXT = 'text',
   ARRAY_BUFFER = 'arrayBuffer',
   BLOB = 'blob',
   BASE64 = 'base64',
+  FILE = 'file',
 }
 
-type httpTypes =
-  | ReceiveAsTypes.JSON
-  | ReceiveAsTypes.TEXT
-  | ReceiveAsTypes.ARRAY_BUFFER
-  | ReceiveAsTypes.BLOB
-  | ReceiveAsTypes.BASE64;
+export type httpTypes =
+  | HttpConfigTypes.JSON
+  | HttpConfigTypes.TEXT
+  | HttpConfigTypes.ARRAY_BUFFER
+  | HttpConfigTypes.BLOB
+  | HttpConfigTypes.BASE64
+  | HttpConfigTypes.FILE;
 
 interface HttpConfig {
   sendAs?: httpTypes;
@@ -60,18 +63,31 @@ function jsonParser(response: Response): Promise<Object> {
   }
 }
 
-function prepareBody<T = object>(body: T, as: httpTypes = 'json'): any {
+function prepareBody(
+  body?: BodyInit,
+  as: httpTypes = HttpConfigTypes.JSON,
+): any {
+  if (!body) {
+    return undefined;
+  }
   switch (as) {
-    case 'text':
+    case HttpConfigTypes.TEXT:
       return String(body);
+    case HttpConfigTypes.FILE:
+      const formData = new FormData();
+      formData.append('file', body as string | Blob);
+      return formData;
     default:
       return JSON.stringify(body);
   }
 }
 
-function prepareResponse<T = object>(body: T, as: httpTypes = 'json'): any {
+function prepareResponse<T = object>(
+  body: T,
+  as: httpTypes = HttpConfigTypes.JSON,
+): any {
   switch (as) {
-    case 'text':
+    case HttpConfigTypes.TEXT:
       return String(body);
     default:
       return JSON.stringify(body);
@@ -114,7 +130,7 @@ export function httpGet(
     });
 }
 
-export function httpPost<T = Object>(
+export function httpPost<T = BodyInit>(
   url: string,
   body?: T,
   config?: HttpConfig,
@@ -127,7 +143,7 @@ export function httpPost<T = Object>(
   return fetch(fetchURL, {
     headers: getHeaders(config && config.extraHeaders),
     method: 'POST',
-    body: prepareBody(body, config && config.sendAs),
+    body: prepareBody(body as BodyInit | undefined, config && config.sendAs),
   })
     .then(checkStatus)
     .then(r => parseResponse(r))
@@ -149,30 +165,6 @@ export function httpPut(
     headers: getHeaders(),
     method: 'PUT',
     body: JSON.stringify(body),
-  })
-    .then(checkStatus)
-    .then(r => parseResponse(r))
-    .catch(e => {
-      throw e;
-    });
-}
-
-export function httpPostFile(
-  url: string,
-  file: File,
-  config?: HttpConfig,
-): Promise<FileResponse> {
-  const body = new FormData();
-  body.append('file', file);
-  const {
-    api: { baseUrl },
-  } = store.getState();
-  return fetch(`${baseUrl}${url}`, {
-    body,
-    headers: getHeaders({
-      ...(config && config.extraHeaders),
-    }),
-    method: 'POST',
   })
     .then(checkStatus)
     .then(r => parseResponse(r))
@@ -217,21 +209,3 @@ export function httpDelete(url: string, useBase: boolean = true): Promise<any> {
       throw e;
     });
 }
-
-// fetch(request, options).then((response) => {
-//   response.arrayBuffer().then((buffer) => {
-//     var base64Flag = 'data:image/jpeg;base64,';
-//     var imageStr = arrayBufferToBase64(buffer);
-
-//     document.querySelector('img').src = base64Flag + imageStr;
-//   });
-// });
-
-// function arrayBufferToBase64(buffer) {
-//   var binary = '';
-//   var bytes = [].slice.call(new Uint8Array(buffer));
-
-//   bytes.forEach((b) => binary += String.fromCharCode(b));
-
-//   return window.btoa(binary);
-// };

@@ -1,5 +1,5 @@
 import { FileResponse } from './types';
-import { httpPostFile, httpGetFile, httpGet } from '../utils/http';
+import { httpPost, httpGet } from '../utils/http';
 import File from '.';
 
 export async function createFile(
@@ -8,7 +8,7 @@ export async function createFile(
   file: any,
 ): Promise<File> {
   try {
-    const fileResponse: FileResponse = await httpPostFile(
+    const fileResponse: FileResponse = await httpPost(
       `/files/${orgLabel}/${projectLabel}`,
       file,
     );
@@ -35,20 +35,20 @@ export async function getFileMetaData(
 }
 
 // fetch the file itself, not the metadata
-export async function getFile(
-  orgLabel: string,
-  projectLabel: string,
-  id: any,
-  mediaType: string,
-): Promise<File> {
-  try {
-    const file = await httpGetFile(
-      `/files/${orgLabel}/${projectLabel}/${id}`,
-      true,
-      { extraHeaders: { Accept: mediaType } },
-    );
-    return file;
-  } catch (error) {
-    throw new Error(error);
-  }
-}
+// export async function getFile(
+//   orgLabel: string,
+//   projectLabel: string,
+//   id: any,
+//   mediaType: string,
+// ): Promise<File> {
+//   try {
+//     const file = await httpGetFile(
+//       `/files/${orgLabel}/${projectLabel}/${id}`,
+//       true,
+//       { extraHeaders: { Accept: mediaType } },
+//     );
+//     return file;
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// }

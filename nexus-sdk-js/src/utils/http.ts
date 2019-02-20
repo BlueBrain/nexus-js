@@ -108,12 +108,12 @@ const parseJsonError = async (error: Response): Promise<JSON> => {
   return payload;
 };
 
-const GET_DEFAULT_HTTP_CONFIG = {
+const CONFIG_DEFAULT_HTTP_GET = {
   useBase: true,
 };
 
 export function httpGet(url: string, config?: HttpConfig): Promise<any> {
-  const squashedConfig: HttpConfig = { ...GET_DEFAULT_HTTP_CONFIG, ...config };
+  const squashedConfig: HttpConfig = { ...CONFIG_DEFAULT_HTTP_GET, ...config };
   const {
     api: { baseUrl },
   } = store.getState();
@@ -128,7 +128,7 @@ export function httpGet(url: string, config?: HttpConfig): Promise<any> {
     });
 }
 
-const POST_DEFAULT_HTTP_CONFIG = {
+const CONFIG_DEFAULT_HTTP_POST = {
   useBase: true,
   sendAs: HttpConfigTypes.JSON,
 };
@@ -138,7 +138,7 @@ export function httpPost<T = BodyInit>(
   body?: T,
   config?: HttpConfig,
 ): Promise<any> {
-  const squashedConfig: HttpConfig = { ...POST_DEFAULT_HTTP_CONFIG, ...config };
+  const squashedConfig: HttpConfig = { ...CONFIG_DEFAULT_HTTP_POST, ...config };
   const {
     api: { baseUrl },
   } = store.getState();

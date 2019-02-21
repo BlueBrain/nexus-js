@@ -304,7 +304,7 @@ import { NexusFile } from '@bbp/nexus-sdk';
 
 NexusFile.create = (orgLabel: string, projectLabel: string, payload: File | Blob | ReadableStream | ReadStream | Readable): Promise<File>;
 
-// examples in brower
+// examples in browser
 NexusFile.create('myorg', 'myproject', new Blob(['abc'], { type: "text/plain"}));
 NexusFile.create('myorg', 'myproject',  new File(["foo"], "foo.txt", {
   type: "text/plain",

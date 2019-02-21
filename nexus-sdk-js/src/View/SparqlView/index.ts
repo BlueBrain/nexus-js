@@ -1,4 +1,4 @@
-import { httpPost } from '../../utils/http';
+import { httpPost, HttpConfigTypes } from '../../utils/http';
 import { SparqlViewQueryException } from './exceptions';
 import { getSparqlView } from '../utils';
 import { SparqlViewResponse, SparqlViewQueryResponse } from './types';
@@ -35,7 +35,7 @@ export default class SparqlView {
         this.queryURL,
         sparqlQuery,
         {
-          sendAs: 'text',
+          sendAs: HttpConfigTypes.TEXT,
           extraHeaders: { 'Content-Type': 'text/plain' },
         },
       );

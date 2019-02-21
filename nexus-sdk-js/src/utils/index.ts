@@ -15,3 +15,7 @@ export function buildQueryParams(options?: {
   }
   return opts;
 }
+
+export function isBrowser(): boolean {
+  return typeof window === 'object';
+}

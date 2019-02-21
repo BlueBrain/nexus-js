@@ -97,6 +97,14 @@ Pre-alpha
 - [x] Update
 - [x] Deprecate
 
+#### Files
+
+- [ ] Get
+- [ ] List
+- [x] Create
+- [ ] Update
+- [ ] Deprecate
+
 ## Getting started
 
 ### Installation
@@ -287,6 +295,29 @@ resourceInstance.update({
     context: { [field: string]: string };
     [field: string]: any;
   }): Promise<Resource>;
+```
+
+### Files
+
+```typescript
+import { NexusFile } from '@bbp/nexus-sdk';
+
+NexusFile.create = (orgLabel: string, projectLabel: string, payload: File | Blob | ReadableStream | ReadStream | Readable): Promise<File>;
+
+// examples in brower
+NexusFile.create('myorg', 'myproject', new Blob(['abc'], { type: "text/plain"}));
+NexusFile.create('myorg', 'myproject',  new File(["foo"], "foo.txt", {
+  type: "text/plain",
+}));
+
+// examples in node
+NexusFile.create('myorg', 'myproject', fs.createReadStream('/path/to/my/file'));
+
+const buffer = new Buffer('abc');
+const stream = new Readable();
+stream.push(buffer);
+stream.push(null);
+NexusFile.create('myOrg', 'myProject', stream);
 ```
 
 ### Views

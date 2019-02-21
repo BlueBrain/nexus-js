@@ -18,7 +18,10 @@ export async function getSelfResource(
   projectLabel: string,
 ): Promise<Resource> {
   try {
-    const resourceResponse: ResourceResponse = await httpGet(selfUrl, false);
+    // Always receive MetaData
+    const resourceResponse: ResourceResponse = await httpGet(selfUrl, {
+      useBase: false,
+    });
 
     // TODO: build somehow
     // const orgLabel = '';
@@ -224,8 +227,7 @@ export async function tagSelfResource(
         tag: tagName,
         rev: tagFromRev,
       },
-      undefined,
-      false,
+      { useBase: false },
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
   } catch (error) {
@@ -251,10 +253,9 @@ export async function listTags(
 
 export async function listSelfTags(selfUrl: string): Promise<string[]> {
   try {
-    const response: ResourceListTagResponse = await httpGet(
-      `${selfUrl}/tags`,
-      false,
-    );
+    const response: ResourceListTagResponse = await httpGet(`${selfUrl}/tags`, {
+      useBase: false,
+    });
     return response.tags;
   } catch (error) {
     throw error;

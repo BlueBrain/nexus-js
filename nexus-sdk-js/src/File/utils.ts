@@ -1,8 +1,8 @@
 // @ts-ignore
 import FormData from 'isomorphic-form-data';
-import { FileResponse } from './types';
+import { NexusFileResponse } from './types';
 import { httpPost, HttpConfigTypes } from '../utils/http';
-import { File as NexusFile } from '..';
+import NexusFile from './index';
 import { isBrowser } from '../utils';
 import { ReadStream } from 'fs';
 import { Readable } from 'stream';
@@ -22,7 +22,7 @@ export async function createFile(
     if (!isBrowser) {
       extraHeaders = form.getHeaders();
     }
-    const fileResponse: FileResponse = await httpPost(
+    const fileResponse: NexusFileResponse = await httpPost(
       `/files/${orgLabel}/${projectLabel}`,
       form,
       {

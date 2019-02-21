@@ -1,8 +1,8 @@
-import { FileResponse } from './types';
+import { NexusFileResponse } from './types';
 import { createFile } from './utils';
 import { Context } from '../Resource/types';
 
-export default class File {
+export default class NexusFile {
   readonly orgLabel: string;
   readonly projectLabel: string;
   readonly context: Context;
@@ -24,14 +24,14 @@ export default class File {
     value: string;
   };
   readonly bytes: number;
-  readonly raw: FileResponse;
+  readonly raw: NexusFileResponse;
 
   static create = createFile;
 
   constructor(
     orgLabel: string,
     projectLabel: string,
-    fileResponse: FileResponse,
+    fileResponse: NexusFileResponse,
   ) {
     this.raw = fileResponse;
     this.orgLabel = orgLabel;

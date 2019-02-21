@@ -18,7 +18,7 @@ import {
   ProjectResponse,
 } from './types';
 import { WILDCARD_SCHEMA_ID } from '../Schema';
-import File from '../File';
+import NexusFile from '../File';
 
 export default class Project {
   context?: Context;
@@ -110,9 +110,9 @@ export default class Project {
     }
   }
 
-  async createFile(file: any): Promise<File> {
+  async createFile(file: any): Promise<NexusFile> {
     try {
-      return await File.create(this.orgLabel, this.label, file);
+      return await NexusFile.create(this.orgLabel, this.label, file);
     } catch (error) {
       throw error;
     }

@@ -1,6 +1,6 @@
 import { Context } from '../Resource/types';
 
-export interface FileResponse {
+export interface NexusFileResponse {
   '@context': Context;
   '@id': string;
   '@type': 'File';

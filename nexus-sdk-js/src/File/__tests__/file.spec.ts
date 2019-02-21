@@ -1,13 +1,14 @@
 import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
-import Nexus, { File as NexusFile } from '../..';
-import { FileResponse } from '../types';
+import Nexus from '../..';
+import NexusFile from '../index';
+import { NexusFileResponse } from '../types';
 import { Readable } from 'stream';
 import fs from 'fs';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
 
-const mockPostFileResponse: FileResponse = {
+const mockPostFileResponse: NexusFileResponse = {
   '@context': 'https://bluebrain.github.io/nexus/contexts/resource.json',
   '@id': 'base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9',
   '@type': 'File',

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`File class It should create a File instance from a getByID example response 1`] = `
-File {
+NexusFile {
   "bytes": 670,
   "constrainedBy": "https://bluebrain.github.io/nexus/schemas/file.json",
   "context": "https://bluebrain.github.io/nexus/contexts/resource.json",

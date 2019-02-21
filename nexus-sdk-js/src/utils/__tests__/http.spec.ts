@@ -1,7 +1,6 @@
 import { resetMocks, mockResponse, mock } from 'jest-fetch-mock';
 import { httpGet, httpPost, HttpConfigTypes } from '../http';
 import Nexus from '../../Nexus';
-import { Headers } from 'cross-fetch';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
@@ -91,13 +90,11 @@ describe('http module', () => {
     it('should successfully parse prepare File', async () => {
       const payload = { message: 'success' };
       mockResponse(JSON.stringify(payload), { status: 200 });
-      const myFile = new File(['foo'], 'foo.txt', {
-        type: 'text/plain',
+      const blob = new Blob(['abc'], { type: 'tet/plain ' });
+      httpPost('/endpoint', blob, {
+        sendAs: HttpConfigTypes.FILE,
       });
-      const formData = new FormData();
-      formData.append('file', myFile);
-      httpPost('/endpoint', myFile, { sendAs: HttpConfigTypes.FILE });
-      expect(mock.calls[0][1].body).toEqual(formData);
+      expect(mock.calls[0][1].body).toEqual(blob);
     });
     it('should throw an error', async () => {
       const payload = { message: 'error' };

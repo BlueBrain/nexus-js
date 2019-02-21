@@ -1,7 +1,5 @@
-import fetch, { Headers } from 'cross-fetch';
 import store from '../store';
-import { FileResponse } from '../File/types';
-import { BodyInit } from 'node-fetch';
+import 'cross-fetch/polyfill';
 
 export enum HttpConfigTypes {
   JSON = 'json',
@@ -74,12 +72,11 @@ function prepareBody(
   switch (as) {
     case HttpConfigTypes.TEXT:
       return String(body);
-    case HttpConfigTypes.FILE:
-      const formData = new FormData();
-      formData.append('file', body as string | Blob);
-      return formData;
-    default:
+    case HttpConfigTypes.JSON:
       return JSON.stringify(body);
+    case HttpConfigTypes.FILE:
+    default:
+      return body;
   }
 }
 

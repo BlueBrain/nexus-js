@@ -85,7 +85,6 @@ describe('File class', () => {
         'base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9',
         true,
       );
-      const body = mock.calls[0][1].body;
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/files/myOrg/myProject/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9`,
       );

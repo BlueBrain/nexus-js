@@ -85,13 +85,12 @@ function prepareResponse(
   as: httpTypes = HttpConfigTypes.JSON,
 ): any {
   switch (as) {
-    case HttpConfigTypes.TEXT:
-      return response.text();
     case HttpConfigTypes.JSON:
       return jsonParser(response);
     case HttpConfigTypes.FILE:
+    case HttpConfigTypes.TEXT:
     default:
-      return response;
+      return response.text();
   }
 }
 

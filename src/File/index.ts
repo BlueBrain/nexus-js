@@ -1,6 +1,7 @@
 import { NexusFileResponse } from './types';
-import { createFile } from './utils';
+import { createFile, getFile, getRawFile } from './utils';
 import { Context } from '../Resource/types';
+import { ReadStream } from 'fs';
 
 export default class NexusFile {
   readonly orgLabel: string;
@@ -25,8 +26,10 @@ export default class NexusFile {
   };
   readonly bytes: number;
   readonly raw: NexusFileResponse;
+  public rawFile?: string | Blob | ArrayBuffer | ReadStream;
 
   static create = createFile;
+  static get = getFile;
 
   constructor(
     orgLabel: string,
@@ -55,5 +58,9 @@ export default class NexusFile {
     };
     this.filename = fileResponse._filename;
     this.mediaType = fileResponse._mediaType;
+  }
+
+  async getFile() {
+    this.rawFile = await getRawFile(this.orgLabel, this.projectLabel, this.id);
   }
 }

@@ -22,11 +22,11 @@ interface HttpConfig {
   sendAs?: httpTypes;
   receiveAs?: httpTypes;
   useBase?: boolean;
-  extraHeaders?: { [key: string]: string };
+  extraHeaders?: { [key: string]: string | null };
 }
 
 const getHeaders = (
-  headers: { [key: string]: string } = {
+  headers: { [key: string]: string | null } = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
@@ -80,15 +80,18 @@ function prepareBody(
   }
 }
 
-function prepareResponse<T = object>(
-  body: T,
+function prepareResponse(
+  response: Response,
   as: httpTypes = HttpConfigTypes.JSON,
 ): any {
   switch (as) {
     case HttpConfigTypes.TEXT:
-      return String(body);
+      return response.text();
+    case HttpConfigTypes.JSON:
+      return jsonParser(response);
+    case HttpConfigTypes.FILE:
     default:
-      return JSON.stringify(body);
+      return response;
   }
 }
 
@@ -119,7 +122,7 @@ export function httpGet(url: string, config?: HttpConfig): Promise<any> {
     headers: getHeaders(squashedConfig.extraHeaders),
   })
     .then(checkStatus)
-    .then(r => parseResponse(r))
+    .then(r => prepareResponse(r, squashedConfig.receiveAs))
     .catch(e => {
       throw e;
     });
@@ -146,7 +149,7 @@ export function httpPost<T = BodyInit>(
     body: prepareBody(body as BodyInit | undefined, squashedConfig.sendAs),
   })
     .then(checkStatus)
-    .then(r => parseResponse(r))
+    .then(r => prepareResponse(r, squashedConfig.receiveAs))
     .catch(e => {
       throw e;
     });

@@ -14,8 +14,8 @@ export interface NexusFileResponse {
   _self: string;
   _constrainedBy: string;
   _project: string;
-  _rev: 1;
-  _deprecated: false;
+  _rev: number;
+  _deprecated: boolean;
   _createdAt: string;
   _createdBy: string;
   _updatedAt: string;

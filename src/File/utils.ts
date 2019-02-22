@@ -1,7 +1,7 @@
 // @ts-ignore
 import FormData from 'isomorphic-form-data';
 import { NexusFileResponse } from './types';
-import { httpPost, HttpConfigTypes } from '../utils/http';
+import { httpPost, HttpConfigTypes, httpGet } from '../utils/http';
 import NexusFile from './index';
 import { isBrowser } from '../utils';
 import { ReadStream } from 'fs';
@@ -34,4 +34,37 @@ export async function createFile(
   } catch (error) {
     throw error;
   }
+}
+
+export async function getFile(
+  orgLabel: string,
+  projectLabel: string,
+  fileId: string,
+  shouldFetchFile: boolean = false,
+): Promise<NexusFile> {
+  const fileResponse: NexusFileResponse = await httpGet(
+    `/files/${orgLabel}/${projectLabel}/${fileId}`,
+  );
+  const file = new NexusFile(orgLabel, projectLabel, fileResponse);
+  if (shouldFetchFile) {
+    await file.getFile();
+  }
+  return file;
+}
+
+export async function getRawFile(
+  orgLabel: string,
+  projectLabel: string,
+  fileId: string,
+): Promise<string | Blob | ReadStream | ArrayBuffer> {
+  const rawFile: string | Blob | ReadStream | ArrayBuffer = await httpGet(
+    `/files/${orgLabel}/${projectLabel}/${fileId}`,
+    {
+      extraHeaders: {
+        Accept: null,
+      },
+      receiveAs: HttpConfigTypes.FILE,
+    },
+  );
+  return rawFile;
 }

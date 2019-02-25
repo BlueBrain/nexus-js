@@ -18,7 +18,7 @@ export type httpTypes =
   | HttpConfigTypes.BASE64
   | HttpConfigTypes.FILE;
 
-interface HttpConfig {
+export interface HttpConfig {
   sendAs?: httpTypes;
   receiveAs?: httpTypes;
   useBase?: boolean;
@@ -54,14 +54,6 @@ const checkStatus = (response: Response): Response => {
   return response;
 };
 
-function jsonParser(response: Response): Promise<Object> {
-  try {
-    return response.json();
-  } catch (error) {
-    throw new Error(error.message);
-  }
-}
-
 function prepareBody(
   body?: BodyInit,
   as: httpTypes = HttpConfigTypes.JSON,
@@ -80,32 +72,28 @@ function prepareBody(
   }
 }
 
-function prepareResponse(
+async function prepareResponse(
   response: Response,
   as: httpTypes = HttpConfigTypes.JSON,
-): any {
+): Promise<any> {
   switch (as) {
     case HttpConfigTypes.JSON:
-      return jsonParser(response);
+      return await response.json();
     case HttpConfigTypes.FILE:
+    case HttpConfigTypes.ARRAY_BUFFER:
+      return await response.arrayBuffer();
+    case HttpConfigTypes.BASE64:
+      const aBuff = await response.arrayBuffer();
+      let binary = '';
+      const bytes = [].slice.call(new Uint8Array(aBuff));
+      bytes.forEach((b: any) => (binary += String.fromCharCode(b)));
+      console.log(bytes);
+      return btoa(binary);
     case HttpConfigTypes.TEXT:
     default:
-      return response.text();
+      return await response.text();
   }
 }
-
-const parseResponse = (response: Response, parser = jsonParser): any => {
-  try {
-    return parser(response);
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
-
-const parseJsonError = async (error: Response): Promise<JSON> => {
-  const payload: JSON = await error.json();
-  return payload;
-};
 
 const CONFIG_DEFAULT_HTTP_GET = {
   useBase: true,
@@ -154,22 +142,27 @@ export function httpPost<T = BodyInit>(
     });
 }
 
+const CONFIG_DEFAULT_HTTP_PUT = {
+  useBase: true,
+};
+
 export function httpPut(
   url: string,
   body?: Object,
-  useBase: boolean = true,
+  config?: HttpConfig,
 ): Promise<any> {
+  const squashedConfig: HttpConfig = { ...CONFIG_DEFAULT_HTTP_PUT, ...config };
   const {
     api: { baseUrl },
   } = store.getState();
-  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
   return fetch(fetchURL, {
     headers: getHeaders(),
     method: 'PUT',
     body: JSON.stringify(body),
   })
     .then(checkStatus)
-    .then(r => parseResponse(r))
+    .then(r => prepareResponse(r, squashedConfig.receiveAs))
     .catch(e => {
       throw e;
     });
@@ -178,35 +171,37 @@ export function httpPut(
 export function httpPatch(
   url: string,
   body?: Object,
-  useBase: boolean = true,
+  config?: HttpConfig,
 ): Promise<any> {
+  const squashedConfig: HttpConfig = { ...CONFIG_DEFAULT_HTTP_PUT, ...config };
   const {
     api: { baseUrl },
   } = store.getState();
-  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
   return fetch(fetchURL, {
     headers: getHeaders(),
     method: 'PATCH',
     body: JSON.stringify(body),
   })
     .then(checkStatus)
-    .then(r => parseResponse(r))
+    .then(r => prepareResponse(r, squashedConfig.receiveAs))
     .catch(e => {
       throw e;
     });
 }
 
-export function httpDelete(url: string, useBase: boolean = true): Promise<any> {
+export function httpDelete(url: string, config?: HttpConfig): Promise<any> {
+  const squashedConfig: HttpConfig = { ...CONFIG_DEFAULT_HTTP_PUT, ...config };
   const {
     api: { baseUrl },
   } = store.getState();
-  const fetchURL = useBase ? `${baseUrl}${url}` : url;
+  const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
   return fetch(fetchURL, {
     headers: getHeaders(),
     method: 'DELETE',
   })
     .then(checkStatus)
-    .then(r => parseResponse(r))
+    .then(r => prepareResponse(r, squashedConfig.receiveAs))
     .catch(e => {
       throw e;
     });

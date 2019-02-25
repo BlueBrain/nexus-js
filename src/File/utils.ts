@@ -69,17 +69,16 @@ export async function getFile(
 }
 
 export async function getRawFile(
-  orgLabel: string,
-  projectLabel: string,
-  fileId: string,
+  selfURL: string,
 ): Promise<string | Blob | ReadStream | ArrayBuffer> {
   const rawFile: string | Blob | ReadStream | ArrayBuffer = await httpGet(
-    `/files/${orgLabel}/${projectLabel}/${fileId}`,
+    selfURL,
     {
+      useBase: false,
       extraHeaders: {
         Accept: null,
       },
-      receiveAs: HttpConfigTypes.FILE,
+      receiveAs: HttpConfigTypes.BASE64,
     },
   );
   return rawFile;

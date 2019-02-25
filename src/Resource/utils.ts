@@ -288,7 +288,7 @@ export async function deprecateSelfResource(
   try {
     const resourceResponse: ResourceResponse = await httpDelete(
       `${selfUrl}?rev=${rev}`,
-      false,
+      { useBase: false },
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
   } catch (error) {

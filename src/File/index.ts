@@ -62,6 +62,6 @@ export default class NexusFile {
   }
 
   async getFile() {
-    this.rawFile = await getRawFile(this.orgLabel, this.projectLabel, this.id);
+    this.rawFile = await getRawFile(this.self);
   }
 }

@@ -87,7 +87,6 @@ async function prepareResponse(
       let binary = '';
       const bytes = [].slice.call(new Uint8Array(aBuff));
       bytes.forEach((b: any) => (binary += String.fromCharCode(b)));
-      console.log(bytes);
       return btoa(binary);
     case HttpConfigTypes.TEXT:
     default:

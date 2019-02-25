@@ -1,14 +1,21 @@
-import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
+import { resetMocks, mock, mockResponse, mockResponses } from 'jest-fetch-mock';
 import Nexus from '../..';
 import NexusFile from '../index';
 import { NexusFileResponse } from '../types';
 import { Readable } from 'stream';
-import fs from 'fs';
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
 
-const mockPostFileResponse: NexusFileResponse = {
+// https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
+function ab2str(buf: ArrayBuffer) {
+  return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
+
+const fakeFile = 'Pretend I am in binary or something :)';
+
+// for both POST and GET it will look the same
+const mockFileResponse: NexusFileResponse = {
   '@context': 'https://bluebrain.github.io/nexus/contexts/resource.json',
   '@id': 'base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9',
   '@type': 'File',
@@ -37,18 +44,14 @@ describe('File class', () => {
   });
   describe('It should create a File instance', () => {
     it('from a getByID example response', () => {
-      const resource = new NexusFile(
-        'testOrg',
-        'testProject',
-        mockPostFileResponse,
-      );
-      expect(resource).toMatchSnapshot();
+      const file = new NexusFile('testOrg', 'testProject', mockFileResponse);
+      expect(file).toMatchSnapshot();
     });
   });
 
   describe('File.create()', () => {
     it('should POST the new file with the expected payload', async () => {
-      mockResponse(JSON.stringify(mockPostFileResponse), { status: 200 });
+      mockResponse(JSON.stringify(mockFileResponse), { status: 200 });
       const buffer = new Buffer('abc');
       const stream = new Readable();
       stream.push(buffer);
@@ -57,6 +60,89 @@ describe('File class', () => {
       await NexusFile.create('myOrg', 'myProject', stream);
       const body = mock.calls[0][1].body;
       expect(body._overheadLength).toBe(143);
+    });
+  });
+
+  describe('File.getSelf()', () => {
+    it('should GET the new file with the expected payload', async () => {
+      mockResponse(JSON.stringify(mockFileResponse), { status: 200 });
+      const selfURL =
+        'https://nexus.example.com/v1/files/myorg/myproj/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9';
+      const file: NexusFile = await NexusFile.getSelf(
+        selfURL,
+        'myOrg',
+        'myProject',
+      );
+      expect(mock.calls[0][0]).toEqual(selfURL);
+      expect(file).toBeInstanceOf(NexusFile);
+      expect(file.id).toEqual('base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9');
+      expect(file.rawFile).toEqual(undefined);
+    });
+
+    it('should GET the new file with the optional fetchFile flag', async () => {
+      mockResponses(
+        [JSON.stringify(mockFileResponse), { status: 200 }],
+        [fakeFile, { status: 200 }],
+      );
+      const selfURL =
+        'https://nexus.example.com/v1/files/myorg/myproj/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9';
+      const file: NexusFile = await NexusFile.getSelf(
+        selfURL,
+        'myOrg',
+        'myProject',
+        true,
+      );
+      expect(mock.calls[0][0]).toEqual(selfURL);
+      expect(file).toBeInstanceOf(NexusFile);
+      expect(file.id).toEqual('base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9');
+      expect(file.rawFile as ArrayBuffer).toEqual(btoa(fakeFile));
+    });
+  });
+
+  describe('File.get()', () => {
+    it('should GET the new file with the expected payload', async () => {
+      mockResponse(JSON.stringify(mockFileResponse), { status: 200 });
+      const file: NexusFile = await NexusFile.get(
+        'myOrg',
+        'myProject',
+        'base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9',
+      );
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/files/myOrg/myProject/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9`,
+      );
+      expect(file).toBeInstanceOf(NexusFile);
+      expect(file.id).toEqual('base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9');
+      expect(file.rawFile).toEqual(undefined);
+    });
+
+    it('should GET the actual file if you add the optional flag', async () => {
+      mockResponses(
+        [JSON.stringify(mockFileResponse), { status: 200 }],
+        [fakeFile, { status: 200 }],
+      );
+      const file: NexusFile = await NexusFile.get(
+        'myOrg',
+        'myProject',
+        'base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9',
+        true,
+      );
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/files/myOrg/myProject/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9`,
+      );
+      expect(file).toBeInstanceOf(NexusFile);
+      expect(file.id).toEqual('base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9');
+      expect(file.rawFile as ArrayBuffer).toEqual(btoa(fakeFile));
+    });
+  });
+
+  describe('File.getFile()', () => {
+    it('should request the raw file', async () => {
+      mockResponse(fakeFile, { status: 200 });
+      const file = new NexusFile('testOrg', 'testProject', mockFileResponse);
+      await file.getFile();
+      const headers = mock.calls[0][1].headers;
+      expect(headers).not.toHaveProperty('Accept');
+      expect(file.rawFile).toEqual(btoa(fakeFile));
     });
   });
 });

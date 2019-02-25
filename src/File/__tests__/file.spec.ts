@@ -57,6 +57,42 @@ describe('File class', () => {
     });
   });
 
+  describe('File.getSelf()', () => {
+    it('should GET the new file with the expected payload', async () => {
+      mockResponse(JSON.stringify(mockFileResponse), { status: 200 });
+      const selfURL =
+        'https://nexus.example.com/v1/files/myorg/myproj/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9';
+      const file: NexusFile = await NexusFile.getSelf(
+        selfURL,
+        'myOrg',
+        'myProject',
+      );
+      expect(mock.calls[0][0]).toEqual(selfURL);
+      expect(file).toBeInstanceOf(NexusFile);
+      expect(file.id).toEqual('base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9');
+      expect(file.rawFile).toEqual(undefined);
+    });
+
+    it('should GET the new file with the optional fetchFile flag', async () => {
+      mockResponses(
+        [JSON.stringify(mockFileResponse), { status: 200 }],
+        ['some text', { status: 200 }],
+      );
+      const selfURL =
+        'https://nexus.example.com/v1/files/myorg/myproj/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9';
+      const file: NexusFile = await NexusFile.getSelf(
+        selfURL,
+        'myOrg',
+        'myProject',
+        true,
+      );
+      expect(mock.calls[0][0]).toEqual(selfURL);
+      expect(file).toBeInstanceOf(NexusFile);
+      expect(file.id).toEqual('base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9');
+      expect(file.rawFile).toEqual('some text');
+    });
+  });
+
   describe('File.get()', () => {
     it('should GET the new file with the expected payload', async () => {
       mockResponse(JSON.stringify(mockFileResponse), { status: 200 });
@@ -65,7 +101,6 @@ describe('File class', () => {
         'myProject',
         'base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9',
       );
-      const body = mock.calls[0][1].body;
       expect(mock.calls[0][0]).toEqual(
         `${baseUrl}/files/myOrg/myProject/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9`,
       );

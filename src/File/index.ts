@@ -1,5 +1,5 @@
 import { NexusFileResponse } from './types';
-import { createFile, getFile, getRawFile } from './utils';
+import { createFile, getFile, getRawFile, getFileSelf } from './utils';
 import { Context } from '../Resource/types';
 import { ReadStream } from 'fs';
 
@@ -30,6 +30,7 @@ export default class NexusFile {
 
   static create = createFile;
   static get = getFile;
+  static getSelf = getFileSelf;
 
   constructor(
     orgLabel: string,

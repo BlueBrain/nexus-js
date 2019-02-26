@@ -64,3 +64,14 @@ export interface ListResourceOptions {
   deprecated?: boolean;
   [key: string]: any;
 }
+
+export enum ResourceGetFormat {
+  JSON_LD = 'application/ld+json',
+  DOT = 'text/vnd.graphviz',
+  N_TRIPLES = 'application/ntriples',
+}
+
+export type ResourceGetFormats =
+  | ResourceGetFormat.DOT
+  | ResourceGetFormat.JSON_LD
+  | ResourceGetFormat.N_TRIPLES;

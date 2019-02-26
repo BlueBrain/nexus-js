@@ -1,7 +1,8 @@
-import { Context, ResourceResponse } from './types';
+import { Context, ResourceResponse, ResourceGetFormats } from './types';
 import {
   getResource,
   getSelfResource,
+  getSelfResourceRawAs,
   updateResource,
   updateSelfResource,
   listResources,
@@ -113,6 +114,10 @@ export default class Resource<T = {}> {
     this.resourceURL = `/resources/${this.orgLabel}/${
       this.projectLabel
     }/_/${encodeURIComponent(this.id)}`;
+  }
+
+  async getAs(format: ResourceGetFormats): Promise<any> {
+    return await getSelfResourceRawAs(this.self, format);
   }
 
   get name(): string {

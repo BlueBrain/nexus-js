@@ -1,5 +1,6 @@
 import store from '../store';
 import 'cross-fetch/polyfill';
+import { removeEmpty } from '.';
 
 export enum HttpConfigTypes {
   JSON = 'json',
@@ -42,7 +43,7 @@ const getHeaders = (
   }
   return new Headers({
     ...headers,
-    ...extraHeaders,
+    ...removeEmpty(extraHeaders),
     mode: 'cors',
   });
 };

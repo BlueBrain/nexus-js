@@ -19,3 +19,15 @@ export function buildQueryParams(options?: {
 export function isBrowser(): boolean {
   return typeof window === 'object';
 }
+
+// https://stackoverflow.com/questions/286141/remove-blank-attributes-from-an-object-in-javascript
+export const removeEmpty = (obj: any): any =>
+  Object.keys(obj)
+    .filter(k => obj[k] !== null && obj[k] !== undefined) // Remove undef. and null.
+    .reduce(
+      (newObj, k) =>
+        typeof obj[k] === 'object'
+          ? Object.assign(newObj, { [k]: removeEmpty(obj[k]) }) // Recurse.
+          : Object.assign(newObj, { [k]: obj[k] }), // Copy value.
+      {},
+    );

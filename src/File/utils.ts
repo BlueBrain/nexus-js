@@ -76,7 +76,7 @@ export async function getRawFile(
     {
       useBase: false,
       extraHeaders: {
-        Accept: null,
+        Accept: '*/*',
       },
       receiveAs: HttpConfigTypes.BASE64,
     },

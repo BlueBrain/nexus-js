@@ -141,7 +141,7 @@ describe('File class', () => {
       const file = new NexusFile('testOrg', 'testProject', mockFileResponse);
       await file.getFile();
       const headers = mock.calls[0][1].headers;
-      expect(headers).not.toHaveProperty('Accept');
+      expect(headers.get('Accept')).toBe('*/*');
       expect(file.rawFile).toEqual(btoa(fakeFile));
     });
   });

@@ -132,6 +132,113 @@ export const mockListProjectResponse: ListProjectsResponse = {
   ],
 };
 
+export const mockListResourceResponseWithStringType = {
+  '@id': 'https://neuroshapes.org/commons/annotation',
+  '@type': 'https://bluebrain.github.io/nexus/vocabulary/Schema',
+  _self:
+    'https://bbp.epfl.ch/nexus/v1/schemas/anorg/testcore/nsg:commons%2Fannotation',
+  _constrainedBy:
+    'https://bluebrain.github.io/nexus/schemas/shacl-20170720.ttl',
+  _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+  _createdAt: '2018-11-14T21:16:56.220Z',
+  _createdBy:
+    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+  _updatedAt: '2018-11-14T21:16:56.220Z',
+  _updatedBy:
+    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+  _rev: 1,
+  _deprecated: false,
+};
+
+export const mockListResourceResponseWithoutType = {
+  '@id': 'https://incf.github.io/neuroshapes/contexts/schema.json',
+  _self:
+    'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/https%3A%2F%2Fbluebrain.github.io%2Fnexus%2Fschemas%2Fresource.json/context:schema.json',
+  _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resource.json',
+  _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+  _createdAt: '2018-11-14T21:16:54.230Z',
+  _createdBy:
+    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+  _updatedAt: '2018-11-15T08:40:52.735Z',
+  _updatedBy:
+    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+  _rev: 2,
+  _deprecated: false,
+};
+
+export const mockGetByIDResourceResponse: ResourceResponse = {
+  '@context': [
+    {
+      Dataset: {
+        '@id': 'dcat:Dataset',
+      },
+    },
+    'https://bluebrain.github.io/nexus/contexts/resource.json',
+  ],
+  '@id':
+    'https://bbp.epfl.ch/nexus/v0/data/bbp/morphology/reconstructedcell/v0.1.0/29d3a491-d3b7-49b6-9033-99017513a8ae',
+  '@type': [
+    'nsg:ReconstructedCell',
+    'prov:Entity',
+    'Dataset',
+    'nsg:ReconstructedPatchedCell',
+    'nsg:InVitroSliceReconstructedPatchedNeuron',
+  ],
+  subject:
+    'https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/subject/v0.1.0/ba9916df-1f21-47d9-be4f-3f1612d2f429',
+  _self:
+    'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae',
+  _constrainedBy: 'https://neuroshapes.org/dash/reconstructedpatchedcell',
+  _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+  _createdAt: '2018-11-15T08:49:59.873Z',
+  _createdBy:
+    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+  _updatedAt: '2018-11-26T08:49:44.148Z',
+  _updatedBy:
+    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+  _rev: 13,
+  _deprecated: false,
+};
+
+export const mockNTriplesResponse = `_:6bb65725-b0ca-40be-b5c9-56b8dd394401 <https://bluebrain.github.io/nexus/vocabulary/algorithm> "SHA-256" .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/filename> "Screenshot 2019-02-17 at 13.07.40.png" .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/deprecated> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/bytes> "36398"^^<http://www.w3.org/2001/XMLSchema#long> .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/project> <https://bbp-nexus.epfl.ch/staging/v1/projects/Kenny/Projector> .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/mediaType> "image/png" .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/createdAt> "2019-02-20T16:14:11.816Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/createdBy> <https://bbp-nexus.epfl.ch/staging/v1/realms/bbp/users/pirman> .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/updatedBy> <https://bbp-nexus.epfl.ch/staging/v1/realms/bbp/users/pirman> .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/constrainedBy> <https://bluebrain.github.io/nexus/schemas/file.json> .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/digest> _:6bb65725-b0ca-40be-b5c9-56b8dd394401 .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://bluebrain.github.io/nexus/vocabulary/File> .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/rev> "1"^^<http://www.w3.org/2001/XMLSchema#long> .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/updatedAt> "2019-02-20T16:14:11.816Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+_:6bb65725-b0ca-40be-b5c9-56b8dd394401 <https://bluebrain.github.io/nexus/vocabulary/value> "ffbf5ae34a341d1e180533ce92aa1207cfb3fb52537a7f6fd25e62162e3ef3ee" .
+<https://some_nexus.instance.io/v1/resource/myOrg/myProject/_/e92600eb-df9a-4553-9569-0dbdaa1443e4> <https://bluebrain.github.io/nexus/vocabulary/self> "https://bbp-nexus.epfl.ch/staging/v1/files/Kenny/Projector/e92600eb-df9a-4553-9569-0dbdaa1443e4" .`;
+
+export const mockDotResponse = `digraph {
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "http://some_nexus.instance.io/v1/realms/github/users/umbreak" [label = "https://bluebrain.github.io/nexus/vocabulary/createdBy"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user2" -> "9.223E0" [label = "http://schema.org/height"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> 1 [label = "https://bluebrain.github.io/nexus/vocabulary/rev"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "http://schema.org/Person" [label = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "2019-02-05T13:40:33.281Z" [label = "https://bluebrain.github.io/nexus/vocabulary/createdAt"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "John Doe" [label = "http://schema.org/name"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user2" -> 9 [label = "http://schema.org/birthHour"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> false [label = "https://bluebrain.github.io/nexus/vocabulary/deprecated"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user2" -> "http://schema.org/Other" [label = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user2" -> 1999 [label = "http://schema.org/birthYear"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" [label = "https://bluebrain.github.io/nexus/vocabulary/self"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user2" -> "2000-04-12T20:00Z" [label = "http://schema.org/birthDate"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "2019-02-05T13:40:33.281Z" [label = "https://bluebrain.github.io/nexus/vocabulary/updatedAt"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "http://some_nexus.instance.io/v1/realms/github/users/umbreak" [label = "https://bluebrain.github.io/nexus/vocabulary/updatedBy"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "http://some_nexus.instance.io/v1/projects/myorg/myproject" [label = "https://bluebrain.github.io/nexus/vocabulary/project"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "Some property" [label = "http://schema.org/sp"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "https://bluebrain.github.io/nexus/schemas/unconstrained.json" [label = "https://bluebrain.github.io/nexus/vocabulary/constrainedBy"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "1999-04-09T20:00Z" [label = "http://schema.org/birthDate"]
+  "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user1" -> "http://some_nexus.instance.io/v1/resources/myorg/myproject/_/user2" [label = "http://schema.org/sibling"]
+}`;
+
 export const mockResourceResponse: ResourceResponse = {
   '@context': '',
   '@id': 'https://incf.github.io/neuroshapes/contexts/schema.json',

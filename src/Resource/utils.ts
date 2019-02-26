@@ -1,6 +1,12 @@
 import { PaginatedList } from '..';
 import Resource from '.';
-import { httpGet, httpPut, httpPost, httpDelete } from '../utils/http';
+import {
+  httpGet,
+  httpPut,
+  httpPost,
+  httpDelete,
+  HttpConfigTypes,
+} from '../utils/http';
 import {
   CreateResourcePayload,
   ResourceListTagResponse,
@@ -9,8 +15,33 @@ import {
   ListResourceResponse,
   ResourceResponseCommon,
   Context,
+  ResourceGetFormat,
+  ResourceGetFormats,
 } from './types';
 import { buildQueryParams } from '../utils';
+
+// Fetch a resource as raw data for any number of
+// content negotiation formats,
+// e.g. JSON-LD, nTriples, and DOT
+export async function getSelfResourceRawAs(
+  selfUrl: string,
+  format: ResourceGetFormats = ResourceGetFormat.JSON_LD,
+): Promise<any> {
+  try {
+    return await httpGet(selfUrl, {
+      useBase: false,
+      extraHeaders: {
+        Accept: format,
+      },
+      receiveAs:
+        format === ResourceGetFormat.JSON_LD
+          ? HttpConfigTypes.JSON
+          : HttpConfigTypes.TEXT,
+    });
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function getSelfResource(
   selfUrl: string,
@@ -18,15 +49,9 @@ export async function getSelfResource(
   projectLabel: string,
 ): Promise<Resource> {
   try {
-    // Always receive MetaData
-    const resourceResponse: ResourceResponse = await httpGet(selfUrl, {
-      useBase: false,
-    });
-
-    // TODO: build somehow
-    // const orgLabel = '';
-    // const projectLabel = '';
-
+    const resourceResponse: ResourceResponse = await getSelfResourceRawAs(
+      selfUrl,
+    );
     const resource = new Resource(orgLabel, projectLabel, resourceResponse);
     return resource;
   } catch (error) {

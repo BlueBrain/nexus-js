@@ -163,7 +163,6 @@ describe('Resource class', () => {
 
   describe('listResources()', () => {
     beforeEach(() => {
-      resetMocks();
       mockResponse(JSON.stringify(mockListResourceResponse), { status: 200 });
     });
 
@@ -216,7 +215,7 @@ describe('Resource class', () => {
     afterEach(() => {
       resetMocks();
     });
-    describe('When format is JSON_LD', async () => {
+    describe('When format is JSON_LD', () => {
       it('should call httpGet method with the proper header and parse as JSON', async () => {
         mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
         const resource = new Resource(
@@ -237,29 +236,35 @@ describe('Resource class', () => {
         );
       });
     });
-    describe('When format is DOT', async () => {
-      mockResponse(mockDotResponse, { status: 200 });
-      const resource = new Resource(
-        'testOrg',
-        'testProject',
-        mockResourceResponse,
-      );
-      await resource.getAs(ResourceGetFormat.DOT);
-      expect(mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
-      expect(mock.calls[0][1].headers.get('Accept')).toBe('text/vnd.graphviz');
+    describe('When format is DOT', () => {
+      it('should call httpGet method with the proper accept header', async () => {
+        mockResponse(mockDotResponse, { status: 200 });
+        const resource = new Resource(
+          'testOrg',
+          'testProject',
+          mockResourceResponse,
+        );
+        await resource.getAs(ResourceGetFormat.DOT);
+        expect(mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
+        expect(mock.calls[0][1].headers.get('Accept')).toBe(
+          'text/vnd.graphviz',
+        );
+      });
     });
-    describe('When format is N_TRIPLES', async () => {
-      mockResponse(mockNTriplesResponse, { status: 200 });
-      const resource = new Resource(
-        'testOrg',
-        'testProject',
-        mockResourceResponse,
-      );
-      await resource.getAs(ResourceGetFormat.N_TRIPLES);
-      expect(mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
-      expect(mock.calls[0][1].headers.get('Accept')).toBe(
-        'application/ntriples',
-      );
+    describe('When format is N_TRIPLES', () => {
+      it('should call httpGet method with the proper accept header', async () => {
+        mockResponse(mockNTriplesResponse, { status: 200 });
+        const resource = new Resource(
+          'testOrg',
+          'testProject',
+          mockResourceResponse,
+        );
+        await resource.getAs(ResourceGetFormat.N_TRIPLES);
+        expect(mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
+        expect(mock.calls[0][1].headers.get('Accept')).toBe(
+          'application/ntriples',
+        );
+      });
     });
   });
 

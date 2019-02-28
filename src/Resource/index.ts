@@ -50,6 +50,7 @@ export default class Resource<T = {}> {
   readonly resourceURL: string;
 
   static getSelf = getSelfResource;
+  static getSelfRawAs = getSelfResourceRawAs;
   static get = getResource;
   static list = listResources;
   static create = createResource;

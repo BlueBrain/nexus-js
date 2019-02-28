@@ -19,9 +19,6 @@ pipeline {
         }
 
         stage('Checkout and Install dependencies') {
-            when {
-                expression { !isRelease }
-            }
             steps {
                 checkout scm
                 sh 'npm ci'
@@ -29,9 +26,6 @@ pipeline {
         }
 
         stage('Review') {
-            when {
-                expression { !isRelease }
-            }
             parallel {
                 stage('Lint') {
                     steps {
@@ -53,10 +47,10 @@ pipeline {
 
         stage('Publish to npm') {
             when {
-                expression { !isRelease }
+                expression { isRelease }
             }
             steps {
-                sh 'echo "//registry.npmjs.org/:_authToken=${NPM_NEXUS_TOKEN}" > .npmrc && npm publish --dry-run'
+                sh 'echo "//registry.npmjs.org/:_authToken=${NPM_NEXUS_TOKEN}" > .npmrc && npm publish'
             }
         }
     }

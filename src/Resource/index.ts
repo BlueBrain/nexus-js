@@ -1,4 +1,9 @@
-import { Context, ResourceResponse, ResourceGetFormats } from './types';
+import {
+  Context,
+  ResourceResponse,
+  ResourceGetFormats,
+  GetResourceOptions,
+} from './types';
 import {
   getResource,
   getSelfResource,
@@ -14,6 +19,10 @@ import {
   listTags,
   listSelfTags,
 } from './utils';
+
+export const DEFAULT_GET_RESOURCE_OPTIONS: GetResourceOptions = {
+  expanded: false,
+};
 
 export const RESOURCE_METADATA_KEYS = [
   '@context',
@@ -48,6 +57,7 @@ export default class Resource<T = {}> {
   readonly data: T;
   readonly raw: ResourceResponse;
   readonly resourceURL: string;
+  readonly expanded: boolean;
 
   static getSelf = getSelfResource;
   static getSelfRawAs = getSelfResourceRawAs;
@@ -79,6 +89,7 @@ export default class Resource<T = {}> {
     orgLabel: string,
     projectLabel: string,
     resourceResponse: ResourceResponse,
+    getResourceOptions: GetResourceOptions = DEFAULT_GET_RESOURCE_OPTIONS,
   ) {
     this.raw = resourceResponse;
     this.orgLabel = orgLabel;
@@ -94,6 +105,7 @@ export default class Resource<T = {}> {
     this.updatedBy = resourceResponse._updatedBy;
     this.rev = resourceResponse._rev;
     this.deprecated = resourceResponse._deprecated;
+    this.expanded = getResourceOptions.expanded;
     // make type an array of sting, even if we only get a single string
     if (resourceResponse['@type']) {
       if (Array.isArray(resourceResponse['@type'])) {

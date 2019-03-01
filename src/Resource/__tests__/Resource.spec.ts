@@ -208,6 +208,22 @@ describe('Resource class', () => {
         `${baseUrl}/resources/myorg/myproject/myschema/myresource`,
       );
       expect(r).toBeInstanceOf(Resource);
+      expect(r).toHaveProperty('expanded', false);
+    });
+
+    it('should call httpGet method with the proper get views url for expanded', async () => {
+      const r: Resource = await getResource(
+        'myorg',
+        'myproject',
+        'myschema',
+        'myresource',
+        { expanded: true },
+      );
+      expect(mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myresource?format=expanded`,
+      );
+      expect(r).toBeInstanceOf(Resource);
+      expect(r).toHaveProperty('expanded', true);
     });
   });
 

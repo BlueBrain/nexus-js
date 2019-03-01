@@ -1,5 +1,5 @@
 import { PaginatedList } from '..';
-import Resource from '.';
+import Resource, { DEFAULT_GET_RESOURCE_OPTIONS } from '.';
 import {
   httpGet,
   httpPut,
@@ -17,6 +17,7 @@ import {
   Context,
   ResourceGetFormat,
   ResourceGetFormats,
+  GetResourceOptions,
 } from './types';
 import { buildQueryParams } from '../utils';
 
@@ -47,12 +48,19 @@ export async function getSelfResource(
   selfUrl: string,
   orgLabel: string,
   projectLabel: string,
+  getResourceOptions: GetResourceOptions = DEFAULT_GET_RESOURCE_OPTIONS,
 ): Promise<Resource> {
   try {
-    const resourceResponse: ResourceResponse = await getSelfResourceRawAs(
-      selfUrl,
+    const url = `${selfUrl}${
+      getResourceOptions.expanded ? '?format=expanded' : ''
+    }`;
+    const resourceResponse: ResourceResponse = await getSelfResourceRawAs(url);
+    const resource = new Resource(
+      orgLabel,
+      projectLabel,
+      resourceResponse,
+      getResourceOptions,
     );
-    const resource = new Resource(orgLabel, projectLabel, resourceResponse);
     return resource;
   } catch (error) {
     throw error;
@@ -64,13 +72,21 @@ export async function getResource(
   projectLabel: string,
   schemaId: string,
   resourceId: string,
+  getResourceOptions: GetResourceOptions = DEFAULT_GET_RESOURCE_OPTIONS,
 ): Promise<Resource> {
-  const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`;
+  const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}${
+    getResourceOptions.expanded ? '?format=expanded' : ''
+  }`;
   try {
     const resourceResponse: ResourceResponse = await httpGet(
       projectResourceURL,
     );
-    const resource = new Resource(orgLabel, projectLabel, resourceResponse);
+    const resource = new Resource(
+      orgLabel,
+      projectLabel,
+      resourceResponse,
+      getResourceOptions,
+    );
     return resource;
   } catch (error) {
     throw error;

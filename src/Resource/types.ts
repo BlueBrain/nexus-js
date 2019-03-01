@@ -75,3 +75,7 @@ export type ResourceGetFormats =
   | ResourceGetFormat.DOT
   | ResourceGetFormat.JSON_LD
   | ResourceGetFormat.N_TRIPLES;
+
+export interface GetResourceOptions {
+  expanded: boolean;
+}

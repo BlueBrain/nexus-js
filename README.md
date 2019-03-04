@@ -246,7 +246,7 @@ Schema.deprecate = (orgLabel: string, projectLabel: string, schemaId: string, re
 import { Resource } from '@bbp/nexus-sdk';
 
 Resource.get = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string): Promise<Resource>;
-Resource.getSelf = (selfUrl: string, orgLabel: string, projectLabel: string, { expanded: boolean }): Promise<Resource>;
+Resource.getSelf = (selfUrl: string, orgLabel: string, projectLabel: string, getResourceOptions = { expanded: true }): Promise<Resource>;
 Resource.getSelfRawAs = (selfUrl: string, resourceFormat?: ResourceGetFormat ): Promise<Resource>;
 
 Resource.list = (orgLabel: string, projectLabel: string, options?: ListResourceOptions): Promise<PaginatedList<Resource>>;

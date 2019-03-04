@@ -18,6 +18,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest --coverage",
+    "codecov": "codecov",
     "lint": "tslint src/**/*",
     "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd",
     "build:commonjs": "tsc --module commonjs --target es5 --outDir lib",

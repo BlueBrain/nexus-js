@@ -4,6 +4,8 @@
 [Development](#development) |
 [License](#license)
 
+[![codecov](https://codecov.io/gh/BlueBrain/nexus-sdk-js/branch/master/graph/badge.svg)](https://codecov.io/gh/BlueBrain/nexus-sdk-js)
+
 # JS SDK for nexus
 
 ![Nexus.js](nexus-js-logo.png)

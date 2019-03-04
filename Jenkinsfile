@@ -35,16 +35,12 @@ pipeline {
                 stage('Test') {
                     steps {
                         sh 'npm run test'
+                        sh "npm run codecov -- --token=\"`oc get secrets codecov-secret --template='{{.data.nexus_sdk_js}}' | base64 -d`\""
                     }
                 }
                 stage('Build') {
                     steps {
                         sh 'npm run build'
-                    }
-                }
-                stage('Coverage') {
-                    steps {
-                        sh "npm run codecov -- --token=\"`oc get secrets codecov-secret --template='{{.data.nexus_sdk_js}}' | base64 -d`\""
                     }
                 }
             }

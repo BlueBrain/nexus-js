@@ -1,4 +1,4 @@
-import { PaginatedList } from '..';
+import { PaginatedList, Project } from '..';
 import Resource, { DEFAULT_GET_RESOURCE_OPTIONS } from '.';
 import {
   httpGet,
@@ -18,8 +18,12 @@ import {
   ResourceGetFormat,
   ResourceGetFormats,
   GetResourceOptions,
+  ResourceLink,
 } from './types';
 import { buildQueryParams } from '../utils';
+import { PaginationSettings } from '../utils/types';
+import { SparqlViewQueryResponse } from '../View/SparqlView/types';
+import { getSparqlView } from '../View/utils';
 
 // Fetch a resource as raw data for any number of
 // content negotiation formats,
@@ -332,6 +336,53 @@ export async function deprecateSelfResource(
       { useBase: false },
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getIncomingLinks(
+  orgLabel: string,
+  projectLabel: string,
+  selfUrl: string,
+  paginationSettings: PaginationSettings,
+): Promise<PaginatedList<ResourceLink>> {
+  try {
+    const { from, size } = paginationSettings;
+    const view = await getSparqlView(orgLabel, projectLabel);
+    const countQuery = `SELECT (COUNT(?s) AS ?total)  WHERE { ?s ?p <${selfUrl}>}`;
+    const paginatedQuery = `SELECT ?s ?p WHERE { ?s ?p <${selfUrl}>} LIMIT ${size} OFFSET ${from}`;
+    const countResponse: SparqlViewQueryResponse = await view.query(countQuery);
+    const paginatedResponse: SparqlViewQueryResponse = await view.query(
+      paginatedQuery,
+    );
+    if (countResponse.results && paginatedResponse.results) {
+      const total = +countResponse.results.bindings[0].total.value;
+      const queryResults = paginatedResponse.results.bindings;
+      const resourcePromises = queryResults.map(subjectPredicatePair => {
+        return Resource.getSelf(
+          subjectPredicatePair.s.value,
+          orgLabel,
+          projectLabel,
+        );
+      });
+      const resources = await Promise.all(resourcePromises);
+      return {
+        total,
+        index: from,
+        results: queryResults.map((subjectPredicatePair, index) => {
+          return {
+            link: resources[index],
+            predicate: subjectPredicatePair.p.value,
+          };
+        }),
+      };
+    }
+    return {
+      total: 0,
+      index: from,
+      results: [],
+    };
   } catch (error) {
     throw error;
   }

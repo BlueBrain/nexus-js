@@ -3,6 +3,7 @@ import {
   ResourceResponse,
   ResourceGetFormats,
   GetResourceOptions,
+  ResourceLink,
 } from './types';
 import {
   getResource,
@@ -18,7 +19,9 @@ import {
   tagSelfResource,
   listTags,
   listSelfTags,
+  getIncomingLinks,
 } from './utils';
+import { PaginatedList, PaginationSettings } from '../utils/types';
 
 export const DEFAULT_GET_RESOURCE_OPTIONS: GetResourceOptions = {
   expanded: false,
@@ -153,6 +156,17 @@ export default class Resource<T = {}> {
       },
       this.orgLabel,
       this.projectLabel,
+    );
+  }
+
+  async getIncomingLinks(
+    paginationSettings: PaginationSettings,
+  ): Promise<PaginatedList<ResourceLink>> {
+    return await getIncomingLinks(
+      this.orgLabel,
+      this.projectLabel,
+      this.self,
+      paginationSettings,
     );
   }
 

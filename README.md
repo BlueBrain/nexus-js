@@ -298,6 +298,9 @@ resourceInstance.update({
     context: { [field: string]: string };
     [field: string]: any;
   }): Promise<Resource>;
+
+// Links! 🔗🔗🔗🔗
+const incomingLinks: PaginatedList<ResourceLinks> = await resourceInstance.getIncomingLinks({ from: 0, size: 20}: PaginationSettings);
 ```
 
 ### Files

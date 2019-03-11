@@ -4,15 +4,11 @@ import {
   mockElasticSearchViewQueryResponse,
   mockElasticSearchViewAggregationResponse,
 } from '../../../__mocks__/helpers';
-import {
-  resetMocks,
-  mockResponse,
-  mock,
-  mockResponses,
-  mockReject,
-} from 'jest-fetch-mock';
+import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import Nexus from '../../../Nexus';
 import { ElasticSearchViewResponse } from '../types';
+
+const { fetchMock } = <GlobalWithFetchMock>global;
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
@@ -62,7 +58,7 @@ describe('ElasticSearchView class', () => {
   });
 
   describe('query()', () => {
-    afterEach(() => resetMocks());
+    afterEach(() => fetchMock.resetMocks());
 
     it('should call httpPost method with the query object and URL', async () => {
       const view = new ElasticSearchView(
@@ -71,13 +67,13 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       const myQuery = {};
-      mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse)],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
       );
       await view.query(myQuery);
-      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
-      expect(mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
     });
 
     it('should throw an error if httpPost crashes', async () => {
@@ -87,7 +83,7 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       const myQuery = {};
-      mockReject(new Error('very bad'));
+      fetchMock.mockReject(new Error('very bad'));
 
       await expect(view.query(myQuery)).rejects.toThrow(Error);
     });
@@ -103,9 +99,9 @@ describe('ElasticSearchView class', () => {
         from: 2,
         size: 20,
       };
-      mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse)],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
       );
       await view.query(myQuery, myPaginationSettings);
       const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${
@@ -113,8 +109,8 @@ describe('ElasticSearchView class', () => {
       }/_search?from=${myPaginationSettings.from}&size=${
         myPaginationSettings.size
       }`;
-      expect(mock.calls[0][0]).toEqual(baseUrl + expectedQueryURL);
-      expect(mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + expectedQueryURL);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
     });
 
     it('should return Promise<PaginatedList<Resource>>', async () => {
@@ -124,9 +120,9 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       const myQuery = {};
-      mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse)],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
       );
       const data = await view.query(myQuery);
       expect(data).toHaveProperty('total', 3341);
@@ -135,7 +131,7 @@ describe('ElasticSearchView class', () => {
   });
 
   describe('rawQuery()', () => {
-    afterEach(() => resetMocks());
+    afterEach(() => fetchMock.resetMocks());
 
     it('should call httpPost method with the query object and URL', async () => {
       const view = new ElasticSearchView(
@@ -144,13 +140,13 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       const myQuery = {};
-      mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse)],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
       );
       await view.rawQuery(myQuery);
-      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
-      expect(mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
     });
 
     it('should throw an error if httpPost crashes', async () => {
@@ -160,7 +156,7 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       const myQuery = {};
-      mockReject(new Error('very bad'));
+      fetchMock.mockReject(new Error('very bad'));
 
       await expect(view.rawQuery(myQuery)).rejects.toThrow(Error);
     });
@@ -176,9 +172,9 @@ describe('ElasticSearchView class', () => {
         from: 2,
         size: 20,
       };
-      mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse)],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
       );
       await view.rawQuery(myQuery, myPaginationSettings);
       const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${
@@ -186,8 +182,8 @@ describe('ElasticSearchView class', () => {
       }/_search?from=${myPaginationSettings.from}&size=${
         myPaginationSettings.size
       }`;
-      expect(mock.calls[0][0]).toEqual(baseUrl + expectedQueryURL);
-      expect(mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + expectedQueryURL);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(myQuery));
     });
 
     it('should return Promise<PaginatedList<ElasticSearchHit>>', async () => {
@@ -197,9 +193,9 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       const myQuery = {};
-      mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse)],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
       );
       const data = await view.rawQuery(myQuery);
       expect(data).toHaveProperty('total', 3341);
@@ -217,12 +213,12 @@ describe('ElasticSearchView class', () => {
     };
     beforeEach(() => {
       // Mock our query response
-      mockResponse(JSON.stringify(mockElasticSearchViewAggregationResponse), {
+      fetchMock.mockResponse(JSON.stringify(mockElasticSearchViewAggregationResponse), {
         status: 200,
       });
     });
 
-    afterEach(() => resetMocks());
+    afterEach(() => fetchMock.resetMocks());
     it('should call httpPost method with the query object and URL', async () => {
       const view = new ElasticSearchView(
         orgLabel,
@@ -230,8 +226,8 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       await view.aggregation(mockAggregationQuery);
-      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify(mockAggregationQuery),
       );
     });
@@ -243,7 +239,7 @@ describe('ElasticSearchView class', () => {
         mockElasticSearchViewResponse,
       );
       const message = 'some error message';
-      mockReject(Error(message));
+      fetchMock.mockReject(Error(message));
       await expect(view.aggregation(mockAggregationQuery)).rejects.toThrow(
         Error,
       );
@@ -263,12 +259,12 @@ describe('ElasticSearchView class', () => {
   describe('filterByType()', () => {
     beforeEach(() => {
       // Mock our query response
-      mockResponse(JSON.stringify(mockElasticSearchViewQueryResponse), {
+      fetchMock.mockResponse(JSON.stringify(mockElasticSearchViewQueryResponse), {
         status: 200,
       });
     });
 
-    afterEach(() => resetMocks());
+    afterEach(() => fetchMock.resetMocks());
 
     it('should call the ES endpoint with the proper query', async () => {
       const filterType =
@@ -294,8 +290,8 @@ describe('ElasticSearchView class', () => {
         },
       };
 
-      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
-      expect(mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
     });
 
     it('should call the ES endpoint and use a filter query with two types', async () => {
@@ -328,21 +324,21 @@ describe('ElasticSearchView class', () => {
           },
         },
       };
-      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
-      expect(mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
     });
   });
 
   describe('filterByConstrainedBy()', () => {
     beforeEach(() => {
       // Mock our query response
-      mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse)],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
       );
     });
 
-    afterEach(() => resetMocks());
+    afterEach(() => fetchMock.resetMocks());
 
     it('should call the ES endpoint with the proper query', async () => {
       const constrainedBy = 'https://neuroshapes.org/dash/person';
@@ -357,8 +353,8 @@ describe('ElasticSearchView class', () => {
           term: { _constrainedBy: constrainedBy },
         },
       };
-      expect(mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
-      expect(mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
     });
   });
 });

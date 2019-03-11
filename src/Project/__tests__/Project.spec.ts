@@ -1,4 +1,4 @@
-import { resetMocks, mock, mockResponse, mockResponses } from 'jest-fetch-mock';
+import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import Project from '../index';
 import {
   mockProjectResponse,
@@ -17,6 +17,8 @@ import Nexus from '../../Nexus';
 import ElasticSearchView from '../../View/ElasticSearchView';
 import SparqlView from '../../View/SparqlView';
 
+const { fetchMock } = <GlobalWithFetchMock>global;
+
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
 
@@ -31,18 +33,18 @@ describe('Project class', () => {
 
   describe('listViews()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockViewsListResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockViewsListResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', async () => {
       const p = new Project(mockProjectResponse);
       await p.listViews();
       const viewURL = `/views/${p.orgLabel}/${p.label}`;
-      expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + viewURL);
     });
 
     it('should return a list of ElasticSearchViews or SparqlView from a response that includes multiple view types', async () => {
@@ -54,22 +56,22 @@ describe('Project class', () => {
 
   describe('getView()', () => {
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', async () => {
-      mockResponse(
+      fetchMock.mockResponse(
         JSON.stringify(mockElasticSearchViewResponse), { status: 200 }
       );
       const p = new Project(mockProjectResponse);
       const viewId = 'nxv:defaultElasticSearchIndex';
       await p.getView(viewId);
       const viewURL = `/views/${p.orgLabel}/${p.label}/${viewId}`;
-      expect(mock.calls[0][0]).toEqual(baseUrl + viewURL);
+      expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + viewURL);
     });
 
     it('should return the view with the corresponding ID, be it SPARQL or ElasticSearch', async () => {
-      mockResponse(
+      fetchMock.mockResponse(
         JSON.stringify(mockSparqlViewResponse), { status: 200 }
       );
       const p = new Project(mockProjectResponse);
@@ -82,14 +84,14 @@ describe('Project class', () => {
 
   describe('get a project', () => {
     beforeEach(() => {
-      mockResponse('{}');
+      fetchMock.mockResponse('{}');
     });
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
     it('set the rev option', async () => {
       await getProject('myorg', 'myproject', { revision: 21 });
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/myproject?rev=21`,
       );
     });
@@ -97,32 +99,32 @@ describe('Project class', () => {
 
   describe('list projects', () => {
     beforeEach(() => {
-      mockResponse('{}');
+      fetchMock.mockResponse('{}');
     });
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
     it('call the /projects endpoint', async () => {
       await listProjects('myorg');
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg`);
     });
     it('set the full text search option', async () => {
       await listProjects('myorg', { q: 'what_is_this' });
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg?q=what_is_this`,
       );
     });
     it('set the from option', async () => {
       await listProjects('myorg', { from: 2 });
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg?from=2`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg?from=2`);
     });
     it('set the size option', async () => {
       await listProjects('myorg', { size: 50 });
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg?size=50`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg?size=50`);
     });
     it('set the deprecated option', async () => {
       await listProjects('myorg', { deprecated: true });
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg?deprecated=true`,
       );
     });
@@ -133,7 +135,7 @@ describe('Project class', () => {
         size: 10,
         deprecated: true,
       });
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg?q=query&from=3&size=10&deprecated=true`,
       );
     });
@@ -141,10 +143,10 @@ describe('Project class', () => {
 
   describe('create a project', () => {
     beforeEach(() => {
-      mockResponse('{}');
+      fetchMock.mockResponse('{}');
     });
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
     it('should call the expected URL with payload', async () => {
       const projectOptions = {
@@ -158,8 +160,8 @@ describe('Project class', () => {
         ],
       };
       await createProject('myorg', 'topsecret', projectOptions);
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg/topsecret`);
-      expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
+      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg/topsecret`);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
     });
     it('should only pass the required fields (name)', async () => {
       const projectOptions = {
@@ -168,8 +170,8 @@ describe('Project class', () => {
         prefixMappings: undefined,
       };
       await createProject('myorg', 'topsecret', projectOptions);
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg/topsecret`);
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/projects/myorg/topsecret`);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ name: 'This is top secret' }),
       );
     });
@@ -177,10 +179,10 @@ describe('Project class', () => {
 
   describe('update a project', () => {
     beforeEach(() => {
-      mockResponse('{}');
+      fetchMock.mockResponse('{}');
     });
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
     it('should call the expected URL with rev and payload', async () => {
       const projectOptions = {
@@ -194,10 +196,10 @@ describe('Project class', () => {
         ],
       };
       await updateProject('myorg', 'topsecret', 12, projectOptions);
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/topsecret?rev=12`,
       );
-      expect(mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(projectOptions));
     });
     it('should only pass the required fields (name)', async () => {
       const projectOptions = {
@@ -206,10 +208,10 @@ describe('Project class', () => {
         prefixMappings: undefined,
       };
       await updateProject('myorg', 'topsecret', 12, projectOptions);
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/topsecret?rev=12`,
       );
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ name: 'This is top secret' }),
       );
     });
@@ -217,14 +219,14 @@ describe('Project class', () => {
 
   describe('deprecate a project', () => {
     beforeEach(() => {
-      mockResponse('{}');
+      fetchMock.mockResponse('{}');
     });
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
     it('updates the specific revision', async () => {
       await deprecateProject('myorg', 'myproject', 12);
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/projects/myorg/myproject?rev=12`,
       );
     });

@@ -1,4 +1,4 @@
-import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
+import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import {
   mockResourceResponse,
   mockListResourceResponse,
@@ -31,6 +31,8 @@ import {
   UpdateResourcePayload,
   ResourceGetFormat,
 } from '../types';
+
+const { fetchMock } = <GlobalWithFetchMock>global;
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
@@ -163,11 +165,11 @@ describe('Resource class', () => {
 
   describe('listResources()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockListResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockListResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', async () => {
@@ -175,14 +177,14 @@ describe('Resource class', () => {
         'myorg',
         'myproject',
       );
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/resources/myorg/myproject`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/resources/myorg/myproject`);
       expect(resources.total).toEqual(1);
       expect(resources.results[0]).toBeInstanceOf(Resource);
     });
 
     it('should call httpGet method with the proper pagination', async () => {
       listResources('myorg', 'myproject', { from: 2, size: 20 });
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject?from=2&size=20`,
       );
     });
@@ -190,11 +192,11 @@ describe('Resource class', () => {
 
   describe('getResource()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', async () => {
@@ -204,7 +206,7 @@ describe('Resource class', () => {
         'myschema',
         'myresource',
       );
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/myresource`,
       );
       expect(r).toBeInstanceOf(Resource);
@@ -219,7 +221,7 @@ describe('Resource class', () => {
         'myresource',
         { expanded: true },
       );
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/myresource?format=expanded`,
       );
       expect(r).toBeInstanceOf(Resource);
@@ -229,11 +231,11 @@ describe('Resource class', () => {
 
   describe('Resource.getAs()', () => {
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
     describe('When format is JSON_LD', () => {
       it('should call httpGet method with the proper header and parse as JSON', async () => {
-        mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+        fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
         const resource = new Resource(
           'testOrg',
           'testProject',
@@ -242,8 +244,8 @@ describe('Resource class', () => {
         const resourceResponse = await resource.getAs(
           ResourceGetFormat.JSON_LD,
         );
-        expect(mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
-        expect(mock.calls[0][1].headers.get('Accept')).toBe(
+        expect(fetchMock.mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
+        expect(fetchMock.mock.calls[0][1].headers.get('Accept')).toBe(
           'application/ld+json',
         );
         expect(resourceResponse).toHaveProperty(
@@ -254,30 +256,30 @@ describe('Resource class', () => {
     });
     describe('When format is DOT', () => {
       it('should call httpGet method with the proper accept header', async () => {
-        mockResponse(mockDotResponse, { status: 200 });
+        fetchMock.mockResponse(mockDotResponse, { status: 200 });
         const resource = new Resource(
           'testOrg',
           'testProject',
           mockResourceResponse,
         );
         await resource.getAs(ResourceGetFormat.DOT);
-        expect(mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
-        expect(mock.calls[0][1].headers.get('Accept')).toBe(
+        expect(fetchMock.mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
+        expect(fetchMock.mock.calls[0][1].headers.get('Accept')).toBe(
           'text/vnd.graphviz',
         );
       });
     });
     describe('When format is N_TRIPLES', () => {
       it('should call httpGet method with the proper accept header', async () => {
-        mockResponse(mockNTriplesResponse, { status: 200 });
+        fetchMock.mockResponse(mockNTriplesResponse, { status: 200 });
         const resource = new Resource(
           'testOrg',
           'testProject',
           mockResourceResponse,
         );
         await resource.getAs(ResourceGetFormat.N_TRIPLES);
-        expect(mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
-        expect(mock.calls[0][1].headers.get('Accept')).toBe(
+        expect(fetchMock.mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
+        expect(fetchMock.mock.calls[0][1].headers.get('Accept')).toBe(
           'application/ntriples',
         );
       });
@@ -286,11 +288,11 @@ describe('Resource class', () => {
 
   describe('getSelfResource()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', async () => {
@@ -308,11 +310,11 @@ describe('Resource class', () => {
 
   describe('createResource()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should POST the new resource', async () => {
@@ -325,11 +327,11 @@ describe('Resource class', () => {
 
       createResource('myorg', 'myproject', 'myschema', payload);
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema`,
       );
-      expect(mock.calls[0][1].method).toEqual('POST');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ '@context': payload.context }),
       );
     });
@@ -345,11 +347,11 @@ describe('Resource class', () => {
 
       createResource('myorg', 'myproject', 'myschema', payload);
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/myID`,
       );
-      expect(mock.calls[0][1].method).toEqual('PUT');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ '@context': payload.context }),
       );
     });
@@ -365,13 +367,13 @@ describe('Resource class', () => {
 
       createResource('myorg', 'myproject', 'myschema', payload);
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/${encodeURIComponent(
           'https://mywebsite.com',
         )}`,
       );
-      expect(mock.calls[0][1].method).toEqual('PUT');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ '@context': payload.context }),
       );
     });
@@ -389,8 +391,8 @@ describe('Resource class', () => {
 
       createResource('myorg', 'myproject', 'myschema', payload);
 
-      expect(mock.calls[0][1].method).toEqual('POST');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({
           '@context': payload.context,
           '@type': payload.type,
@@ -411,11 +413,11 @@ describe('Resource class', () => {
 
       createResource('myorg', 'myproject', 'myschema', payload);
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/myresource`,
       );
-      expect(mock.calls[0][1].method).toEqual('PUT');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ '@context': payload.context }),
       );
     });
@@ -434,8 +436,8 @@ describe('Resource class', () => {
 
       createResource('myorg', 'myproject', 'myschema', payload);
 
-      expect(mock.calls[0][1].method).toEqual('PUT');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({
           '@context': payload.context,
           '@type': payload.type,
@@ -448,47 +450,47 @@ describe('Resource class', () => {
 
   describe('deprecateResource()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should deprecate the resource', async () => {
       deprecateResource('myorg', 'myproject', 'myschema', 'myresource', 2);
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/myresource?rev=2`,
       );
-      expect(mock.calls[0][1].method).toEqual('DELETE');
+      expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
 
   describe('deprecateSelfResource()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should deprecate the resource using the self url', async () => {
       deprecateSelfResource('http://myresource.com', 3, 'myorg', 'myproject');
 
-      expect(mock.calls[0][0]).toEqual('http://myresource.com?rev=3');
-      expect(mock.calls[0][1].method).toEqual('DELETE');
+      expect(fetchMock.mock.calls[0][0]).toEqual('http://myresource.com?rev=3');
+      expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
 
   describe('tagSelfResource()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should tag the resource', async () => {
@@ -497,11 +499,11 @@ describe('Resource class', () => {
         tagFromRev: 2,
       });
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/mylabel/myschema/myresource/tags?rev=3`,
       );
-      expect(mock.calls[0][1].method).toEqual('POST');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ tag: 'mytag', rev: 2 }),
       );
     });
@@ -509,11 +511,11 @@ describe('Resource class', () => {
 
   describe('tagSelfResource()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should tag the resource using the self url', async () => {
@@ -525,9 +527,9 @@ describe('Resource class', () => {
         'mylabel',
       );
 
-      expect(mock.calls[0][0]).toEqual('http://myresource.com/tags?rev=3');
-      expect(mock.calls[0][1].method).toEqual('POST');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual('http://myresource.com/tags?rev=3');
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ tag: 'mytag', rev: 2 }),
       );
     });
@@ -535,17 +537,17 @@ describe('Resource class', () => {
 
   describe('getTags()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should tag the resource', async () => {
       listTags('myorg', 'myproject', 'myschema', 'myresource');
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/myresource/tags`,
       );
     });
@@ -553,27 +555,27 @@ describe('Resource class', () => {
 
   describe('getSelfTags()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should tag the resource', async () => {
       listSelfTags('http://myresource.com');
 
-      expect(mock.calls[0][0]).toEqual('http://myresource.com/tags');
+      expect(fetchMock.mock.calls[0][0]).toEqual('http://myresource.com/tags');
     });
   });
 
   describe('updateSelf()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should PUT to update the resource', async () => {
@@ -594,11 +596,11 @@ describe('Resource class', () => {
         updatePayload,
       );
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/myId?rev=1`,
       );
-      expect(mock.calls[0][1].method).toEqual('PUT');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({
           '@context': updatePayload.context,
           myFancyField: updatePayload.myFancyField,
@@ -620,11 +622,11 @@ describe('Resource class', () => {
         updatePayload,
       );
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/myId?rev=1`,
       );
-      expect(mock.calls[0][1].method).toEqual('PUT');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({
           myFancyField: updatePayload.myFancyField,
         }),

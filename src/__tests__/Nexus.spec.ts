@@ -1,8 +1,10 @@
-import { resetMocks, mock, mockResponses } from 'jest-fetch-mock';
+import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import Nexus from '..';
 import { mockOrgResponse, mockListProjectResponse } from '../__mocks__/helpers';
 import Organization from '../Organization';
 import { PaginatedList } from '../utils/types';
+
+const { fetchMock } = <GlobalWithFetchMock>global;
 
 const nexus = new Nexus({ environment: 'http://example.com' });
 describe('Nexus class', () => {
@@ -12,12 +14,12 @@ describe('Nexus class', () => {
 
   describe('get an Org', () => {
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
     it('should return an organisation', async () => {
-      mockResponses([JSON.stringify(mockOrgResponse)]);
+      fetchMock.mockResponses([JSON.stringify(mockOrgResponse), {status: 200}]);
       const org: Organization = await nexus.getOrganization('myorg');
-      expect(mock.calls.length).toBe(1);
+      expect(fetchMock.mock.calls.length).toBe(1);
       expect(org).toBeInstanceOf(Organization);
       expect(org.label).toEqual('myorg');
     });
@@ -25,12 +27,12 @@ describe('Nexus class', () => {
 
   describe('list a list of Org', () => {
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
     it('should return a list of organisations', async () => {
-      mockResponses([JSON.stringify(mockListProjectResponse)]);
+      fetchMock.mockResponses([JSON.stringify(mockListProjectResponse), {status: 200}]);
       const orgs: PaginatedList<Organization> = await nexus.listOrganizations();
-      expect(mock.calls.length).toBe(1);
+      expect(fetchMock.mock.calls.length).toBe(1);
       expect(orgs.total).toEqual(1);
     });
   });

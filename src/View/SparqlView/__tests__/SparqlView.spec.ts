@@ -1,4 +1,4 @@
-import { resetMocks, mockResponse, mock, mockResponses } from 'jest-fetch-mock';
+import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import SparqlView from '../../SparqlView';
 import {
   mockSparqlViewResponse,
@@ -6,6 +6,8 @@ import {
 } from '../../../__mocks__/helpers';
 import Project from '../../../Project';
 import { SparqlViewQueryResponse, SparqlViewResponse } from '../types';
+
+const { fetchMock } = <GlobalWithFetchMock>global;
 
 const project = new Project(mockProjectResponse);
 const mockSparlQueryResponse: SparqlViewQueryResponse = {
@@ -72,7 +74,7 @@ function testClassProperties(view: SparqlView, response: SparqlViewResponse) {
 
 describe('Sparql View class', () => {
   afterEach(() => {
-    resetMocks();
+    fetchMock.resetMocks();
   });
   const orgLabel = 'my-org';
   const projectLabel = 'example';
@@ -84,9 +86,9 @@ describe('Sparql View class', () => {
     testClassProperties(view, mockSparqlViewResponse);
   });
   it('should get the Sparql view', async () => {
-    mockResponse(JSON.stringify(mockSparqlViewResponse));
+    fetchMock.mockResponse(JSON.stringify(mockSparqlViewResponse));
     const view: SparqlView = await SparqlView.get(orgLabel, projectLabel);
-    expect(mock.calls.length).toBe(1);
+    expect(fetchMock.mock.calls.length).toBe(1);
     expect(view.id).toBe(mockSparqlViewResponse['@id']);
     expect(view.deprecated).toBe(mockSparqlViewResponse._deprecated);
     expect(view.orgLabel).toBe('my-org');
@@ -98,14 +100,14 @@ describe('Sparql View class', () => {
 
   describe('query()', () => {
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
     it('should query the Sparql view', async () => {
-      mockResponses([JSON.stringify(mockSparlQueryResponse)]);
+      fetchMock.mockResponses([JSON.stringify(mockSparlQueryResponse), {status: 200}]);
       const result: SparqlViewQueryResponse = await view.query(
         'SELECT * where {?s ?p ?o} LIMIT 3',
       );
-      expect(mock.calls.length).toBe(1);
+      expect(fetchMock.mock.calls.length).toBe(1);
       expect(result.head.vars.length).toBe(3);
     });
   });

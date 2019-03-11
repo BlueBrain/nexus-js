@@ -1,4 +1,4 @@
-import { resetMocks, mock, mockResponse } from 'jest-fetch-mock';
+import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import Schema from '..';
 import {
   listSchemas,
@@ -16,6 +16,8 @@ import {
   mockListSchemaResponse,
 } from '../__mocks__/mockSchemaResponses';
 
+const { fetchMock } = <GlobalWithFetchMock>global;
+
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
 
@@ -27,11 +29,11 @@ describe('Schema class', () => {
 
   describe('listSchemas()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockListSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockListSchemaResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', async () => {
@@ -39,14 +41,14 @@ describe('Schema class', () => {
         'myorg',
         'myproject',
       );
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/schemas/myorg/myproject`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/schemas/myorg/myproject`);
       expect(schema.total).toEqual(1);
       expect(schema.results[0]).toBeInstanceOf(Schema);
     });
 
     it('should call httpGet method with the proper pagination', async () => {
       await listSchemas('myorg', 'myproject', { from: 2, size: 20 });
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/schemas/myorg/myproject?from=2&size=20`,
       );
     });
@@ -54,16 +56,16 @@ describe('Schema class', () => {
 
   describe('getSchema()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should call httpGet method with the proper get views url', async () => {
       const schema: Schema = await getSchema('myorg', 'myproject', 'myschema');
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/schemas/myorg/myproject/myschema`,
       );
       expect(schema).toBeInstanceOf(Schema);
@@ -72,11 +74,11 @@ describe('Schema class', () => {
 
   describe('createSchema()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should POST the new schema', async () => {
@@ -98,9 +100,9 @@ describe('Schema class', () => {
 
       createSchema('myorg', 'myproject', payload);
 
-      expect(mock.calls[0][0]).toEqual(`${baseUrl}/schemas/myorg/myproject`);
-      expect(mock.calls[0][1].method).toEqual('POST');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/schemas/myorg/myproject`);
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({
           '@context': payload.context,
           shapes: payload.shapes,
@@ -128,11 +130,11 @@ describe('Schema class', () => {
 
       createSchema('myorg', 'myproject', payload);
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/schemas/myorg/myproject/myschema`,
       );
-      expect(mock.calls[0][1].method).toEqual('PUT');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ '@context': payload.context, shapes: payload.shapes }),
       );
     });
@@ -140,30 +142,30 @@ describe('Schema class', () => {
 
   describe('deprecateSchema()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should deprecate the schema', async () => {
       await deprecateSchema('myorg', 'myproject', 'myschema', 2);
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/schemas/myorg/myproject/myschema?rev=2`,
       );
-      expect(mock.calls[0][1].method).toEqual('DELETE');
+      expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
 
   describe('tagSchema()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should tag the schema', async () => {
@@ -172,11 +174,11 @@ describe('Schema class', () => {
         tagFromRev: 2,
       });
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/schemas/myorg/mylabel/myschema/tags?rev=3`,
       );
-      expect(mock.calls[0][1].method).toEqual('POST');
-      expect(mock.calls[0][1].body).toEqual(
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ tag: 'mytag', rev: 2 }),
       );
     });
@@ -184,17 +186,17 @@ describe('Schema class', () => {
 
   describe('getTags()', () => {
     beforeEach(() => {
-      mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
     });
 
     afterEach(() => {
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should tag the schema', async () => {
       await listSchemaTags('myorg', 'myproject', 'myschema');
 
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/schemas/myorg/myproject/myschema/tags`,
       );
     });

@@ -75,7 +75,7 @@
       "node"
     ],
     "setupFiles": [
-      "./test/setupJest.ts"
+      "./test/setupJest.js"
     ]
   },
   "prettier": {

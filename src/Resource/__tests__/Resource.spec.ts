@@ -299,7 +299,7 @@ describe('Resource class', () => {
       const r: Resource = await getSelfResource(
         'http://myurl.com/staging/v1/something/somethingelse/resources/myOrg/myProject/mySchema/fred',
       );
-      expect(mock.calls[0][0]).toEqual(
+      expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://myurl.com/staging/v1/something/somethingelse/resources/myOrg/myProject/mySchema/fred',
       );
       expect(r).toBeInstanceOf(Resource);

@@ -490,7 +490,6 @@ export async function getLinks(
       results: [],
     };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }

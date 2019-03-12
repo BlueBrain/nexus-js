@@ -248,7 +248,7 @@ Schema.deprecate = (orgLabel: string, projectLabel: string, schemaId: string, re
 import { Resource } from '@bbp/nexus-sdk';
 
 Resource.get = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string): Promise<Resource>;
-Resource.getSelf = (selfUrl: string, orgLabel: string, projectLabel: string, getResourceOptions = { expanded: true }): Promise<Resource>;
+Resource.getSelf = (selfUrl: string, getResourceOptions = { expanded: true }): Promise<Resource>;
 Resource.getSelfRawAs = (selfUrl: string, resourceFormat?: ResourceGetFormat ): Promise<Resource>;
 
 Resource.list = (orgLabel: string, projectLabel: string, options?: ListResourceOptions): Promise<PaginatedList<Resource>>;
@@ -301,6 +301,7 @@ resourceInstance.update({
 
 // Links! 🔗🔗🔗🔗
 const incomingLinks: PaginatedList<ResourceLinks> = await resourceInstance.getIncomingLinks({ from: 0, size: 20}: PaginationSettings);
+const outgoingLinks: PaginatedList<ResourceLinks> = await resourceInstance.getOutgoingLinks({ from: 0, size: 20}: PaginationSettings);
 ```
 
 ### Files

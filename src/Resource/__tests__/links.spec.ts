@@ -9,28 +9,10 @@ import {
 import { SparqlViewQueryResponse } from '../../View/SparqlView/types';
 import { PaginatedList } from '../../utils/types';
 import { ResourceLink } from '../types';
-import { getIncomingLinks } from '../utils';
+import { getIncomingLinks, getOutgoingLinks } from '../utils';
 
 const mockIncomingLinksQueryResponse: SparqlViewQueryResponse = {
-  head: { vars: ['s', 'p'] },
-  results: {
-    bindings: [
-      {
-        p: {
-          type: 'uri',
-          value: 'https://mynexusinstance.com/vocabs/org/project/favoriteBuddy',
-        },
-        s: {
-          type: 'uri',
-          value: 'https://mynexusinstance.com/vocabs/org/project/_/jeff',
-        },
-      },
-    ],
-  },
-};
-
-const mockIncomingLinksCountResponse: SparqlViewQueryResponse = {
-  head: { vars: ['total'] },
+  head: { vars: ['total', 's', 'p', 'self'] },
   results: {
     bindings: [
       {
@@ -38,6 +20,134 @@ const mockIncomingLinksCountResponse: SparqlViewQueryResponse = {
           datatype: 'http://www.w3.org/2001/XMLSchema#integer',
           type: 'literal',
           value: '2',
+        },
+      },
+      {
+        p: {
+          type: 'uri',
+          value:
+            'https://mynexusinstance.io/vocabs/Kenny/What-A-Project/favoriteBuddy',
+        },
+        s: {
+          type: 'uri',
+          value:
+            'https://mynexusinstance.io/resources/Kenny/What-A-Project/_/fred',
+        },
+        self: {
+          type: 'literal',
+          value:
+            'https://mynexusinstance.io/resources/Kenny/What-A-Project/_/fred',
+        },
+      },
+      {
+        p: {
+          type: 'uri',
+          value:
+            'https://mynexusinstance.io/vocabs/Kenny/What-A-Project/favoriteBuddy',
+        },
+        s: {
+          type: 'uri',
+          value:
+            'https://mynexusinstance.io/resources/Kenny/What-A-Project/_/jeff',
+        },
+        self: {
+          type: 'literal',
+          value:
+            'https://mynexusinstance.io/resources/Kenny/What-A-Project/_/jeff',
+        },
+      },
+    ],
+  },
+};
+
+const mockOutgoingLinksQueryResponse: SparqlViewQueryResponse = {
+  head: { vars: ['total', 'o', 'p', 'self'] },
+  results: {
+    bindings: [
+      {
+        total: {
+          datatype: 'http://www.w3.org/2001/XMLSchema#integer',
+          type: 'literal',
+          value: '6',
+        },
+      },
+      {
+        o: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/resources/Kenny/What-A-Project/_/defaultSparqlIndex',
+        },
+        p: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/vocabs/Kenny/What-A-Project/favoriteView',
+        },
+      },
+      {
+        o: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/resources/Kenny/What-A-Project/_/fred',
+        },
+        p: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/vocabs/Kenny/What-A-Project/anotherFavoriteBuddy',
+        },
+        self: {
+          type: 'literal',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/resources/Kenny/What-A-Project/_/fred',
+        },
+      },
+      {
+        o: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/resources/Kenny/What-A-Project/_/fred',
+        },
+        p: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/vocabs/Kenny/What-A-Project/favoriteBuddy',
+        },
+        self: {
+          type: 'literal',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/resources/Kenny/What-A-Project/_/fred',
+        },
+      },
+      {
+        o: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/resources/Kenny/What-A-Project/_/jeff',
+        },
+        p: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/vocabs/Kenny/What-A-Project/favoriteBuddy',
+        },
+        self: {
+          type: 'literal',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/resources/Kenny/What-A-Project/_/jeff',
+        },
+      },
+      {
+        o: { type: 'uri', value: 'https://google.com' },
+        p: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/vocabs/Kenny/What-A-Project/favoriteBuddy',
+        },
+      },
+      {
+        o: { type: 'uri', value: 'https://wildmagic.io' },
+        p: {
+          type: 'uri',
+          value:
+            'https://bbp-nexus.epfl.ch/staging/v1/vocabs/Kenny/What-A-Project/favoriteExternalEndpoint',
         },
       },
     ],
@@ -48,21 +158,15 @@ describe('Incoming / Outgoing Links behavior', () => {
   const resource = new Resource<{
     subject: string;
   }>('testOrg', 'testProject', mockGetByIDResourceResponse);
-  describe('getLinks()', () => {});
+
   describe('getIncomingLinks()', () => {
-    beforeEach(() => {
+    it('should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries', async () => {
       mockResponses(
         [JSON.stringify(mockSparqlViewResponse)],
-        [JSON.stringify(mockIncomingLinksCountResponse)],
         [JSON.stringify(mockIncomingLinksQueryResponse)],
         [JSON.stringify(mockResourceResponse)],
+        [JSON.stringify(mockResourceResponse)],
       );
-    });
-
-    afterEach(() => {
-      resetMocks();
-    });
-    it('should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries', async () => {
       const links: PaginatedList<ResourceLink> = await getIncomingLinks(
         'myorg',
         'myproject',
@@ -72,16 +176,39 @@ describe('Incoming / Outgoing Links behavior', () => {
           size: 20,
         },
       );
-      const countQuery =
-        'SELECT (COUNT(?s) AS ?total)  WHERE { ?s ?p <http://blah.com/resourceSelfID>}';
-      const paginatedQuery =
-        'SELECT ?s ?p WHERE { ?s ?p <http://blah.com/resourceSelfID>} LIMIT 20 OFFSET 0';
-      expect(mock.calls[1][1].body).toEqual(countQuery);
-      expect(mock.calls[2][1].body).toEqual(paginatedQuery);
+
+      expect(mock.calls[1][1].body).toMatchSnapshot();
       expect(links.results[0]).toHaveProperty('predicate');
       expect(links.results[0]).toHaveProperty('link');
       expect(links.results[0].link).toBeInstanceOf(Resource);
+      resetMocks();
     });
   });
-  describe('Resource.getOutgoingLinks()', () => {});
+
+  describe('getOutgoingLinks()', () => {
+    it('should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries', async () => {
+      mockResponses(
+        [JSON.stringify(mockSparqlViewResponse)],
+        [JSON.stringify(mockOutgoingLinksQueryResponse)],
+        [JSON.stringify(mockResourceResponse)],
+        [JSON.stringify(mockResourceResponse)],
+        [JSON.stringify(mockResourceResponse)],
+      );
+      const links: PaginatedList<ResourceLink> = await getOutgoingLinks(
+        'myorg',
+        'myproject',
+        'http://blah.com/resourceSelfID',
+        {
+          from: 0,
+          size: 20,
+        },
+      );
+
+      expect(mock.calls[1][1].body).toMatchSnapshot();
+      expect(links.results[0]).toHaveProperty('predicate');
+      expect(links.results[0]).toHaveProperty('link');
+      expect(links.results[1].link).toBeInstanceOf(Resource);
+      resetMocks();
+    });
+  });
 });

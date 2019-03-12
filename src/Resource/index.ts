@@ -20,6 +20,7 @@ import {
   listTags,
   listSelfTags,
   getIncomingLinks,
+  getOutgoingLinks,
 } from './utils';
 import { PaginatedList, PaginationSettings } from '../utils/types';
 
@@ -163,6 +164,17 @@ export default class Resource<T = {}> {
     paginationSettings: PaginationSettings,
   ): Promise<PaginatedList<ResourceLink>> {
     return await getIncomingLinks(
+      this.orgLabel,
+      this.projectLabel,
+      this.self,
+      paginationSettings,
+    );
+  }
+
+  async getOutgoingLinks(
+    paginationSettings: PaginationSettings,
+  ): Promise<PaginatedList<ResourceLink>> {
+    return await getOutgoingLinks(
       this.orgLabel,
       this.projectLabel,
       this.self,

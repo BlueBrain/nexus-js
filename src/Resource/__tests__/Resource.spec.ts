@@ -295,12 +295,14 @@ describe('Resource class', () => {
 
     it('should call httpGet method with the proper get views url', async () => {
       const r: Resource = await getSelfResource(
-        'http://myurl.com',
-        'myorg',
-        'myproject',
+        'http://myurl.com/staging/v1/something/somethingelse/resources/myOrg/myProject/mySchema/fred',
       );
-      expect(mock.calls[0][0]).toEqual('http://myurl.com');
+      expect(mock.calls[0][0]).toEqual(
+        'http://myurl.com/staging/v1/something/somethingelse/resources/myOrg/myProject/mySchema/fred',
+      );
       expect(r).toBeInstanceOf(Resource);
+      expect(r).toHaveProperty('orgLabel', 'myOrg');
+      expect(r).toHaveProperty('projectLabel', 'myProject');
     });
   });
 

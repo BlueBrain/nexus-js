@@ -68,11 +68,7 @@ describe('File class', () => {
       mockResponse(JSON.stringify(mockFileResponse), { status: 200 });
       const selfURL =
         'https://nexus.example.com/v1/files/myorg/myproj/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9';
-      const file: NexusFile = await NexusFile.getSelf(
-        selfURL,
-        'myOrg',
-        'myProject',
-      );
+      const file: NexusFile = await NexusFile.getSelf(selfURL);
       expect(mock.calls[0][0]).toEqual(selfURL);
       expect(file).toBeInstanceOf(NexusFile);
       expect(file.id).toEqual('base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9');
@@ -86,12 +82,7 @@ describe('File class', () => {
       );
       const selfURL =
         'https://nexus.example.com/v1/files/myorg/myproj/base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9';
-      const file: NexusFile = await NexusFile.getSelf(
-        selfURL,
-        'myOrg',
-        'myProject',
-        true,
-      );
+      const file: NexusFile = await NexusFile.getSelf(selfURL, true);
       expect(mock.calls[0][0]).toEqual(selfURL);
       expect(file).toBeInstanceOf(NexusFile);
       expect(file.id).toEqual('base:d8848d4c-68f7-4ffd-952f-63a8cbcb86a9');

@@ -451,9 +451,7 @@ export async function getLinks(
     if (paginatedResponse.results) {
       const totalBinding =
         paginatedResponse.results &&
-        paginatedResponse.results.bindings.find(
-          binding => typeof binding['total'] !== 'undefined',
-        );
+        paginatedResponse.results.bindings.find(binding => !!binding.total);
       const queryResults = paginatedResponse.results.bindings.filter(
         binding => typeof binding['total'] === 'undefined',
       );
@@ -464,7 +462,7 @@ export async function getLinks(
 
         // self exists here, so we can assume that
         // it is a resource in the platform
-        if (typeof subjectPredicate['self'] !== 'undefined') {
+        if (!!subjectPredicate.self) {
           return Resource.getSelf(subjectPredicate.self.value);
         }
 
@@ -478,7 +476,7 @@ export async function getLinks(
         results: queryResults.map((subjectPredicate, index) => {
           return {
             link: resources[index],
-            isExternal: typeof subjectPredicate['self'] !== 'undefined',
+            isExternal: !subjectPredicate.self,
             predicate: subjectPredicate.p.value,
           };
         }),

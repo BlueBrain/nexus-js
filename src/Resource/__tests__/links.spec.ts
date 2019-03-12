@@ -75,18 +75,6 @@ const mockOutgoingLinksQueryResponse: SparqlViewQueryResponse = {
         o: {
           type: 'uri',
           value:
-            'https://bbp-nexus.epfl.ch/staging/v1/resources/Kenny/What-A-Project/_/defaultSparqlIndex',
-        },
-        p: {
-          type: 'uri',
-          value:
-            'https://bbp-nexus.epfl.ch/staging/v1/vocabs/Kenny/What-A-Project/favoriteView',
-        },
-      },
-      {
-        o: {
-          type: 'uri',
-          value:
             'https://bbp-nexus.epfl.ch/staging/v1/resources/Kenny/What-A-Project/_/fred',
         },
         p: {
@@ -256,6 +244,8 @@ describe('Incoming / Outgoing Links behavior', () => {
       expect(mock.calls[1][1].body).toMatchSnapshot();
       expect(links.results[0]).toHaveProperty('predicate');
       expect(links.results[0]).toHaveProperty('link');
+      expect(links.results[2]).toHaveProperty('isExternal', false);
+      expect(links.results[4]).toHaveProperty('isExternal', true);
       expect(links.results[1].link).toBeInstanceOf(Resource);
       resetMocks();
     });

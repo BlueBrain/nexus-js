@@ -155,19 +155,42 @@ const mockOutgoingLinksQueryResponse: SparqlViewQueryResponse = {
 };
 
 describe('Incoming / Outgoing Links behavior', () => {
-  const resource = new Resource<{
-    subject: string;
-  }>('testOrg', 'testProject', mockGetByIDResourceResponse);
-
   describe('getIncomingLinks()', () => {
-    it('should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries', async () => {
+    it('should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries as instance method', async () => {
+      const resource = new Resource<{
+        subject: string;
+      }>('testOrg', 'testProject', mockGetByIDResourceResponse);
+
       mockResponses(
         [JSON.stringify(mockSparqlViewResponse)],
         [JSON.stringify(mockIncomingLinksQueryResponse)],
         [JSON.stringify(mockResourceResponse)],
         [JSON.stringify(mockResourceResponse)],
       );
-      const links: PaginatedList<ResourceLink> = await getIncomingLinks(
+      const links: PaginatedList<
+        ResourceLink
+      > = await resource.getIncomingLinks({
+        from: 0,
+        size: 20,
+      });
+
+      expect(mock.calls[1][1].body).toMatchSnapshot();
+      expect(links.results[0]).toHaveProperty('predicate');
+      expect(links.results[0]).toHaveProperty('link');
+      expect(links.results[0].link).toBeInstanceOf(Resource);
+      resetMocks();
+    });
+
+    it('should work as a static method', async () => {
+      mockResponses(
+        [JSON.stringify(mockSparqlViewResponse)],
+        [JSON.stringify(mockIncomingLinksQueryResponse)],
+        [JSON.stringify(mockResourceResponse)],
+        [JSON.stringify(mockResourceResponse)],
+      );
+      const links: PaginatedList<
+        ResourceLink
+      > = await Resource.getIncomingLinks(
         'myorg',
         'myproject',
         'http://blah.com/resourceSelfID',
@@ -186,7 +209,33 @@ describe('Incoming / Outgoing Links behavior', () => {
   });
 
   describe('getOutgoingLinks()', () => {
-    it('should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries', async () => {
+    it('should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries as instance method', async () => {
+      const resource = new Resource<{
+        subject: string;
+      }>('testOrg', 'testProject', mockGetByIDResourceResponse);
+
+      mockResponses(
+        [JSON.stringify(mockSparqlViewResponse)],
+        [JSON.stringify(mockOutgoingLinksQueryResponse)],
+        [JSON.stringify(mockResourceResponse)],
+        [JSON.stringify(mockResourceResponse)],
+        [JSON.stringify(mockResourceResponse)],
+      );
+      const links: PaginatedList<
+        ResourceLink
+      > = await resource.getOutgoingLinks({
+        from: 0,
+        size: 20,
+      });
+
+      expect(mock.calls[1][1].body).toMatchSnapshot();
+      expect(links.results[0]).toHaveProperty('predicate');
+      expect(links.results[0]).toHaveProperty('link');
+      expect(links.results[1].link).toBeInstanceOf(Resource);
+      resetMocks();
+    });
+
+    it('should work just as well as a static method', async () => {
       mockResponses(
         [JSON.stringify(mockSparqlViewResponse)],
         [JSON.stringify(mockOutgoingLinksQueryResponse)],

@@ -300,6 +300,19 @@ resourceInstance.update({
   }): Promise<Resource>;
 
 // Links! 🔗🔗🔗🔗
+
+const incomingLinks: PaginatedList<ResourceLinks> = await Resource.getIncomingLinks(
+  orgLabel: string,
+  projectLabel: string,
+  selfUrl: string,
+  { from: 0, size: 20}: PaginationSettings);
+
+const outgoingLinks: PaginatedList<ResourceLinks> = await Resource.getOutgoingLinks(
+  orgLabel: string,
+  projectLabel: string,
+  selfUrl: string,
+  { from: 0, size: 20}: PaginationSettings);
+
 const incomingLinks: PaginatedList<ResourceLinks> = await resourceInstance.getIncomingLinks({ from: 0, size: 20}: PaginationSettings);
 const outgoingLinks: PaginatedList<ResourceLinks> = await resourceInstance.getOutgoingLinks({ from: 0, size: 20}: PaginationSettings);
 ```

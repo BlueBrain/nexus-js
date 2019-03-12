@@ -65,6 +65,8 @@ export default class Resource<T = {}> {
 
   static getSelf = getSelfResource;
   static getSelfRawAs = getSelfResourceRawAs;
+  static getIncomingLinks = getIncomingLinks;
+  static getOutgoingLinks = getOutgoingLinks;
   static get = getResource;
   static list = listResources;
   static create = createResource;

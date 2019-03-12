@@ -3,4 +3,5 @@ if (process.env.NODE_ENV === 'test') {
 
   jest.setMock('node-fetch', fetch);
   global.fetch = fetch;
+  global.fetchMock = fetch;
 }

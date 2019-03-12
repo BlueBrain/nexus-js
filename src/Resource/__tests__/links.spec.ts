@@ -1,5 +1,5 @@
 import Resource from '..';
-import { resetMocks, mock, mockResponses } from 'jest-fetch-mock';
+import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import {
   mockGetByIDResourceResponse,
   mockProjectResponse,
@@ -10,6 +10,8 @@ import { SparqlViewQueryResponse } from '../../View/SparqlView/types';
 import { PaginatedList } from '../../utils/types';
 import { ResourceLink } from '../types';
 import { getIncomingLinks, getOutgoingLinks } from '../utils';
+
+const { fetchMock } = <GlobalWithFetchMock>global;
 
 const mockIncomingLinksQueryResponse: SparqlViewQueryResponse = {
   head: { vars: ['total', 's', 'p', 'self'] },
@@ -149,11 +151,11 @@ describe('Incoming / Outgoing Links behavior', () => {
         subject: string;
       }>('testOrg', 'testProject', mockGetByIDResourceResponse);
 
-      mockResponses(
-        [JSON.stringify(mockSparqlViewResponse)],
-        [JSON.stringify(mockIncomingLinksQueryResponse)],
-        [JSON.stringify(mockResourceResponse)],
-        [JSON.stringify(mockResourceResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockSparqlViewResponse), {status: 200}],
+        [JSON.stringify(mockIncomingLinksQueryResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
       );
       const links: PaginatedList<
         ResourceLink
@@ -162,19 +164,19 @@ describe('Incoming / Outgoing Links behavior', () => {
         size: 20,
       });
 
-      expect(mock.calls[1][1].body).toMatchSnapshot();
+      expect(fetchMock.mock.calls[1][1].body).toMatchSnapshot();
       expect(links.results[0]).toHaveProperty('predicate');
       expect(links.results[0]).toHaveProperty('link');
       expect(links.results[0].link).toBeInstanceOf(Resource);
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should work as a static method', async () => {
-      mockResponses(
-        [JSON.stringify(mockSparqlViewResponse)],
-        [JSON.stringify(mockIncomingLinksQueryResponse)],
-        [JSON.stringify(mockResourceResponse)],
-        [JSON.stringify(mockResourceResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockSparqlViewResponse), {status: 200}],
+        [JSON.stringify(mockIncomingLinksQueryResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
       );
       const links: PaginatedList<
         ResourceLink
@@ -188,11 +190,11 @@ describe('Incoming / Outgoing Links behavior', () => {
         },
       );
 
-      expect(mock.calls[1][1].body).toMatchSnapshot();
+      expect(fetchMock.mock.calls[1][1].body).toMatchSnapshot();
       expect(links.results[0]).toHaveProperty('predicate');
       expect(links.results[0]).toHaveProperty('link');
       expect(links.results[0].link).toBeInstanceOf(Resource);
-      resetMocks();
+      fetchMock.resetMocks();
     });
   });
 
@@ -202,12 +204,12 @@ describe('Incoming / Outgoing Links behavior', () => {
         subject: string;
       }>('testOrg', 'testProject', mockGetByIDResourceResponse);
 
-      mockResponses(
-        [JSON.stringify(mockSparqlViewResponse)],
-        [JSON.stringify(mockOutgoingLinksQueryResponse)],
-        [JSON.stringify(mockResourceResponse)],
-        [JSON.stringify(mockResourceResponse)],
-        [JSON.stringify(mockResourceResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockSparqlViewResponse), {status: 200}],
+        [JSON.stringify(mockOutgoingLinksQueryResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
       );
       const links: PaginatedList<
         ResourceLink
@@ -216,20 +218,20 @@ describe('Incoming / Outgoing Links behavior', () => {
         size: 20,
       });
 
-      expect(mock.calls[1][1].body).toMatchSnapshot();
+      expect(fetchMock.mock.calls[1][1].body).toMatchSnapshot();
       expect(links.results[0]).toHaveProperty('predicate');
       expect(links.results[0]).toHaveProperty('link');
       expect(links.results[1].link).toBeInstanceOf(Resource);
-      resetMocks();
+      fetchMock.resetMocks();
     });
 
     it('should work just as well as a static method', async () => {
-      mockResponses(
-        [JSON.stringify(mockSparqlViewResponse)],
-        [JSON.stringify(mockOutgoingLinksQueryResponse)],
-        [JSON.stringify(mockResourceResponse)],
-        [JSON.stringify(mockResourceResponse)],
-        [JSON.stringify(mockResourceResponse)],
+      fetchMock.mockResponses(
+        [JSON.stringify(mockSparqlViewResponse), {status: 200}],
+        [JSON.stringify(mockOutgoingLinksQueryResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockResourceResponse), {status: 200}],
       );
       const links: PaginatedList<ResourceLink> = await getOutgoingLinks(
         'myorg',
@@ -241,13 +243,13 @@ describe('Incoming / Outgoing Links behavior', () => {
         },
       );
 
-      expect(mock.calls[1][1].body).toMatchSnapshot();
+      expect(fetchMock.mock.calls[1][1].body).toMatchSnapshot();
       expect(links.results[0]).toHaveProperty('predicate');
       expect(links.results[0]).toHaveProperty('link');
       expect(links.results[2]).toHaveProperty('isExternal', false);
       expect(links.results[4]).toHaveProperty('isExternal', true);
       expect(links.results[1].link).toBeInstanceOf(Resource);
-      resetMocks();
+      fetchMock.resetMocks();
     });
   });
 });

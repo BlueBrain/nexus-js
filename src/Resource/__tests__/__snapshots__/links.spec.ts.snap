@@ -11,7 +11,7 @@ exports[`Incoming / Outgoing Links behavior getIncomingLinks() should fetch a Pa
       WHERE {
         graph ?g1 {
 
-          ?ref ?p <[object Window]> .
+          ?ref ?p <https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae> .
           ?s nxv:constrainedBy ?aSchema .
           ?s nxv:self ?self
 
@@ -47,7 +47,7 @@ exports[`Incoming / Outgoing Links behavior getIncomingLinks() should work as a 
       WHERE {
         graph ?g1 {
 
-          ?ref ?p <[object Window]> .
+          ?ref ?p <http://blah.com/resourceSelfID> .
           ?s nxv:constrainedBy ?aSchema .
           ?s nxv:self ?self
 

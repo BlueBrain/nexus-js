@@ -411,7 +411,7 @@ export async function getIncomingLinks(
       WHERE {
         graph ?g1 {
 
-          ?ref ?p <${self}> .
+          ?ref ?p <${selfUrl}> .
           ?s nxv:constrainedBy ?aSchema .
           ?s nxv:self ?self
 

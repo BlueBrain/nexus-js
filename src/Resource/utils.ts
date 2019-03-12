@@ -1,4 +1,4 @@
-import { PaginatedList } from '..';
+import { PaginatedList, Project } from '..';
 import Resource, { DEFAULT_GET_RESOURCE_OPTIONS } from '.';
 import {
   httpGet,
@@ -18,8 +18,12 @@ import {
   ResourceGetFormat,
   ResourceGetFormats,
   GetResourceOptions,
+  ResourceLink,
 } from './types';
 import { buildQueryParams } from '../utils';
+import { PaginationSettings } from '../utils/types';
+import { SparqlViewQueryResponse } from '../View/SparqlView/types';
+import { getSparqlView } from '../View/utils';
 
 // Fetch a resource as raw data for any number of
 // content negotiation formats,
@@ -46,11 +50,12 @@ export async function getSelfResourceRawAs(
 
 export async function getSelfResource(
   selfUrl: string,
-  orgLabel: string,
-  projectLabel: string,
   getResourceOptions: GetResourceOptions = DEFAULT_GET_RESOURCE_OPTIONS,
 ): Promise<Resource> {
   try {
+    const [id, schema, projectLabel, orgLabel, ...rest] = selfUrl
+      .split('/')
+      .reverse();
     const url = `${selfUrl}${
       getResourceOptions.expanded ? '?format=expanded' : ''
     }`;
@@ -332,6 +337,156 @@ export async function deprecateSelfResource(
       { useBase: false },
     );
     return new Resource(orgLabel, projectLabel, resourceResponse);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getOutgoingLinks(
+  orgLabel: string,
+  projectLabel: string,
+  selfUrl: string,
+  paginationSettings: PaginationSettings,
+): Promise<PaginatedList<ResourceLink>> {
+  return await getLinks(
+    orgLabel,
+    projectLabel,
+    paginationSettings,
+    () => `
+  prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+  SELECT ?total ?o ?p ?self
+
+  WITH {
+    SELECT DISTINCT ?p ?o ?self
+        WHERE {
+            graph ?g1 {
+              <${selfUrl}> ?p ?o
+              FILTER(isIri(?o) && ?p NOT IN (nxv:updatedBy, nxv:createdBy, nxv:constrainedBy, nxv:project, rdf:type))
+            } .
+            OPTIONAL {
+              graph ?g2 {
+              	?o nxv:constrainedBy ?aSchema .
+                ?o nxv:self ?self
+              }
+            }
+      }
+} AS %resultSet
+
+
+  WHERE {
+     {
+        SELECT (COUNT(?o) AS ?total)
+        WHERE { INCLUDE %resultSet }
+     }
+     UNION
+    {
+        SELECT *
+        WHERE { INCLUDE %resultSet }
+        ORDER BY ?o ?p
+        LIMIT ${paginationSettings.size}
+        OFFSET ${paginationSettings.from}
+     }
+  }
+  `,
+  );
+}
+
+export async function getIncomingLinks(
+  orgLabel: string,
+  projectLabel: string,
+  selfUrl: string,
+  paginationSettings: PaginationSettings,
+): Promise<PaginatedList<ResourceLink>> {
+  return await getLinks(
+    orgLabel,
+    projectLabel,
+    paginationSettings,
+    () => `
+    prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+
+    SELECT ?total ?s ?p  ?self
+
+    WITH {
+      SELECT DISTINCT ?s ?p ?self
+      WHERE {
+        graph ?g1 {
+
+          ?ref ?p <${selfUrl}> .
+          ?s nxv:constrainedBy ?aSchema .
+          ?s nxv:self ?self
+
+        }
+      }
+    } AS %resultSet
+
+    WHERE {
+      {
+        SELECT (COUNT(?s) AS ?total)
+        WHERE { INCLUDE %resultSet }
+      }
+      UNION
+      {
+        SELECT *
+        WHERE { INCLUDE %resultSet }
+        ORDER BY ?s ?p
+        LIMIT ${paginationSettings.size}
+        OFFSET ${paginationSettings.from}
+       }
+      }
+    `,
+  );
+}
+
+export async function getLinks(
+  orgLabel: string,
+  projectLabel: string,
+  paginationSettings: PaginationSettings,
+  makeQuery: () => string,
+): Promise<PaginatedList<ResourceLink>> {
+  try {
+    const { from } = paginationSettings;
+    const view = await getSparqlView(orgLabel, projectLabel);
+    const query = makeQuery();
+    const paginatedResponse: SparqlViewQueryResponse = await view.query(query);
+    if (paginatedResponse.results) {
+      const totalBinding =
+        paginatedResponse.results &&
+        paginatedResponse.results.bindings.find(binding => !!binding.total);
+      const queryResults = paginatedResponse.results.bindings.filter(
+        binding => typeof binding['total'] === 'undefined',
+      );
+
+      const resourcePromises = queryResults.map(subjectPredicate => {
+        // depending on incoming or outgoing, we'll center on subject or object
+        const graphID = (subjectPredicate.s || subjectPredicate.o).value;
+
+        // self exists here, so we can assume that
+        // it is a resource in the platform
+        if (!!subjectPredicate.self) {
+          return Resource.getSelf(subjectPredicate.self.value);
+        }
+
+        // otherwise it is not a resource, likely DOI or URI
+        return graphID;
+      });
+      const resources = await Promise.all(resourcePromises);
+      return {
+        total: totalBinding ? totalBinding.total.value : 0,
+        index: from,
+        results: queryResults.map((subjectPredicate, index) => {
+          return {
+            link: resources[index],
+            isExternal: !subjectPredicate.self,
+            predicate: subjectPredicate.p.value,
+          };
+        }),
+      };
+    }
+    return {
+      total: 0,
+      index: from,
+      results: [],
+    };
   } catch (error) {
     throw error;
   }

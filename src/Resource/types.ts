@@ -1,3 +1,5 @@
+import { Resource } from '..';
+
 export interface ResourceResponseCommon {
   '@id': string;
   '@type'?: string | string[];
@@ -78,4 +80,10 @@ export type ResourceGetFormats =
 
 export interface GetResourceOptions {
   expanded: boolean;
+}
+
+export interface ResourceLink {
+  link: Resource | string;
+  isExternal: boolean;
+  predicate: string; // url vocab link such as https://myNexusInstance.com/vocabs/myOrg/friendProject/friend
 }

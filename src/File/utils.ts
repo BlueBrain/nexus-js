@@ -38,13 +38,14 @@ export async function createFile(
 
 export async function getFileSelf(
   selfUrl: string,
-  orgLabel: string,
-  projectLabel: string,
   shouldFetchFile: boolean = false,
 ): Promise<NexusFile> {
   const fileResponse: NexusFileResponse = await httpGet(selfUrl, {
     useBase: false,
   });
+  const [id, schema, projectLabel, orgLabel, ...rest] = selfUrl
+    .split('/')
+    .reverse();
   const file = new NexusFile(orgLabel, projectLabel, fileResponse);
   if (shouldFetchFile) {
     await file.getFile();

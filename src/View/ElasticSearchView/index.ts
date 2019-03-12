@@ -156,8 +156,6 @@ export default class ElasticSearchView {
         response.hits.hits.map(async resource => {
           return await Resource.getSelf(
             (resource._source as ElasticSearchResourceResponse)['_self'],
-            this.orgLabel,
-            this.projectLabel,
           );
         }),
       );

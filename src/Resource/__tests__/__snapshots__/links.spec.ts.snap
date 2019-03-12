@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Incoming / Outgoing Links behavior getIncomingLinks() should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries as instance method 1`] = `
+"
+    prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+
+    SELECT ?total ?s ?p  ?self
+
+    WITH {
+      SELECT DISTINCT ?s ?p ?self
+      WHERE {
+        graph ?g1 {
+
+          ?ref ?p <https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae> .
+          ?s nxv:constrainedBy ?aSchema .
+          ?s nxv:self ?self
+
+        }
+      }
+    } AS %resultSet
+
+    WHERE {
+      {
+        SELECT (COUNT(?s) AS ?total)
+        WHERE { INCLUDE %resultSet }
+      }
+      UNION
+      {
+        SELECT *
+        WHERE { INCLUDE %resultSet }
+        ORDER BY ?s ?p
+        LIMIT 20
+        OFFSET 0
+       }
+      }
+    "
+`;
+
+exports[`Incoming / Outgoing Links behavior getIncomingLinks() should work as a static method 1`] = `
+"
+    prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+
+    SELECT ?total ?s ?p  ?self
+
+    WITH {
+      SELECT DISTINCT ?s ?p ?self
+      WHERE {
+        graph ?g1 {
+
+          ?ref ?p <http://blah.com/resourceSelfID> .
+          ?s nxv:constrainedBy ?aSchema .
+          ?s nxv:self ?self
+
+        }
+      }
+    } AS %resultSet
+
+    WHERE {
+      {
+        SELECT (COUNT(?s) AS ?total)
+        WHERE { INCLUDE %resultSet }
+      }
+      UNION
+      {
+        SELECT *
+        WHERE { INCLUDE %resultSet }
+        ORDER BY ?s ?p
+        LIMIT 20
+        OFFSET 0
+       }
+      }
+    "
+`;
+
+exports[`Incoming / Outgoing Links behavior getOutgoingLinks() should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries as instance method 1`] = `
+"
+  prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+  SELECT ?total ?o ?p ?self
+
+  WITH {
+    SELECT DISTINCT ?p ?o ?self
+        WHERE {
+            graph ?g1 {
+              <https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae> ?p ?o
+              FILTER(isIri(?o) && ?p NOT IN (nxv:updatedBy, nxv:createdBy, nxv:constrainedBy, nxv:project, rdf:type))
+            } .
+            OPTIONAL {
+              graph ?g2 {
+              	?o nxv:constrainedBy ?aSchema .
+                ?o nxv:self ?self
+              }
+            }
+      }
+} AS %resultSet
+
+
+  WHERE {
+     {
+        SELECT (COUNT(?o) AS ?total)
+        WHERE { INCLUDE %resultSet }
+     }
+     UNION
+    {
+        SELECT *
+        WHERE { INCLUDE %resultSet }
+        ORDER BY ?o ?p
+        LIMIT 20
+        OFFSET 0
+     }
+  }
+  "
+`;
+
+exports[`Incoming / Outgoing Links behavior getOutgoingLinks() should work just as well as a static method 1`] = `
+"
+  prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+  SELECT ?total ?o ?p ?self
+
+  WITH {
+    SELECT DISTINCT ?p ?o ?self
+        WHERE {
+            graph ?g1 {
+              <http://blah.com/resourceSelfID> ?p ?o
+              FILTER(isIri(?o) && ?p NOT IN (nxv:updatedBy, nxv:createdBy, nxv:constrainedBy, nxv:project, rdf:type))
+            } .
+            OPTIONAL {
+              graph ?g2 {
+              	?o nxv:constrainedBy ?aSchema .
+                ?o nxv:self ?self
+              }
+            }
+      }
+} AS %resultSet
+
+
+  WHERE {
+     {
+        SELECT (COUNT(?o) AS ?total)
+        WHERE { INCLUDE %resultSet }
+     }
+     UNION
+    {
+        SELECT *
+        WHERE { INCLUDE %resultSet }
+        ORDER BY ?o ?p
+        LIMIT 20
+        OFFSET 0
+     }
+  }
+  "
+`;

@@ -456,22 +456,24 @@ export async function getLinks(
         binding => typeof binding['total'] === 'undefined',
       );
 
-      const resourcePromises = queryResults.map(subjectPredicate => {
-        // depending on incoming or outgoing, we'll center on subject or object
-        const graphID = (subjectPredicate.s || subjectPredicate.o).value;
+      const resourcePromises: Promise<string | Resource>[] = queryResults.map(
+        subjectPredicate => {
+          // depending on incoming or outgoing, we'll center on subject or object
+          const graphID = (subjectPredicate.s || subjectPredicate.o).value;
 
-        // self exists here, so we can assume that
-        // it is a resource in the platform
-        if (!!subjectPredicate.self) {
-          return Resource.getSelf(subjectPredicate.self.value);
-        }
+          // self exists here, so we can assume that
+          // it is a resource in the platform
+          if (!!subjectPredicate.self) {
+            return Resource.getSelf(subjectPredicate.self.value);
+          }
 
-        // otherwise it is not a resource, likely DOI or URI
-        return graphID;
-      });
+          // otherwise it is not a resource, likely DOI or URI
+          return Promise.resolve(graphID);
+        },
+      );
       const resources = await Promise.all(resourcePromises);
       return {
-        total: totalBinding ? totalBinding.total.value : 0,
+        total: Number(totalBinding ? totalBinding.total.value : 0),
         index: from,
         results: queryResults.map((subjectPredicate, index) => {
           return {

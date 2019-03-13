@@ -17,7 +17,7 @@ export interface SparqlViewQueryResponse {
     bindings: {
       [key: string]: {
         type: string;
-        value: any;
+        value: string;
         datatype?: string;
         'xml:lang'?: string;
         [attribute: string]: any;

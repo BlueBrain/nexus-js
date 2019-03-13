@@ -9,7 +9,7 @@ import {
 import { SparqlViewQueryResponse } from '../../View/SparqlView/types';
 import { PaginatedList } from '../../utils/types';
 import { ResourceLink } from '../types';
-import { getIncomingLinks, getOutgoingLinks } from '../utils';
+import { getIncomingLinks, getOutgoingLinks, getLinks } from '../utils';
 
 const { fetchMock } = <GlobalWithFetchMock>global;
 
@@ -145,6 +145,31 @@ const mockOutgoingLinksQueryResponse: SparqlViewQueryResponse = {
 };
 
 describe('Incoming / Outgoing Links behavior', () => {
+  describe('getLinks()', () => {
+    it('should output PaginationSettings with total as a number', async () => {
+      fetchMock.mockResponses(
+        [JSON.stringify(mockSparqlViewResponse), { status: 200 }],
+        [JSON.stringify(mockIncomingLinksQueryResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+      );
+
+      const links: PaginatedList<ResourceLink> = await getLinks(
+        'myOrg',
+        'myProject',
+        {
+          from: 0,
+          size: 20,
+        },
+        () => 'Pretend that I am a great sparql query!',
+      );
+
+      expect(links.results[0]).toHaveProperty('predicate');
+      expect(links.results[0]).toHaveProperty('link');
+      expect(links.total).toBe(2);
+      fetchMock.resetMocks();
+    });
+  });
   describe('getIncomingLinks()', () => {
     it('should fetch a PaginatedList of ResourceLinks using the proper SPAQRL queries as instance method', async () => {
       const resource = new Resource<{
@@ -152,10 +177,10 @@ describe('Incoming / Outgoing Links behavior', () => {
       }>('testOrg', 'testProject', mockGetByIDResourceResponse);
 
       fetchMock.mockResponses(
-        [JSON.stringify(mockSparqlViewResponse), {status: 200}],
-        [JSON.stringify(mockIncomingLinksQueryResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockSparqlViewResponse), { status: 200 }],
+        [JSON.stringify(mockIncomingLinksQueryResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
       );
       const links: PaginatedList<
         ResourceLink
@@ -173,10 +198,10 @@ describe('Incoming / Outgoing Links behavior', () => {
 
     it('should work as a static method', async () => {
       fetchMock.mockResponses(
-        [JSON.stringify(mockSparqlViewResponse), {status: 200}],
-        [JSON.stringify(mockIncomingLinksQueryResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockSparqlViewResponse), { status: 200 }],
+        [JSON.stringify(mockIncomingLinksQueryResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
       );
       const links: PaginatedList<
         ResourceLink
@@ -205,11 +230,11 @@ describe('Incoming / Outgoing Links behavior', () => {
       }>('testOrg', 'testProject', mockGetByIDResourceResponse);
 
       fetchMock.mockResponses(
-        [JSON.stringify(mockSparqlViewResponse), {status: 200}],
-        [JSON.stringify(mockOutgoingLinksQueryResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockSparqlViewResponse), { status: 200 }],
+        [JSON.stringify(mockOutgoingLinksQueryResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
       );
       const links: PaginatedList<
         ResourceLink
@@ -227,11 +252,11 @@ describe('Incoming / Outgoing Links behavior', () => {
 
     it('should work just as well as a static method', async () => {
       fetchMock.mockResponses(
-        [JSON.stringify(mockSparqlViewResponse), {status: 200}],
-        [JSON.stringify(mockOutgoingLinksQueryResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
-        [JSON.stringify(mockResourceResponse), {status: 200}],
+        [JSON.stringify(mockSparqlViewResponse), { status: 200 }],
+        [JSON.stringify(mockOutgoingLinksQueryResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
       );
       const links: PaginatedList<ResourceLink> = await getOutgoingLinks(
         'myorg',

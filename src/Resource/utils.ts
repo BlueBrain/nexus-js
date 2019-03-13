@@ -471,7 +471,7 @@ export async function getLinks(
       });
       const resources = await Promise.all(resourcePromises);
       return {
-        total: totalBinding ? totalBinding.total.value : 0,
+        total: +(totalBinding ? totalBinding.total.value : 0),
         index: from,
         results: queryResults.map((subjectPredicate, index) => {
           return {

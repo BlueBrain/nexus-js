@@ -473,9 +473,7 @@ export async function getLinks(
       );
       const resources = await Promise.all(resourcePromises);
       return {
-        // total must be a number, so we use + to cast the string
-        // such as "2" into the number 2
-        total: +(totalBinding ? totalBinding.total.value : 0),
+        total: Number(totalBinding ? totalBinding.total.value : 0),
         index: from,
         results: queryResults.map((subjectPredicate, index) => {
           return {

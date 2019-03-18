@@ -54,7 +54,7 @@ export async function getOrganization(
     const org = new Organization(orgResponse);
     return org;
   } catch (error) {
-    throw new Error(`ListOrgsError: ${error}`);
+    throw error;
   }
 }
 
@@ -86,7 +86,7 @@ export async function listOrganizations(
       results: orgs,
     };
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 
@@ -108,7 +108,7 @@ export async function updateOrganization(
     );
     return new Organization(orgResponse);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 
@@ -127,7 +127,7 @@ export async function deprecateOrganization(
     );
     return new Organization(orgResponse);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 

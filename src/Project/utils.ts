@@ -43,7 +43,7 @@ export async function getProject(
     );
     return new Project(projectResponse);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 
@@ -76,7 +76,7 @@ export async function listProjects(
       results: projects,
     };
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 
@@ -92,7 +92,7 @@ export async function createProject(
     );
     return new Project({ ...projectResponse, ...projectPayload });
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 
@@ -109,7 +109,7 @@ export async function updateProject(
     );
     return new Project({ ...projectResponse, ...projectPayload });
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 
@@ -124,7 +124,7 @@ export async function deprecateProject(
     );
     return new Project(projectResponse);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 }
 

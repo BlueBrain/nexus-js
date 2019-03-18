@@ -54,7 +54,7 @@ export async function getOrganization(
     const org = new Organization(orgResponse);
     return org;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 

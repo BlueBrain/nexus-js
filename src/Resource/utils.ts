@@ -56,16 +56,16 @@ export async function getSelfResource(
     const [id, schema, projectLabel, orgLabel, ...rest] = selfUrl
       .split('/')
       .reverse();
-    const url = `${selfUrl}${
-      getResourceOptions.expanded ? '?format=expanded' : ''
-    }`;
-    const resourceResponse: ResourceResponse = await getSelfResourceRawAs(url);
-    const resource = new Resource(
-      orgLabel,
-      projectLabel,
-      resourceResponse,
-      getResourceOptions,
+    const resourceResponse: ResourceResponse = await getSelfResourceRawAs(
+      selfUrl,
     );
+    const resource = new Resource(orgLabel, projectLabel, resourceResponse);
+    // we also need to fetch the expanded data
+    if (getResourceOptions.expanded) {
+      resource.expanded = await getSelfResourceRawAs(
+        `${selfUrl}?format=expanded`,
+      );
+    }
     return resource;
   } catch (error) {
     throw error;
@@ -79,19 +79,17 @@ export async function getResource(
   resourceId: string,
   getResourceOptions: GetResourceOptions = DEFAULT_GET_RESOURCE_OPTIONS,
 ): Promise<Resource> {
-  const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}${
-    getResourceOptions.expanded ? '?format=expanded' : ''
-  }`;
+  const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`;
   try {
     const resourceResponse: ResourceResponse = await httpGet(
       projectResourceURL,
     );
-    const resource = new Resource(
-      orgLabel,
-      projectLabel,
-      resourceResponse,
-      getResourceOptions,
-    );
+    const resource = new Resource(orgLabel, projectLabel, resourceResponse);
+    if (getResourceOptions.expanded) {
+      resource.expanded = await httpGet(
+        `${projectResourceURL}?format=expanded`,
+      );
+    }
     return resource;
   } catch (error) {
     throw error;

@@ -61,7 +61,7 @@ export default class Resource<T = {}> {
   readonly data: T;
   readonly raw: ResourceResponse;
   readonly resourceURL: string;
-  readonly expanded: boolean;
+  expanded?: JSON;
 
   static getSelf = getSelfResource;
   static getSelfRawAs = getSelfResourceRawAs;
@@ -95,7 +95,6 @@ export default class Resource<T = {}> {
     orgLabel: string,
     projectLabel: string,
     resourceResponse: ResourceResponse,
-    getResourceOptions: GetResourceOptions = DEFAULT_GET_RESOURCE_OPTIONS,
   ) {
     this.raw = resourceResponse;
     this.orgLabel = orgLabel;
@@ -111,7 +110,6 @@ export default class Resource<T = {}> {
     this.updatedBy = resourceResponse._updatedBy;
     this.rev = resourceResponse._rev;
     this.deprecated = resourceResponse._deprecated;
-    this.expanded = getResourceOptions.expanded;
     // make type an array of sting, even if we only get a single string
     if (resourceResponse['@type']) {
       if (Array.isArray(resourceResponse['@type'])) {

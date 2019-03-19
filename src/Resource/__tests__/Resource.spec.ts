@@ -165,7 +165,9 @@ describe('Resource class', () => {
 
   describe('listResources()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockListResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockListResourceResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -177,7 +179,9 @@ describe('Resource class', () => {
         'myorg',
         'myproject',
       );
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/resources/myorg/myproject`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject`,
+      );
       expect(resources.total).toEqual(1);
       expect(resources.results[0]).toBeInstanceOf(Resource);
     });
@@ -192,7 +196,10 @@ describe('Resource class', () => {
 
   describe('getResource()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+        status: 200,
+      });
+      fetchMock.mockResponses(['{}', { status: 200 }], ['{}', { status: 200 }]);
     });
 
     afterEach(() => {
@@ -210,7 +217,7 @@ describe('Resource class', () => {
         `${baseUrl}/resources/myorg/myproject/myschema/myresource`,
       );
       expect(r).toBeInstanceOf(Resource);
-      expect(r).toHaveProperty('expanded', false);
+      expect(r).toHaveProperty('expanded', undefined);
     });
 
     it('should call httpGet method with the proper get views url for expanded', async () => {
@@ -222,10 +229,13 @@ describe('Resource class', () => {
         { expanded: true },
       );
       expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/resources/myorg/myproject/myschema/myresource`,
+      );
+      expect(fetchMock.mock.calls[1][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject/myschema/myresource?format=expanded`,
       );
       expect(r).toBeInstanceOf(Resource);
-      expect(r).toHaveProperty('expanded', true);
+      expect(r).toHaveProperty('expanded', {});
     });
   });
 
@@ -235,7 +245,9 @@ describe('Resource class', () => {
     });
     describe('When format is JSON_LD', () => {
       it('should call httpGet method with the proper header and parse as JSON', async () => {
-        fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+        fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+          status: 200,
+        });
         const resource = new Resource(
           'testOrg',
           'testProject',
@@ -244,7 +256,9 @@ describe('Resource class', () => {
         const resourceResponse = await resource.getAs(
           ResourceGetFormat.JSON_LD,
         );
-        expect(fetchMock.mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
+        expect(fetchMock.mock.calls[0][0]).toEqual(
+          mockResourceResponse['_self'],
+        );
         expect(fetchMock.mock.calls[0][1].headers.get('Accept')).toBe(
           'application/ld+json',
         );
@@ -263,7 +277,9 @@ describe('Resource class', () => {
           mockResourceResponse,
         );
         await resource.getAs(ResourceGetFormat.DOT);
-        expect(fetchMock.mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
+        expect(fetchMock.mock.calls[0][0]).toEqual(
+          mockResourceResponse['_self'],
+        );
         expect(fetchMock.mock.calls[0][1].headers.get('Accept')).toBe(
           'text/vnd.graphviz',
         );
@@ -278,7 +294,9 @@ describe('Resource class', () => {
           mockResourceResponse,
         );
         await resource.getAs(ResourceGetFormat.N_TRIPLES);
-        expect(fetchMock.mock.calls[0][0]).toEqual(mockResourceResponse['_self']);
+        expect(fetchMock.mock.calls[0][0]).toEqual(
+          mockResourceResponse['_self'],
+        );
         expect(fetchMock.mock.calls[0][1].headers.get('Accept')).toBe(
           'application/ntriples',
         );
@@ -288,7 +306,15 @@ describe('Resource class', () => {
 
   describe('getSelfResource()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponses(
+        [
+          JSON.stringify(mockResourceResponse),
+          {
+            status: 200,
+          },
+        ],
+        ['{}', { status: 200 }],
+      );
     });
 
     afterEach(() => {
@@ -306,11 +332,28 @@ describe('Resource class', () => {
       expect(r).toHaveProperty('orgLabel', 'myOrg');
       expect(r).toHaveProperty('projectLabel', 'myProject');
     });
+    it('should call httpGet method with the proper get views url as well as fetching expanded data', async () => {
+      const r: Resource = await getSelfResource(
+        'http://myurl.com/staging/v1/something/somethingelse/resources/myOrg/myProject/mySchema/fred',
+        { expanded: true },
+      );
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://myurl.com/staging/v1/something/somethingelse/resources/myOrg/myProject/mySchema/fred',
+      );
+      expect(fetchMock.mock.calls[1][0]).toEqual(
+        'http://myurl.com/staging/v1/something/somethingelse/resources/myOrg/myProject/mySchema/fred?format=expanded',
+      );
+      expect(r).toBeInstanceOf(Resource);
+      expect(r).toHaveProperty('orgLabel', 'myOrg');
+      expect(r).toHaveProperty('projectLabel', 'myProject');
+    });
   });
 
   describe('createResource()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -450,7 +493,9 @@ describe('Resource class', () => {
 
   describe('deprecateResource()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -469,7 +514,9 @@ describe('Resource class', () => {
 
   describe('deprecateSelfResource()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -486,7 +533,9 @@ describe('Resource class', () => {
 
   describe('tagSelfResource()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -511,7 +560,9 @@ describe('Resource class', () => {
 
   describe('tagSelfResource()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -527,7 +578,9 @@ describe('Resource class', () => {
         'mylabel',
       );
 
-      expect(fetchMock.mock.calls[0][0]).toEqual('http://myresource.com/tags?rev=3');
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://myresource.com/tags?rev=3',
+      );
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
       expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ tag: 'mytag', rev: 2 }),
@@ -537,7 +590,9 @@ describe('Resource class', () => {
 
   describe('getTags()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -555,7 +610,9 @@ describe('Resource class', () => {
 
   describe('getSelfTags()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -571,7 +628,9 @@ describe('Resource class', () => {
 
   describe('updateSelf()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {

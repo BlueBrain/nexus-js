@@ -11,7 +11,7 @@ exports[`Incoming / Outgoing Links behavior getIncomingLinks() should fetch a Pa
       WHERE {
         graph ?g1 {
 
-          ?ref ?p <https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae> .
+          ?ref ?p <https://bbp.epfl.ch/nexus/v0/data/bbp/morphology/reconstructedcell/v0.1.0/29d3a491-d3b7-49b6-9033-99017513a8ae> .
           ?s nxv:constrainedBy ?aSchema .
           ?s nxv:self ?self
 
@@ -80,14 +80,15 @@ exports[`Incoming / Outgoing Links behavior getOutgoingLinks() should fetch a Pa
   WITH {
     SELECT DISTINCT ?p ?o ?self
         WHERE {
-            graph ?g1 {
-              <https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae> ?p ?o
-              FILTER(isIri(?o) && ?p NOT IN (nxv:updatedBy, nxv:createdBy, nxv:constrainedBy, nxv:project, rdf:type))
+            graph <https://bbp.epfl.ch/nexus/v0/data/bbp/morphology/reconstructedcell/v0.1.0/29d3a491-d3b7-49b6-9033-99017513a8ae/graph> {
+              ?s ?p ?o
+              FILTER(isIri(?o) && ?p NOT IN (nxv:updatedBy, nxv:createdBy, nxv:constrainedBy, nxv:project, rdf:type, nxv:self))
             } .
             OPTIONAL {
               graph ?g2 {
               	?o nxv:constrainedBy ?aSchema .
                 ?o nxv:self ?self
+                FILTER(?g2 != <https://bbp.epfl.ch/nexus/v0/data/bbp/morphology/reconstructedcell/v0.1.0/29d3a491-d3b7-49b6-9033-99017513a8ae/graph>)
               }
             }
       }
@@ -119,14 +120,15 @@ exports[`Incoming / Outgoing Links behavior getOutgoingLinks() should work just 
   WITH {
     SELECT DISTINCT ?p ?o ?self
         WHERE {
-            graph ?g1 {
-              <http://blah.com/resourceSelfID> ?p ?o
-              FILTER(isIri(?o) && ?p NOT IN (nxv:updatedBy, nxv:createdBy, nxv:constrainedBy, nxv:project, rdf:type))
+            graph <http://blah.com/resourceSelfID/graph> {
+              ?s ?p ?o
+              FILTER(isIri(?o) && ?p NOT IN (nxv:updatedBy, nxv:createdBy, nxv:constrainedBy, nxv:project, rdf:type, nxv:self))
             } .
             OPTIONAL {
               graph ?g2 {
               	?o nxv:constrainedBy ?aSchema .
                 ?o nxv:self ?self
+                FILTER(?g2 != <http://blah.com/resourceSelfID/graph>)
               }
             }
       }

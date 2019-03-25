@@ -343,7 +343,7 @@ export async function deprecateSelfResource(
 export async function getOutgoingLinks(
   orgLabel: string,
   projectLabel: string,
-  selfUrl: string,
+  id: string,
   paginationSettings: PaginationSettings,
 ): Promise<PaginatedList<ResourceLink>> {
   return await getLinks(
@@ -357,14 +357,15 @@ export async function getOutgoingLinks(
   WITH {
     SELECT DISTINCT ?p ?o ?self
         WHERE {
-            graph ?g1 {
-              <${selfUrl}> ?p ?o
-              FILTER(isIri(?o) && ?p NOT IN (nxv:updatedBy, nxv:createdBy, nxv:constrainedBy, nxv:project, rdf:type))
+            graph <${id}/graph> {
+              ?s ?p ?o
+              FILTER(isIri(?o) && ?p NOT IN (nxv:updatedBy, nxv:createdBy, nxv:constrainedBy, nxv:project, rdf:type, nxv:self))
             } .
             OPTIONAL {
               graph ?g2 {
               	?o nxv:constrainedBy ?aSchema .
                 ?o nxv:self ?self
+                FILTER(?g2 != <${id}/graph>)
               }
             }
       }
@@ -392,7 +393,7 @@ export async function getOutgoingLinks(
 export async function getIncomingLinks(
   orgLabel: string,
   projectLabel: string,
-  selfUrl: string,
+  id: string,
   paginationSettings: PaginationSettings,
 ): Promise<PaginatedList<ResourceLink>> {
   return await getLinks(
@@ -409,7 +410,7 @@ export async function getIncomingLinks(
       WHERE {
         graph ?g1 {
 
-          ?ref ?p <${selfUrl}> .
+          ?ref ?p <${id}> .
           ?s nxv:constrainedBy ?aSchema .
           ?s nxv:self ?self
 

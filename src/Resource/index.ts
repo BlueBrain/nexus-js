@@ -166,7 +166,7 @@ export default class Resource<T = {}> {
     return await getIncomingLinks(
       this.orgLabel,
       this.projectLabel,
-      this.self,
+      this.id,
       paginationSettings,
     );
   }
@@ -177,7 +177,7 @@ export default class Resource<T = {}> {
     return await getOutgoingLinks(
       this.orgLabel,
       this.projectLabel,
-      this.self,
+      this.id,
       paginationSettings,
     );
   }

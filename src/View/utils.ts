@@ -97,9 +97,7 @@ export async function getView(
           viewResponse as SparqlViewResponse,
         );
   } catch (error) {
-    throw new Error(
-      `Not found: view "${viewId}" for project "${projectLabel}" in organization "${orgLabel}"`,
-    );
+    throw error;
   }
 }
 

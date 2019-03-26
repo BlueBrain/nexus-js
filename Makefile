@@ -1,26 +1,32 @@
 .PHONY: build test clean
 
+ME=`id -u`:`id -g`
+
+dshell:
+	@echo "Running a Docker shell... 🐚"
+	@docker-compose run --rm --user ${ME} --entrypoint bash nexus-sdk
+
 install:
 	@echo "Installing project's dependencies... 🚀"
-	@docker-compose run --rm nexus-sdk install
+	@npm i
 
 build:
 	@echo "Building project... 👷"
-	@docker-compose run --rm nexus-sdk
+	@npm run build
 
 test:
 	@echo "Running tests... 🧪"
-	@docker-compose run --rm nexus-sdk test
+	@npm test
 
 lint:
 	@echo "Linting... ✨"
-	@docker-compose run --rm nexus-sdk run lint
+	@npm run lint
 
 documentation:
 	@echo "Generating documentation... 📑"
-	@docker-compose run --rm nexus-sdk run documentation
+	@npm run documentation
 
 clean:
-	@echo "Cleaning... 🧹"
-	@docker-compose run --rm nexus-sdk run clean
-	@sudo rm -fr node_modules/
+	@echo "Cleaning... 🗑"
+	@npm run clean
+	@rm -fr node_modules/

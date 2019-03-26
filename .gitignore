@@ -8,4 +8,5 @@ node_modules/
 envs/*.env
 .vscode
 coverage/
+npm-cache/
 .ocp-port-forwarding.js

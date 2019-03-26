@@ -404,7 +404,7 @@ ACL.delete = (path: string, rev: number): Promise<any>;
 
 ## Development
 
-> If you don't have Node.js installed on your machine, you can run a "docker shell" using docker-compose from which you'll have a fully working Node.js environment.
+> If you don't have Node.js installed on your machine, you can run a "docker shell" with `make dshell` from which you'll have a fully working Node.js environment.
 > Make sure you have already installed both [Docker Engine](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
 
 - Install: `npm install`

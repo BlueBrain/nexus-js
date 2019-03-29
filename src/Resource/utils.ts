@@ -365,7 +365,7 @@ export async function getOutgoingLinks(
               graph ?g2 {
               	?o nxv:constrainedBy ?aSchema .
                 ?o nxv:self ?self
-                FILTER(?g2 != <${id}/graph>)
+                FILTER(?g2 != <${expandedID}/graph>)
               }
             }
       }

@@ -177,6 +177,10 @@ describe('Incoming / Outgoing Links behavior', () => {
       }>('testOrg', 'testProject', mockGetByIDResourceResponse);
 
       fetchMock.mockResponses(
+        [
+          JSON.stringify({ '@id': 'https://myExpandedResourceURl.com/someID' }),
+          { status: 200 },
+        ],
         [JSON.stringify(mockSparqlViewResponse), { status: 200 }],
         [JSON.stringify(mockIncomingLinksQueryResponse), { status: 200 }],
         [JSON.stringify(mockResourceResponse), { status: 200 }],
@@ -188,7 +192,39 @@ describe('Incoming / Outgoing Links behavior', () => {
         from: 0,
         size: 20,
       });
+      expect(resource.expanded).toEqual({
+        '@id': 'https://myExpandedResourceURl.com/someID',
+      });
+      expect(fetchMock.mock.calls[2][1].body).toMatchSnapshot();
+      expect(links.results[0]).toHaveProperty('predicate');
+      expect(links.results[0]).toHaveProperty('link');
+      expect(links.results[0].link).toBeInstanceOf(Resource);
+      fetchMock.resetMocks();
+    });
 
+    it('should work having already the expanded resource', async () => {
+      const resource = new Resource<{
+        subject: string;
+      }>('testOrg', 'testProject', mockGetByIDResourceResponse);
+      resource.expanded = {
+        '@id': 'https://myExpandedResourceURl.com/someID',
+      } as any;
+
+      fetchMock.mockResponses(
+        [JSON.stringify(mockSparqlViewResponse), { status: 200 }],
+        [JSON.stringify(mockIncomingLinksQueryResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+        [JSON.stringify(mockResourceResponse), { status: 200 }],
+      );
+      const links: PaginatedList<
+        ResourceLink
+      > = await resource.getIncomingLinks({
+        from: 0,
+        size: 20,
+      });
+      expect(resource.expanded).toEqual({
+        '@id': 'https://myExpandedResourceURl.com/someID',
+      });
       expect(fetchMock.mock.calls[1][1].body).toMatchSnapshot();
       expect(links.results[0]).toHaveProperty('predicate');
       expect(links.results[0]).toHaveProperty('link');
@@ -230,6 +266,10 @@ describe('Incoming / Outgoing Links behavior', () => {
       }>('testOrg', 'testProject', mockGetByIDResourceResponse);
 
       fetchMock.mockResponses(
+        [
+          JSON.stringify({ '@id': 'https://myExpandedResourceURl.com/someID' }),
+          { status: 200 },
+        ],
         [JSON.stringify(mockSparqlViewResponse), { status: 200 }],
         [JSON.stringify(mockOutgoingLinksQueryResponse), { status: 200 }],
         [JSON.stringify(mockResourceResponse), { status: 200 }],
@@ -243,7 +283,10 @@ describe('Incoming / Outgoing Links behavior', () => {
         size: 20,
       });
 
-      expect(fetchMock.mock.calls[1][1].body).toMatchSnapshot();
+      expect(resource.expanded).toEqual({
+        '@id': 'https://myExpandedResourceURl.com/someID',
+      });
+      expect(fetchMock.mock.calls[2][1].body).toMatchSnapshot();
       expect(links.results[0]).toHaveProperty('predicate');
       expect(links.results[0]).toHaveProperty('link');
       expect(links.results[1].link).toBeInstanceOf(Resource);

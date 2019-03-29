@@ -239,6 +239,29 @@ describe('Resource class', () => {
     });
   });
 
+  describe('Resource.getExpanded()', () => {
+    afterEach(() => {
+      fetchMock.resetMocks();
+    });
+    it('should fetch the expanded resource as an instance method', async () => {
+      fetchMock.mockResponse(
+        JSON.stringify({ '@id': 'https://myfancyresourcelocation.com/myID' }),
+        {
+          status: 200,
+        },
+      );
+      const resource = new Resource(
+        'testOrg',
+        'testProject',
+        mockResourceResponse,
+      );
+      await resource.getExpanded();
+      expect(resource.expanded).toEqual({
+        '@id': 'https://myfancyresourcelocation.com/myID',
+      });
+    });
+  });
+
   describe('Resource.getAs()', () => {
     afterEach(() => {
       fetchMock.resetMocks();

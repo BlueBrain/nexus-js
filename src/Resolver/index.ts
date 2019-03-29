@@ -54,6 +54,6 @@ export default class Resolver {
     this.resourceType = resolverResponse.resourceType;
     this.identities = resolverResponse.identities;
     this.raw = resolverResponse;
-    this.type = resolverResponse["@type"].map(normalizeType).find(isValidType) || "InProject";
+    this.type = (resolverResponse["@type"] as string[]).map(normalizeType).find(isValidType) || "InProject";
   }
 }

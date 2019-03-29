@@ -1,9 +1,33 @@
 import { PaginationSettings } from '../utils/types';
 import { Identity } from '../ACL/types';
 
+export type ResolverTypes = "InProject" | "CrossProject";
+
+export interface ResolverPayloadCommon {
+  "@id"?: string;
+  priority: number;
+}
+
+export interface InProjectResolverPayload extends ResolverPayloadCommon {
+  "@type": {
+    0: "InProject";
+  }
+}
+
+export interface CrossProjectResolverPayload extends ResolverPayloadCommon {
+  "@type": {
+    0: "CrossProject";
+  };
+  projects: string[];
+  resourceType?: string;
+  identities: Identity[];
+}
+
+export type ResolverPayload = InProjectResolverPayload | CrossProjectResolverPayload;
+
 export interface ResolverResponseCommon {
     "@id": string;
-    "@type": string[];
+    "@type": string[] | InProjectResolverPayload["@type"] | CrossProjectResolverPayload["@type"];
     _constrainedBy: string;
     _createdAt: string;
     _createdBy: string;
@@ -16,19 +40,21 @@ export interface ResolverResponseCommon {
     [key: string]: any;
 };
 
-export interface ResolverResponse extends ResolverResponseCommon {
+export interface SingleResolverResponse extends ResolverResponseCommon {
   '@context': string | string[];
 }
 
-export interface InProjectResolverResponse extends ResolverResponse {
+export interface InProjectResolverResponse extends SingleResolverResponse {
   priority: number;
 }
 
-export interface CrossProjectResolverResponse extends ResolverResponse {
+export interface CrossProjectResolverResponse extends SingleResolverResponse {
   projects: string[];
   resourceType?: string;
   identities: Identity[];
 }
+
+export type ResolverResponse = InProjectResolverResponse | CrossProjectResolverResponse;
 
 export interface ListResolverResponse {
   '@context': string | string[];
@@ -48,4 +74,5 @@ export interface ListResolverOptions {
     [key: string]: any;
   }
 
-export type ResolverTypes = "InProject" | "CrossProject";
+// It's possible to fetch a resolver by revision or tag, not both.
+export type GetResolverOptions = { rev: number } | { tag: string };

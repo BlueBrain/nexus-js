@@ -160,13 +160,24 @@ export default class Resource<T = {}> {
     );
   }
 
+  async getExpanded() {
+    this.expanded = await getSelfResourceRawAs(`${this.self}?format=expanded`);
+  }
+
   async getIncomingLinks(
     paginationSettings: PaginationSettings,
   ): Promise<PaginatedList<ResourceLink>> {
+    let expandedID;
+    if (this.expanded && (this.expanded as any)['@id']) {
+      expandedID = (this.expanded as any)['@id'];
+    } else {
+      await this.getExpanded();
+      expandedID = (this.expanded as any)['@id'];
+    }
     return await getIncomingLinks(
       this.orgLabel,
       this.projectLabel,
-      this.id,
+      expandedID,
       paginationSettings,
     );
   }
@@ -174,10 +185,17 @@ export default class Resource<T = {}> {
   async getOutgoingLinks(
     paginationSettings: PaginationSettings,
   ): Promise<PaginatedList<ResourceLink>> {
+    let expandedID;
+    if (this.expanded && (this.expanded as any)['@id']) {
+      expandedID = (this.expanded as any)['@id'];
+    } else {
+      await this.getExpanded();
+      expandedID = (this.expanded as any)['@id'];
+    }
     return await getOutgoingLinks(
       this.orgLabel,
       this.projectLabel,
-      this.id,
+      expandedID,
       paginationSettings,
     );
   }

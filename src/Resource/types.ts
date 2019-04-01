@@ -90,5 +90,6 @@ export interface ResourceLink {
 
 export interface ExpandedResource {
   '@id': string;
+  '@type'?: string[];
   [uriKey: string]: any;
 }

@@ -8,7 +8,7 @@ import {
 } from '../../__mocks__/helpers';
 import { SparqlViewQueryResponse } from '../../View/SparqlView/types';
 import { PaginatedList } from '../../utils/types';
-import { ResourceLink } from '../types';
+import { ResourceLink, ExpandedResource } from '../types';
 import { getIncomingLinks, getOutgoingLinks, getLinks } from '../utils';
 
 const { fetchMock } = <GlobalWithFetchMock>global;
@@ -208,7 +208,7 @@ describe('Incoming / Outgoing Links behavior', () => {
       }>('testOrg', 'testProject', mockGetByIDResourceResponse);
       resource.expanded = {
         '@id': 'https://myExpandedResourceURl.com/someID',
-      } as any;
+      };
 
       fetchMock.mockResponses(
         [JSON.stringify(mockSparqlViewResponse), { status: 200 }],
@@ -299,7 +299,7 @@ describe('Incoming / Outgoing Links behavior', () => {
       }>('testOrg', 'testProject', mockGetByIDResourceResponse);
       resource.expanded = {
         '@id': 'https://myExpandedResourceURl.com/someID',
-      } as any;
+      };
 
       fetchMock.mockResponses(
         [JSON.stringify(mockSparqlViewResponse), { status: 200 }],

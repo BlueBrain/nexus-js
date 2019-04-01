@@ -314,7 +314,7 @@ const incomingLinks: PaginatedList<ResourceLinks> = await Resource.getIncomingLi
 const outgoingLinks: PaginatedList<ResourceLinks> = await Resource.getOutgoingLinks(
   orgLabel: string,
   projectLabel: string,
-  expandedID,
+  expandedID: string,
   { from: 0, size: 20}: PaginationSettings);
 
 const incomingLinks: PaginatedList<ResourceLinks> = await resourceInstance.getIncomingLinks({ from: 0, size: 20}: PaginationSettings);

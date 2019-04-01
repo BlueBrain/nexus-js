@@ -87,3 +87,8 @@ export interface ResourceLink {
   isExternal: boolean;
   predicate: string; // url vocab link such as https://myNexusInstance.com/vocabs/myOrg/friendProject/friend
 }
+
+export interface ExpandedResource {
+  '@id': string;
+  [uriKey: string]: any;
+}

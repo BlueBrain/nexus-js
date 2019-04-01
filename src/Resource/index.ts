@@ -4,6 +4,7 @@ import {
   ResourceGetFormats,
   GetResourceOptions,
   ResourceLink,
+  ExpandedResource,
 } from './types';
 import {
   getResource,
@@ -61,7 +62,7 @@ export default class Resource<T = {}> {
   readonly data: T;
   readonly raw: ResourceResponse;
   readonly resourceURL: string;
-  expanded?: JSON;
+  expanded?: ExpandedResource;
 
   static getSelf = getSelfResource;
   static getSelfRawAs = getSelfResourceRawAs;
@@ -160,13 +161,25 @@ export default class Resource<T = {}> {
     );
   }
 
+  async getExpanded() {
+    this.expanded = await getSelfResourceRawAs(`${this.self}?format=expanded`);
+    return this.expanded;
+  }
+
   async getIncomingLinks(
     paginationSettings: PaginationSettings,
   ): Promise<PaginatedList<ResourceLink>> {
+    let expandedID;
+    if (this.expanded && this.expanded['@id']) {
+      expandedID = this.expanded['@id'];
+    } else {
+      await this.getExpanded();
+      expandedID = (this.expanded as ExpandedResource)['@id'];
+    }
     return await getIncomingLinks(
       this.orgLabel,
       this.projectLabel,
-      this.id,
+      expandedID,
       paginationSettings,
     );
   }
@@ -174,10 +187,17 @@ export default class Resource<T = {}> {
   async getOutgoingLinks(
     paginationSettings: PaginationSettings,
   ): Promise<PaginatedList<ResourceLink>> {
+    let expandedID;
+    if (this.expanded && this.expanded['@id']) {
+      expandedID = this.expanded['@id'];
+    } else {
+      await this.getExpanded();
+      expandedID = (this.expanded as ExpandedResource)['@id'];
+    }
     return await getOutgoingLinks(
       this.orgLabel,
       this.projectLabel,
-      this.id,
+      expandedID,
       paginationSettings,
     );
   }

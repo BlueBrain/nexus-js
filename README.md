@@ -291,6 +291,7 @@ Resource.updateSelf = (selfUrl: string, rev: number, {
 Resource.deprecate = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string, rev: number): Promise<Resource>;
 Resource.deprecateSelf = (selfUrl: string, rev: number, orgLabel: string, projectLabel: string): Promise<Resource>;
 
+// Instance Methods
 resourceInstance.update({
     context,
     ...data
@@ -299,18 +300,21 @@ resourceInstance.update({
     [field: string]: any;
   }): Promise<Resource>;
 
+resourceInstance.getExpanded = () =>: Promise
+
+
 // Links! 🔗🔗🔗🔗
 
 const incomingLinks: PaginatedList<ResourceLinks> = await Resource.getIncomingLinks(
   orgLabel: string,
   projectLabel: string,
-  selfUrl: string,
+  expandedID: string,
   { from: 0, size: 20}: PaginationSettings);
 
 const outgoingLinks: PaginatedList<ResourceLinks> = await Resource.getOutgoingLinks(
   orgLabel: string,
   projectLabel: string,
-  selfUrl: string,
+  expandedID: string,
   { from: 0, size: 20}: PaginationSettings);
 
 const incomingLinks: PaginatedList<ResourceLinks> = await resourceInstance.getIncomingLinks({ from: 0, size: 20}: PaginationSettings);

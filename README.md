@@ -65,8 +65,8 @@ Pre-alpha
 
 - [x] Get default view for a Project
 - [x] Query
-- [ ] Get incoming links
-- [ ] Get outgoing links
+- [x] Get incoming links
+- [x] Get outgoing links
 
 #### Schemas
 
@@ -101,11 +101,15 @@ Pre-alpha
 
 #### Files
 
-- [ ] Get
+- [x] Get
 - [ ] List
 - [x] Create
 - [ ] Update
 - [ ] Deprecate
+
+#### Statistics
+
+- [x] Get
 
 ## Getting started
 

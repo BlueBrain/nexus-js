@@ -11,7 +11,6 @@ jest.mock('../../../Statistics/utils');
 
 const { fetchMock } = <GlobalWithFetchMock>global;
 
-const project = new Project(mockProjectResponse);
 const mockSparlQueryResponse: SparqlViewQueryResponse = {
   head: {
     vars: ['s', 'p', 'o'],

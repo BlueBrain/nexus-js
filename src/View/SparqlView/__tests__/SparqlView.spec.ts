@@ -6,10 +6,11 @@ import {
 } from '../../../__mocks__/helpers';
 import Project from '../../../Project';
 import { SparqlViewQueryResponse, SparqlViewResponse } from '../types';
+import { getViewStatistics } from '../../../Statistics/utils';
+jest.mock('../../../Statistics/utils');
 
 const { fetchMock } = <GlobalWithFetchMock>global;
 
-const project = new Project(mockProjectResponse);
 const mockSparlQueryResponse: SparqlViewQueryResponse = {
   head: {
     vars: ['s', 'p', 'o'],
@@ -103,12 +104,30 @@ describe('Sparql View class', () => {
       fetchMock.resetMocks();
     });
     it('should query the Sparql view', async () => {
-      fetchMock.mockResponses([JSON.stringify(mockSparlQueryResponse), {status: 200}]);
+      fetchMock.mockResponses([
+        JSON.stringify(mockSparlQueryResponse),
+        { status: 200 },
+      ]);
       const result: SparqlViewQueryResponse = await view.query(
         'SELECT * where {?s ?p ?o} LIMIT 3',
       );
       expect(fetchMock.mock.calls.length).toBe(1);
       expect(result.head.vars.length).toBe(3);
+    });
+  });
+  describe('methods', () => {
+    it('should call the method with the proper args', async () => {
+      const view = new SparqlView(
+        orgLabel,
+        projectLabel,
+        mockSparqlViewResponse,
+      );
+      await view.getStatistics();
+      expect(getViewStatistics).toHaveBeenCalledWith(
+        'my-org',
+        'example',
+        'nxv:defaultSparqlIndex',
+      );
     });
   });
 });

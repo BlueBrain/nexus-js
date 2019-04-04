@@ -2,6 +2,8 @@ import { httpPost, HttpConfigTypes } from '../../utils/http';
 import { SparqlViewQueryException } from './exceptions';
 import { getSparqlView } from '../utils';
 import { SparqlViewResponse, SparqlViewQueryResponse } from './types';
+import Statistics from '../../Statistics';
+import { getViewStatistics } from '../../Statistics/utils';
 
 export default class SparqlView {
   id: string;
@@ -43,5 +45,9 @@ export default class SparqlView {
     } catch (error) {
       throw new SparqlViewQueryException(error.message);
     }
+  }
+
+  public async getStatistics(): Promise<Statistics> {
+    return getViewStatistics(this.orgLabel, this.projectLabel, this.id);
   }
 }

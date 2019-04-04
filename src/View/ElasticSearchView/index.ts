@@ -10,6 +10,8 @@ import {
   ElasticSearchResourceResponse,
   ElasticSearchViewAggregationResponse,
 } from './types';
+import Statistics from '../../Statistics';
+import { getViewStatistics } from '../../Statistics/utils';
 
 export default class ElasticSearchView {
   id: string;
@@ -195,5 +197,9 @@ export default class ElasticSearchView {
     } catch (error) {
       throw new ViewQueryError(error.message);
     }
+  }
+
+  public async getStatistics(): Promise<Statistics> {
+    return getViewStatistics(this.orgLabel, this.projectLabel, this.id);
   }
 }

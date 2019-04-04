@@ -24,6 +24,7 @@ import {
   getOutgoingLinks,
 } from './utils';
 import { PaginatedList, PaginationSettings } from '../utils/types';
+import Statistics from '../Statistics';
 
 export const DEFAULT_GET_RESOURCE_OPTIONS: GetResourceOptions = {
   expanded: false,
@@ -199,6 +200,15 @@ export default class Resource<T = {}> {
       this.projectLabel,
       expandedID,
       paginationSettings,
+    );
+  }
+
+  async getStatistics() {
+    return Statistics.getForResource(
+      this.orgLabel,
+      this.projectLabel,
+      this.constrainedBy,
+      this.id,
     );
   }
 

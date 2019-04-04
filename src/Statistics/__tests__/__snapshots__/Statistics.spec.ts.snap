@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Statistics getResourceStatistics() should return an instance of statistics 1`] = `
+Statistics {
+  "context": "https://bluebrain.github.io/nexus/contexts/view.json",
+  "delayInSeconds": 0,
+  "discardedEvents": 0,
+  "evaluatedEvents": 10,
+  "lastEventDateTime": "2019-04-03T12:27:41.344Z",
+  "lastProcessedEventDateTime": "2019-04-03T12:27:41.344Z",
+  "processedEvents": 10,
+  "remainingEvents": 0,
+  "totalEvents": 10,
+}
+`;
+
+exports[`Statistics getViewStatistics() should return an instance of statistics 1`] = `
+Statistics {
+  "context": "https://bluebrain.github.io/nexus/contexts/view.json",
+  "delayInSeconds": 0,
+  "discardedEvents": 0,
+  "evaluatedEvents": 10,
+  "lastEventDateTime": "2019-04-03T12:27:41.344Z",
+  "lastProcessedEventDateTime": "2019-04-03T12:27:41.344Z",
+  "processedEvents": 10,
+  "remainingEvents": 0,
+  "totalEvents": 10,
+}
+`;

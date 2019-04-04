@@ -7,6 +7,8 @@ import {
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import Nexus from '../../../Nexus';
 import { ElasticSearchViewResponse } from '../types';
+import { getViewStatistics } from '../../../Statistics/utils';
+jest.mock('../../../Statistics/utils');
 
 const { fetchMock } = <GlobalWithFetchMock>global;
 
@@ -68,8 +70,11 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       fetchMock.mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
+        [
+          JSON.stringify(mockElasticSearchViewAggregationResponse),
+          { status: 200 },
+        ],
       );
       await view.query(myQuery);
       expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
@@ -100,8 +105,11 @@ describe('ElasticSearchView class', () => {
         size: 20,
       };
       fetchMock.mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
+        [
+          JSON.stringify(mockElasticSearchViewAggregationResponse),
+          { status: 200 },
+        ],
       );
       await view.query(myQuery, myPaginationSettings);
       const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${
@@ -121,8 +129,11 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       fetchMock.mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
+        [
+          JSON.stringify(mockElasticSearchViewAggregationResponse),
+          { status: 200 },
+        ],
       );
       const data = await view.query(myQuery);
       expect(data).toHaveProperty('total', 3341);
@@ -141,8 +152,11 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       fetchMock.mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
+        [
+          JSON.stringify(mockElasticSearchViewAggregationResponse),
+          { status: 200 },
+        ],
       );
       await view.rawQuery(myQuery);
       expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
@@ -173,8 +187,11 @@ describe('ElasticSearchView class', () => {
         size: 20,
       };
       fetchMock.mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
+        [
+          JSON.stringify(mockElasticSearchViewAggregationResponse),
+          { status: 200 },
+        ],
       );
       await view.rawQuery(myQuery, myPaginationSettings);
       const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${
@@ -194,8 +211,11 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       fetchMock.mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
+        [
+          JSON.stringify(mockElasticSearchViewAggregationResponse),
+          { status: 200 },
+        ],
       );
       const data = await view.rawQuery(myQuery);
       expect(data).toHaveProperty('total', 3341);
@@ -213,9 +233,12 @@ describe('ElasticSearchView class', () => {
     };
     beforeEach(() => {
       // Mock our query response
-      fetchMock.mockResponse(JSON.stringify(mockElasticSearchViewAggregationResponse), {
-        status: 200,
-      });
+      fetchMock.mockResponse(
+        JSON.stringify(mockElasticSearchViewAggregationResponse),
+        {
+          status: 200,
+        },
+      );
     });
 
     afterEach(() => fetchMock.resetMocks());
@@ -259,9 +282,12 @@ describe('ElasticSearchView class', () => {
   describe('filterByType()', () => {
     beforeEach(() => {
       // Mock our query response
-      fetchMock.mockResponse(JSON.stringify(mockElasticSearchViewQueryResponse), {
-        status: 200,
-      });
+      fetchMock.mockResponse(
+        JSON.stringify(mockElasticSearchViewQueryResponse),
+        {
+          status: 200,
+        },
+      );
     });
 
     afterEach(() => fetchMock.resetMocks());
@@ -291,7 +317,9 @@ describe('ElasticSearchView class', () => {
       };
 
       expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
-      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
+        JSON.stringify(expectedQuery),
+      );
     });
 
     it('should call the ES endpoint and use a filter query with two types', async () => {
@@ -325,7 +353,9 @@ describe('ElasticSearchView class', () => {
         },
       };
       expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
-      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
+        JSON.stringify(expectedQuery),
+      );
     });
   });
 
@@ -333,8 +363,11 @@ describe('ElasticSearchView class', () => {
     beforeEach(() => {
       // Mock our query response
       fetchMock.mockResponses(
-        [JSON.stringify(mockElasticSearchViewQueryResponse), {status: 200}],
-        [JSON.stringify(mockElasticSearchViewAggregationResponse), {status: 200}],
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
+        [
+          JSON.stringify(mockElasticSearchViewAggregationResponse),
+          { status: 200 },
+        ],
       );
     });
 
@@ -354,7 +387,24 @@ describe('ElasticSearchView class', () => {
         },
       };
       expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + view.queryURL);
-      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(expectedQuery));
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
+        JSON.stringify(expectedQuery),
+      );
+    });
+  });
+  describe('methods', () => {
+    it('should call the method with the proper args', async () => {
+      const view = new ElasticSearchView(
+        orgLabel,
+        projectLabel,
+        mockElasticSearchViewResponse,
+      );
+      await view.getStatistics();
+      expect(getViewStatistics).toHaveBeenCalledWith(
+        'testOrg',
+        'testProject',
+        'nxv:defaultElasticSearchIndex',
+      );
     });
   });
 });

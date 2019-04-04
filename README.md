@@ -65,8 +65,8 @@ Pre-alpha
 
 - [x] Get default view for a Project
 - [x] Query
-- [ ] Get incoming links
-- [ ] Get outgoing links
+- [x] Get incoming links
+- [x] Get outgoing links
 
 #### Schemas
 
@@ -101,11 +101,15 @@ Pre-alpha
 
 #### Files
 
-- [ ] Get
+- [x] Get
 - [ ] List
 - [x] Create
 - [ ] Update
 - [ ] Deprecate
+
+#### Statistics
+
+- [x] Get
 
 ## Getting started
 
@@ -302,6 +306,9 @@ resourceInstance.update({
 
 resourceInstance.getExpanded = () =>: Promise
 
+// EXPERIMENTAL
+resourceInstance.getStatistics(): Promise<Statistics>
+
 
 // Links! 🔗🔗🔗🔗
 
@@ -369,7 +376,13 @@ elasticSearchInstance.query(elasticSearchQuery: object, pagination?: PaginationS
 // Query an ElasticSearch view and retrieve raw results as returned by ElasticSearch
 elasticSearchInstance.rawQuery(elasticSearchQuery: object, pagination?: PaginationSettings): Promise<PaginatedList<ElasticSearchHit>>;
 
+// EXPERIMENTAL
+elasticSearchInstance.getStatistics(): Promise<Statistics>
+
 sparqlInstance.query(sparqlQuery: string): Promise<SparqlViewQueryResponse>;
+
+// EXPERIMENTAL
+sparqlInstance.getStatistics(): Promise<Statistics>
 ```
 
 ### Realm
@@ -404,6 +417,16 @@ ACL.subtract = (path: string, rev: number, payload: ACLPayload[]): Promise<any>;
 ACL.replace = (path: string, rev: number, payload: ACLPayload[]): Promise<any>;
 
 ACL.delete = (path: string, rev: number): Promise<any>;
+```
+
+### Statistics (Experimental)
+
+```typescript
+import { Statistics } from '@bbp/nexus-sdk';
+
+Statistics.getViewStatistics = (orgLabel: string, projectLabel: string, schemaId: string, viewId: string): Promise<Statistics>;
+
+Statistics.getResourceStatistics(orgLabel: string, projectLabel: string, resourceId): Promise<Statistics>;
 ```
 
 ## Development

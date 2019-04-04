@@ -25,8 +25,12 @@ const isElasticSearchView = (
   ];
 
   // Types returned by the API may be extended (full URIs), so we check against the end of the string.
-  return viewResponse['@type'].some(type =>
-    validTypes.some(validType => type.endsWith(validType)),
+  return (
+    viewResponse &&
+    viewResponse['@type'] &&
+    viewResponse['@type'].some(type =>
+      validTypes.some(validType => type.endsWith(validType)),
+    )
   );
 };
 

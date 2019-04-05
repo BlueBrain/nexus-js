@@ -20,11 +20,7 @@ import {
 export async function listResolvers(
   orgLabel: string,
   projectLabel: string,
-  options: ListResolverOptions = {
-    from: 0,
-    size: DEFAULT_LIST_SIZE,
-    deprecated: false,
-  },
+  options?: ListResolverOptions,
 ): Promise<PaginatedList<Resolver>> {
   const opts: string = buildQueryParams(options);
   try {

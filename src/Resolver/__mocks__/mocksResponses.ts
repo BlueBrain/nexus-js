@@ -78,9 +78,142 @@ export const mockGetCrossProjectResolverResponse = {
   _rev: 1,
   _deprecated: false,
   _createdAt: '2019-04-05T09:42:18.053Z',
+  _createdBy: 'http://api.url/v1/realms/github-dev/users/bbp-test',
+  _updatedAt: '2019-04-05T09:42:18.053Z',
+  _updatedBy: 'http://api.url/v1/realms/github-dev/users/bbp-test',
+};
+
+export const mockCreateResolverResponse = {
+  '@context': 'https://bluebrain.github.io/nexus/contexts/resource.json',
+  '@id': 'http://api.url/v1/resources/myorg/myproject/_/crossprojectresolver2',
+  '@type': ['CrossProject', 'Resolver'],
+  _self: 'http://api.url/v1/resolvers/myorg/myproject/crossprojectresolver2',
+  _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resolver.json',
+  _project: 'http://api.url/v1/projects/myorg/myproject',
+  _rev: 1,
+  _deprecated: false,
+  _createdAt: '2019-04-05T14:18:11.389Z',
+  _createdBy: 'http://api.url/v1/realms/github-dev/users/bbp-test',
+  _updatedAt: '2019-04-05T14:18:11.389Z',
+  _updatedBy: 'http://api.url/v1/realms/github-dev/users/bbp-test',
+};
+
+export const mockUpdateResolverResponse = {
+    '@context': 'https://bluebrain.github.io/nexus/contexts/resource.json',
+    '@id': 'http://api.url/v1/resources/myorg/myproject/_/crossprojectresolver2',
+    '@type': ['CrossProject', 'Resolver'],
+    _self: 'http://api.url/v1/resolvers/myorg/myproject/crossprojectresolver2',
+    _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resolver.json',
+    _project: 'http://api.url/v1/projects/myorg/myproject',
+    _rev: 2,
+    _deprecated: false,
+    _createdAt: '2019-04-05T14:18:11.389Z',
+    _createdBy:
+      'http://api.url/v1/realms/github-dev/users/bbp-test',
+    _updatedAt: '2019-04-05T14:18:11.553Z',
+    _updatedBy:
+      'http://api.url/v1/realms/github-dev/users/bbp-test',
+  };;
+
+export const mockGetAfterUpdateResolverResponse = {
+    '@context': [
+      'https://bluebrain.github.io/nexus/contexts/resolver.json',
+      'https://bluebrain.github.io/nexus/contexts/resource.json',
+    ],
+    '@id': 'http://api.url/v1/resources/myorg/myproject/_/crossprojectresolver2',
+    '@type': ['CrossProject', 'Resolver'],
+    identities: [{ '@type': 'Anonymous' }],
+    priority: 2,
+    projects: ['myorg/myotherproject'],
+    _self: 'http://api.url/v1/resolvers/myorg/myproject/crossprojectresolver2',
+    _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resolver.json',
+    _project: 'http://api.url/v1/projects/myorg/myproject',
+    _rev: 4,
+    _deprecated: false,
+    _createdAt: '2019-04-05T14:18:11.389Z',
+    _createdBy:
+      'http://api.url/v1/realms/github-dev/users/bbp-test',
+    _updatedAt: '2019-04-05T14:18:11.553Z',
+    _updatedBy:
+      'http://api.url/v1/realms/github-dev/users/bbp-test',
+  };
+
+export const mockTagResolverResponse = {
+    '@context': 'https://bluebrain.github.io/nexus/contexts/resource.json',
+    '@id': 'http://api.url/v1/resources/myorg/myproject/_/crossprojectresolver2',
+    '@type': ['CrossProject', 'Resolver'],
+    _self: 'http://api.url/v1/resolvers/myorg/myproject/crossprojectresolver2',
+    _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resolver.json',
+    _project: 'http://api.url/v1/projects/myorg/myproject',
+    _rev: 3,
+    _deprecated: false,
+    _createdAt: '2019-04-05T14:18:11.389Z',
+    _createdBy:
+      'http://api.url/v1/realms/github-dev/users/bbp-test',
+    _updatedAt: '2019-04-05T14:18:11.553Z',
+    _updatedBy:
+      'http://api.url/v1/realms/github-dev/users/bbp-test',
+  };;
+
+export const mockGetAfterTagResolverResponse = {
+    '@context': [
+      'https://bluebrain.github.io/nexus/contexts/resolver.json',
+      'https://bluebrain.github.io/nexus/contexts/resource.json',
+    ],
+    '@id': 'http://api.url/v1/resources/myorg/myproject/_/crossprojectresolver2',
+    '@type': ['CrossProject', 'Resolver'],
+    identities: [{ '@type': 'Anonymous' }],
+    priority: 2,
+    projects: ['myorg/myotherproject'],
+    _self: 'http://api.url/v1/resolvers/myorg/myproject/crossprojectresolver2',
+    _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resolver.json',
+    _project: 'http://api.url/v1/projects/myorg/myproject',
+    _rev: 3,
+    _deprecated: false,
+    _createdAt: '2019-04-05T14:18:11.389Z',
+    _createdBy:
+      'http://api.url/v1/realms/github-dev/users/bbp-test',
+    _updatedAt: '2019-04-05T14:18:11.553Z',
+    _updatedBy:
+      'http://api.url/v1/realms/github-dev/users/bbp-test',
+  };
+
+export const mockDeprecateResolverResponse = {
+  '@context': 'https://bluebrain.github.io/nexus/contexts/resource.json',
+  '@id': 'http://api.url/v1/resources/myorg/myproject/_/crossprojectresolver2',
+  '@type': ['CrossProject', 'Resolver'],
+  _self: 'http://api.url/v1/resolvers/myorg/myproject/crossprojectresolver2',
+  _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resolver.json',
+  _project: 'http://api.url/v1/projects/myorg/myproject',
+  _rev: 4,
+  _deprecated: true,
+  _createdAt: '2019-04-05T14:18:11.389Z',
   _createdBy:
     'http://api.url/v1/realms/github-dev/users/bbp-test',
-  _updatedAt: '2019-04-05T09:42:18.053Z',
+  _updatedAt: '2019-04-05T14:18:11.553Z',
+  _updatedBy:
+    'http://api.url/v1/realms/github-dev/users/bbp-test',
+};
+
+export const mockGetAfterDeprecateResolverResponse = {
+  '@context': [
+    'https://bluebrain.github.io/nexus/contexts/resolver.json',
+    'https://bluebrain.github.io/nexus/contexts/resource.json',
+  ],
+  '@id': 'http://api.url/v1/resources/myorg/myproject/_/crossprojectresolver2',
+  '@type': ['CrossProject', 'Resolver'],
+  identities: [{ '@type': 'Anonymous' }],
+  priority: 2,
+  projects: ['myorg/myotherproject'],
+  _self: 'http://api.url/v1/resolvers/myorg/myproject/crossprojectresolver2',
+  _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resolver.json',
+  _project: 'http://api.url/v1/projects/myorg/myproject',
+  _rev: 4,
+  _deprecated: true,
+  _createdAt: '2019-04-05T14:18:11.389Z',
+  _createdBy:
+    'http://api.url/v1/realms/github-dev/users/bbp-test',
+  _updatedAt: '2019-04-05T14:18:11.553Z',
   _updatedBy:
     'http://api.url/v1/realms/github-dev/users/bbp-test',
 };

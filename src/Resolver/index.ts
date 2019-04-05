@@ -1,5 +1,19 @@
-import { getResolver, listResolvers, normalizeType, isValidType } from './utils';
-import { ResolverResponse, ResolverTypes } from './types';
+import {
+  getResolver,
+  listResolvers,
+  createResolver,
+  updateResolver,
+  tagResolver,
+  deprecateResolver,
+  normalizeType,
+  isValidType,
+} from './utils';
+import {
+  ResolverResponse,
+  ResolverTypes,
+  CrossProjectResolverPayload,
+  TagResolverPayload,
+} from './types';
 import { Identity } from '../ACL/types';
 
 export default class Resolver {
@@ -25,11 +39,10 @@ export default class Resolver {
 
   static get = getResolver;
   static list = listResolvers;
-  /*static async create(method: "POST" | "PUT" = "PUT") {};
-  static async update() {};
-  static async tag() {};
-  static async deprecate() {};
-  static async list() {};*/
+  static create = createResolver;
+  static update = updateResolver;
+  static tag = tagResolver;
+  static deprecate = deprecateResolver;
 
   constructor(
     orgLabel: string,
@@ -55,5 +68,22 @@ export default class Resolver {
     this.identities = resolverResponse.identities;
     this.raw = resolverResponse;
     this.type = (resolverResponse["@type"] as string[]).map(normalizeType).find(isValidType) || "InProject";
+  }
+
+  async update(
+    resolverPayload: CrossProjectResolverPayload,
+  ): Promise<Resolver> {
+    const updatedResolver = Resolver.update(this.orgLabel, this.projectLabel, this.id, this.rev, resolverPayload);
+    return updatedResolver;
+  }
+
+  async tag(tagPayload: TagResolverPayload): Promise<Resolver> {
+    const updatedResolver = Resolver.tag(this.orgLabel, this.projectLabel, this.id, this.rev, tagPayload);
+    return updatedResolver;
+  }
+
+  async deprecate(): Promise<Resolver> {
+    const updatedResolver = Resolver.deprecate(this.orgLabel, this.projectLabel, this.id, this.rev);
+    return updatedResolver;
   }
 }

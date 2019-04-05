@@ -25,6 +25,11 @@ export interface CrossProjectResolverPayload extends ResolverPayloadCommon {
 
 export type ResolverPayload = InProjectResolverPayload | CrossProjectResolverPayload;
 
+export interface TagResolverPayload {
+  tag: string,
+  rev: number,
+}
+
 export interface ResolverResponseCommon {
     "@id": string;
     "@type": string[] | InProjectResolverPayload["@type"] | CrossProjectResolverPayload["@type"];
@@ -40,15 +45,15 @@ export interface ResolverResponseCommon {
     [key: string]: any;
 };
 
-export interface SingleResolverResponse extends ResolverResponseCommon {
+export interface PartialResolverResponse extends ResolverResponseCommon {
   '@context': string | string[];
 }
 
-export interface InProjectResolverResponse extends SingleResolverResponse {
+export interface InProjectResolverResponse extends PartialResolverResponse {
   priority: number;
 }
 
-export interface CrossProjectResolverResponse extends SingleResolverResponse {
+export interface CrossProjectResolverResponse extends PartialResolverResponse {
   projects: string[];
   resourceType?: string;
   identities: Identity[];

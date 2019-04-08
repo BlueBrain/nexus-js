@@ -47,6 +47,7 @@ Beta
 - [x] Get
 - [x] List
 - [ ] Create
+- [ ] Tag
 - [ ] Update
 - [ ] Delete
 
@@ -56,6 +57,7 @@ Beta
 - [x] Get
 - [ ] Create
 - [ ] Update
+- [ ] Tag
 - [ ] Delete
 - [x] Query
 - [x] Filter by type

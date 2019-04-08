@@ -1,18 +1,25 @@
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import Organization from '../';
 import { mockListOrgResponse, mockOrgResponse } from '../../__mocks__/helpers';
-import {
-  getOrganization,
-  updateOrganization,
-  deprecateOrganization,
-  listOrganizations,
-} from '../utils';
+import makeOrgUtils from // getOrganization,
+// updateOrganization,
+// deprecateOrganization,
+// listOrganizations,
+'../utils';
 import { Nexus } from '../..';
 
 const { fetchMock } = <GlobalWithFetchMock>global;
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
+const {
+  createOrganization,
+  getOrganization,
+  listOrganizations,
+  deprecateOrganization,
+  updateOrganization,
+  subscribe,
+} = makeOrgUtils();
 const org = new Organization(mockOrgResponse);
 describe('Organization class', () => {
   it('should create an Org instance', () => {
@@ -22,20 +29,28 @@ describe('Organization class', () => {
 
   describe('get an org', () => {
     beforeEach(() => {
-      fetchMock.mockResponses([JSON.stringify(mockOrgResponse), {status: 200}]);
+      fetchMock.mockResponses([
+        JSON.stringify(mockOrgResponse),
+        { status: 200 },
+      ]);
     });
     afterEach(() => {
       fetchMock.resetMocks();
     });
     it('set the rev option', async () => {
       await getOrganization('myorg', { rev: 12 });
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=12`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/orgs/myorg?rev=12`,
+      );
     });
   });
 
   describe('list orgs', () => {
     beforeEach(() => {
-      fetchMock.mockResponses([JSON.stringify(mockListOrgResponse), {status: 200}]);
+      fetchMock.mockResponses([
+        JSON.stringify(mockListOrgResponse),
+        { status: 200 },
+      ]);
     });
     afterEach(() => {
       fetchMock.resetMocks();
@@ -50,7 +65,9 @@ describe('Organization class', () => {
     });
     it('set deprecated option', async () => {
       await listOrganizations({ deprecated: true });
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/orgs?deprecated=true`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/orgs?deprecated=true`,
+      );
     });
     it('set from option', async () => {
       await listOrganizations({ from: 3 });
@@ -77,14 +94,19 @@ describe('Organization class', () => {
 
   describe('update an org', () => {
     beforeEach(() => {
-      fetchMock.mockResponses([JSON.stringify(mockOrgResponse), {status: 200}]);
+      fetchMock.mockResponses([
+        JSON.stringify(mockOrgResponse),
+        { status: 200 },
+      ]);
     });
     afterEach(() => {
       fetchMock.resetMocks();
     });
     it('updates the specific revision', async () => {
       updateOrganization('myorg', 12, { description: 'my new description' });
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=12`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/orgs/myorg?rev=12`,
+      );
       expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({ description: 'my new description' }),
       );
@@ -93,14 +115,19 @@ describe('Organization class', () => {
 
   describe('deprecate an org', () => {
     beforeEach(() => {
-      fetchMock.mockResponses([JSON.stringify(mockOrgResponse), {status: 200}]);
+      fetchMock.mockResponses([
+        JSON.stringify(mockOrgResponse),
+        { status: 200 },
+      ]);
     });
     afterEach(() => {
       fetchMock.resetMocks();
     });
     it('updates the specific revision', async () => {
       deprecateOrganization('myorg', 12);
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg?rev=12`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/orgs/myorg?rev=12`,
+      );
     });
   });
 });

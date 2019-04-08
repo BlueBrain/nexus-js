@@ -1,15 +1,25 @@
 import Project from '../Project';
-import {
+import makeOrgUtils from //   createOrganization, // , {
+//   getOrganization,
+//   listOrganizations,
+//   deprecateOrganization,
+//   updateOrganization,
+//   subscribe,
+// }
+'./utils';
+import { Context, CreateOrgPayload, OrgResponse } from './types';
+import { ListProjectOptions, CreateProjectPayload } from '../Project/types';
+import { PaginatedList } from '../utils/types';
+import { NexusState } from '../store';
+
+const {
   createOrganization,
   getOrganization,
   listOrganizations,
   deprecateOrganization,
   updateOrganization,
   subscribe,
-} from './utils';
-import { Context, CreateOrgPayload, OrgResponse } from './types';
-import { ListProjectOptions, CreateProjectPayload } from '../Project/types';
-import { PaginatedList } from '../utils/types';
+} = makeOrgUtils();
 
 export default class Organization {
   context?: Context;
@@ -32,9 +42,9 @@ export default class Organization {
   static create = createOrganization;
   static update = updateOrganization;
   static deprecate = deprecateOrganization;
-  static subscribe = subscribe;
+  // static subscribe = subscribe;
 
-  constructor(organizationResponse: OrgResponse) {
+  constructor(organizationResponse: OrgResponse, state?: NexusState) {
     this.context = organizationResponse['@context'];
     this.id = organizationResponse['@id'];
     this.type = organizationResponse['@type'];
@@ -49,6 +59,9 @@ export default class Organization {
     this.self = organizationResponse._self;
     this.constrainedBy = organizationResponse._constrainedBy;
     this.description = organizationResponse.description;
+
+    // this.Org = makeOrgUtils(state)
+    // this.Project = makeProjectUtils(state)
   }
 
   async update(orgPayload: CreateOrgPayload): Promise<Organization> {

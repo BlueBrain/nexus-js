@@ -3,7 +3,6 @@ import Resolver from '.';
 import { PaginatedList, DEFAULT_LIST_SIZE } from '../utils/types';
 import { buildQueryParams } from '../utils';
 import {
-  GetResolverOptions,
   ListResolverOptions,
   ListResolverResponse,
   CrossProjectResolverPayload,
@@ -13,6 +12,7 @@ import {
   ResolverTypes,
   PartialResolverResponse,
 } from './types';
+import { FetchSpecificOptions } from '../utils/types';
 
 /**
  * Lists resolvers for a project in a paginated way.
@@ -61,7 +61,7 @@ export async function getResolver(
   orgLabel: string,
   projectLabel: string,
   resolverId: string,
-  options?: GetResolverOptions,
+  options?: FetchSpecificOptions,
 ): Promise<Resolver> {
   const opts: string = buildQueryParams(options);
   try {

@@ -68,16 +68,13 @@ export interface ListResolverResponse {
 }
 
 export interface ListResolverOptions {
-    full_text_search_query?: string;
-    from?: PaginationSettings['from'];
-    size?: PaginationSettings['size'];
-    deprecated?: boolean;
-    rev?: number;
-    type?: string;
-    createdBy?: string;
-    updatedBy?: string;
-    [key: string]: any;
-  }
-
-// It's possible to fetch a resolver by revision or tag, not both.
-export type GetResolverOptions = { rev: number } | { tag: string };
+  full_text_search_query?: string;
+  from?: PaginationSettings['from'];
+  size?: PaginationSettings['size'];
+  deprecated?: boolean;
+  rev?: number;
+  type?: string;
+  createdBy?: string;
+  updatedBy?: string;
+  [key: string]: any;
+}

@@ -10,3 +10,9 @@ export interface PaginatedList<T> {
   index: number;
   results: T[];
 }
+
+/**
+ * Several entities can be fetched with a specific tag or revision,
+ * but not both at the same time.
+ */
+export type FetchSpecificOptions = { rev: number } | { tag: string };

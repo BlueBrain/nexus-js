@@ -12,7 +12,7 @@
 
 ## Status
 
-Pre-alpha
+Beta
 
 ### TODO list
 
@@ -77,6 +77,13 @@ Pre-alpha
 - [x] Deprecate
 
 #### Resolvers
+
+- [x] Get
+- [x] List
+- [x] Create
+- [x] Update
+- [x] Tag
+- [x] Deprecate
 
 #### Data
 
@@ -383,6 +390,30 @@ sparqlInstance.query(sparqlQuery: string): Promise<SparqlViewQueryResponse>;
 
 // EXPERIMENTAL
 sparqlInstance.getStatistics(): Promise<Statistics>
+```
+
+### Resolver
+
+```typescript
+import { Resolver } from '@bbp/nexus-sdk';
+
+Resolver.get(): Promise<Resolver>;
+
+Resolver.list(orgLabel: string, projectLabel: string, options?: ListResolverOptions): <Promise<PaginatedList<Resolver>>;
+
+Resolver.create(orgLabel: string, projectLabel: string, resolverId: string | null, resolverPayload: CrossProjectResolverPayload, method: "POST" | "PUT" = "PUT"): Promise<Resolver>;
+
+Resolver.update(orgLabel: string, projectLabel: string, resolverId: string, previousRev: number, resolverPayload: CrossProjectResolverPayload): Promise<Resolver>
+
+Resolver.tag(orgLabel: string, projectLabel: string, resolverId: string, previousRev: number, tagPayload: TagResolverPayload): Promise<Resolver>
+
+Resolver.deprecate(orgLabel: string, projectLabel: string, resolverId: string, previousRev: number): Promise<Resolver>
+
+resolverInstance.update(resolverPayload: CrossProjectResolverPayload): Promise<Resolver>;
+
+resolverInstance.tag(tagPayload: TagResolverPayload): Promise<Resolver>;
+
+resolverInstance.deprecate(): Promise<Resolver>;
 ```
 
 ### Realm

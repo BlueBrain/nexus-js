@@ -1,6 +1,6 @@
 import { httpGet, httpPut, httpDelete, httpPost } from '../utils/http';
 import Resolver from '.';
-import { PaginatedList, DEFAULT_LIST_SIZE } from '../utils/types';
+import { PaginatedList, DEFAULT_LIST_SIZE, FetchSpecificOptions } from '../utils/types';
 import { buildQueryParams } from '../utils';
 import {
   ListResolverOptions,
@@ -12,7 +12,6 @@ import {
   ResolverTypes,
   PartialResolverResponse,
 } from './types';
-import { FetchSpecificOptions } from '../utils/types';
 
 /**
  * Lists resolvers for a project in a paginated way.

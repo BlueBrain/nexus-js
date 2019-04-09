@@ -4,6 +4,7 @@ import { CreateOrgPayload, ListOrgOptions } from './Organization/types';
 import makeOrgUtils, { OrgUtils } from './Organization/utils';
 import { PaginatedList } from './utils/types';
 import Store from './utils/Store';
+import makeProjectUtils, { ProjectUtils } from './Project/utils';
 
 type NexusConfig = {
   environment?: string;
@@ -18,6 +19,7 @@ if (process.env.NODE === 'TEST') {
 export default class Nexus {
   readonly store: Store;
   readonly Organization: OrgUtils;
+  readonly Project: ProjectUtils;
 
   // update global store
   static setEnvironment(environment: string): void {
@@ -56,6 +58,7 @@ export default class Nexus {
     });
 
     this.Organization = makeOrgUtils(this.store);
+    this.Project = makeProjectUtils(this.store);
   }
 
   setToken(token: string) {

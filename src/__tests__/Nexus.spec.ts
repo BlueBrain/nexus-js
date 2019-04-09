@@ -48,8 +48,19 @@ describe('Nexus class', () => {
       expect(nexus).toBeInstanceOf(Nexus);
     });
     it('should call Org method with instance store', async () => {
-      await nexus.Organization.get('lol');
-      expect(fetchMock.mock.calls[0][0]).toEqual(`http://example.com/orgs/lol`);
+      await nexus.Organization.get('myorg');
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `http://example.com/orgs/myorg`,
+      );
+      expect(fetchMock.mock.calls[0][1].headers.get(['Authorization'])).toEqual(
+        'Bearer user1',
+      );
+    });
+    it('should call Project method with instance store', async () => {
+      await nexus.Project.get('myorg', 'myproject');
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `http://example.com/projects/myorg/myproject`,
+      );
       expect(fetchMock.mock.calls[0][1].headers.get(['Authorization'])).toEqual(
         'Bearer user1',
       );

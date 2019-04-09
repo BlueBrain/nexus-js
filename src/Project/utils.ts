@@ -1,5 +1,5 @@
 import Project from '.';
-import createHttpLink, { httpGet, httpPut, httpDelete } from '../utils/http';
+import createHttpLink from '../utils/http';
 import {
   CreateProjectPayload,
   ListProjectOptions,

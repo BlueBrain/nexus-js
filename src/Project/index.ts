@@ -14,6 +14,7 @@ import { WILDCARD_SCHEMA_ID } from '../Schema';
 import NexusFile from '../File';
 import store from '../store';
 import Store from '../utils/Store';
+import makeResourceUtils, { ResourceUtils } from '../Resource/utils';
 
 const {
   get: getProject,
@@ -43,9 +44,9 @@ export default class Project {
   updatedBy: string;
   description?: string;
   projectUtils?: ProjectUtils;
+  resourceUtils?: ResourceUtils;
   // fileUtils?: FileUtils
   // viewUtils?: ViewUtils
-  // resourceUtils? ResourceUtils
 
   static get = getProject;
   static list = listProjects;
@@ -54,7 +55,7 @@ export default class Project {
   static deprecate = deprecateProject;
   // static subscribe = subscribe;
 
-  constructor(projectResponse: ProjectResponse, store?: Store) {
+  constructor(projectResponse: ProjectResponse, localStore?: Store) {
     this.context = projectResponse['@context'];
     this.id = projectResponse['@id'];
     this.type = projectResponse['@type'];
@@ -72,24 +73,29 @@ export default class Project {
     this.updatedAt = projectResponse._updatedAt;
     this.updatedBy = projectResponse._updatedBy;
     this.description = projectResponse.description;
+    if (localStore) {
+      this.projectUtils = makeProjectUtils(localStore);
+      this.resourceUtils = makeResourceUtils(localStore);
+    }
   }
 
   async update(projectPayload: CreateProjectPayload): Promise<Project> {
+    const update = this.projectUtils
+      ? this.projectUtils.update
+      : Project.update;
     try {
-      return Project.update(
-        this.orgLabel,
-        this.label,
-        this.rev,
-        projectPayload,
-      );
+      return update(this.orgLabel, this.label, this.rev, projectPayload);
     } catch (error) {
       throw error;
     }
   }
 
   async deprecate(): Promise<Project> {
+    const deprecate = this.projectUtils
+      ? this.projectUtils.deprecate
+      : Project.deprecate;
     try {
-      return Project.deprecate(this.orgLabel, this.label, this.rev);
+      return deprecate(this.orgLabel, this.label, this.rev);
     } catch (error) {
       throw error;
     }
@@ -98,16 +104,22 @@ export default class Project {
   async listResources(
     pagination?: PaginationSettings,
   ): Promise<PaginatedList<Resource>> {
+    const listResources = this.resourceUtils
+      ? this.resourceUtils.list
+      : Resource.list;
     try {
-      return await Resource.list(this.orgLabel, this.label, pagination);
+      return await listResources(this.orgLabel, this.label, pagination);
     } catch (error) {
       throw error;
     }
   }
 
   async getResource(id: string): Promise<Resource> {
+    const getResources = this.resourceUtils
+      ? this.resourceUtils.get
+      : Resource.get;
     try {
-      return await Resource.get(
+      return await getResources(
         this.orgLabel,
         this.label,
         WILDCARD_SCHEMA_ID,

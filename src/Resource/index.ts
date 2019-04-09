@@ -6,25 +6,11 @@ import {
   ResourceLink,
   ExpandedResource,
 } from './types';
-import {
-  getResource,
-  getSelfResource,
-  getSelfResourceRawAs,
-  updateResource,
-  updateSelfResource,
-  listResources,
-  createResource,
-  tagResource,
-  deprecateResource,
-  deprecateSelfResource,
-  tagSelfResource,
-  listTags,
-  listSelfTags,
-  getIncomingLinks,
-  getOutgoingLinks,
-} from './utils';
+import makeResourceUtils, { ResourceUtils } from './utils';
 import { PaginatedList, PaginationSettings } from '../utils/types';
 import Statistics from '../Statistics';
+import store from '../store';
+import Store from '../utils/Store';
 
 export const DEFAULT_GET_RESOURCE_OPTIONS: GetResourceOptions = {
   expanded: false,
@@ -45,6 +31,24 @@ export const RESOURCE_METADATA_KEYS = [
   '_deprecated',
 ];
 
+const {
+  getSelf: getSelfResource,
+  getSelfRawAs: getSelfResourceRawAs,
+  get: getResource,
+  list: listResources,
+  create: createResource,
+  updateSelf: updateSelfResource,
+  update: updateResource,
+  deprecate: deprecateResource,
+  deprecateSelf: deprecateSelfResource,
+  tag: tagResource,
+  tagSelf: tagSelfResource,
+  listTags,
+  listSelfTags,
+  getIncomingLinks,
+  getOutgoingLinks,
+} = makeResourceUtils(store);
+
 export default class Resource<T = {}> {
   readonly orgLabel: string;
   readonly projectLabel: string;
@@ -64,6 +68,7 @@ export default class Resource<T = {}> {
   readonly raw: ResourceResponse;
   readonly resourceURL: string;
   expanded?: ExpandedResource;
+  readonly resourceUtils?: ResourceUtils;
 
   static getSelf = getSelfResource;
   static getSelfRawAs = getSelfResourceRawAs;
@@ -97,6 +102,7 @@ export default class Resource<T = {}> {
     orgLabel: string,
     projectLabel: string,
     resourceResponse: ResourceResponse,
+    localStore?: Store,
   ) {
     this.raw = resourceResponse;
     this.orgLabel = orgLabel;
@@ -133,10 +139,16 @@ export default class Resource<T = {}> {
     this.resourceURL = `/resources/${this.orgLabel}/${
       this.projectLabel
     }/_/${encodeURIComponent(this.id)}`;
+    if (localStore) {
+      this.resourceUtils = makeResourceUtils(localStore);
+    }
   }
 
   async getAs(format: ResourceGetFormats): Promise<any> {
-    return await getSelfResourceRawAs(this.self, format);
+    const getSelfRawAs = this.resourceUtils
+      ? this.resourceUtils.getSelfRawAs
+      : Resource.getSelfRawAs;
+    return await getSelfRawAs(this.self, format);
   }
 
   get name(): string {
@@ -150,7 +162,10 @@ export default class Resource<T = {}> {
     context?: Context;
     [field: string]: any;
   }): Promise<Resource> {
-    return Resource.updateSelf(
+    const updateSelf = this.resourceUtils
+      ? this.resourceUtils.updateSelf
+      : Resource.updateSelf;
+    return updateSelf(
       this.resourceURL,
       this.rev,
       {
@@ -163,13 +178,19 @@ export default class Resource<T = {}> {
   }
 
   async getExpanded() {
-    this.expanded = await getSelfResourceRawAs(`${this.self}?format=expanded`);
+    const getSelfRawAs = this.resourceUtils
+      ? this.resourceUtils.getSelfRawAs
+      : Resource.getSelfRawAs;
+    this.expanded = await getSelfRawAs(`${this.self}?format=expanded`);
     return this.expanded;
   }
 
   async getIncomingLinks(
     paginationSettings: PaginationSettings,
   ): Promise<PaginatedList<ResourceLink>> {
+    const getIncomingLinks = this.resourceUtils
+      ? this.resourceUtils.getIncomingLinks
+      : Resource.getIncomingLinks;
     let expandedID;
     if (this.expanded && this.expanded['@id']) {
       expandedID = this.expanded['@id'];
@@ -188,6 +209,9 @@ export default class Resource<T = {}> {
   async getOutgoingLinks(
     paginationSettings: PaginationSettings,
   ): Promise<PaginatedList<ResourceLink>> {
+    const getOutgoingLinks = this.resourceUtils
+      ? this.resourceUtils.getOutgoingLinks
+      : Resource.getOutgoingLinks;
     let expandedID;
     if (this.expanded && this.expanded['@id']) {
       expandedID = this.expanded['@id'];

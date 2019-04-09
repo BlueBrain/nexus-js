@@ -1,15 +1,22 @@
 import Project from '../Project';
-import {
-  createOrganization,
-  getOrganization,
-  listOrganizations,
-  deprecateOrganization,
-  updateOrganization,
-  subscribe,
-} from './utils';
+import makeOrgUtils, { OrgUtils } from './utils';
 import { Context, CreateOrgPayload, OrgResponse } from './types';
 import { ListProjectOptions, CreateProjectPayload } from '../Project/types';
 import { PaginatedList } from '../utils/types';
+import store from '../store';
+import Store from '../utils/Store';
+
+// default utils functions
+// they use the global store
+// for token and baseUrl
+const {
+  create: createOrganization,
+  get: getOrganization,
+  list: listOrganizations,
+  deprecate: deprecateOrganization,
+  update: updateOrganization,
+  subscribe,
+} = makeOrgUtils(store);
 
 export default class Organization {
   context?: Context;
@@ -26,15 +33,16 @@ export default class Organization {
   self?: string;
   constrainedBy?: string;
   description?: string;
+  orgUtils?: OrgUtils;
 
+  // expose default utils through static methods
   static get = getOrganization;
   static list = listOrganizations;
   static create = createOrganization;
   static update = updateOrganization;
   static deprecate = deprecateOrganization;
-  static subscribe = subscribe;
 
-  constructor(organizationResponse: OrgResponse) {
+  constructor(organizationResponse: OrgResponse, localStore?: Store) {
     this.context = organizationResponse['@context'];
     this.id = organizationResponse['@id'];
     this.type = organizationResponse['@type'];
@@ -49,19 +57,26 @@ export default class Organization {
     this.self = organizationResponse._self;
     this.constrainedBy = organizationResponse._constrainedBy;
     this.description = organizationResponse.description;
+    if (localStore) {
+      this.orgUtils = makeOrgUtils(localStore);
+    }
   }
 
   async update(orgPayload: CreateOrgPayload): Promise<Organization> {
+    const update = this.orgUtils ? this.orgUtils.update : updateOrganization;
     try {
-      return Organization.update(this.label, this.rev, orgPayload);
+      return update(this.label, this.rev, orgPayload);
     } catch (error) {
       throw error;
     }
   }
 
   async deprecate(): Promise<Organization> {
+    const deprecate = this.orgUtils
+      ? this.orgUtils.deprecate
+      : deprecateOrganization;
     try {
-      return Organization.deprecate(this.label, this.rev);
+      return deprecate(this.label, this.rev);
     } catch (error) {
       throw error;
     }

@@ -1,6 +1,7 @@
 import store from '../store';
 import 'cross-fetch/polyfill';
 import { removeEmpty } from '.';
+import Store from './Store';
 
 export enum HttpConfigTypes {
   JSON = 'json',
@@ -205,4 +206,134 @@ export function httpDelete(url: string, config?: HttpConfig): Promise<any> {
     .catch(e => {
       throw e;
     });
+}
+
+export default function createHttpLink(store: Store) {
+  const {
+    api: { baseUrl },
+  } = store.getState();
+  // if (!baseUrl) {
+  //   throw new Error('No environment has been defined');
+  // }
+
+  const getHeaders = (
+    headers: { [key: string]: string | null } = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  ): Headers => {
+    const {
+      auth: { accessToken },
+    } = store.getState();
+    let extraHeaders = {};
+    if (accessToken) {
+      extraHeaders = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+    }
+    return new Headers({
+      ...headers,
+      ...removeEmpty(extraHeaders),
+      mode: 'cors',
+    });
+  };
+
+  return {
+    httpGet: (url: string, config?: HttpConfig): Promise<any> => {
+      const squashedConfig: HttpConfig = {
+        ...CONFIG_DEFAULT_HTTP_GET,
+        ...config,
+      };
+      const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
+      return fetch(fetchURL, {
+        headers: getHeaders(squashedConfig.extraHeaders),
+      })
+        .then(checkStatus)
+        .then(r => prepareResponse(r, squashedConfig.receiveAs))
+        .catch(e => {
+          throw e;
+        });
+    },
+
+    httpPost: <T = BodyInit>(
+      url: string,
+      body?: T,
+      config?: HttpConfig,
+    ): Promise<any> => {
+      const squashedConfig: HttpConfig = {
+        ...CONFIG_DEFAULT_HTTP_POST,
+        ...config,
+      };
+      const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
+      return fetch(fetchURL, {
+        headers: getHeaders(squashedConfig.extraHeaders),
+        method: 'POST',
+        body: prepareBody(body as BodyInit | undefined, squashedConfig.sendAs),
+      })
+        .then(checkStatus)
+        .then(r => prepareResponse(r, squashedConfig.receiveAs))
+        .catch(e => {
+          throw e;
+        });
+    },
+
+    httpPut: (
+      url: string,
+      body?: Object,
+      config?: HttpConfig,
+    ): Promise<any> => {
+      const squashedConfig: HttpConfig = {
+        ...CONFIG_DEFAULT_HTTP_PUT,
+        ...config,
+      };
+      const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
+      return fetch(fetchURL, {
+        headers: getHeaders(),
+        method: 'PUT',
+        body: JSON.stringify(body),
+      })
+        .then(checkStatus)
+        .then(r => prepareResponse(r, squashedConfig.receiveAs))
+        .catch(e => {
+          throw e;
+        });
+    },
+    httpPatch: (
+      url: string,
+      body?: Object,
+      config?: HttpConfig,
+    ): Promise<any> => {
+      const squashedConfig: HttpConfig = {
+        ...CONFIG_DEFAULT_HTTP_PUT,
+        ...config,
+      };
+      const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
+      return fetch(fetchURL, {
+        headers: getHeaders(),
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      })
+        .then(checkStatus)
+        .then(r => prepareResponse(r, squashedConfig.receiveAs))
+        .catch(e => {
+          throw e;
+        });
+    },
+    httpDelete: (url: string, config?: HttpConfig): Promise<any> => {
+      const squashedConfig: HttpConfig = {
+        ...CONFIG_DEFAULT_HTTP_PUT,
+        ...config,
+      };
+      const fetchURL = squashedConfig.useBase ? `${baseUrl}${url}` : url;
+      return fetch(fetchURL, {
+        headers: getHeaders(),
+        method: 'DELETE',
+      })
+        .then(checkStatus)
+        .then(r => prepareResponse(r, squashedConfig.receiveAs))
+        .catch(e => {
+          throw e;
+        });
+    },
+  };
 }

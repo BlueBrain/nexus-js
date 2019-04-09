@@ -65,6 +65,15 @@ describe('Nexus class', () => {
         'Bearer user1',
       );
     });
+    it('should call Resource method with instance store', async () => {
+      await nexus.Resource.get('myorg', 'myproject', 'myschema', 'myresource');
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `http://example.com/resources/myorg/myproject/myschema/myresource`,
+      );
+      expect(fetchMock.mock.calls[0][1].headers.get(['Authorization'])).toEqual(
+        'Bearer user1',
+      );
+    });
   });
   describe('get an Org', () => {
     afterEach(() => {

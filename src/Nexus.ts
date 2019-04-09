@@ -1,16 +1,25 @@
 import store from './store';
 import Organization from './Organization';
 import { CreateOrgPayload, ListOrgOptions } from './Organization/types';
+import makeOrgUtils, { OrgUtils } from './Organization/utils';
 import { PaginatedList } from './utils/types';
+import Store from './utils/Store';
 
 type NexusConfig = {
   environment?: string;
   token?: string;
 };
 
-export default class Nexus {
-  static store = store;
+// Without this, jest crashes really bad...
+if (process.env.NODE === 'TEST') {
+  Organization;
+}
 
+export default class Nexus {
+  readonly store: Store;
+  readonly Organization: OrgUtils;
+
+  // update global store
   static setEnvironment(environment: string): void {
     store.update('api', state => ({
       ...state,
@@ -18,6 +27,7 @@ export default class Nexus {
     }));
   }
 
+  // update global store
   static setToken(token: string): void {
     if (!token || token === undefined || token.length === 0) {
       throw new Error('Token is invalid.');
@@ -28,6 +38,7 @@ export default class Nexus {
     }));
   }
 
+  // update global store
   static removeToken(): void {
     store.update('auth', state => ({
       ...state,
@@ -35,26 +46,44 @@ export default class Nexus {
     }));
   }
 
-  constructor(config?: NexusConfig) {
-    if (config) {
-      if (config.environment) {
-        Nexus.setEnvironment(config.environment);
-      }
-      if (config.token) {
-        Nexus.setToken(config.token);
-      }
+  constructor(config: NexusConfig) {
+    if (!config.environment) {
+      throw new Error('No environment provided');
     }
+    this.store = new Store({
+      auth: { accessToken: config.token },
+      api: { baseUrl: config.environment },
+    });
+
+    this.Organization = makeOrgUtils(this.store);
+  }
+
+  setToken(token: string) {
+    if (!token || token === undefined || token.length === 0) {
+      throw new Error('Token is invalid.');
+    }
+    this.store.update('auth', state => ({
+      ...state,
+      accessToken: token,
+    }));
+  }
+
+  removeToken(): void {
+    this.store.update('auth', state => ({
+      ...state,
+      accessToken: undefined,
+    }));
   }
 
   async getOrganization(label: string): Promise<Organization> {
-    return Organization.get(label);
+    return this.Organization.get(label);
   }
 
   async listOrganizations(
     listOrgOptions?: ListOrgOptions,
   ): Promise<PaginatedList<Organization>> {
     try {
-      return Organization.list(listOrgOptions);
+      return this.Organization.list(listOrgOptions);
     } catch (error) {
       throw error;
     }
@@ -65,7 +94,7 @@ export default class Nexus {
     orgPayload?: CreateOrgPayload,
   ): Promise<Organization> {
     try {
-      return Organization.create(label, orgPayload);
+      return this.Organization.create(label, orgPayload);
     } catch (error) {
       throw error;
     }
@@ -77,7 +106,7 @@ export default class Nexus {
     orgPayload: CreateOrgPayload,
   ): Promise<Organization> {
     try {
-      return Organization.update(label, rev, orgPayload);
+      return this.Organization.update(label, rev, orgPayload);
     } catch (error) {
       throw error;
     }
@@ -88,7 +117,7 @@ export default class Nexus {
     rev: number,
   ): Promise<Organization> {
     try {
-      return Organization.deprecate(label, rev);
+      return this.Organization.deprecate(label, rev);
     } catch (error) {
       throw error;
     }

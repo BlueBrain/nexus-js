@@ -1,27 +1,24 @@
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import Organization from '../';
 import { mockListOrgResponse, mockOrgResponse } from '../../__mocks__/helpers';
-import makeOrgUtils from // getOrganization,
-// updateOrganization,
-// deprecateOrganization,
-// listOrganizations,
-'../utils';
+import makeOrgUtils from '../utils';
 import { Nexus } from '../..';
+import store from '../../store';
 
 const { fetchMock } = <GlobalWithFetchMock>global;
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
-const {
-  createOrganization,
-  getOrganization,
-  listOrganizations,
-  deprecateOrganization,
-  updateOrganization,
-  subscribe,
-} = makeOrgUtils();
 const org = new Organization(mockOrgResponse);
 describe('Organization class', () => {
+  const {
+    create: createOrganization,
+    get: getOrganization,
+    list: listOrganizations,
+    deprecate: deprecateOrganization,
+    update: updateOrganization,
+    subscribe,
+  } = makeOrgUtils(store);
   it('should create an Org instance', () => {
     expect(org).toBeInstanceOf(Organization);
     expect(org.label).toEqual(mockOrgResponse._label);
@@ -88,6 +85,25 @@ describe('Organization class', () => {
       });
       expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/orgs?full_text_search=some_search%20with%20spaces&size=12&deprecated=true&from=3`,
+      );
+    });
+  });
+
+  describe('create an org', () => {
+    beforeEach(() => {
+      fetchMock.mockResponses([
+        JSON.stringify(mockOrgResponse),
+        { status: 200 },
+      ]);
+    });
+    afterEach(() => {
+      fetchMock.resetMocks();
+    });
+    it('updates the specific revision', async () => {
+      createOrganization('myorg', { description: 'my new description' });
+      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/orgs/myorg`);
+      expect(fetchMock.mock.calls[0][1].body).toEqual(
+        JSON.stringify({ description: 'my new description' }),
       );
     });
   });

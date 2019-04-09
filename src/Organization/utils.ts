@@ -11,7 +11,7 @@ import {
   OrgEventListeners,
   OrgEventType,
 } from './types';
-import createHttpLink, * as http from '../utils/http';
+import createHttpLink from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
 import { PaginatedList } from '../utils/types';
 import { getEventSource, parseMessageEventData } from '../utils/events';
@@ -19,10 +19,32 @@ import { getEventSource, parseMessageEventData } from '../utils/events';
 import EventSource = require('eventsource');
 import { buildQueryParams } from '../utils';
 import Store from '../utils/Store';
-import { default as bob } from '../store';
 
-// @ts-ignore
-export default function makeOrgUtils(store: Store = bob) {
+export interface OrgUtils {
+  create(label: string, orgPayload?: CreateOrgPayload): Promise<Organization>;
+  update(
+    orgLabel: string,
+    rev: number,
+    orgPayload: CreateOrgPayload,
+  ): Promise<Organization>;
+  get(
+    orgLabel: string,
+    options?: { rev?: number; tag?: string },
+  ): Promise<Organization>;
+  list(options?: ListOrgOptions): Promise<PaginatedList<Organization>>;
+  update(
+    orgLabel: string,
+    rev: number,
+    orgPayload: CreateOrgPayload,
+  ): Promise<Organization>;
+  deprecate(orgLabel: string, rev: number): Promise<Organization>;
+  // @ts-ignore
+  subscribe(listeners: OrgEventListeners): EventSource;
+}
+
+export const lol = 'lol';
+
+export default function makeOrgUtils(store: Store): OrgUtils {
   const { httpGet, httpPut, httpDelete } = createHttpLink(store);
 
   return {
@@ -31,7 +53,7 @@ export default function makeOrgUtils(store: Store = bob) {
      * @param label The label of your organization
      * @param name The name of your organization
      */
-    createOrganization: async (
+    create: async (
       label: string,
       orgPayload?: CreateOrgPayload,
     ): Promise<Organization> => {
@@ -40,7 +62,7 @@ export default function makeOrgUtils(store: Store = bob) {
           `/orgs/${label}`,
           orgPayload,
         );
-        return new Organization({ ...orgResponse, ...orgPayload });
+        return new Organization({ ...orgResponse, ...orgPayload }, store);
       } catch (error) {
         throw new CreateOrganizationException(error.message);
       }
@@ -51,7 +73,7 @@ export default function makeOrgUtils(store: Store = bob) {
      * @param orgLabel The organization label to fetch
      * @param Object<revision, tag> The specific tag OR revision to fetch
      */
-    getOrganization: async (
+    get: async (
       orgLabel: string,
       options?: { rev?: number; tag?: string },
     ): Promise<Organization> => {
@@ -60,14 +82,14 @@ export default function makeOrgUtils(store: Store = bob) {
         const orgResponse: OrgResponse = await httpGet(
           `/orgs/${orgLabel}${opts}`,
         );
-        const org = new Organization(orgResponse);
+        const org = new Organization(orgResponse, store);
         return org;
       } catch (error) {
         throw error;
       }
     },
 
-    listOrganizations: async (
+    list: async (
       options?: ListOrgOptions,
     ): Promise<PaginatedList<Organization>> => {
       const opts = buildQueryParams(options);
@@ -83,10 +105,13 @@ export default function makeOrgUtils(store: Store = bob) {
 
         const orgs: Organization[] = listOrgResponse._results.map(
           (commonResponse: OrgResponseCommon) =>
-            new Organization({
-              ...commonResponse,
-              '@context': listOrgResponse['@context'],
-            }),
+            new Organization(
+              {
+                ...commonResponse,
+                '@context': listOrgResponse['@context'],
+              },
+              store,
+            ),
         );
 
         return {
@@ -105,7 +130,7 @@ export default function makeOrgUtils(store: Store = bob) {
      * @param rev Last known revision
      * @param newName Knew name the organization will be called with
      */
-    updateOrganization: async (
+    update: async (
       orgLabel: string,
       rev: number,
       orgPayload: CreateOrgPayload,
@@ -115,7 +140,7 @@ export default function makeOrgUtils(store: Store = bob) {
           `/orgs/${orgLabel}?rev=${rev}`,
           orgPayload,
         );
-        return new Organization(orgResponse);
+        return new Organization(orgResponse, store);
       } catch (error) {
         throw error;
       }
@@ -126,15 +151,12 @@ export default function makeOrgUtils(store: Store = bob) {
      * @param orgLabel Label of the Org to be deprecated
      * @param rev Last know revision
      */
-    deprecateOrganization: async (
-      orgLabel: string,
-      rev: number,
-    ): Promise<Organization> => {
+    deprecate: async (orgLabel: string, rev: number): Promise<Organization> => {
       try {
         const orgResponse: OrgResponse = await httpDelete(
           `/orgs/${orgLabel}?rev=${rev}`,
         );
-        return new Organization(orgResponse);
+        return new Organization(orgResponse, store);
       } catch (error) {
         throw error;
       }

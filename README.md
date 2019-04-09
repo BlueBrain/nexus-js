@@ -133,10 +133,26 @@ const { Nexus } = nexusSdk; // global name is window.nexusSdk
 ## Documentation
 
 ```typescript
-// You can setup your Nexus config with the static methods
+// You can setup your Nexus config globally with the static methods
+// this is useful on the client
 Nexus.setEnvironment('http://api.url');
 Nexus.setToken('my_bearer_token');
 Nexus.removeToken();
+
+// Org.get
+
+// on the server you might want to create an instance
+const nexusUser = new Nexus({
+  environment: 'http://api.url',
+  token: 'user_bearer_token',
+});
+const nexusUser2 = new Nexus({
+  environment: 'http://api.url',
+  token: 'user2_bearer_token',
+});
+
+// nexusUser.Organization.get
+// nexusUser2.Organization.get
 ```
 
 The SDK follows the same pattern when dealing with an organization, project, resource, realm, acl, etc...:
@@ -149,6 +165,9 @@ The SDK follows the same pattern when dealing with an organization, project, res
 
 ```typescript
 import { Organization } from '@bbp/nexus-sdk';
+// or
+const nexus = new Nexus({ environment, token});
+const Organization = nexus.Organization
 
 Organization.get = (orgLabel: string, options?: undefined | object): Promise<Organization>;
 

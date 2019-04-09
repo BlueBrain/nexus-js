@@ -3,14 +3,7 @@ import { PaginationSettings, PaginatedList } from '../utils/types';
 import View from '../View';
 import ElasticSearchView from '../View/ElasticSearchView';
 import SparqlView from '../View/SparqlView';
-import {
-  getProject,
-  listProjects,
-  createProject,
-  deprecateProject,
-  updateProject,
-  subscribe,
-} from './utils';
+import makeProjectUtils, { ProjectUtils } from './utils';
 import {
   ApiMapping,
   Context,
@@ -19,6 +12,17 @@ import {
 } from './types';
 import { WILDCARD_SCHEMA_ID } from '../Schema';
 import NexusFile from '../File';
+import store from '../store';
+import Store from '../utils/Store';
+
+const {
+  get: getProject,
+  list: listProjects,
+  create: createProject,
+  update: updateProject,
+  deprecate: deprecateProject,
+  // subscribe
+} = makeProjectUtils(store);
 
 export default class Project {
   context?: Context;
@@ -38,15 +42,19 @@ export default class Project {
   updatedAt: string;
   updatedBy: string;
   description?: string;
+  projectUtils?: ProjectUtils;
+  // fileUtils?: FileUtils
+  // viewUtils?: ViewUtils
+  // resourceUtils? ResourceUtils
 
   static get = getProject;
   static list = listProjects;
   static create = createProject;
   static update = updateProject;
   static deprecate = deprecateProject;
-  static subscribe = subscribe;
+  // static subscribe = subscribe;
 
-  constructor(projectResponse: ProjectResponse) {
+  constructor(projectResponse: ProjectResponse, store?: Store) {
     this.context = projectResponse['@context'];
     this.id = projectResponse['@id'];
     this.type = projectResponse['@type'];

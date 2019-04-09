@@ -5,6 +5,7 @@ import { ListProjectOptions, CreateProjectPayload } from '../Project/types';
 import { PaginatedList } from '../utils/types';
 import store from '../store';
 import Store from '../utils/Store';
+import makeProjectUtils, { ProjectUtils } from '../Project/utils';
 
 // default utils functions
 // they use the global store
@@ -34,6 +35,7 @@ export default class Organization {
   constrainedBy?: string;
   description?: string;
   orgUtils?: OrgUtils;
+  projectUtils?: ProjectUtils;
 
   // expose default utils through static methods
   static get = getOrganization;
@@ -59,6 +61,7 @@ export default class Organization {
     this.description = organizationResponse.description;
     if (localStore) {
       this.orgUtils = makeOrgUtils(localStore);
+      this.projectUtils = makeProjectUtils(localStore);
     }
   }
 
@@ -83,8 +86,9 @@ export default class Organization {
   }
 
   async getProject(projectLabel: string): Promise<Project> {
+    const getProject = this.projectUtils ? this.projectUtils.get : Project.get;
     try {
-      return Project.get(this.label, projectLabel);
+      return getProject(this.label, projectLabel);
     } catch (error) {
       throw error;
     }
@@ -93,8 +97,11 @@ export default class Organization {
   async listProjects(
     options?: ListProjectOptions,
   ): Promise<PaginatedList<Project>> {
+    const listProject = this.projectUtils
+      ? this.projectUtils.list
+      : Project.list;
     try {
-      return Project.list(this.label, options);
+      return listProject(this.label, options);
     } catch (error) {
       throw error;
     }
@@ -104,8 +111,11 @@ export default class Organization {
     projectLabel: string,
     projectPayload: CreateProjectPayload,
   ): Promise<Project> {
+    const createProject = this.projectUtils
+      ? this.projectUtils.create
+      : Project.create;
     try {
-      return Project.create(this.label, projectLabel, projectPayload);
+      return createProject(this.label, projectLabel, projectPayload);
     } catch (error) {
       throw error;
     }
@@ -116,8 +126,11 @@ export default class Organization {
     projectRev: number,
     projectPayload: CreateProjectPayload,
   ): Promise<Project> {
+    const updateProject = this.projectUtils
+      ? this.projectUtils.update
+      : Project.update;
     try {
-      return Project.update(
+      return updateProject(
         this.label,
         projectLabel,
         projectRev,
@@ -132,8 +145,11 @@ export default class Organization {
     projectLabel: string,
     projectRev: number,
   ): Promise<Project> {
+    const deprecateProject = this.projectUtils
+      ? this.projectUtils.deprecate
+      : Project.deprecate;
     try {
-      return Project.deprecate(this.label, projectLabel, projectRev);
+      return deprecateProject(this.label, projectLabel, projectRev);
     } catch (error) {
       throw error;
     }

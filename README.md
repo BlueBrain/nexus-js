@@ -146,9 +146,13 @@ Nexus.setEnvironment('http://api.url');
 Nexus.setToken('my_bearer_token');
 Nexus.removeToken();
 
-// Org.get
+// and then use it like
+// Organization.get
+// Project.get
+// etc...
 
 // on the server you might want to create an instance
+// and pass this down to your request context
 const nexusUser = new Nexus({
   environment: 'http://api.url',
   token: 'user_bearer_token',
@@ -158,8 +162,10 @@ const nexusUser2 = new Nexus({
   token: 'user2_bearer_token',
 });
 
+// then you can do
 // nexusUser.Organization.get
 // nexusUser2.Organization.get
+// nexusUser.Project.get
 ```
 
 The SDK follows the same pattern when dealing with an organization, project, resource, realm, acl, etc...:
@@ -208,6 +214,9 @@ Organization.subscribe = (listeners: OrgEventListeners): EventSource;
 
 ```typescript
 import { Project } from '@bbp/nexus-sdk';
+// or
+const nexus = new Nexus({ environment, token});
+const Project = nexus.Project
 
 Project.get = (orgLabel: string, projectLabel: string, options?: undefined | object): Promise<Project>;
 

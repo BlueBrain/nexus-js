@@ -42,8 +42,6 @@ export interface OrgUtils {
   subscribe(listeners: OrgEventListeners): EventSource;
 }
 
-export const lol = 'lol';
-
 export default function makeOrgUtils(store: Store): OrgUtils {
   const { httpGet, httpPut, httpDelete } = createHttpLink(store);
 

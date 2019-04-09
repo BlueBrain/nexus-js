@@ -41,7 +41,6 @@ export default class Organization {
   static create = createOrganization;
   static update = updateOrganization;
   static deprecate = deprecateOrganization;
-  // static subscribe = subscribe;
 
   constructor(organizationResponse: OrgResponse, localStore?: Store) {
     this.context = organizationResponse['@context'];
@@ -60,7 +59,6 @@ export default class Organization {
     this.description = organizationResponse.description;
     if (localStore) {
       this.orgUtils = makeOrgUtils(localStore);
-      // this.Project = makeProjectUtils(state)
     }
   }
 

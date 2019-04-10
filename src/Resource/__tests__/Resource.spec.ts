@@ -9,19 +9,7 @@ import {
   mockListResourceResponseWithoutType,
 } from '../../__mocks__/helpers';
 import Resource from '../../Resource';
-import {
-  listResources,
-  getResource,
-  getSelfResource,
-  createResource,
-  deprecateResource,
-  deprecateSelfResource,
-  tagSelfResource,
-  tagResource,
-  listTags,
-  listSelfTags,
-  updateResource,
-} from '../utils';
+import makeResourceUtils from '../utils';
 import Nexus from '../../Nexus';
 import { PaginatedList } from '../../utils/types';
 import {
@@ -31,6 +19,7 @@ import {
   UpdateResourcePayload,
   ResourceGetFormat,
 } from '../types';
+import store from '../../store';
 
 const { fetchMock } = <GlobalWithFetchMock>global;
 
@@ -55,6 +44,21 @@ function testClassProperties(
 }
 
 describe('Resource class', () => {
+  const {
+    getSelf: getSelfResource,
+    getSelfRawAs: getSelfResourceRawAs,
+    get: getResource,
+    list: listResources,
+    create: createResource,
+    updateSelf: updateSelfResource,
+    update: updateResource,
+    deprecate: deprecateResource,
+    deprecateSelf: deprecateSelfResource,
+    tag: tagResource,
+    tagSelf: tagSelfResource,
+    listTags,
+    listSelfTags,
+  } = makeResourceUtils(store);
   describe('It should create a Resource instance', () => {
     it('from a getByID example response', () => {
       const resource = new Resource<{

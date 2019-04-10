@@ -9,7 +9,8 @@ import {
 import { SparqlViewQueryResponse } from '../../View/SparqlView/types';
 import { PaginatedList } from '../../utils/types';
 import { ResourceLink, ExpandedResource } from '../types';
-import { getIncomingLinks, getOutgoingLinks, getLinks } from '../utils';
+import makeResourceUtils from '../utils';
+import store from '../../store';
 
 const { fetchMock } = <GlobalWithFetchMock>global;
 
@@ -143,6 +144,10 @@ const mockOutgoingLinksQueryResponse: SparqlViewQueryResponse = {
     ],
   },
 };
+
+const { getIncomingLinks, getOutgoingLinks, getLinks } = makeResourceUtils(
+  store,
+);
 
 describe('Incoming / Outgoing Links behavior', () => {
   describe('getLinks()', () => {

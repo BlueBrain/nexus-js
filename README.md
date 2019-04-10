@@ -285,6 +285,9 @@ Schema.deprecate = (orgLabel: string, projectLabel: string, schemaId: string, re
 
 ```typescript
 import { Resource } from '@bbp/nexus-sdk';
+// or
+const nexus = new Nexus({ environment, token});
+const Resource = nexus.Resource
 
 Resource.get = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string): Promise<Resource>;
 Resource.getSelf = (selfUrl: string, getResourceOptions = { expanded: true }): Promise<Resource>;

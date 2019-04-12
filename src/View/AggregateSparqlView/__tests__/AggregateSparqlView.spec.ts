@@ -45,17 +45,6 @@ const mockAggregatedSparqlViewResponse = {
   _updatedBy: 'http://example.com/v1//v1/realms/github/users/kenjinp',
 };
 
-const testMetaData = (
-  view: AggregateSparqlView,
-  response: AggregateSparqlViewResponse,
-) => {
-  expect(view).toHaveProperty('id', response['@id']);
-  expect(view).toHaveProperty('type', response['@type']);
-  expect(view).toHaveProperty('uuid', response['_uuid']);
-  expect(view).toHaveProperty('rev', response['_rev']);
-  expect(view).toHaveProperty('deprecated', response['_deprecated']);
-};
-
 describe('AggregateSparqlView', () => {
   describe('aggregateSparqlView', () => {
     it('should have all the properties created by the response', () => {
@@ -64,8 +53,7 @@ describe('AggregateSparqlView', () => {
         'myProject',
         mockAggregatedSparqlViewGetResponse,
       );
-      console.log(aggregateSparqlView);
-      testMetaData(aggregateSparqlView, mockAggregatedSparqlViewGetResponse);
+      expect(aggregateSparqlView).toMatchSnapshot();
     });
   });
 });

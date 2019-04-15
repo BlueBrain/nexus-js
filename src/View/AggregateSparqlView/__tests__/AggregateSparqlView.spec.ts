@@ -1,5 +1,4 @@
 import AggregateSparqlView from '../';
-import { AggregateSparqlViewResponse } from '../types';
 
 const mockAggregatedSparqlViewGetResponse = {
   '@context': [
@@ -19,30 +18,15 @@ const mockAggregatedSparqlViewGetResponse = {
       viewId: 'http://example.com/base/custom',
     },
   ],
-  _self: 'http://example.com/v1//v1/views/my-org/my-project/aggregated',
-  _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/view.json',
-  _project: 'http://example.com/v1//v1/projects/my-org/my-project',
-  _rev: 1,
-  _deprecated: false,
-  _createdAt: '2019-04-10T08:58:39.530Z',
-  _createdBy: 'http://example.com/v1//v1/realms/github/users/kenjinp',
-  _updatedAt: '2019-04-10T08:58:39.530Z',
-  _updatedBy: 'http://example.com/v1//v1/realms/github/users/kenjinp',
-};
-
-const mockAggregatedSparqlViewResponse = {
-  '@context': 'https://bluebrain.github.io/nexus/contexts/resource.json',
-  '@id': 'http://example.com/base/aggregated',
-  '@type': ['View', 'AggregateSparqlView'],
   _self: 'http://example.com/v1/views/my-org/my-project/aggregated',
   _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/view.json',
-  _project: 'http://example.com/v1//v1/projects/my-org/my-project',
+  _project: 'http://example.com/v1/projects/my-org/my-project',
   _rev: 1,
   _deprecated: false,
   _createdAt: '2019-04-10T08:58:39.530Z',
-  _createdBy: 'http://example.com/v1//v1/realms/github/users/kenjinp',
+  _createdBy: 'http://example.com/v1/realms/github/users/somebody',
   _updatedAt: '2019-04-10T08:58:39.530Z',
-  _updatedBy: 'http://example.com/v1//v1/realms/github/users/kenjinp',
+  _updatedBy: 'http://example.com/v1/realms/github/users/somebody',
 };
 
 describe('AggregateSparqlView', () => {

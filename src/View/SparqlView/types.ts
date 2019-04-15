@@ -1,4 +1,7 @@
+import { Context } from '../../Resource/types';
+
 export interface SparqlViewResponse {
+  '@context'?: Context;
   '@id': string;
   '@type': string[];
   _uuid: string;

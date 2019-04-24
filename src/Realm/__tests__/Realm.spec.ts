@@ -1,18 +1,20 @@
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import Nexus from '../../Nexus';
-import {
-  getRealm,
-  listRealms,
-  createRealm,
-  updateRealm,
-  deprecateRealm,
-} from '../utils';
 import { mockListRealmResponse } from '../__mocks__/mockReponses';
+import makeRealmUtils from '../utils';
+import store from '../../store';
 
 const { fetchMock } = <GlobalWithFetchMock>global;
 
 const baseUrl = 'http://api.url';
 Nexus.setEnvironment(baseUrl);
+const {
+  create: createRealm,
+  get: getRealm,
+  list: listRealms,
+  deprecate: deprecateRealm,
+  update: updateRealm,
+} = makeRealmUtils(store);
 
 describe('Realm utils', () => {
   describe('getRealm()', () => {
@@ -30,7 +32,9 @@ describe('Realm utils', () => {
     });
     it('should make a GET request using the realmLabel and specific rev', async () => {
       await getRealm('myrealm', 12);
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/realms/myrealm?rev=12`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/realms/myrealm?rev=12`,
+      );
     });
   });
 
@@ -45,11 +49,15 @@ describe('Realm utils', () => {
 
     it('should make a GET request with the default options', async () => {
       await listRealms();
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/realms?from=0&size=20`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/realms?from=0&size=20`,
+      );
     });
     it('should make a GET request with the deprecated option', async () => {
       await listRealms({ deprecated: true });
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/realms?deprecated=true`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/realms?deprecated=true`,
+      );
     });
     it('should make a GET request with the size option', async () => {
       await listRealms({ size: 100 });
@@ -122,7 +130,9 @@ describe('Realm utils', () => {
         name: 'GITHUB',
         openIdConfig: 'http://config.com',
       });
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/realms/myrealm?rev=2`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/realms/myrealm?rev=2`,
+      );
       expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
       expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({
@@ -144,7 +154,9 @@ describe('Realm utils', () => {
 
     it('should make a DELETE request using the realmLabel and version', async () => {
       await deprecateRealm('myrealm', 2);
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/realms/myrealm?rev=2`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/realms/myrealm?rev=2`,
+      );
       expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });

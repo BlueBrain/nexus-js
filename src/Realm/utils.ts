@@ -18,7 +18,7 @@ import { buildQueryParams } from '../utils';
 
 export interface RealmUtils {
   get(realmLabel: string, rev?: number): Promise<Realm>;
-  list(listRealmOptions: PaginationSettings): Promise<PaginatedList<Realm>>;
+  list(listRealmOptions?: ListRealmOptions): Promise<PaginatedList<Realm>>;
   create(realmLabel: string, realmPayload: CreateRealmPayload): Promise<Realm>;
   update(
     realmLabel: string,

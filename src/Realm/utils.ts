@@ -11,7 +11,6 @@ import {
   PaginatedList,
   DEFAULT_LIST_SIZE,
   DEFAULT_PAGINATION_SETTINGS,
-  PaginationSettings,
 } from '../utils/types';
 import Store from '../utils/Store';
 import { buildQueryParams } from '../utils';

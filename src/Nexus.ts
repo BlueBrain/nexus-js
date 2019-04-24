@@ -7,6 +7,7 @@ import Store from './utils/Store';
 import makeProjectUtils, { ProjectUtils } from './Project/utils';
 import makeResourceUtils, { ResourceUtils } from './Resource/utils';
 import makeFileUtils, { FileUtils } from './File/utils';
+import makeRealmUtils, { RealmUtils } from './Realm/utils';
 
 type NexusConfig = {
   environment?: string;
@@ -24,6 +25,7 @@ export default class Nexus {
   readonly Project: ProjectUtils;
   readonly Resource: ResourceUtils;
   readonly NexusFile: FileUtils;
+  readonly Realm: RealmUtils;
 
   // update global store
   static setEnvironment(environment: string): void {
@@ -65,6 +67,7 @@ export default class Nexus {
     this.Project = makeProjectUtils(this.store);
     this.Resource = makeResourceUtils(this.store);
     this.NexusFile = makeFileUtils(this.store);
+    this.Realm = makeRealmUtils(this.store);
   }
 
   setToken(token: string) {

@@ -1,6 +1,10 @@
 import { httpGet, httpPut, httpDelete, httpPost } from '../utils/http';
 import Resolver from '.';
-import { PaginatedList, DEFAULT_LIST_SIZE } from '../utils/types';
+import {
+  PaginatedList,
+  DEFAULT_LIST_SIZE,
+  DEFAULT_PAGINATION_SETTINGS,
+} from '../utils/types';
 import { buildQueryParams } from '../utils';
 import {
   GetResolverOptions,
@@ -28,7 +32,8 @@ export async function listResolvers(
       `/resolvers/${orgLabel}/${projectLabel}${opts}`,
     );
     const total: number = resolverResponse._total;
-    const index: number = (options && options.from) || 0;
+    const index: number =
+      (options && options.from) || DEFAULT_PAGINATION_SETTINGS.from;
     const resolverIds = resolverResponse._results.map(
       (commonResponse: ResolverResponseCommon) =>
         encodeURIComponent(commonResponse['@id']),

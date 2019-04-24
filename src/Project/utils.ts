@@ -12,7 +12,7 @@ import {
   ProjectDeprecatedEvent,
   ProjectEventType,
 } from './types';
-import { PaginatedList } from '../utils/types';
+import { PaginatedList, DEFAULT_PAGINATION_SETTINGS } from '../utils/types';
 import { getEventSource, parseMessageEventData } from '../utils/events';
 // @ts-ignore
 import EventSource = require('eventsource');
@@ -109,7 +109,7 @@ export default function makeProjectUtils(store: Store): ProjectUtils {
         );
         return {
           total: listProjectResponse._total,
-          index: (options && options.from) || 0,
+          index: (options && options.from) || DEFAULT_PAGINATION_SETTINGS.from,
           results: projects,
         };
       } catch (error) {

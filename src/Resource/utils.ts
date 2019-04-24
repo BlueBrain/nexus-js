@@ -15,7 +15,10 @@ import {
   ResourceLink,
 } from './types';
 import { buildQueryParams } from '../utils';
-import { PaginationSettings } from '../utils/types';
+import {
+  PaginationSettings,
+  DEFAULT_PAGINATION_SETTINGS,
+} from '../utils/types';
 import { SparqlViewQueryResponse } from '../View/SparqlView/types';
 import { getSparqlView } from '../View/utils';
 import Store from '../utils/Store';
@@ -295,7 +298,8 @@ export default function makeResourceUtils(store: Store): ResourceUtils {
           `/resources/${orgLabel}/${projectLabel}${opts}`,
         );
         const total: number = listResourceResponses._total;
-        const index: number = (options && options.from) || 0;
+        const index: number =
+          (options && options.from) || DEFAULT_PAGINATION_SETTINGS.from;
         const results: Resource[] = listResourceResponses._results.map(
           (commonResponse: ResourceResponseCommon) =>
             new Resource(

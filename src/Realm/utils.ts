@@ -7,7 +7,11 @@ import {
   RealmResponseCommon,
   CreateRealmPayload,
 } from './types';
-import { PaginatedList, DEFAULT_LIST_SIZE } from '../utils/types';
+import {
+  PaginatedList,
+  DEFAULT_LIST_SIZE,
+  DEFAULT_PAGINATION_SETTINGS,
+} from '../utils/types';
 import { buildQueryParams } from '../utils';
 
 export async function getRealm(
@@ -43,7 +47,9 @@ export async function listRealms(
 
     return {
       total: listRealmResponse._total,
-      index: (listRealmOptions && listRealmOptions.from) || 0,
+      index:
+        (listRealmOptions && listRealmOptions.from) ||
+        DEFAULT_PAGINATION_SETTINGS.from,
       results: realms,
     };
   } catch (error) {

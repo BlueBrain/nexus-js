@@ -1,6 +1,10 @@
 import { httpGet, httpPut, httpDelete, httpPost } from '../utils/http';
 import Resolver from '.';
-import { PaginatedList, DEFAULT_LIST_SIZE } from '../utils/types';
+import {
+  PaginatedList,
+  DEFAULT_LIST_SIZE,
+  DEFAULT_PAGINATION_SETTINGS,
+} from '../utils/types';
 import { buildQueryParams } from '../utils';
 import {
   GetResolverOptions,
@@ -28,15 +32,17 @@ export async function listResolvers(
       `/resolvers/${orgLabel}/${projectLabel}${opts}`,
     );
     const total: number = resolverResponse._total;
-    const index: number = (options && options.from) || 1;
+    const index: number =
+      (options && options.from) || DEFAULT_PAGINATION_SETTINGS.from;
     const resolverIds = resolverResponse._results.map(
-      (commonResponse: ResolverResponseCommon) => encodeURIComponent(commonResponse["@id"])
+      (commonResponse: ResolverResponseCommon) =>
+        encodeURIComponent(commonResponse['@id']),
     );
 
     const results: Resolver[] = await Promise.all(
-      resolverIds.map(
-        resolverId => getResolver(orgLabel, projectLabel, resolverId)
-      )
+      resolverIds.map(resolverId =>
+        getResolver(orgLabel, projectLabel, resolverId),
+      ),
     );
 
     return {
@@ -89,16 +95,21 @@ export async function createResolver(
   projectLabel: string,
   resolverId: string | null,
   resolverPayload: CrossProjectResolverPayload,
-  method: "POST" | "PUT" = "PUT",
+  method: 'POST' | 'PUT' = 'PUT',
 ): Promise<Resolver> {
   try {
-    const httpRequest = method === "POST" ? httpPost : httpPut;
-    const url = `/resolvers/${orgLabel}/${projectLabel}${resolverId && method === "PUT" ? `/${resolverId}` : ''}`;
+    const httpRequest = method === 'POST' ? httpPost : httpPut;
+    const url = `/resolvers/${orgLabel}/${projectLabel}${
+      resolverId && method === 'PUT' ? `/${resolverId}` : ''
+    }`;
     const resolverResponse: PartialResolverResponse = await httpRequest(
       url,
       resolverPayload,
     );
-    return new Resolver(orgLabel, projectLabel, { ...resolverResponse, ...resolverPayload });
+    return new Resolver(orgLabel, projectLabel, {
+      ...resolverResponse,
+      ...resolverPayload,
+    });
   } catch (error) {
     throw error;
   }
@@ -122,7 +133,10 @@ export async function updateResolver(
       `/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${previousRev}`,
       resolverPayload,
     );
-    return new Resolver(orgLabel, projectLabel, { ...resolverResponse, ...resolverPayload });
+    return new Resolver(orgLabel, projectLabel, {
+      ...resolverResponse,
+      ...resolverPayload,
+    });
   } catch (error) {
     throw error;
   }
@@ -150,7 +164,9 @@ export async function tagResolver(
     const newRevision = resolverResponse._rev;
 
     // Get the full Resolver object for the updated object, as original response lacks info
-    const updatedResolver = getResolver(orgLabel, projectLabel, resolverId, {"rev": newRevision});
+    const updatedResolver = getResolver(orgLabel, projectLabel, resolverId, {
+      rev: newRevision,
+    });
     return updatedResolver;
   } catch (error) {
     throw error;
@@ -173,20 +189,25 @@ export async function deprecateResolver(
 ): Promise<Resolver> {
   try {
     const resolverResponse: PartialResolverResponse = await httpDelete(
-      `/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${previousRev}`
+      `/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${previousRev}`,
     );
     const newRevision = resolverResponse._rev;
 
     // Get the full Resolver object for the updated object, as original response lacks info
-    const updatedResolver = getResolver(orgLabel, projectLabel, resolverId, {"rev": newRevision});
+    const updatedResolver = getResolver(orgLabel, projectLabel, resolverId, {
+      rev: newRevision,
+    });
     return updatedResolver;
   } catch (error) {
     throw error;
   }
 }
 
-export const normalizeType = (type: string): string => <string>type.split("/").pop();
+export const normalizeType = (type: string): string =>
+  <string>type.split('/').pop();
 
-export const isValidType = (normalizedType: string): normalizedType is ResolverTypes => {
-  return ["InProject", "CrossProject"].includes(normalizedType);
+export const isValidType = (
+  normalizedType: string,
+): normalizedType is ResolverTypes => {
+  return ['InProject', 'CrossProject'].includes(normalizedType);
 };

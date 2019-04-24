@@ -1,5 +1,9 @@
 import { httpPost } from '../../utils/http';
-import { PaginatedList, PaginationSettings } from '../../utils/types';
+import {
+  PaginatedList,
+  PaginationSettings,
+  DEFAULT_PAGINATION_SETTINGS,
+} from '../../utils/types';
 import Resource from '../../Resource';
 import { getElasticSearchView } from '../utils';
 import {
@@ -109,7 +113,8 @@ export default class ElasticSearchView {
       );
 
       const total: number = response.hits.total;
-      const index: number = (pagination && pagination.from) || 1;
+      const index: number =
+        (pagination && pagination.from) || DEFAULT_PAGINATION_SETTINGS.from;
 
       // Expand the data for each item in the list
       // By fetching each item by ID
@@ -150,7 +155,8 @@ export default class ElasticSearchView {
       );
 
       const total: number = response.hits.total;
-      const index: number = (pagination && pagination.from) || 1;
+      const index: number =
+        (pagination && pagination.from) || DEFAULT_PAGINATION_SETTINGS.from;
 
       // Expand the data for each item in the list
       // By fetching each item by ID

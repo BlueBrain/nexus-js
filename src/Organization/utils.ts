@@ -13,7 +13,7 @@ import {
 } from './types';
 import createHttpLink from '../utils/http';
 import { CreateOrganizationException } from './exceptions';
-import { PaginatedList } from '../utils/types';
+import { PaginatedList, DEFAULT_PAGINATION_SETTINGS } from '../utils/types';
 import { getEventSource, parseMessageEventData } from '../utils/events';
 // @ts-ignore
 import EventSource = require('eventsource');
@@ -114,7 +114,7 @@ export default function makeOrgUtils(store: Store): OrgUtils {
 
         return {
           total: listOrgResponse._total,
-          index: (options && options.from) || 1,
+          index: (options && options.from) || DEFAULT_PAGINATION_SETTINGS.from,
           results: orgs,
         };
       } catch (error) {

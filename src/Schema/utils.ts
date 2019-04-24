@@ -10,6 +10,7 @@ import {
   SchemaListTagResponse,
 } from './types';
 import Schema from '.';
+import { DEFAULT_PAGINATION_SETTINGS } from '../utils/types';
 
 export async function getSchema(
   orgLabel: string,
@@ -39,7 +40,8 @@ export async function listSchemas(
       `/schemas/${orgLabel}/${projectLabel}${opts}`,
     );
     const total: number = listSchemaResponses._total;
-    const index: number = (options && options.from) || 1;
+    const index: number =
+      (options && options.from) || DEFAULT_PAGINATION_SETTINGS.from;
     const results: Schema[] = listSchemaResponses._results.map(
       (commonResponse: SchemaResponseCommon) =>
         new Schema(orgLabel, projectLabel, {

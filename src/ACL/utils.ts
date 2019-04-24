@@ -8,7 +8,7 @@ import {
 } from './types';
 import { httpGet, httpPut, httpPatch, httpDelete } from '../utils/http';
 import { buildQueryParams } from '../utils';
-import { PaginatedList } from '../utils/types';
+import { PaginatedList, DEFAULT_PAGINATION_SETTINGS } from '../utils/types';
 
 export async function listACL(
   path: string,
@@ -26,7 +26,7 @@ export async function listACL(
     );
     return {
       total: aclListResponse._total,
-      index: (options && options.from) || 1,
+      index: (options && options.from) || DEFAULT_PAGINATION_SETTINGS.from,
       results: acls,
     };
   } catch (error) {

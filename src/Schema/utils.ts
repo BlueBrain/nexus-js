@@ -39,7 +39,7 @@ export async function listSchemas(
       `/schemas/${orgLabel}/${projectLabel}${opts}`,
     );
     const total: number = listSchemaResponses._total;
-    const index: number = (options && options.from) || 1;
+    const index: number = (options && options.from) || 0;
     const results: Schema[] = listSchemaResponses._results.map(
       (commonResponse: SchemaResponseCommon) =>
         new Schema(orgLabel, projectLabel, {

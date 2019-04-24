@@ -114,7 +114,7 @@ export default function makeOrgUtils(store: Store): OrgUtils {
 
         return {
           total: listOrgResponse._total,
-          index: (options && options.from) || 1,
+          index: (options && options.from) || 0,
           results: orgs,
         };
       } catch (error) {

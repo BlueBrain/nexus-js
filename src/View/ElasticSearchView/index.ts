@@ -109,7 +109,7 @@ export default class ElasticSearchView {
       );
 
       const total: number = response.hits.total;
-      const index: number = (pagination && pagination.from) || 1;
+      const index: number = (pagination && pagination.from) || 0;
 
       // Expand the data for each item in the list
       // By fetching each item by ID
@@ -150,7 +150,7 @@ export default class ElasticSearchView {
       );
 
       const total: number = response.hits.total;
-      const index: number = (pagination && pagination.from) || 1;
+      const index: number = (pagination && pagination.from) || 0;
 
       // Expand the data for each item in the list
       // By fetching each item by ID

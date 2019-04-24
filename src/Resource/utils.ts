@@ -295,7 +295,7 @@ export default function makeResourceUtils(store: Store): ResourceUtils {
           `/resources/${orgLabel}/${projectLabel}${opts}`,
         );
         const total: number = listResourceResponses._total;
-        const index: number = (options && options.from) || 1;
+        const index: number = (options && options.from) || 0;
         const results: Resource[] = listResourceResponses._results.map(
           (commonResponse: ResourceResponseCommon) =>
             new Resource(

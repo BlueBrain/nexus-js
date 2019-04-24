@@ -43,7 +43,7 @@ export async function listRealms(
 
     return {
       total: listRealmResponse._total,
-      index: (listRealmOptions && listRealmOptions.from) || 1,
+      index: (listRealmOptions && listRealmOptions.from) || 0,
       results: realms,
     };
   } catch (error) {

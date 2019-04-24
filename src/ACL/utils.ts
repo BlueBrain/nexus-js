@@ -26,7 +26,7 @@ export async function listACL(
     );
     return {
       total: aclListResponse._total,
-      index: (options && options.from) || 1,
+      index: (options && options.from) || 0,
       results: acls,
     };
   } catch (error) {

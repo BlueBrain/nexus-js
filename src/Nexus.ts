@@ -6,6 +6,7 @@ import { PaginatedList } from './utils/types';
 import Store from './utils/Store';
 import makeProjectUtils, { ProjectUtils } from './Project/utils';
 import makeResourceUtils, { ResourceUtils } from './Resource/utils';
+import makeFileUtils, { FileUtils } from './File/utils';
 
 type NexusConfig = {
   environment?: string;
@@ -22,6 +23,7 @@ export default class Nexus {
   readonly Organization: OrgUtils;
   readonly Project: ProjectUtils;
   readonly Resource: ResourceUtils;
+  readonly NexusFile: FileUtils;
 
   // update global store
   static setEnvironment(environment: string): void {
@@ -62,6 +64,7 @@ export default class Nexus {
     this.Organization = makeOrgUtils(this.store);
     this.Project = makeProjectUtils(this.store);
     this.Resource = makeResourceUtils(this.store);
+    this.NexusFile = makeFileUtils(this.store);
   }
 
   setToken(token: string) {

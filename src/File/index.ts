@@ -1,7 +1,14 @@
 import { NexusFileResponse } from './types';
-import { createFile, getFile, getRawFile, getFileSelf } from './utils';
+import makeFileUtils, { FileUtils } from './utils';
 import { Context } from '../Resource/types';
 import { ReadStream } from 'fs';
+import store from '../store';
+import Store from '../utils/Store';
+
+// default utils functions
+// they use the global store
+// for token and baseUrl
+const { createFile, getFile, getRawFile, getFileSelf } = makeFileUtils(store);
 
 export default class NexusFile {
   readonly orgLabel: string;
@@ -27,7 +34,7 @@ export default class NexusFile {
   readonly bytes: number;
   readonly raw: NexusFileResponse;
   public rawFile?: string | Blob | ArrayBuffer | ReadStream;
-
+  public fileUtils?: FileUtils;
   static create = createFile;
   static get = getFile;
   static getSelf = getFileSelf;
@@ -36,6 +43,7 @@ export default class NexusFile {
     orgLabel: string,
     projectLabel: string,
     fileResponse: NexusFileResponse,
+    localStore?: Store,
   ) {
     this.raw = fileResponse;
     this.orgLabel = orgLabel;
@@ -59,9 +67,14 @@ export default class NexusFile {
     };
     this.filename = fileResponse._filename;
     this.mediaType = fileResponse._mediaType;
+    if (localStore) {
+      this.fileUtils = makeFileUtils(localStore);
+    }
   }
 
   async getFile() {
-    this.rawFile = await getRawFile(this.self);
+    this.rawFile = this.fileUtils
+      ? await this.fileUtils.getRawFile(this.self)
+      : await getRawFile(this.self);
   }
 }

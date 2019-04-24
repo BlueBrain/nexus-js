@@ -109,7 +109,7 @@ export default function makeProjectUtils(store: Store): ProjectUtils {
         );
         return {
           total: listProjectResponse._total,
-          index: (options && options.from) || 1,
+          index: (options && options.from) || 0,
           results: projects,
         };
       } catch (error) {

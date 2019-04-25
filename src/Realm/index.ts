@@ -1,7 +1,9 @@
-import { RealmResponse, CreateRealmPayload } from './types';
-import makeRealmUtils, { RealmUtils } from './utils';
+import { RealmResponse, CreateRealmPayload, RealmUtils } from './types';
 import store from '../store';
 import Store from '../utils/Store';
+import makeRealmUtils from './utils';
+export { default as makeRealmUtils } from './utils';
+export { RealmUtils } from './types';
 
 const {
   create: createRealm,

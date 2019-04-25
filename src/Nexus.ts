@@ -7,7 +7,7 @@ import Store from './utils/Store';
 import makeProjectUtils, { ProjectUtils } from './Project/utils';
 import makeResourceUtils, { ResourceUtils } from './Resource/utils';
 import makeFileUtils, { FileUtils } from './File/utils';
-import makeRealmUtils, { RealmUtils } from './Realm/utils';
+import Realm, { makeRealmUtils, RealmUtils } from './Realm';
 
 type NexusConfig = {
   environment?: string;
@@ -17,6 +17,7 @@ type NexusConfig = {
 // Without this, jest crashes really bad...
 if (process.env.NODE === 'TEST') {
   Organization;
+  Realm;
 }
 
 export default class Nexus {

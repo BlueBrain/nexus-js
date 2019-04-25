@@ -6,6 +6,7 @@ import {
   ListRealmResponse,
   RealmResponseCommon,
   CreateRealmPayload,
+  RealmUtils,
 } from './types';
 import {
   PaginatedList,
@@ -14,18 +15,6 @@ import {
 } from '../utils/types';
 import Store from '../utils/Store';
 import { buildQueryParams } from '../utils';
-
-export interface RealmUtils {
-  get(realmLabel: string, rev?: number): Promise<Realm>;
-  list(listRealmOptions?: ListRealmOptions): Promise<PaginatedList<Realm>>;
-  create(realmLabel: string, realmPayload: CreateRealmPayload): Promise<Realm>;
-  update(
-    realmLabel: string,
-    rev: number,
-    realmPayload: CreateRealmPayload,
-  ): Promise<Realm>;
-  deprecate(realmLabel: string, rev: number): Promise<Realm>;
-}
 
 export default function makeRealmUtils(store: Store): RealmUtils {
   const { httpGet, httpPut, httpDelete } = createHttpLink(store);

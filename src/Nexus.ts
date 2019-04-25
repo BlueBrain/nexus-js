@@ -7,7 +7,8 @@ import Store from './utils/Store';
 import makeProjectUtils, { ProjectUtils } from './Project/utils';
 import makeResourceUtils, { ResourceUtils } from './Resource/utils';
 import makeFileUtils, { FileUtils } from './File/utils';
-import Realm, { makeRealmUtils, RealmUtils } from './Realm';
+import Realm, { makeRealmUtils } from './Realm';
+import { RealmUtils } from './Realm/types';
 
 type NexusConfig = {
   environment?: string;

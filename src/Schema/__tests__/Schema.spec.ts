@@ -29,7 +29,9 @@ describe('Schema class', () => {
 
   describe('listSchemas()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockListSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockListSchemaResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -41,7 +43,9 @@ describe('Schema class', () => {
         'myorg',
         'myproject',
       );
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/schemas/myorg/myproject`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/schemas/myorg/myproject`,
+      );
       expect(schema.total).toEqual(1);
       expect(schema.results[0]).toBeInstanceOf(Schema);
     });
@@ -56,7 +60,9 @@ describe('Schema class', () => {
 
   describe('getSchema()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -74,7 +80,9 @@ describe('Schema class', () => {
 
   describe('createSchema()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -100,7 +108,9 @@ describe('Schema class', () => {
 
       createSchema('myorg', 'myproject', payload);
 
-      expect(fetchMock.mock.calls[0][0]).toEqual(`${baseUrl}/schemas/myorg/myproject`);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        `${baseUrl}/schemas/myorg/myproject`,
+      );
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
       expect(fetchMock.mock.calls[0][1].body).toEqual(
         JSON.stringify({
@@ -142,7 +152,9 @@ describe('Schema class', () => {
 
   describe('deprecateSchema()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -161,7 +173,9 @@ describe('Schema class', () => {
 
   describe('tagSchema()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {
@@ -186,7 +200,9 @@ describe('Schema class', () => {
 
   describe('getTags()', () => {
     beforeEach(() => {
-      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), { status: 200 });
+      fetchMock.mockResponse(JSON.stringify(mockSchemaResponse), {
+        status: 200,
+      });
     });
 
     afterEach(() => {

@@ -1,12 +1,21 @@
-import { RealmResponse, CreateRealmPayload } from './types';
-import {
-  getRealm,
-  listRealms,
-  createRealm,
-  updateRealm,
-  deprecateRealm,
-} from './utils';
-import { CreateOrgPayload } from '../Organization/types';
+import { RealmResponse, CreateRealmPayload, RealmUtils } from './types';
+import store from '../store';
+import Store from '../utils/Store';
+import makeRealmUtils from './utils';
+// 🚨 Stupid workaround alert! 🚨
+// Please access makeRealmUtils from this file only
+// as Realm.makeRealmUtils
+// otherwise jest will explode
+// claiming the utils.default is not a function!
+export { default as makeRealmUtils } from './utils';
+
+const {
+  create: createRealm,
+  get: getRealm,
+  list: listRealms,
+  deprecate: deprecateRealm,
+  update: updateRealm,
+} = makeRealmUtils(store);
 
 export default class Realm {
   context?: string | string[];
@@ -26,6 +35,7 @@ export default class Realm {
   updatedBy: string;
   rev: number;
   deprecated: boolean;
+  realmUtils?: RealmUtils;
 
   static get = getRealm;
   static list = listRealms;
@@ -33,7 +43,7 @@ export default class Realm {
   static update = updateRealm;
   static deprecate = deprecateRealm;
 
-  constructor(realmResponse: RealmResponse) {
+  constructor(realmResponse: RealmResponse, localStore?: Store) {
     this.context = realmResponse['@context'];
     this.id = realmResponse['@id'];
     this.type = realmResponse['@type'];
@@ -51,11 +61,15 @@ export default class Realm {
     this.updatedBy = realmResponse._updatedBy;
     this.rev = realmResponse._rev;
     this.deprecated = realmResponse._deprecated;
+    if (localStore) {
+      this.realmUtils = makeRealmUtils(localStore);
+    }
   }
 
   async update(payload: CreateRealmPayload): Promise<Realm> {
     try {
-      return Realm.update(this.label, this.rev, payload);
+      const update = this.realmUtils ? this.realmUtils.update : updateRealm;
+      return update(this.label, this.rev, payload);
     } catch (error) {
       throw error;
     }
@@ -63,7 +77,10 @@ export default class Realm {
 
   async deprecate(): Promise<Realm> {
     try {
-      return Realm.deprecate(this.label, this.rev);
+      const deprecate = this.realmUtils
+        ? this.realmUtils.deprecate
+        : deprecateRealm;
+      return deprecate(this.label, this.rev);
     } catch (error) {
       throw error;
     }

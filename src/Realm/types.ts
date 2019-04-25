@@ -1,4 +1,17 @@
-import { PaginationSettings } from '../utils/types';
+import { PaginationSettings, PaginatedList } from '../utils/types';
+import Realm from '.';
+
+export interface RealmUtils {
+  get(realmLabel: string, rev?: number): Promise<Realm>;
+  list(listRealmOptions?: ListRealmOptions): Promise<PaginatedList<Realm>>;
+  create(realmLabel: string, realmPayload: CreateRealmPayload): Promise<Realm>;
+  update(
+    realmLabel: string,
+    rev: number,
+    realmPayload: CreateRealmPayload,
+  ): Promise<Realm>;
+  deprecate(realmLabel: string, rev: number): Promise<Realm>;
+}
 
 export type Context = string | string[];
 

@@ -2,6 +2,11 @@ import { RealmResponse, CreateRealmPayload, RealmUtils } from './types';
 import store from '../store';
 import Store from '../utils/Store';
 import makeRealmUtils from './utils';
+// 🚨 Stupid workaround alert! 🚨
+// Please access makeRealmUtils from this file only
+// as Realm.makeRealmUtils
+// otherwise jest will explode
+// claiming the utils.default is not a function!
 export { default as makeRealmUtils } from './utils';
 
 const {

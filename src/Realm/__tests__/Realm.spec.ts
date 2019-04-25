@@ -1,4 +1,4 @@
-import { Realm } from '../../../lib';
+import Realm from '../index';
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
 
 export const mockRealmResponse = {

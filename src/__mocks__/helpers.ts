@@ -153,7 +153,7 @@ export const mockListResourceResponseWithStringType = {
 export const mockListResourceResponseWithoutType = {
   '@id': 'https://incf.github.io/neuroshapes/contexts/schema.json',
   _self:
-    'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/https%3A%2F%2Fbluebrain.github.io%2Fnexus%2Fschemas%2Fresource.json/context:schema.json',
+    'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/https%3A%2F%2Fincf.github.io%2Fneuroshapes%2Fcontextx%2Fschema.json',
   _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resource.json',
   _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
   _createdAt: '2018-11-14T21:16:54.230Z',
@@ -243,7 +243,7 @@ export const mockResourceResponse: ResourceResponse = {
   '@context': '',
   '@id': 'https://incf.github.io/neuroshapes/contexts/schema.json',
   _self:
-    'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/https%3A%2F%2Fbluebrain.github.io%2Fnexus%2Fschemas%2Fresource.json/context:schema.json',
+    'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/https%3A%2F%2Fincf.github.io%2Fnexus%2Fneuroshapes%2Fcontexts%2Fschema.json',
   _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resource.json',
   _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
   _createdAt: '2018-11-14T21:16:54.230Z',

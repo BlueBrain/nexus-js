@@ -265,10 +265,10 @@ export default function makeResourceUtils(store: Store): ResourceUtils {
       resourceId: string,
       getResourceOptions: GetResourceOptions = DEFAULT_GET_RESOURCE_OPTIONS,
     ): Promise<Resource> => {
-      const projectResourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`;
+      const resourceURL = `/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`;
       try {
         const resourceResponse: ResourceResponse = await httpGet(
-          projectResourceURL,
+          resourceURL,
         );
         const resource = new Resource(
           orgLabel,
@@ -278,7 +278,7 @@ export default function makeResourceUtils(store: Store): ResourceUtils {
         );
         if (getResourceOptions.expanded) {
           resource.expanded = await httpGet(
-            `${projectResourceURL}?format=expanded`,
+            `${resourceURL}?format=expanded`,
           );
         }
         return resource;

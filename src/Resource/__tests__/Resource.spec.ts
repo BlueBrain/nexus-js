@@ -30,7 +30,7 @@ function testClassProperties(
   resource: Resource,
   response: ResourceResponse | ResourceResponseCommon,
 ) {
-  expect(resource.id).toEqual(response['@id']);
+  expect(resource.id).toEqual(Resource.extractResolvableId(response._self));
   // We expect self to be cast into a URL object
   expect(resource.self).toEqual(response._self);
   expect(resource.constrainedBy).toEqual(response._constrainedBy);
@@ -148,7 +148,7 @@ describe('Resource class', () => {
       });
       expect(resource.name).toEqual(myPrefLabel);
     });
-    it('should efault to the @id value if nothing else matches', () => {
+    it('should default to the @id value if nothing else matches', () => {
       const resource = new Resource(
         'testOrg',
         'testProject',
@@ -203,7 +203,6 @@ describe('Resource class', () => {
       fetchMock.mockResponse(JSON.stringify(mockResourceResponse), {
         status: 200,
       });
-      fetchMock.mockResponses(['{}', { status: 200 }], ['{}', { status: 200 }]);
     });
 
     afterEach(() => {
@@ -239,7 +238,7 @@ describe('Resource class', () => {
         `${baseUrl}/resources/myorg/myproject/myschema/myresource?format=expanded`,
       );
       expect(r).toBeInstanceOf(Resource);
-      expect(r).toHaveProperty('expanded', {});
+      expect(r).toHaveProperty('expanded', mockResourceResponse);
     });
   });
 

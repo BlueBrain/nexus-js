@@ -97,6 +97,10 @@ export default class Resource<T = {}> {
       raw['@id'];
     return name;
   }
+  static extractResolvableId(selfUrl: string): string {
+    // If the resolvable id is a URI, it will be encoded in the selfUrl
+    return decodeURIComponent(<string>selfUrl.split('/').pop());
+  }
 
   constructor(
     orgLabel: string,
@@ -107,7 +111,7 @@ export default class Resource<T = {}> {
     this.raw = resourceResponse;
     this.orgLabel = orgLabel;
     this.projectLabel = projectLabel;
-    this.id = resourceResponse['@id'];
+    this.id = Resource.extractResolvableId(resourceResponse._self);
     this.context = resourceResponse['@context'];
     this.self = resourceResponse._self;
     this.constrainedBy = resourceResponse._constrainedBy;

@@ -373,6 +373,24 @@ describe('Resource class', () => {
       expect(r).toHaveProperty('orgLabel', 'myOrg');
       expect(r).toHaveProperty('projectLabel', 'myProject');
     });
+    it('should assign the proper orgLabel even if the selfURL has files', async () => {
+      const r: Resource = await getSelfResource(
+        'http://myurl.com/staging/v1/something/somethingelse/files/myOrgABC/myProjectABC/myFileID',
+        { expanded: true },
+      );
+      expect(r).toBeInstanceOf(Resource);
+      expect(r).toHaveProperty('orgLabel', 'myOrgABC');
+      expect(r).toHaveProperty('projectLabel', 'myProjectABC');
+    });
+    it('should assign the proper orgLabel even if the selfURL has files but it isnt a real file', async () => {
+      const r: Resource = await getSelfResource(
+        'http://myurl.com/staging/v1/something/somethingelse/resources/testOrgA/myProjectB/mySchema/I-love-files-but-i-am-not-one-of-them',
+        { expanded: true },
+      );
+      expect(r).toBeInstanceOf(Resource);
+      expect(r).toHaveProperty('orgLabel', 'testOrgA');
+      expect(r).toHaveProperty('projectLabel', 'myProjectB');
+    });
   });
 
   describe('createResource()', () => {

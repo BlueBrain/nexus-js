@@ -240,10 +240,21 @@ export default function makeResourceUtils(store: Store): ResourceUtils {
         let orgLabel;
         let rest;
 
-        if (selfUrl.includes(FILES_PATH_LABEL)) {
-          [, projectLabel, orgLabel, ...rest] = selfUrl.split('/').reverse();
+        // in the case of a file, this will be FILES_PATH_LABEL
+        // however in the normal case this will be the location
+        // of the orgLabel within the path
+        // this is because files are treated specially and have no
+        // schemas in their path.
+        const resourceAccessType = [...selfUrl.split('/')].reverse()[3];
+
+        if (resourceAccessType === FILES_PATH_LABEL) {
+          [, projectLabel, orgLabel, ...rest] = [
+            ...selfUrl.split('/'),
+          ].reverse();
         } else {
-          [, , projectLabel, orgLabel, ...rest] = selfUrl.split('/').reverse();
+          [, , projectLabel, orgLabel, ...rest] = [
+            ...selfUrl.split('/'),
+          ].reverse();
         }
 
         const resourceResponse: ResourceResponse = await getSelfResourceRawAs(

@@ -23,6 +23,8 @@ import { SparqlViewQueryResponse } from '../View/SparqlView/types';
 import { getSparqlView } from '../View/utils';
 import Store from '../utils/Store';
 
+const FILES_PATH_LABEL = 'files';
+
 export interface ResourceUtils {
   getSelfRawAs(selfUrl: string, format?: ResourceGetFormats): Promise<any>;
   getSelf(
@@ -234,9 +236,16 @@ export default function makeResourceUtils(store: Store): ResourceUtils {
       getResourceOptions: GetResourceOptions = DEFAULT_GET_RESOURCE_OPTIONS,
     ): Promise<Resource> => {
       try {
-        const [id, schema, projectLabel, orgLabel, ...rest] = selfUrl
-          .split('/')
-          .reverse();
+        let projectLabel;
+        let orgLabel;
+        let rest;
+
+        if (selfUrl.includes(FILES_PATH_LABEL)) {
+          [, projectLabel, orgLabel, ...rest] = selfUrl.split('/').reverse();
+        } else {
+          [, , projectLabel, orgLabel, ...rest] = selfUrl.split('/').reverse();
+        }
+
         const resourceResponse: ResourceResponse = await getSelfResourceRawAs(
           selfUrl,
         );

@@ -374,6 +374,15 @@ describe('Resource class', () => {
       expect(r).toHaveProperty('orgLabel', 'myOrg');
       expect(r).toHaveProperty('projectLabel', 'myProject');
     });
+    it('should assign the proper orgLabel even if the selfURL has files', async () => {
+      const r: Resource = await getSelfResource(
+        'http://myurl.com/staging/v1/something/somethingelse/files/myOrg/myProject/myFIleID',
+        { expanded: true },
+      );
+      expect(r).toBeInstanceOf(Resource);
+      expect(r).toHaveProperty('orgLabel', 'myOrg');
+      expect(r).toHaveProperty('projectLabel', 'myProject');
+    });
   });
 
   describe('createResource()', () => {

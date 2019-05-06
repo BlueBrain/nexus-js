@@ -388,7 +388,6 @@ describe('Resource class', () => {
         'http://myurl.com/staging/v1/something/somethingelse/resources/testOrgA/myProjectB/mySchema/I-love-files-but-i-am-not-one-of-them',
         { expanded: true },
       );
-      console.log(r);
       expect(r).toBeInstanceOf(Resource);
       expect(r).toHaveProperty('orgLabel', 'testOrgA');
       expect(r).toHaveProperty('projectLabel', 'myProjectB');

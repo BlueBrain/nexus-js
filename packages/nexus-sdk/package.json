@@ -1,0 +1,44 @@
+{
+  "name": "@bbp/nexus-sdk",
+  "version": "1.1.0",
+  "description": "REST API abstraction for Nexus",
+  "keywords": [
+    "rest",
+    "js",
+    "node",
+    "sdk",
+    "typescript"
+  ],
+  "author": "Julien Machon <julienmachon@gmail.com>",
+  "homepage": "https://github.com/BlueBrain/nexus-webapp-commons#readme",
+  "license": "Apache-2.0",
+  "main": "./lib/index.js",
+  "module": "./es/index.js",
+  "unpkg": "./dist/index.js",
+  "typings": "./lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BlueBrain/nexus-webapp-commons.git"
+  },
+  "scripts": {
+    "build": "tsc && rollup -c",
+    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr node_modules/",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/BlueBrain/nexus-webapp-commons/issues"
+  },
+  "dependencies": {
+    "@bbp/nexus-link": "^0.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

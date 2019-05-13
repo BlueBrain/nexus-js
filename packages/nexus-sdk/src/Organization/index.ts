@@ -1,10 +1,16 @@
 import { toPromise, Observable } from '@bbp/nexus-link';
 import { Fetchers } from '../types';
-import { Organization, OrganizationList } from './types';
+import {
+  Organization,
+  OrganizationList,
+  ListOrgOptions,
+  CreateOrgPayload,
+} from './types';
 import { NexusContext } from '../nexusSdk';
+import { buildQueryParams } from '../utils';
 
 const Organization = (
-  { httpGet, httpPut, poll }: Fetchers,
+  { httpGet, httpPut, httpDelete, poll }: Fetchers,
   context: NexusContext,
 ) => {
   return {
@@ -14,13 +20,34 @@ const Organization = (
           path: `${context.uri}/${context.version}/orgs/${label}`,
         }),
       ),
-    list: (): Promise<OrganizationList> =>
-      toPromise(httpGet({ path: `${context.uri}/${context.version}/orgs` })),
-    create: (label: string, payload: any): Promise<any> =>
+    list: (options?: ListOrgOptions): Promise<OrganizationList> => {
+      const opts = buildQueryParams(options);
+      return toPromise(
+        httpGet({ path: `${context.uri}/${context.version}/orgs${opts}` }),
+      );
+    },
+    create: (label: string, payload: CreateOrgPayload): Promise<any> =>
       toPromise(
         httpPut({
           path: `${context.uri}/${context.version}/orgs/${label}`,
-          body: payload,
+          body: JSON.stringify(payload),
+        }),
+      ),
+    update: (
+      label: string,
+      rev: number,
+      payload: CreateOrgPayload,
+    ): Promise<any> =>
+      toPromise(
+        httpPut({
+          path: `${context.uri}/${context.version}/orgs/${label}?rev=${rev}`,
+          body: JSON.stringify(payload),
+        }),
+      ),
+    deprecate: (label: string, rev: number): Promise<any> =>
+      toPromise(
+        httpDelete({
+          path: `${context.uri}/${context.version}/orgs/${label}?rev=${rev}`,
         }),
       ),
     poll: (

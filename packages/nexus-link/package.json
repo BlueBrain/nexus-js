@@ -28,9 +28,10 @@
     "url": "git+https://github.com/BlueBrain/nexus-webapp-commons.git"
   },
   "scripts": {
+    "prebuild": "npm run clean",
     "build": "tsc && rollup -c",
-    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr node_modules/",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/",
+    "test": "jest"
   },
   "bugs": {
     "url": "https://github.com/BlueBrain/nexus-webapp-commons/issues"

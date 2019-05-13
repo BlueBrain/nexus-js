@@ -4,6 +4,7 @@ import { Context } from '../Resource/types';
 import { ReadStream } from 'fs';
 import store from '../store';
 import Store from '../utils/Store';
+import { HttpConfigTypes } from '../utils/http';
 
 // default utils functions
 // they use the global store
@@ -72,9 +73,9 @@ export default class NexusFile {
     }
   }
 
-  async getFile() {
+  async getFile(receiveAs?: HttpConfigTypes) {
     this.rawFile = this.fileUtils
-      ? await this.fileUtils.getRawFile(this.self)
-      : await getRawFile(this.self);
+      ? await this.fileUtils.getRawFile(this.self, receiveAs)
+      : await getRawFile(this.self, receiveAs);
   }
 }

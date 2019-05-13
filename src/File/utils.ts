@@ -21,15 +21,18 @@ export interface FileUtils {
   getFileSelf: (
     selfUrl: string,
     shouldFetchFile?: boolean,
+    receiveAs?: HttpConfigTypes,
   ) => Promise<NexusFile>;
   getFile: (
     orgLabel: string,
     projectLabel: string,
     fileId: string,
     shouldFetchFile?: boolean,
+    receiveAs?: HttpConfigTypes,
   ) => Promise<NexusFile>;
   getRawFile: (
     selfURL: string,
+    receiveAs?: HttpConfigTypes,
   ) => Promise<string | Blob | ReadStream | ArrayBuffer>;
 }
 
@@ -88,6 +91,7 @@ export default function makeFileUtils(store: Store): FileUtils {
     getFileSelf: async (
       selfUrl: string,
       shouldFetchFile: boolean = false,
+      receiveAs?: HttpConfigTypes,
     ): Promise<NexusFile> => {
       const fileResponse: NexusFileResponse = await httpGet(selfUrl, {
         useBase: false,
@@ -97,7 +101,7 @@ export default function makeFileUtils(store: Store): FileUtils {
         .reverse();
       const file = new NexusFile(orgLabel, projectLabel, fileResponse);
       if (shouldFetchFile) {
-        await file.getFile();
+        await file.getFile(receiveAs);
       }
       return file;
     },
@@ -115,13 +119,14 @@ export default function makeFileUtils(store: Store): FileUtils {
       projectLabel: string,
       fileId: string,
       shouldFetchFile: boolean = false,
+      receiveAs?: HttpConfigTypes,
     ): Promise<NexusFile> => {
       const fileResponse: NexusFileResponse = await httpGet(
         `/files/${orgLabel}/${projectLabel}/${fileId}`,
       );
       const file = new NexusFile(orgLabel, projectLabel, fileResponse);
       if (shouldFetchFile) {
-        await file.getFile();
+        await file.getFile(receiveAs);
       }
       return file;
     },
@@ -133,6 +138,7 @@ export default function makeFileUtils(store: Store): FileUtils {
      */
     getRawFile: async (
       selfURL: string,
+      receiveAs?: HttpConfigTypes,
     ): Promise<string | Blob | ReadStream | ArrayBuffer> => {
       const rawFile: string | Blob | ReadStream | ArrayBuffer = await httpGet(
         selfURL,
@@ -141,7 +147,7 @@ export default function makeFileUtils(store: Store): FileUtils {
           extraHeaders: {
             Accept: '*/*',
           },
-          receiveAs: HttpConfigTypes.BASE64,
+          receiveAs: receiveAs || HttpConfigTypes.ARRAY_BUFFER,
         },
       );
       return rawFile;

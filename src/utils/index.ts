@@ -1,3 +1,10 @@
+export const defaultProps = (propsDefault: {
+  [key: string]: any;
+}) => (propsUsed?: { [key: string]: any }) => ({
+  ...propsDefault,
+  ...(propsUsed || {}),
+});
+
 export function buildQueryParams(options?: {
   [key: string]: string | number | boolean | undefined;
 }): string {

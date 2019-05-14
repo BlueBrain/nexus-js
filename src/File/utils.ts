@@ -1,16 +1,26 @@
 // @ts-ignore
 import FormData from 'isomorphic-form-data';
-import { NexusFileResponse } from './types';
-import createHttpLink, {
-  httpPost,
-  HttpConfigTypes,
-  httpGet,
-} from '../utils/http';
+import {
+  NexusFileResponse,
+  FetchFileOptions,
+  FetchRawFileOptions,
+} from './types';
+import createHttpLink, { HttpConfigTypes } from '../utils/http';
 import NexusFile from './index';
-import { isBrowser } from '../utils';
+import { isBrowser, defaultProps } from '../utils';
 import { ReadStream } from 'fs';
 import { Readable } from 'stream';
 import Store from '../utils/Store';
+
+// Make any default props apply
+export const defaultFetchRawFileOptions = {
+  receiveAs: HttpConfigTypes.ARRAY_BUFFER,
+};
+
+export const defaultFetchFileOptions = {
+  ...defaultFetchRawFileOptions,
+  shouldFetchFile: false,
+};
 
 export interface FileUtils {
   createFile: (
@@ -20,19 +30,17 @@ export interface FileUtils {
   ) => Promise<NexusFile>;
   getFileSelf: (
     selfUrl: string,
-    shouldFetchFile?: boolean,
-    receiveAs?: HttpConfigTypes,
+    fetchFileOptions?: FetchFileOptions,
   ) => Promise<NexusFile>;
   getFile: (
     orgLabel: string,
     projectLabel: string,
     fileId: string,
-    shouldFetchFile?: boolean,
-    receiveAs?: HttpConfigTypes,
+    fetchFileOptions?: FetchFileOptions,
   ) => Promise<NexusFile>;
   getRawFile: (
     selfURL: string,
-    receiveAs?: HttpConfigTypes,
+    fetchFileOptions?: FetchRawFileOptions,
   ) => Promise<string | Blob | ReadStream | ArrayBuffer>;
 }
 
@@ -90,9 +98,11 @@ export default function makeFileUtils(store: Store): FileUtils {
      */
     getFileSelf: async (
       selfUrl: string,
-      shouldFetchFile: boolean = false,
-      receiveAs?: HttpConfigTypes,
+      fetchFileOptions?: FetchFileOptions,
     ): Promise<NexusFile> => {
+      const { shouldFetchFile, receiveAs } = defaultProps(
+        defaultFetchFileOptions,
+      )(fetchFileOptions);
       const fileResponse: NexusFileResponse = await httpGet(selfUrl, {
         useBase: false,
       });
@@ -101,7 +111,7 @@ export default function makeFileUtils(store: Store): FileUtils {
         .reverse();
       const file = new NexusFile(orgLabel, projectLabel, fileResponse);
       if (shouldFetchFile) {
-        await file.getFile(receiveAs);
+        await file.getFile({ receiveAs });
       }
       return file;
     },
@@ -118,15 +128,17 @@ export default function makeFileUtils(store: Store): FileUtils {
       orgLabel: string,
       projectLabel: string,
       fileId: string,
-      shouldFetchFile: boolean = false,
-      receiveAs?: HttpConfigTypes,
+      fetchFileOptions?: FetchFileOptions,
     ): Promise<NexusFile> => {
+      const { shouldFetchFile, receiveAs } = defaultProps(
+        defaultFetchFileOptions,
+      )(fetchFileOptions);
       const fileResponse: NexusFileResponse = await httpGet(
         `/files/${orgLabel}/${projectLabel}/${fileId}`,
       );
       const file = new NexusFile(orgLabel, projectLabel, fileResponse);
       if (shouldFetchFile) {
-        await file.getFile(receiveAs);
+        await file.getFile({ receiveAs });
       }
       return file;
     },
@@ -138,16 +150,19 @@ export default function makeFileUtils(store: Store): FileUtils {
      */
     getRawFile: async (
       selfURL: string,
-      receiveAs?: HttpConfigTypes,
+      fetchRawFileOptions?: FetchRawFileOptions,
     ): Promise<string | Blob | ReadStream | ArrayBuffer> => {
+      const { receiveAs } = defaultProps(defaultFetchRawFileOptions)(
+        fetchRawFileOptions,
+      );
       const rawFile: string | Blob | ReadStream | ArrayBuffer = await httpGet(
         selfURL,
         {
+          receiveAs,
           useBase: false,
           extraHeaders: {
             Accept: '*/*',
           },
-          receiveAs: receiveAs || HttpConfigTypes.ARRAY_BUFFER,
         },
       );
       return rawFile;

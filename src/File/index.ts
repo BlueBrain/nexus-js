@@ -1,5 +1,5 @@
-import { NexusFileResponse } from './types';
-import makeFileUtils, { FileUtils } from './utils';
+import { NexusFileResponse, FetchRawFileOptions } from './types';
+import makeFileUtils, { FileUtils, defaultFetchRawFileOptions } from './utils';
 import { Context } from '../Resource/types';
 import { ReadStream } from 'fs';
 import store from '../store';
@@ -73,9 +73,9 @@ export default class NexusFile {
     }
   }
 
-  async getFile(receiveAs?: HttpConfigTypes) {
+  async getFile(fetchRawFileOptions?: FetchRawFileOptions) {
     this.rawFile = this.fileUtils
-      ? await this.fileUtils.getRawFile(this.self, receiveAs)
-      : await getRawFile(this.self, receiveAs);
+      ? await this.fileUtils.getRawFile(this.self, fetchRawFileOptions)
+      : await getRawFile(this.self, fetchRawFileOptions);
   }
 }

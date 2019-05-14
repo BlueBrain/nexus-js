@@ -1,9 +1,10 @@
-import { NexusFileResponse } from './types';
-import makeFileUtils, { FileUtils } from './utils';
+import { NexusFileResponse, FetchRawFileOptions } from './types';
+import makeFileUtils, { FileUtils, defaultFetchRawFileOptions } from './utils';
 import { Context } from '../Resource/types';
 import { ReadStream } from 'fs';
 import store from '../store';
 import Store from '../utils/Store';
+import { HttpConfigTypes } from '../utils/http';
 
 // default utils functions
 // they use the global store
@@ -72,9 +73,9 @@ export default class NexusFile {
     }
   }
 
-  async getFile() {
+  async getFile(fetchRawFileOptions?: FetchRawFileOptions) {
     this.rawFile = this.fileUtils
-      ? await this.fileUtils.getRawFile(this.self)
-      : await getRawFile(this.self);
+      ? await this.fileUtils.getRawFile(this.self, fetchRawFileOptions)
+      : await getRawFile(this.self, fetchRawFileOptions);
   }
 }

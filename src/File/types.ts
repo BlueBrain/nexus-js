@@ -1,4 +1,5 @@
 import { Context } from '../Resource/types';
+import { HttpConfigTypes } from '../utils/http';
 
 export interface NexusFileResponse {
   '@context': Context;
@@ -20,4 +21,12 @@ export interface NexusFileResponse {
   _createdBy: string;
   _updatedAt: string;
   _updatedBy: string;
+}
+
+export interface FetchFileOptions extends FetchRawFileOptions {
+  shouldFetchFile?: boolean;
+}
+
+export interface FetchRawFileOptions {
+  receiveAs?: HttpConfigTypes;
 }

@@ -6,7 +6,7 @@ AggregateSparqlView {
   "id": "http://example.com/base/aggregated",
   "orgLabel": "myOrg",
   "projectLabel": "myProject",
-  "queryURL": "/views/myOrg/myProject/http://example.com/base/aggregated/sparql",
+  "queryURL": "/views/myOrg/myProject/http%3A%2F%2Fexample.com%2Fbase%2Faggregated/sparql",
   "rev": 1,
   "type": Array [
     "View",

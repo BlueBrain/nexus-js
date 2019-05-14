@@ -38,9 +38,9 @@ export default class ElasticSearchView {
     this.uuid = elasticSearchViewResponse['_uuid'];
     this.rev = elasticSearchViewResponse['_rev'];
     this.deprecated = elasticSearchViewResponse['_deprecated'];
-    this.queryURL = `/views/${this.orgLabel}/${this.projectLabel}/${
-      this.id
-    }/_search`;
+    this.queryURL = `/views/${this.orgLabel}/${
+      this.projectLabel
+    }/${encodeURIComponent(this.id)}/_search`;
   }
 
   static get = getElasticSearchView;

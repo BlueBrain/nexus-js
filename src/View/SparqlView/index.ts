@@ -24,9 +24,9 @@ export default class SparqlView {
     this.uuid = sparqlViewResponse['_uuid'];
     this.rev = sparqlViewResponse['_rev'];
     this.deprecated = sparqlViewResponse['_deprecated'];
-    this.queryURL = `/views/${this.orgLabel}/${this.projectLabel}/${
-      this.id
-    }/sparql`;
+    this.queryURL = `/views/${this.orgLabel}/${
+      this.projectLabel
+    }/${encodeURIComponent(this.id)}/sparql`;
   }
 
   static get = getSparqlView;

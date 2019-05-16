@@ -43,6 +43,11 @@ export interface ResourceUtils {
     projectLabel: string,
     options?: ListResourceOptions,
   ): Promise<PaginatedList<Resource>>;
+  listNext(
+    orgLabel: string,
+    projectLabel: string,
+    nextLik: string,
+  ): Promise<PaginatedList<Resource>>;
   create(
     orgLabel: string,
     projectLabel: string,
@@ -317,6 +322,43 @@ export default function makeResourceUtils(store: Store): ResourceUtils {
         const next: string = listResourceResponses._next;
         const index: number =
           (options && options.from) || DEFAULT_PAGINATION_SETTINGS.from;
+        const results: Resource[] = listResourceResponses._results.map(
+          (commonResponse: ResourceResponseCommon) =>
+            new Resource(
+              orgLabel,
+              projectLabel,
+              {
+                ...commonResponse,
+                '@context': listResourceResponses['@context'],
+              },
+              store,
+            ),
+        );
+
+        return {
+          total,
+          index,
+          next,
+          results,
+        };
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    listNext: async (
+      orgLabel: string,
+      projectLabel: string,
+      nextLink: string,
+    ): Promise<PaginatedList<Resource>> => {
+      try {
+        const listResourceResponses: ListResourceResponse = await httpGet(
+          nextLink,
+          { useBase: false },
+        );
+        const total: number = listResourceResponses._total;
+        const next: string = listResourceResponses._next;
+        const index: number = DEFAULT_PAGINATION_SETTINGS.from;
         const results: Resource[] = listResourceResponses._results.map(
           (commonResponse: ResourceResponseCommon) =>
             new Resource(

@@ -36,6 +36,7 @@ const {
   getSelfRawAs: getSelfResourceRawAs,
   get: getResource,
   list: listResources,
+  listNext: listNextResources,
   create: createResource,
   updateSelf: updateSelfResource,
   update: updateResource,
@@ -76,6 +77,7 @@ export default class Resource<T = {}> {
   static getOutgoingLinks = getOutgoingLinks;
   static get = getResource;
   static list = listResources;
+  static listNext = listNextResources;
   static create = createResource;
   static updateSelf = updateSelfResource;
   static update = updateResource;

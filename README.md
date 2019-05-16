@@ -400,7 +400,7 @@ View.list = (orgLabel: string, projectLabel: string): Promise<(ElasticSearchView
 
 ElasticSearchView.get = (orgLabel: string, projectLabel: string, viewId?: string): Promise<ElasticSearchView>;
 
-SparqlView.get = (orgLabel: string, projectLabel: string): Promise<SparqlView>;
+SparqlView.get = (orgLabel: string, projectLabel: string, viewId?: string): Promise<SparqlView>;
 
 elasticSearchInstance.aggregation(elasticSearchAggregationQuery: object): Promise<ElasticSearchViewAggregationResponse>;
 

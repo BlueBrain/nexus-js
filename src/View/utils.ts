@@ -133,20 +133,19 @@ export async function getElasticSearchView(
 }
 
 /**
- * Get the default (and only) SPARQL view of a project.
+ * Get a SPARQL view of a project.
  *
  * Queries the triple-store (RDF) directly. For advanced uses.
+ * Without viewId parameter, will get the default Sparql view
+ * that is created automatically with a project
  */
 export async function getSparqlView(
   orgLabel: string,
   projectLabel: string,
+  viewId: string = SPARQL_DEFAULT_VIEW_ID,
 ): Promise<SparqlView> {
   try {
-    const sparqlDefaultView = await getView(
-      orgLabel,
-      projectLabel,
-      SPARQL_DEFAULT_VIEW_ID,
-    );
+    const sparqlDefaultView = await getView(orgLabel, projectLabel, viewId);
     if (!(sparqlDefaultView instanceof SparqlView)) {
       throw new Error(
         `Incorrect type (not a SPARQL view): view "${SPARQL_DEFAULT_VIEW_ID}" for project "${projectLabel}" in organization "${orgLabel}"`,

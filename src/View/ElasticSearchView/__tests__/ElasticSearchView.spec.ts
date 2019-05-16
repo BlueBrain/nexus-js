@@ -54,9 +54,9 @@ describe('ElasticSearchView class', () => {
       projectLabel,
       mockElasticSearchViewResponse,
     );
-    const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${
-      view.id
-    }/_search`;
+    const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${encodeURIComponent(
+      view.id,
+    )}/_search`;
     expect(view.queryURL).toEqual(expectedQueryURL);
   });
 
@@ -71,17 +71,14 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
         [
-          JSON.stringify(mockElasticSearchViewQueryResponse),
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 1st inner fetch for Resource
+          { status: 200 },
         ],
         [
-          JSON.stringify(mockResourceResponse),  // 1st inner fetch for Resource
-          { status: 200 }
-        ],
-        [
-          JSON.stringify(mockResourceResponse),  // 2nd inner fetch for expanded Resource
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 2nd inner fetch for expanded Resource
+          { status: 200 },
         ],
         [
           JSON.stringify(mockElasticSearchViewAggregationResponse),
@@ -117,17 +114,14 @@ describe('ElasticSearchView class', () => {
         size: 20,
       };
       fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
         [
-          JSON.stringify(mockElasticSearchViewQueryResponse),
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 1st inner fetch for Resource
+          { status: 200 },
         ],
         [
-          JSON.stringify(mockResourceResponse),  // 1st inner fetch for Resource
-          { status: 200 }
-        ],
-        [
-          JSON.stringify(mockResourceResponse),  // 2nd inner fetch for expanded Resource
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 2nd inner fetch for expanded Resource
+          { status: 200 },
         ],
         [
           JSON.stringify(mockElasticSearchViewAggregationResponse),
@@ -135,9 +129,9 @@ describe('ElasticSearchView class', () => {
         ],
       );
       await view.query(myQuery, myPaginationSettings);
-      const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${
-        view.id
-      }/_search?from=${myPaginationSettings.from}&size=${
+      const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${encodeURIComponent(
+        view.id,
+      )}/_search?from=${myPaginationSettings.from}&size=${
         myPaginationSettings.size
       }`;
       expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + expectedQueryURL);
@@ -152,17 +146,14 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
         [
-          JSON.stringify(mockElasticSearchViewQueryResponse),
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 1st inner fetch for Resource
+          { status: 200 },
         ],
         [
-          JSON.stringify(mockResourceResponse),  // 1st inner fetch for Resource
-          { status: 200 }
-        ],
-        [
-          JSON.stringify(mockResourceResponse),  // 2nd inner fetch for expanded Resource
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 2nd inner fetch for expanded Resource
+          { status: 200 },
         ],
         [
           JSON.stringify(mockElasticSearchViewAggregationResponse),
@@ -186,17 +177,14 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
         [
-          JSON.stringify(mockElasticSearchViewQueryResponse),
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 1st inner fetch for Resource
+          { status: 200 },
         ],
         [
-          JSON.stringify(mockResourceResponse),  // 1st inner fetch for Resource
-          { status: 200 }
-        ],
-        [
-          JSON.stringify(mockResourceResponse),  // 2nd inner fetch for expanded Resource
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 2nd inner fetch for expanded Resource
+          { status: 200 },
         ],
         [
           JSON.stringify(mockElasticSearchViewAggregationResponse),
@@ -232,17 +220,14 @@ describe('ElasticSearchView class', () => {
         size: 20,
       };
       fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
         [
-          JSON.stringify(mockElasticSearchViewQueryResponse),
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 1st inner fetch for Resource
+          { status: 200 },
         ],
         [
-          JSON.stringify(mockResourceResponse),  // 1st inner fetch for Resource
-          { status: 200 }
-        ],
-        [
-          JSON.stringify(mockResourceResponse),  // 2nd inner fetch for expanded Resource
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 2nd inner fetch for expanded Resource
+          { status: 200 },
         ],
         [
           JSON.stringify(mockElasticSearchViewAggregationResponse),
@@ -250,9 +235,9 @@ describe('ElasticSearchView class', () => {
         ],
       );
       await view.rawQuery(myQuery, myPaginationSettings);
-      const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${
-        view.id
-      }/_search?from=${myPaginationSettings.from}&size=${
+      const expectedQueryURL = `/views/${orgLabel}/${projectLabel}/${encodeURIComponent(
+        view.id,
+      )}/_search?from=${myPaginationSettings.from}&size=${
         myPaginationSettings.size
       }`;
       expect(fetchMock.mock.calls[0][0]).toEqual(baseUrl + expectedQueryURL);
@@ -267,17 +252,14 @@ describe('ElasticSearchView class', () => {
       );
       const myQuery = {};
       fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
         [
-          JSON.stringify(mockElasticSearchViewQueryResponse),
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 1st inner fetch for Resource
+          { status: 200 },
         ],
         [
-          JSON.stringify(mockResourceResponse),  // 1st inner fetch for Resource
-          { status: 200 }
-        ],
-        [
-          JSON.stringify(mockResourceResponse),  // 2nd inner fetch for expanded Resource
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 2nd inner fetch for expanded Resource
+          { status: 200 },
         ],
         [
           JSON.stringify(mockElasticSearchViewAggregationResponse),
@@ -350,17 +332,14 @@ describe('ElasticSearchView class', () => {
     beforeEach(() => {
       // Mock our query response
       fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
         [
-          JSON.stringify(mockElasticSearchViewQueryResponse),
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 1st inner fetch for Resource
+          { status: 200 },
         ],
         [
-          JSON.stringify(mockResourceResponse),  // 1st inner fetch for Resource
-          { status: 200 }
-        ],
-        [
-          JSON.stringify(mockResourceResponse),  // 2nd inner fetch for expanded Resource
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 2nd inner fetch for expanded Resource
+          { status: 200 },
         ],
       );
     });
@@ -438,17 +417,14 @@ describe('ElasticSearchView class', () => {
     beforeEach(() => {
       // Mock our query response
       fetchMock.mockResponses(
+        [JSON.stringify(mockElasticSearchViewQueryResponse), { status: 200 }],
         [
-          JSON.stringify(mockElasticSearchViewQueryResponse),
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 1st inner fetch for Resource
+          { status: 200 },
         ],
         [
-          JSON.stringify(mockResourceResponse),  // 1st inner fetch for Resource
-          { status: 200 }
-        ],
-        [
-          JSON.stringify(mockResourceResponse),  // 2nd inner fetch for expanded Resource
-          { status: 200 }
+          JSON.stringify(mockResourceResponse), // 2nd inner fetch for expanded Resource
+          { status: 200 },
         ],
       );
     });

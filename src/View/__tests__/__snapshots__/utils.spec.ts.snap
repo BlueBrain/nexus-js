@@ -7,7 +7,7 @@ Array [
     "id": "nxv:myview2",
     "orgLabel": "myorg",
     "projectLabel": "myproject",
-    "queryURL": "/views/myorg/myproject/nxv:myview2/_search",
+    "queryURL": "/views/myorg/myproject/nxv%3Amyview2/_search",
     "rev": 4,
     "type": Array [
       "ElasticSearchView",
@@ -21,7 +21,7 @@ Array [
     "id": "nxv:myview",
     "orgLabel": "myorg",
     "projectLabel": "myproject",
-    "queryURL": "/views/myorg/myproject/nxv:myview/sparql",
+    "queryURL": "/views/myorg/myproject/nxv%3Amyview/sparql",
     "rev": 4,
     "type": Array [
       "SparqlView",

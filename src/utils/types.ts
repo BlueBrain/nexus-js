@@ -14,4 +14,5 @@ export interface PaginatedList<T> {
   total: number;
   index: number;
   results: T[];
+  next?: string;
 }

@@ -295,6 +295,8 @@ Resource.getSelfRawAs = (selfUrl: string, resourceFormat?: ResourceGetFormat ): 
 
 Resource.list = (orgLabel: string, projectLabel: string, options?: ListResourceOptions): Promise<PaginatedList<Resource>>;
 
+Resource.listNext = (orgLabel: string, projectLabel: string, nextLink: string): Promise<PaginatedList<Resource>>;
+
 Resource.listTags = (orgLabel: string, projectLabel: string, schemaId: string, resourceId: string): Promise<string[]>;
 Resource.listSelfTags = (selfUrl: string): Promise<string[]>;
 
@@ -342,7 +344,7 @@ resourceInstance.update({
     [field: string]: any;
   }): Promise<Resource>;
 
-resourceInstance.getExpanded = () =>: Promise
+resourceInstance.getExpanded(): Promise<any>
 
 // EXPERIMENTAL
 resourceInstance.getStatistics(): Promise<Statistics>

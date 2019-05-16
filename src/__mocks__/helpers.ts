@@ -276,6 +276,7 @@ export const mockListResourceResponse: ListResourceResponse = {
     },
   ],
   _total: 1,
+  _next: 'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore?after=234234',
 };
 
 // [KP] The mappings property here is verbose, but it's exactly what we expect

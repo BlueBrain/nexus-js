@@ -20,6 +20,7 @@ export interface ListResourceResponse {
   '@context'?: Context;
   _total: number;
   _results: ResourceResponseCommon[];
+  _next: string;
 }
 
 export interface ResourceResponse extends ResourceResponseCommon {

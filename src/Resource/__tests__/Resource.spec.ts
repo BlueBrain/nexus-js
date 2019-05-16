@@ -49,6 +49,7 @@ describe('Resource class', () => {
     getSelfRawAs: getSelfResourceRawAs,
     get: getResource,
     list: listResources,
+    listNext: listNextResources,
     create: createResource,
     updateSelf: updateSelfResource,
     update: updateResource,
@@ -195,6 +196,29 @@ describe('Resource class', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         `${baseUrl}/resources/myorg/myproject?from=2&size=20`,
       );
+    });
+  });
+
+  describe('listNextResources()', () => {
+    beforeEach(() => {
+      fetchMock.mockResponse(JSON.stringify(mockListResourceResponse), {
+        status: 200,
+      });
+    });
+
+    afterEach(() => {
+      fetchMock.resetMocks();
+    });
+
+    it('should call httpGet method with the proper get views url', async () => {
+      const resources: PaginatedList<Resource> = await listNextResources(
+        'myorg',
+        'myproject',
+        'http://next.url',
+      );
+      expect(fetchMock.mock.calls[0][0]).toEqual(`http://next.url`);
+      expect(resources.total).toEqual(1);
+      expect(resources.results[0]).toBeInstanceOf(Resource);
     });
   });
 

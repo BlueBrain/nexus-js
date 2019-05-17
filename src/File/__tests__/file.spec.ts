@@ -68,6 +68,20 @@ describe('File class', () => {
       const body = fetchMock.mock.calls[0][1].body;
       expect(body._overheadLength).toBe(143);
     });
+    it('should POST the new file to specific storage', async () => {
+      fetchMock.mockResponse(JSON.stringify(mockFileResponse), { status: 200 });
+      const buffer = new Buffer('abc');
+      const stream = new Readable();
+      stream.push(buffer);
+      stream.push(null);
+
+      await NexusFile.create('myOrg', 'myProject', stream, {
+        storage: 'nxv: storage',
+      });
+      expect(fetchMock.mock.calls[0][0]).toContain(
+        '/files/myOrg/myProject?storage=nxv%3A%20storage',
+      );
+    });
   });
 
   describe('NexusFile.getFileSelf()', () => {

@@ -30,3 +30,8 @@ export interface FetchFileOptions extends FetchRawFileOptions {
 export interface FetchRawFileOptions {
   receiveAs?: HttpConfigTypes;
 }
+
+export interface CreateFileOptions {
+  storage?: string;
+  [key: string]: any;
+}

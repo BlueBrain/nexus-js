@@ -4,10 +4,11 @@ import {
   NexusFileResponse,
   FetchFileOptions,
   FetchRawFileOptions,
+  CreateFileOptions,
 } from './types';
 import createHttpLink, { HttpConfigTypes } from '../utils/http';
 import NexusFile from './index';
-import { isBrowser, defaultProps } from '../utils';
+import { isBrowser, defaultProps, buildQueryParams } from '../utils';
 import { ReadStream } from 'fs';
 import { Readable } from 'stream';
 import Store from '../utils/Store';
@@ -27,6 +28,7 @@ export interface FileUtils {
     orgLabel: string,
     projectLabel: string,
     file: File | Blob | ReadableStream | ReadStream | Readable,
+    options?: CreateFileOptions,
   ) => Promise<NexusFile>;
   getFileSelf: (
     selfUrl: string,
@@ -65,8 +67,10 @@ export default function makeFileUtils(store: Store): FileUtils {
       orgLabel: string,
       projectLabel: string,
       file: File | Blob | ReadableStream | ReadStream | Readable,
+      options?: CreateFileOptions,
     ): Promise<NexusFile> => {
       try {
+        const ops = buildQueryParams(options);
         // create new form data
         const form = new FormData();
         // add file
@@ -77,7 +81,7 @@ export default function makeFileUtils(store: Store): FileUtils {
           extraHeaders = form.getHeaders();
         }
         const fileResponse: NexusFileResponse = await httpPost(
-          `/files/${orgLabel}/${projectLabel}`,
+          `/files/${orgLabel}/${projectLabel}${ops}`,
           form,
           {
             extraHeaders,

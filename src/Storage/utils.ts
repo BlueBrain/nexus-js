@@ -1,6 +1,16 @@
-import { StorageList, ListStorageOptions } from './types';
+import { StorageList, ListStorageOptions, GetStorageOptions } from './types';
 import { httpGet } from '../utils/http';
 import { buildQueryParams } from '../utils';
+
+export const get = (
+  orgLabel: string,
+  projectLabel: string,
+  storageId: string,
+  options?: GetStorageOptions,
+): Promise<Storage> => {
+  const opts = buildQueryParams(options);
+  return httpGet(`/storages/${orgLabel}/${projectLabel}/${storageId}${opts}`);
+};
 
 export const list = (
   orgLabel: string,

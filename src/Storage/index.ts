@@ -1,5 +1,6 @@
-import { list } from './utils';
+import { list, get } from './utils';
 
 export default {
+  get,
   list,
 };

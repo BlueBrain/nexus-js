@@ -17,6 +17,18 @@ describe('Storage', () => {
   afterEach(() => {
     fetchMock.resetMocks();
   });
+  it('should get()', async () => {
+    await Storage.get('myorg', 'myproject', 'mystorage');
+    expect(fetchMock.mock.calls[0][0]).toEqual(
+      `${baseUrl}/storages/myorg/myproject/mystorage`,
+    );
+  });
+  it('should get() with options', async () => {
+    await Storage.get('myorg', 'myproject', 'mystorage', { rev: 3 });
+    expect(fetchMock.mock.calls[0][0]).toEqual(
+      `${baseUrl}/storages/myorg/myproject/mystorage?rev=3`,
+    );
+  });
   it('should list()', async () => {
     await Storage.list('myorg', 'myproject');
     expect(fetchMock.mock.calls[0][0]).toEqual(

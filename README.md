@@ -118,7 +118,7 @@ Beta
 - [x] Get
 
 #### Storages
-- [ ] List
+- [x] List
 - [ ] Create
 - [ ] Update
 - [ ] Deprecate

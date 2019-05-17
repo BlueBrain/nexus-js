@@ -23,6 +23,12 @@ export interface StorageList {
   _next: string;
 }
 
+export interface GetStorageOptions {
+  rev?: number;
+  tag?: string;
+  [key: string]: any;
+}
+
 export interface ListStorageOptions {
   from?: number;
   size?: number;

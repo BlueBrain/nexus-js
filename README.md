@@ -85,7 +85,6 @@ Beta
 - [x] Tag
 - [x] Deprecate
 
-#### Data
 
 #### ACLs
 
@@ -117,6 +116,13 @@ Beta
 #### Statistics
 
 - [x] Get
+
+#### Storages
+- [x] Get
+- [x] List
+- [ ] Create
+- [ ] Update
+- [ ] Deprecate
 
 ## Getting started
 
@@ -491,6 +497,15 @@ import { Statistics } from '@bbp/nexus-sdk';
 Statistics.getViewStatistics = (orgLabel: string, projectLabel: string, schemaId: string, viewId: string): Promise<Statistics>;
 
 Statistics.getResourceStatistics(orgLabel: string, projectLabel: string, resourceId): Promise<Statistics>;
+```
+
+### Storage
+
+```typescript
+import { Storage } from '@bbp/nexus-sdk';
+
+Storage.get = (orgLabel: string, projectLabel: string, storageId: string, options?: GetStorageOptions): Promise<Storage>;
+Storage.list = (orgLabel: string, projectLabel: string, options?: ListStorageOptions): Promise<StorageList>;
 ```
 
 ## Development

@@ -379,7 +379,7 @@ const outgoingLinks: PaginatedList<ResourceLinks> = await resourceInstance.getOu
 ```typescript
 import { NexusFile } from '@bbp/nexus-sdk';
 
-NexusFile.create = (orgLabel: string, projectLabel: string, payload: File | Blob | ReadableStream | ReadStream | Readable): Promise<File>;
+NexusFile.create = (orgLabel: string, projectLabel: string, payload: File | Blob | ReadableStream | ReadStream | Readable, options?: CreateStorageOptions): Promise<File>;
 
 // examples in browser
 NexusFile.create('myorg', 'myproject', new Blob(['abc'], { type: "text/plain"}));

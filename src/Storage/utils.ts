@@ -9,7 +9,11 @@ export const get = (
   options?: GetStorageOptions,
 ): Promise<Storage> => {
   const opts = buildQueryParams(options);
-  return httpGet(`/storages/${orgLabel}/${projectLabel}/${storageId}${opts}`);
+  return httpGet(
+    `/storages/${orgLabel}/${projectLabel}/${encodeURIComponent(
+      storageId,
+    )}${opts}`,
+  );
 };
 
 export const list = (

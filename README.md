@@ -118,6 +118,7 @@ Beta
 - [x] Get
 
 #### Storages
+- [x] Get
 - [x] List
 - [ ] Create
 - [ ] Update
@@ -503,7 +504,8 @@ Statistics.getResourceStatistics(orgLabel: string, projectLabel: string, resourc
 ```typescript
 import { Storage } from '@bbp/nexus-sdk';
 
-Storage.list() = (orgLabel: string, projectLabel: string): Promise<StorageList>;
+Storage.get = (orgLabel: string, projectLabel: string, storageId: string, options?: GetStorageOptions): Promise<Storage>;
+Storage.list = (orgLabel: string, projectLabel: string, options?: ListStorageOptions): Promise<StorageList>;
 ```
 
 ## Development

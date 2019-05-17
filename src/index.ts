@@ -9,6 +9,7 @@ export { default as Realm } from './Realm';
 export { default as Resolver } from './Resolver';
 export { default as NexusFile } from './File';
 export { default as Statistics } from './Statistics';
+export { default as Storage } from './Storage';
 export * from './View';
 export * from './utils/types';
 

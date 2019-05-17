@@ -23,4 +23,10 @@ describe('Storage', () => {
       `${baseUrl}/storages/myorg/myproject`,
     );
   });
+  it('should list() with options ', async () => {
+    await Storage.list('myorg', 'myproject', { rev: 3, size: 10 });
+    expect(fetchMock.mock.calls[0][0]).toEqual(
+      `${baseUrl}/storages/myorg/myproject?rev=3&size=10`,
+    );
+  });
 });

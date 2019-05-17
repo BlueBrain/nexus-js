@@ -22,3 +22,14 @@ export interface StorageList {
   _results: StorageCommon[];
   _next: string;
 }
+
+export interface ListStorageOptions {
+  from?: number;
+  size?: number;
+  deprecated?: boolean;
+  rev?: number;
+  type?: string;
+  createdBy?: string;
+  updatedBy?: string;
+  [key: string]: any;
+}

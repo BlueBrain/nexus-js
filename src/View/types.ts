@@ -1,8 +1,9 @@
-import { ElasticSearchView, SparqlView, AggregateSparqlView } from '.';
+import { ElasticSearchView, SparqlView } from '.';
 import { ElasticSearchViewResponse } from './ElasticSearchView/types';
 import { SparqlViewResponse } from './SparqlView/types';
 import { Context, ResourceResponseCommon } from '../Resource/types';
 import AggregateElasticSearchView from './AggregateElasticSearchView';
+import AggregateSparqlView from './AggregateSparqlView';
 
 export interface ListViewResponse {
   '@context'?: Context;

@@ -136,16 +136,16 @@ export const mockListResourceResponseWithStringType = {
   '@id': 'https://neuroshapes.org/commons/annotation',
   '@type': 'https://bluebrain.github.io/nexus/vocabulary/Schema',
   _self:
-    'https://bbp.epfl.ch/nexus/v1/schemas/anorg/testcore/nsg:commons%2Fannotation',
+    'https://nexus.deployment.whatever.com/schemas/anorg/testcore/nsg:commons%2Fannotation',
   _constrainedBy:
     'https://bluebrain.github.io/nexus/schemas/shacl-20170720.ttl',
-  _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+  _project: 'https://nexus.deployment.whatever.com/projects/anorg/testcore',
   _createdAt: '2018-11-14T21:16:56.220Z',
   _createdBy:
-    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+    'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
   _updatedAt: '2018-11-14T21:16:56.220Z',
   _updatedBy:
-    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+    'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
   _rev: 1,
   _deprecated: false,
 };
@@ -153,15 +153,15 @@ export const mockListResourceResponseWithStringType = {
 export const mockListResourceResponseWithoutType = {
   '@id': 'https://incf.github.io/neuroshapes/contexts/schema.json',
   _self:
-    'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/https%3A%2F%2Fincf.github.io%2Fneuroshapes%2Fcontextx%2Fschema.json',
+    'https://nexus.deployment.whatever.com/resources/anorg/testcore/https%3A%2F%2Fincf.github.io%2Fneuroshapes%2Fcontextx%2Fschema.json',
   _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resource.json',
-  _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+  _project: 'https://nexus.deployment.whatever.com/projects/anorg/testcore',
   _createdAt: '2018-11-14T21:16:54.230Z',
   _createdBy:
-    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+    'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
   _updatedAt: '2018-11-15T08:40:52.735Z',
   _updatedBy:
-    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+    'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
   _rev: 2,
   _deprecated: false,
 };
@@ -187,15 +187,15 @@ export const mockGetByIDResourceResponse: ResourceResponse = {
   subject:
     'https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/subject/v0.1.0/ba9916df-1f21-47d9-be4f-3f1612d2f429',
   _self:
-    'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae',
+    'https://nexus.deployment.whatever.com/resources/anorg/testcore/datashapes:reconstructedpatchedcell/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fmorphology%2Freconstructedcell%2Fv0.1.0%2F29d3a491-d3b7-49b6-9033-99017513a8ae',
   _constrainedBy: 'https://neuroshapes.org/dash/reconstructedpatchedcell',
-  _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+  _project: 'https://nexus.deployment.whatever.com/projects/anorg/testcore',
   _createdAt: '2018-11-15T08:49:59.873Z',
   _createdBy:
-    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+    'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
   _updatedAt: '2018-11-26T08:49:44.148Z',
   _updatedBy:
-    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+    'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
   _rev: 13,
   _deprecated: false,
 };
@@ -243,15 +243,15 @@ export const mockResourceResponse: ResourceResponse = {
   '@context': '',
   '@id': 'https://incf.github.io/neuroshapes/contexts/schema.json',
   _self:
-    'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/https%3A%2F%2Fincf.github.io%2Fnexus%2Fneuroshapes%2Fcontexts%2Fschema.json',
+    'https://nexus.deployment.whatever.com/resources/anorg/testcore/https%3A%2F%2Fincf.github.io%2Fnexus%2Fneuroshapes%2Fcontexts%2Fschema.json',
   _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resource.json',
-  _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+  _project: 'https://nexus.deployment.whatever.com/projects/anorg/testcore',
   _createdAt: '2018-11-14T21:16:54.230Z',
   _createdBy:
-    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+    'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
   _updatedAt: '2018-11-15T08:40:52.735Z',
   _updatedBy:
-    'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+    'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
   _rev: 2,
   _deprecated: false,
 };
@@ -262,21 +262,22 @@ export const mockListResourceResponse: ListResourceResponse = {
     {
       '@id': 'https://incf.github.io/neuroshapes/contexts/schema.json',
       _self:
-        'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/https%3A%2F%2Fbluebrain.github.io%2Fnexus%2Fschemas%2Fresource.json/context:schema.json',
+        'https://nexus.deployment.whatever.com/resources/anorg/testcore/https%3A%2F%2Fbluebrain.github.io%2Fnexus%2Fschemas%2Fresource.json/context:schema.json',
       _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resource.json',
-      _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+      _project: 'https://nexus.deployment.whatever.com/projects/anorg/testcore',
       _createdAt: '2018-11-14T21:16:54.230Z',
       _createdBy:
-        'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+        'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
       _updatedAt: '2018-11-15T08:40:52.735Z',
       _updatedBy:
-        'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+        'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
       _rev: 2,
       _deprecated: false,
     },
   ],
   _total: 1,
-  _next: 'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore?after=234234',
+  _next:
+    'https://nexus.deployment.whatever.com/resources/anorg/testcore?after=234234',
 };
 
 // [KP] The mappings property here is verbose, but it's exactly what we expect
@@ -372,6 +373,16 @@ export const mockViewsListResponse: ViewsListResponse = {
       sourceAsText: true,
       _rev: 1,
       _deprecated: false,
+      _self:
+        'https://nexus.deployment.whatever.com/resources/anorg/testcore/https%3A%2F%2Fbluebrain.github.io%2Fnexus%2Fschemas%2Fresource.json/context:schema.json',
+      _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resource.json',
+      _project: 'https://nexus.deployment.whatever.com/projects/anorg/testcore',
+      _createdAt: '2018-11-14T21:16:54.230Z',
+      _createdBy:
+        'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+      _updatedAt: '2018-11-15T08:40:52.735Z',
+      _updatedBy:
+        'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
     },
     {
       '@id': 'nxv:defaultSparqlIndex',
@@ -379,6 +390,16 @@ export const mockViewsListResponse: ViewsListResponse = {
       _uuid: 'd88b71d2-b8a4-4744-bf22-2d99ef5bd26b',
       _rev: 1,
       _deprecated: false,
+      _self:
+        'https://nexus.deployment.whatever.com/resources/anorg/testcore/https%3A%2F%2Fbluebrain.github.io%2Fnexus%2Fschemas%2Fresource.json/context:schema.json',
+      _constrainedBy: 'https://bluebrain.github.io/nexus/schemas/resource.json',
+      _project: 'https://nexus.deployment.whatever.com/projects/anorg/testcore',
+      _createdAt: '2018-11-14T21:16:54.230Z',
+      _createdBy:
+        'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+      _updatedAt: '2018-11-15T08:40:52.735Z',
+      _updatedBy:
+        'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
     },
   ],
 };
@@ -461,15 +482,16 @@ export const mockElasticSearchViewQueryResponse: ElasticSearchViewQueryResponse 
           _original_source:
             '{"@context":{"xml":"http://www.w3.org/XML/1998/namespace","rdf":"http://www.w3.org/1999/02/22-rdf-syntax-ns#","rdfs":"http://www.w3.org/2000/01/rdf-schema#","xsd":"http://www.w3.org/2001/XMLSchema#","owl":"http://www.w3.org/2002/07/owl#","skos":"http://www.w3.org/2004/02/skos/core#","prov":"http://www.w3.org/ns/prov#","dcat":"http://www.w3.org/ns/dcat#","sh":"http://www.w3.org/ns/shacl#","shsh":"http://www.w3.org/ns/shacl-shacl#","dcterms":"http://purl.org/dc/terms/","schema":"http://schema.org/","nxv":"https://bbp-nexus.epfl.ch/vocabs/nexus/core/terms/v0.1.0/","nsg":"https://bbp-nexus.epfl.ch/vocabs/bbp/neurosciencegraph/core/v0.1.0/","this":"http://example.org/minds/","dc":"http://purl.org/dc/elements/1.1/","vann":"http://purl.org/vocab/vann/","void":"http://rdfs.org/ns/void#","Dataset":{"@id":"dcat:Dataset"},"valueZ":{"@id":"nsg:valueZ"},"digest":{"@id":"nxv:digest"},"maxValue":{"@id":"schema:maxValue"},"unitCode":{"@id":"schema:unitCode"},"contribution":{"@id":"nsg:contribution"},"type":{"@id":"rdf:type"},"license":{"@id":"dcat:license"},"accessURL":{"@id":"dcat:accessURL"},"subject":{"@id":"nsg:subject"},"label":{"@id":"rdfs:label"},"valueX":{"@id":"nsg:valueX"},"species":{"@id":"nsg:species"},"valueY":{"@id":"nsg:valueY"},"repository":{"@id":"nsg:repository"},"agent":{"@id":"prov:agent"},"objectOfStudy":{"@id":"nsg:objectOfStudy"},"byteSize":{"@id":"dcat:byteSize"},"coordinatesInBrainAtlas":{"@id":"nsg:coordinatesInBrainAtlas"},"value":{"@id":"schema:value"},"downloadURL":{"@id":"dcat:downloadURL"},"atlasSpatialReferenceSystem":{"@id":"nsg:atlasSpatialReferenceSystem"},"mediaType":{"@id":"dcat:mediaType"},"brainLocation":{"@id":"nsg:brainLocation"},"distribution":{"@id":"dcat:distribution"},"brainRegion":{"@id":"nsg:brainRegion"},"minValue":{"@id":"schema:minValue"}},"@id":"https://bbp.epfl.ch/nexus/v0/data/bbp/experiment/subject/v0.1.0/eb1b8cbb-ae00-44c0-889e-107e9f16faef","@type":["nsg:Subject","prov:Entity"],"schema:name":"Rattus norvegicus Wistar Han","nsg:providerId":"C300797C","species":{"@id":"http://purl.obolibrary.org/obo/NCBITaxon_10116","label":"Rattus norvegicus"},"nsg:strain":{"@id":"http://purl.obolibrary.org/obo/RS_0001833","label":"Wistar Han"}}',
           _self:
-            'https://bbp.epfl.ch/nexus/v1/resources/anorg/testcore/datashapes:subject/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fexperiment%2Fsubject%2Fv0.1.0%2Feb1b8cbb-ae00-44c0-889e-107e9f16faef',
+            'https://nexus.deployment.whatever.com/resources/anorg/testcore/datashapes:subject/https%3A%2F%2Fbbp.epfl.ch%2Fnexus%2Fv0%2Fdata%2Fbbp%2Fexperiment%2Fsubject%2Fv0.1.0%2Feb1b8cbb-ae00-44c0-889e-107e9f16faef',
           _constrainedBy: 'https://neuroshapes.org/dash/subject',
-          _project: 'https://bbp.epfl.ch/nexus/v1/projects/anorg/testcore',
+          _project:
+            'https://nexus.deployment.whatever.com/projects/anorg/testcore',
           _createdAt: '2018-11-21T00:02:27.206Z',
           _createdBy:
-            'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+            'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
           _updatedAt: '2018-11-26T11:00:29.200Z',
           _updatedBy:
-            'https://bbp.epfl.ch/nexus/v1/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
+            'https://nexus.deployment.whatever.com/realms/BBP/users/f:9d46ddd6-134e-44d6-aa74-bdf00f48dfce:sy',
           _rev: 11,
           _deprecated: false,
         },

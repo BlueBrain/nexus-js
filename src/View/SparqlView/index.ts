@@ -12,9 +12,11 @@ export default class SparqlView {
   rev: number;
   deprecated: boolean;
   queryURL: string;
+  orgLabel: string;
+  projectLabel: string;
   constructor(
-    readonly orgLabel: string,
-    readonly projectLabel: string,
+    orgLabel: string,
+    projectLabel: string,
     sparqlViewResponse: SparqlViewResponse,
   ) {
     this.orgLabel = orgLabel;

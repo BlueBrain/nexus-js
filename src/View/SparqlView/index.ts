@@ -20,7 +20,7 @@ export default class SparqlView {
     this.orgLabel = orgLabel;
     this.projectLabel = projectLabel;
     this.id = sparqlViewResponse['@id'];
-    this.type = sparqlViewResponse['@type'];
+    this.type = sparqlViewResponse['@type'] as string[];
     this.uuid = sparqlViewResponse['_uuid'];
     this.rev = sparqlViewResponse['_rev'];
     this.deprecated = sparqlViewResponse['_deprecated'];

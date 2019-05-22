@@ -1,3 +1,5 @@
+import { ResourceResponseCommon } from '../Resource/types';
+
 export const defaultProps = (propsDefault: {
   [key: string]: any;
 }) => (propsUsed?: { [key: string]: any }) => ({
@@ -38,3 +40,16 @@ export const removeEmpty = (obj: any): any =>
           : Object.assign(newObj, { [k]: obj[k] }), // Copy value.
       {},
     );
+
+export const forceAsListOfStrings = (s: string | string[]): string[] =>
+  Array.isArray(s) ? s : [s];
+
+// Does this resource have type 'typeToCheck'?
+export const typeEndsWith = (
+  resourceResponse: ResourceResponseCommon,
+  typeToCheck: string,
+): boolean =>
+  !!resourceResponse['@type'] &&
+  forceAsListOfStrings(resourceResponse['@type']).some(type =>
+    type.endsWith(typeToCheck),
+  );

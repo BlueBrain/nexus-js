@@ -1,7 +1,7 @@
 import { ElasticSearchView, SparqlView, AggregateSparqlView } from '.';
 import { ElasticSearchViewResponse } from './ElasticSearchView/types';
 import { SparqlViewResponse } from './SparqlView/types';
-import { Context } from '../Resource/types';
+import { Context, ResourceResponseCommon } from '../Resource/types';
 import AggregateElasticSearchView from './AggregateElasticSearchView';
 
 export interface ListViewResponse {
@@ -38,19 +38,14 @@ export enum ViewTypes {
   AggregateSparqlView = 'AggregateSparqlView',
 }
 
-export interface SimpleViewResponse {
-  '@context'?: Context;
-  '@id': string;
-  '@type': string[];
+export interface ViewResponseCommon extends ResourceResponseCommon {
   _uuid: string;
-  _rev: number;
-  _deprecated: boolean;
 }
 
 export interface AggregateViewReference {
   project: string;
   viewId: string;
 }
-export interface AggregateViewResponse extends SimpleViewResponse {
+export interface AggregateViewResponse extends ViewResponseCommon {
   views: AggregateViewReference[];
 }

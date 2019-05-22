@@ -16,20 +16,7 @@ export interface ViewsAggregation {
 }
 
 // When getting a ESView by ID.
-export interface ElasticSearchViewResponse {
-  '@context'?: string[];
-  '@id': string;
-  '@type': string[];
-  _uuid: string;
-  _rev: number;
-  _deprecated: boolean;
-  _self?: string;
-  _constrainedBy?: string;
-  _project?: string;
-  _createdAt?: string;
-  _createdBy?: string;
-  _updatedAt?: string;
-  _updatedBy?: string;
+export interface ElasticSearchViewResponse extends ResourceResponseCommon {
   includeMetadata?: boolean;
   mapping?: Mapping;
   resourceSchemas?: string[];

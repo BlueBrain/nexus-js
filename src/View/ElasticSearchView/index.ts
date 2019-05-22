@@ -23,7 +23,7 @@ export default class ElasticSearchView {
     this.orgLabel = orgLabel;
     this.projectLabel = projectLabel;
     this.id = elasticSearchViewResponse['@id'];
-    this.type = elasticSearchViewResponse['@type'];
+    this.type = elasticSearchViewResponse['@type'] as string[];
     this.uuid = elasticSearchViewResponse['_uuid'];
     this.rev = elasticSearchViewResponse['_rev'];
     this.deprecated = elasticSearchViewResponse['_deprecated'];

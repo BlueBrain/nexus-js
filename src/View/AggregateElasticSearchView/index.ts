@@ -20,7 +20,7 @@ export default class AggregateElasticSearchView {
     this.orgLabel = orgLabel;
     this.projectLabel = projectLabel;
     this.id = aggregateViewResponse['@id'];
-    this.type = aggregateViewResponse['@type'];
+    this.type = aggregateViewResponse['@type'] as string[];
     this.uuid = aggregateViewResponse['_uuid'];
     this.rev = aggregateViewResponse['_rev'];
     this.deprecated = aggregateViewResponse['_deprecated'];

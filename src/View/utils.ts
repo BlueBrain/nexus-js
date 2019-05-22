@@ -7,7 +7,9 @@ import {
   ViewResponse,
   DEFAULT_ES_VIEW_ID,
   DEFAULT_SPARQL_VIEW_ID,
+  ViewTypes,
 } from './types';
+import { typeEndsWith } from '../utils';
 
 export interface ViewsListResponse {
   '@context'?: string | string[];
@@ -18,25 +20,16 @@ export interface ViewsListResponse {
 const isElasticSearchView = (
   viewResponse: ViewResponse,
 ): viewResponse is ElasticSearchViewResponse => {
-  const validTypes: string[] = [
-    'ElasticSearchView',
-    'AggregateElasticSearchView',
-  ];
-
-  // Types returned by the API may be extended (full URIs), so we check against the end of the string.
   return (
-    viewResponse &&
-    viewResponse['@type'] &&
-    viewResponse['@type'].some(type =>
-      validTypes.some(validType => type.endsWith(validType)),
-    )
+    typeEndsWith(viewResponse, ViewTypes.ElasticSearchView) ||
+    typeEndsWith(viewResponse, ViewTypes.AggregateElasticSearchView)
   );
 };
 
 const isSparqlView = (
   viewResponse: ViewResponse,
 ): viewResponse is SparqlViewResponse => {
-  return viewResponse['@type'].some(type => type.endsWith('SparqlView'));
+  return typeEndsWith(viewResponse, ViewTypes.SparqlView);
 };
 
 // The current API does not support pagination / filtering of views

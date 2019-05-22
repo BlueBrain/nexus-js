@@ -1,12 +1,7 @@
-import { Context } from '../../Resource/types';
+import { Context, ResourceResponseCommon } from '../../Resource/types';
 
-export interface SparqlViewResponse {
-  '@context'?: Context;
-  '@id': string;
-  '@type': string[];
+export interface SparqlViewResponse extends ResourceResponseCommon {
   _uuid: string;
-  _rev: number;
-  _deprecated: boolean;
 }
 
 // based on: https://www.w3.org/TR/sparql11-results-json/

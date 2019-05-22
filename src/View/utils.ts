@@ -3,18 +3,17 @@ import SparqlView from './SparqlView';
 import { httpGet } from '../utils/http';
 import { ElasticSearchViewResponse } from './ElasticSearchView/types';
 import { SparqlViewResponse } from './SparqlView/types';
-
-export type ViewResponse = ElasticSearchViewResponse | SparqlViewResponse;
+import {
+  ViewResponse,
+  DEFAULT_ES_VIEW_ID,
+  DEFAULT_SPARQL_VIEW_ID,
+} from './types';
 
 export interface ViewsListResponse {
   '@context'?: string | string[];
   _total: number;
   _results: (ElasticSearchViewResponse | SparqlViewResponse)[];
 }
-
-// IDs for the views that are automatically created with a project
-const ES_DEFAULT_VIEW_ID: string = 'nxv:defaultElasticSearchIndex';
-const SPARQL_DEFAULT_VIEW_ID: string = 'nxv:defaultSparqlIndex';
 
 const isElasticSearchView = (
   viewResponse: ViewResponse,
@@ -115,7 +114,7 @@ export async function getView(
 export async function getElasticSearchView(
   orgLabel: string,
   projectLabel: string,
-  viewId: string = ES_DEFAULT_VIEW_ID,
+  viewId: string = DEFAULT_ES_VIEW_ID,
 ): Promise<ElasticSearchView> {
   try {
     const view = await getView(orgLabel, projectLabel, viewId);
@@ -142,13 +141,13 @@ export async function getElasticSearchView(
 export async function getSparqlView(
   orgLabel: string,
   projectLabel: string,
-  viewId: string = SPARQL_DEFAULT_VIEW_ID,
+  viewId: string = DEFAULT_SPARQL_VIEW_ID,
 ): Promise<SparqlView> {
   try {
     const sparqlDefaultView = await getView(orgLabel, projectLabel, viewId);
     if (!(sparqlDefaultView instanceof SparqlView)) {
       throw new Error(
-        `Incorrect type (not a SPARQL view): view "${SPARQL_DEFAULT_VIEW_ID}" for project "${projectLabel}" in organization "${orgLabel}"`,
+        `Incorrect type (not a SPARQL view): view "${DEFAULT_SPARQL_VIEW_ID}" for project "${projectLabel}" in organization "${orgLabel}"`,
       );
     }
     return sparqlDefaultView;

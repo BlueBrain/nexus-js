@@ -42,7 +42,7 @@ export type ProjectListOptions = {
   [key: string]: any;
 };
 
-export type CreateProjectPayload = {
+export type ProjectPayload = {
   description?: string;
   base?: string;
   vocab?: string;

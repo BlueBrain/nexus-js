@@ -4,7 +4,7 @@ import {
   Project,
   ProjectList,
   ProjectListOptions,
-  CreateProjectPayload,
+  ProjectPayload,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
@@ -38,7 +38,7 @@ const Project = (
     create: (
       orgLabel: string,
       projectLabel: string,
-      payload: CreateProjectPayload,
+      payload: ProjectPayload,
     ): Promise<Project> =>
       toPromise(
         httpPut({
@@ -52,7 +52,7 @@ const Project = (
       orgLabel: string,
       projectLabel: string,
       rev: number,
-      payload: CreateProjectPayload,
+      payload: ProjectPayload,
     ): Promise<Project> =>
       toPromise(
         httpPut({

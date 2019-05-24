@@ -2,6 +2,7 @@ import { pipe, triggerFetch, setMethod, poll, Context } from '@bbp/nexus-link';
 import { NexusClientOptions, Fetchers } from './types';
 import Organization from './Organization';
 import NexusFile from './File';
+import Project from './Project';
 
 export type NexusContext = Context & {
   uri: string;
@@ -29,5 +30,6 @@ export function createNexusClient(options: NexusClientOptions) {
   return {
     Organization: Organization(fetchers, context),
     File: NexusFile(fetchers, context),
+    Project: Project(fetchers, context),
   };
 }

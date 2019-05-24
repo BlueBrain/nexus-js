@@ -1,7 +1,7 @@
 import { buildQueryParams } from '../utils';
 
 describe('utils functions', () => {
-  describe('buidlQueryParams()', () => {
+  describe('buildQueryParams()', () => {
     it('should return 1 query param', () => {
       expect(buildQueryParams({ foo: 'bar' })).toEqual('?foo=bar');
     });

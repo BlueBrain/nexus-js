@@ -55,3 +55,14 @@ export type ElasticSearchViewQueryResponse = {
   timed_out: boolean;
   took: number;
 };
+
+export type ElasticSearchViewPayload = {
+  '@id': string;
+  '@type': ['ElasticSearchView'];
+  mapping: {};
+  sourceAsText?: boolean;
+  includeMetadata?: boolean;
+  includeDeprecated?: boolean;
+  resourceSchemas?: string[];
+  resourceTypes?: string[];
+};

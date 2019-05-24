@@ -25,6 +25,8 @@ const View = ({ httpGet, poll }: Fetchers, context: NexusContext) => {
           }/views/${orgLabel}/${projectLabel}`,
         }),
       ),
+    tag: () => {},
+    deprecate: () => {},
     poll: <T = View>(
       orgLabel: string,
       projectLabel: string,

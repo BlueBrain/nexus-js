@@ -19,8 +19,10 @@ Example:
 
 A Link for logging how long it took to resolve the request, called logger
 
+```
 request  -> logger creates start=Date.now()   -> forward to next and subscribe -> request goes to server  |
 response <- logger does log(Date.now()-start) <- bubble the chain of handlers  <- response from server  <-|
+```
 
 There are 2 types of Links:
  - stateless

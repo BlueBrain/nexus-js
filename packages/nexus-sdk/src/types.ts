@@ -16,4 +16,25 @@ export type Fetchers = {
   poll: Link;
 };
 
-export type Context = string | string[];
+export type Context = string | (string | { [key: string]: string })[];
+
+export type Resource = {
+  '@context?': Context;
+  '@type': string | string[];
+  _self: string;
+  _constrainedBy: string;
+  _project: string;
+  _rev: number;
+  _deprecated: boolean;
+  _createdAt: string;
+  _createdBy: string;
+  _updatedAt: string;
+  _updatedBy: string;
+};
+
+export type PaginatedResource<T = Resource> = {
+  '@context': Context;
+  total: number;
+  _result: T[];
+  _next?: string;
+};

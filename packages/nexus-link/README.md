@@ -10,8 +10,10 @@ A link returns an observable for the previous link to subscribe to.
 
 The flow looks like:
 
+```
 request  -> | LINK1 | -> | LINK2 | -> server   |
-response <- | LINK1 | <- | LINK2 | <- result <-|
+response <- |       | <- |       | <- result <-|
+```
 
 Example:
 

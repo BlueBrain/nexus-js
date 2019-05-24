@@ -1,5 +1,9 @@
 # Projects
 
+[`Back to Readme`](../../#readme)
+
+[`Project Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/admin/admin-projects-api.html)
+
 ```typescript
 // Projects
 nexus.Project.list('myOrg')

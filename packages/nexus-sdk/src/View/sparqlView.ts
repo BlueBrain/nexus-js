@@ -1,7 +1,8 @@
+import { toPromise } from '@bbp/nexus-link';
 import { Fetchers } from '../types';
 import { NexusContext } from '../nexusSdk';
-import { toPromise } from '@bbp/nexus-link';
-import { SparqlView } from './types';
+import { SparqlView, SparqlViewPayload } from './types';
+import { buildQueryParams } from '../utils';
 
 const SparqlView = ({ httpPost }: Fetchers, context: NexusContext) => {
   return {
@@ -20,6 +21,37 @@ const SparqlView = ({ httpPost }: Fetchers, context: NexusContext) => {
           headers: {
             'Content-Type': 'text/plain',
           },
+        }),
+      );
+    },
+    create: (
+      orgLabel: string,
+      projectLabel: string,
+      payload: SparqlViewPayload,
+    ): Promise<SparqlView> =>
+      toPromise(
+        httpPost({
+          path: `${context.uri}/${
+            context.version
+          }/views/${orgLabel}/${projectLabel}`,
+          body: JSON.stringify(payload),
+        }),
+      ),
+    update: (
+      orgLabel: string,
+      projectLabel: string,
+      payload: SparqlViewPayload,
+      options?: {
+        rev: number;
+      },
+    ): Promise<SparqlView> => {
+      const opts = buildQueryParams(options);
+      return toPromise(
+        httpPost({
+          path: `${context.uri}/${
+            context.version
+          }/views/${orgLabel}/${projectLabel}${opts}`,
+          body: JSON.stringify(payload),
         }),
       );
     },

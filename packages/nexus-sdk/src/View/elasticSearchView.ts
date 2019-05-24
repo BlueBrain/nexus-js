@@ -1,6 +1,6 @@
+import { toPromise } from '@bbp/nexus-link';
 import { Fetchers } from '../types';
 import { NexusContext } from '../nexusSdk';
-import { toPromise } from '@bbp/nexus-link';
 import { ElasticSearchView, ElasticSearchViewPayload } from './types';
 import { buildQueryParams } from '../utils';
 
@@ -53,7 +53,7 @@ const ElasticSearchView = (
     ): Promise<ElasticSearchView> => {
       const opts = buildQueryParams(options);
       return toPromise(
-        httpPost({
+        httpPut({
           path: `${context.uri}/${
             context.version
           }/views/${orgLabel}/${projectLabel}/${viewId}${opts}`,

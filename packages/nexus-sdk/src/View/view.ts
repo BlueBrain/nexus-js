@@ -1,6 +1,6 @@
+import { toPromise, Observable } from '@bbp/nexus-link';
 import { Fetchers } from '../types';
 import { NexusContext } from '../nexusSdk';
-import { toPromise, Observable } from '@bbp/nexus-link';
 import { View, ViewList } from './types';
 
 const View = ({ httpGet, poll }: Fetchers, context: NexusContext) => {

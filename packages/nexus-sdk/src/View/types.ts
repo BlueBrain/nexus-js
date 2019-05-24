@@ -1,4 +1,4 @@
-import { Resource, PaginatedResource } from '../types';
+import { Resource, PaginatedResource, Context } from '../types';
 
 export type SparqlView = Resource & {
   '@id': ['SparqlView', 'View'];
@@ -65,4 +65,28 @@ export type ElasticSearchViewPayload = {
   includeDeprecated?: boolean;
   resourceSchemas?: string[];
   resourceTypes?: string[];
+};
+
+export type AggregatedElasticSearchViewPayload = {
+  '@context'?: Context;
+  '@id': string;
+  '@type': ['AggregatedElasticSearchView'];
+  views: { project: string; viewId: string }[];
+};
+
+export type SparqlViewPayload = {
+  '@id': string;
+  '@type': ['SparqlView'];
+  includeMetadata?: boolean;
+  includeDeprecated?: boolean;
+  resourceSchemas?: string[];
+  resourceTypes?: string[];
+  resourceTag?: string[];
+};
+
+export type AggregatedSparqlViewPayload = {
+  '@context'?: Context;
+  '@id': string;
+  '@type': ['AggregatedSparqlView'];
+  views: { project: string; viewId: string }[];
 };

@@ -57,7 +57,7 @@ export type ElasticSearchViewQueryResponse = {
 };
 
 export type ElasticSearchViewPayload = {
-  '@id': string;
+  '@id'?: string;
   '@type': ['ElasticSearchView'];
   mapping: {};
   sourceAsText?: boolean;
@@ -69,13 +69,13 @@ export type ElasticSearchViewPayload = {
 
 export type AggregatedElasticSearchViewPayload = {
   '@context'?: Context;
-  '@id': string;
+  '@id'?: string;
   '@type': ['AggregatedElasticSearchView'];
   views: { project: string; viewId: string }[];
 };
 
 export type SparqlViewPayload = {
-  '@id': string;
+  '@id'?: string;
   '@type': ['SparqlView'];
   includeMetadata?: boolean;
   includeDeprecated?: boolean;
@@ -86,7 +86,7 @@ export type SparqlViewPayload = {
 
 export type AggregatedSparqlViewPayload = {
   '@context'?: Context;
-  '@id': string;
+  '@id?': string;
   '@type': ['AggregatedSparqlView'];
   views: { project: string; viewId: string }[];
 };

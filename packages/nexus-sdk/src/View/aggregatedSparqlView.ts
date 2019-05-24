@@ -2,7 +2,6 @@ import { toPromise } from '@bbp/nexus-link';
 import { Fetchers } from '../types';
 import { NexusContext } from '../nexusSdk';
 import { AggregatedSparqlViewPayload, AggregatedSparqlView } from './types';
-import { buildQueryParams } from '../utils';
 
 const AggregatedSparqlView = (
   { httpPost }: Fetchers,
@@ -25,6 +24,7 @@ const AggregatedSparqlView = (
     update: (
       orgLabel: string,
       projectLabel: string,
+      viewId: string,
       rev: number,
       payload: AggregatedSparqlViewPayload,
     ): Promise<AggregatedSparqlView> =>
@@ -32,7 +32,7 @@ const AggregatedSparqlView = (
         httpPost({
           path: `${context.uri}/${
             context.version
-          }/views/${orgLabel}/${projectLabel}?rev=${rev}`,
+          }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
           body: JSON.stringify(payload),
         }),
       ),

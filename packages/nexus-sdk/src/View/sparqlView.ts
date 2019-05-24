@@ -2,9 +2,8 @@ import { toPromise } from '@bbp/nexus-link';
 import { Fetchers } from '../types';
 import { NexusContext } from '../nexusSdk';
 import { SparqlView, SparqlViewPayload } from './types';
-import { buildQueryParams } from '../utils';
 
-const SparqlView = ({ httpPost }: Fetchers, context: NexusContext) => {
+const SparqlView = ({ httpPost, httpPut }: Fetchers, context: NexusContext) => {
   return {
     query: <T = any>(
       orgLabel: string,
@@ -40,14 +39,15 @@ const SparqlView = ({ httpPost }: Fetchers, context: NexusContext) => {
     update: (
       orgLabel: string,
       projectLabel: string,
+      viewId: string,
       rev: number,
       payload: SparqlViewPayload,
     ): Promise<SparqlView> =>
       toPromise(
-        httpPost({
+        httpPut({
           path: `${context.uri}/${
             context.version
-          }/views/${orgLabel}/${projectLabel}?rev=${rev}`,
+          }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
           body: JSON.stringify(payload),
         }),
       ),

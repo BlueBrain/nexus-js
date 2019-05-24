@@ -33,41 +33,33 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
+      rev: number,
       payload: {
         tag: string;
         rev: number;
       },
-      options?: {
-        rev: number;
-      },
-    ): Promise<View> => {
-      const opts = buildQueryParams(options);
-      return toPromise(
+    ): Promise<View> =>
+      toPromise(
         httpPost({
           path: `${context.uri}/${
             context.version
-          }/views/${orgLabel}/${projectLabel}/${viewId}${opts}`,
+          }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
           body: JSON.stringify(payload),
         }),
-      );
-    },
+      ),
     deprecate: (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
-      options?: {
-        rev: number;
-      },
-    ): Promise<View> => {
-      const opts = buildQueryParams(options);
-      return toPromise(
+      rev: number,
+    ): Promise<View> =>
+      toPromise(
         httpDelete({
           path: `${context.uri}/${
             context.version
-          }/views/${orgLabel}/${projectLabel}/${viewId}${opts}`,
+          }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
         }),
-      );
-    },
+      ),
     poll: <T = View>(
       orgLabel: string,
       projectLabel: string,

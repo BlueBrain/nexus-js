@@ -40,21 +40,17 @@ const SparqlView = ({ httpPost }: Fetchers, context: NexusContext) => {
     update: (
       orgLabel: string,
       projectLabel: string,
+      rev: number,
       payload: SparqlViewPayload,
-      options?: {
-        rev: number;
-      },
-    ): Promise<SparqlView> => {
-      const opts = buildQueryParams(options);
-      return toPromise(
+    ): Promise<SparqlView> =>
+      toPromise(
         httpPost({
           path: `${context.uri}/${
             context.version
-          }/views/${orgLabel}/${projectLabel}${opts}`,
+          }/views/${orgLabel}/${projectLabel}?rev=${rev}`,
           body: JSON.stringify(payload),
         }),
-      );
-    },
+      ),
   };
 };
 

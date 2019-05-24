@@ -46,21 +46,17 @@ const ElasticSearchView = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
+      rev: number,
       payload: ElasticSearchViewPayload,
-      options?: {
-        rev: number;
-      },
-    ): Promise<ElasticSearchView> => {
-      const opts = buildQueryParams(options);
-      return toPromise(
+    ): Promise<ElasticSearchView> =>
+      toPromise(
         httpPut({
           path: `${context.uri}/${
             context.version
-          }/views/${orgLabel}/${projectLabel}/${viewId}${opts}`,
+          }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
           body: JSON.stringify(payload),
         }),
-      );
-    },
+      ),
   };
 };
 

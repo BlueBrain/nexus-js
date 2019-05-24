@@ -25,21 +25,17 @@ const AggregatedSparqlView = (
     update: (
       orgLabel: string,
       projectLabel: string,
+      rev: number,
       payload: AggregatedSparqlViewPayload,
-      options?: {
-        rev: number;
-      },
-    ): Promise<AggregatedSparqlView> => {
-      const opts = buildQueryParams(options);
-      return toPromise(
+    ): Promise<AggregatedSparqlView> =>
+      toPromise(
         httpPost({
           path: `${context.uri}/${
             context.version
-          }/views/${orgLabel}/${projectLabel}${opts}`,
+          }/views/${orgLabel}/${projectLabel}?rev=${rev}`,
           body: JSON.stringify(payload),
         }),
-      );
-    },
+      ),
   };
 };
 

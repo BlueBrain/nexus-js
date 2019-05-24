@@ -5,7 +5,6 @@ import {
   AggregatedElasticSearchViewPayload,
   AggregatedElasticSearchView,
 } from './types';
-import { buildQueryParams } from '../utils';
 
 const AggregatedElasticSearchView = (
   { httpPost, httpPut }: Fetchers,
@@ -29,21 +28,17 @@ const AggregatedElasticSearchView = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
+      rev: number,
       payload: AggregatedElasticSearchViewPayload,
-      options?: {
-        rev: number;
-      },
-    ): Promise<AggregatedElasticSearchView> => {
-      const opts = buildQueryParams(options);
-      return toPromise(
+    ): Promise<AggregatedElasticSearchView> =>
+      toPromise(
         httpPut({
           path: `${context.uri}/${
             context.version
-          }/views/${orgLabel}/${projectLabel}/${viewId}${opts}`,
+          }/views/${orgLabel}/${projectLabel}/${viewId}/?rev=${rev}`,
           body: JSON.stringify(payload),
         }),
-      );
-    },
+      ),
   };
 };
 

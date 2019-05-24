@@ -4,7 +4,7 @@ import { NexusContext } from '../nexusSdk';
 import { AggregatedSparqlViewPayload, AggregatedSparqlView } from './types';
 
 const AggregatedSparqlView = (
-  { httpPost }: Fetchers,
+  { httpPost, httpPut }: Fetchers,
   context: NexusContext,
 ) => {
   return {
@@ -29,7 +29,7 @@ const AggregatedSparqlView = (
       payload: AggregatedSparqlViewPayload,
     ): Promise<AggregatedSparqlView> =>
       toPromise(
-        httpPost({
+        httpPut({
           path: `${context.uri}/${
             context.version
           }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,

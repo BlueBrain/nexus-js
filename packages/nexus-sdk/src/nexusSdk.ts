@@ -10,6 +10,7 @@ import {
   AggregatedElasticSearchView,
   AggregatedSparqlView,
 } from './View';
+import Resolver from './Resolver';
 
 export type NexusContext = Context & {
   uri: string;
@@ -42,6 +43,7 @@ export function createNexusClient(options: NexusClientOptions) {
     ElasticSearchView: ElasticSearchView(fetchers, context),
     AggregatedElasticSearchView: AggregatedElasticSearchView(fetchers, context),
     AggregatedSparqlView: AggregatedSparqlView(fetchers, context),
+    Resolver: Resolver(fetchers, context),
     File: NexusFile(fetchers, context),
   };
 }

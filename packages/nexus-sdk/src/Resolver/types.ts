@@ -12,14 +12,14 @@ export type GetResolverOptions = {
   tag?: string;
 };
 export type ListResolverOptions = {
-  full_text_search_query: string;
-  from: number;
-  size: number;
-  deprecated: boolean;
-  rev: number;
-  type: ResolverType;
-  createdBy: string;
-  updatedBy: string;
+  full_text_search_query?: string;
+  from?: number;
+  size?: number;
+  deprecated?: boolean;
+  rev?: number;
+  type?: ResolverType;
+  createdBy?: string;
+  updatedBy?: string;
 };
 export type ResolverPayload =
   | InProjectResolverPayload

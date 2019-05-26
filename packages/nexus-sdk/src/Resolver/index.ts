@@ -81,7 +81,7 @@ const Resolver = (
         httpDelete({
           path: `${context.uri}/${
             context.version
-          }/resolver/${orgLabel}/${projectLabel}${resolverId}?rev=${rev}`,
+          }/resolver/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
         }),
       ),
     poll: (

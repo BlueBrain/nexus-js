@@ -2,10 +2,10 @@ import { Resource, PaginatedResource } from '../types';
 
 export type StorageType = 'DiskStorage' | 'RemoteDiskStorage' | 'S3Storage';
 
-export type Storage = {};
-export type DiskStorage = Resource & {};
-export type RemoteDiskStorage = Resource & {};
-export type S3Storage = Resource & {};
+export type Storage = DiskStorage | RemoteDiskStorage | S3Storage;
+export type DiskStorage = Resource & {}; // TODO:
+export type RemoteDiskStorage = Resource & {}; // TODO:
+export type S3Storage = Resource & {}; // TODO:
 export type StorageList = PaginatedResource<Storage>;
 
 export type GetStorageOptions = {

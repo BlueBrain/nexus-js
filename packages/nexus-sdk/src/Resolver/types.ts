@@ -3,9 +3,9 @@ import { Resource, PaginatedResource } from '../types';
 export type ResolverType = 'InProject' | 'CrossProject';
 
 export type Resolver = InProjectResolver | CrossProjectResolver;
-export type InProjectResolver = Resource & {};
-export type CrossProjectResolver = Resource & {};
-export type ResolverList = PaginatedResource<Resolver>;
+export type InProjectResolver = Resource & {}; // TODO:
+export type CrossProjectResolver = Resource & {}; // TODO:
+export type ResolverList = PaginatedResource<Resolver>; // TODO:
 
 export type GetResolverOptions = {
   rev?: number;

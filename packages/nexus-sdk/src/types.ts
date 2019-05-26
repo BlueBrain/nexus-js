@@ -21,6 +21,7 @@ export type Context = string | (string | { [key: string]: string })[];
 export type Resource = {
   '@context?': Context;
   '@type': string | string[];
+  '@id': string;
   _incoming: string;
   _outgoing: string;
   '@id': string;

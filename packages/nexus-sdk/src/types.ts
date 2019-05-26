@@ -23,6 +23,7 @@ export type Resource = {
   '@type': string | string[];
   _incoming: string;
   _outgoing: string;
+  '@id': string;
   _self: string;
   _constrainedBy: string;
   _project: string;

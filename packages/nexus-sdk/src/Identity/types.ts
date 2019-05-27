@@ -1,4 +1,4 @@
-import { Context } from '@bbp/nexus-link';
+import { Context } from '../types';
 
 export type IdentityType = 'User' | 'Group' | 'Authenticated' | 'Anonymous';
 

@@ -1,4 +1,5 @@
 import { StatefulLink, Link, Context } from '@bbp/nexus-link';
+export * from './Identity/types';
 
 export type NexusClientOptions = {
   uri: string;
@@ -21,6 +22,8 @@ export type Context = string | (string | { [key: string]: string })[];
 export type Resource = {
   '@context?': Context;
   '@type': string | string[];
+  _incoming: string;
+  _outgoing: string;
   _self: string;
   _constrainedBy: string;
   _project: string;

@@ -3,9 +3,31 @@ import { Resource, PaginatedResource } from '../types';
 export type StorageType = 'DiskStorage' | 'RemoteDiskStorage' | 'S3Storage';
 
 export type Storage = DiskStorage | RemoteDiskStorage | S3Storage;
-export type DiskStorage = Resource & {}; // TODO:
-export type RemoteDiskStorage = Resource & {}; // TODO:
-export type S3Storage = Resource & {}; // TODO:
+export type DiskStorage = Resource & {
+  '@type': ['DiskStorage', 'Storage'];
+  volume: string;
+  default: boolean;
+  readPermissions?: string[];
+  writePermissions?: string[];
+  _algorithm: string;
+};
+export type RemoteDiskStorage = Resource & {
+  '@type': ['RemoteStorage', 'Storage'];
+  folder: string;
+  default: boolean;
+  endpoint?: string;
+  readPermissions?: string[];
+  writePermissions?: string[];
+  _algorithm: string;
+};
+export type S3Storage = Resource & {
+  '@type': ['S3Storage', 'Storage'];
+  default: boolean;
+  readPermissions?: string[];
+  writePermissions?: string[];
+  bucket: string;
+  _algorithm: string;
+};
 export type StorageList = PaginatedResource<Storage>;
 
 export type GetStorageOptions = {

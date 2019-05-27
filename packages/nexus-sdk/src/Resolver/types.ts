@@ -1,11 +1,20 @@
-import { Resource, PaginatedResource } from '../types';
+import { Resource, PaginatedResource, Identity } from '../types';
 
 export type ResolverType = 'InProject' | 'CrossProject';
 
 export type Resolver = InProjectResolver | CrossProjectResolver;
-export type InProjectResolver = Resource & {}; // TODO:
-export type CrossProjectResolver = Resource & {}; // TODO:
-export type ResolverList = PaginatedResource<Resolver>; // TODO:
+export type InProjectResolver = Resource & {
+  '@type': ['InProject', 'Resolver'];
+  priority: number;
+};
+export type CrossProjectResolver = Resource & {
+  '@type': ['CrossProject', 'Resolver'];
+  resourceTypes: string[];
+  projects: string[];
+  identities: Identity[];
+  priority: number;
+};
+export type ResolverList = PaginatedResource<Resolver>;
 
 export type GetResolverOptions = {
   rev?: number;
@@ -36,6 +45,6 @@ export type CrossProjectResolverPayload = {
   '@type': ['CrossProject'];
   resourceTypes: string[];
   projects: string[];
-  identities: {}[];
+  identities: Identity[];
   priority: number;
 };

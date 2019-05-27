@@ -51,3 +51,9 @@ export type GetResourceOptions = {
   tag?: string;
   [key: string]: any;
 };
+
+export type TagResourcePayload = {
+  previousRev: number;
+  tag: string;
+  rev: number;
+};

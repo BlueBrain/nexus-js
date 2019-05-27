@@ -5,7 +5,8 @@
 - Resources and other Endpoints
   - [`Projects`](./src/Project#readme)
   - [`Resources`](./src/Resource#readme)
-  - [`Identities`](./src/Identity)
+  - [`Identities`](./src/Identity#readme)
+  - [`Files`](./src/File#readme)
 
 ## Documentation
 

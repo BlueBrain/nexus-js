@@ -9,11 +9,11 @@ const View = (
   context: NexusContext,
 ) => {
   return {
-    get: <T = View>(
+    get: (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
-    ): Promise<T> =>
+    ): Promise<View> =>
       toPromise(
         httpGet({
           path: `${context.uri}/${
@@ -88,12 +88,12 @@ const View = (
           }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
         }),
       ),
-    poll: <T = View>(
+    poll: (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
       options?: { pollTime: number },
-    ): Observable<T> =>
+    ): Observable<View> =>
       poll({
         path: `${context.uri}/${
           context.version

@@ -1,4 +1,4 @@
-import { buildQueryParams } from '../utils';
+import { buildQueryParams, removeLeadingSlash } from '../utils';
 
 describe('utils functions', () => {
   describe('buildQueryParams()', () => {
@@ -29,6 +29,14 @@ describe('utils functions', () => {
         '?description=I%20love%20encoded%20URI',
       );
       expect(buildQueryParams()).toEqual('');
+    });
+  });
+  describe('removeLeadingSlash()', () => {
+    it('should remove leading slash', () => {
+      expect(removeLeadingSlash('/some/path')).toEqual('some/path');
+    });
+    it('should return the original string', () => {
+      expect(removeLeadingSlash('*')).toEqual('*');
     });
   });
 });

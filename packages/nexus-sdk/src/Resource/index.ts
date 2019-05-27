@@ -1,10 +1,10 @@
 import { toPromise, Observable } from '@bbp/nexus-link';
 import { Fetchers, GetResourceOptions, Resource } from '../types';
 import {
-  ResourceList,
   ResourceListOptions,
   ResourcePayload,
   DEFAULT_SCHEMA_ID,
+  PaginatedResource,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
@@ -33,7 +33,7 @@ const Resource = (
       orgLabel: string,
       projectLabel: string,
       options?: ResourceListOptions,
-    ): Promise<ResourceList> => {
+    ): Promise<PaginatedResource> => {
       const opts = buildQueryParams(options);
       return toPromise(
         httpGet({

@@ -1,5 +1,4 @@
 import { StatefulLink, Link, Context } from '@bbp/nexus-link';
-export * from './Identity/types';
 
 export type NexusClientOptions = {
   uri: string;
@@ -41,3 +40,12 @@ export type PaginatedResource<T = Resource> = {
   _result: T[];
   _next?: string;
 };
+
+export * from './File/types';
+export * from './Identity/types';
+export * from './Organization/types';
+export * from './Project/types';
+export * from './Resolver/types';
+export * from './Schema/types';
+export * from './Storage/types';
+export * from './View/types';

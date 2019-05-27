@@ -9,7 +9,7 @@ import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
 
 const Organization = (
-  { httpGet, httpPut, httpDelete, poll }: Fetchers,
+  { httpGet, httpPut, httpDelete, httpPatch, poll }: Fetchers,
   context: NexusContext,
 ) => {
   return {
@@ -33,14 +33,14 @@ const Organization = (
       payload: PermissionsPayload,
     ): Promise<Permissions> =>
       toPromise(
-        httpPut({
+        httpPatch({
           path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
           body: JSON.stringify({ '@type': 'Subtract', permissions: payload }),
         }),
       ),
     append: (rev: number, payload: PermissionsPayload): Promise<Permissions> =>
       toPromise(
-        httpPut({
+        httpPatch({
           path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
           body: JSON.stringify({ '@type': 'Append', permissions: payload }),
         }),

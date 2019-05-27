@@ -1,5 +1,5 @@
 import { toPromise, Observable } from '@bbp/nexus-link';
-import { Fetchers } from '../types';
+import { Fetchers, Resource } from '../types';
 import { NexusContext } from '../nexusSdk';
 import { View, ViewList, ViewPayload } from './types';
 import { buildQueryParams } from '../utils';
@@ -33,7 +33,7 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       payload: ViewPayload,
-    ): Promise<View> =>
+    ): Promise<Resource> =>
       toPromise(
         httpPut({
           path: `${context.uri}/${
@@ -48,7 +48,7 @@ const View = (
       viewId: string,
       rev: number,
       payload: ViewPayload,
-    ): Promise<View> =>
+    ): Promise<Resource> =>
       toPromise(
         httpPut({
           path: `${context.uri}/${
@@ -66,7 +66,7 @@ const View = (
         tag: string;
         rev: number;
       },
-    ): Promise<View> =>
+    ): Promise<Resource> =>
       toPromise(
         httpPost({
           path: `${context.uri}/${
@@ -80,7 +80,7 @@ const View = (
       projectLabel: string,
       viewId: string,
       rev: number,
-    ): Promise<View> =>
+    ): Promise<Resource> =>
       toPromise(
         httpDelete({
           path: `${context.uri}/${

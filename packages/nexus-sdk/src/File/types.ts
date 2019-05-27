@@ -1,5 +1,6 @@
 import { GetResourceOptions, Resource } from '../Resource/types';
 import { FetchAsValues } from '@bbp/nexus-link';
+
 export type NexusFile = Resource & {
   '@type': 'File';
   _bytes: number;
@@ -13,4 +14,10 @@ export type NexusFile = Resource & {
 
 export type GetFileOptions = GetResourceOptions & {
   as?: FetchAsValues;
+};
+
+export type FilePayload = {
+  '@id'?: string;
+  storage?: string;
+  file: File | Blob | string;
 };

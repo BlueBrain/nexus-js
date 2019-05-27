@@ -15,3 +15,5 @@ export function buildQueryParams(options?: {
   }
   return opts;
 }
+
+export const isBrowser = (): boolean => typeof window !== 'undefined';

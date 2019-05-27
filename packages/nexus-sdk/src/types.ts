@@ -18,6 +18,7 @@ export type Fetchers = {
 
 export type Context = string | (string | { [key: string]: string })[];
 
+export * from './Resource/types';
 export * from './File/types';
 export * from './Identity/types';
 export * from './Organization/types';

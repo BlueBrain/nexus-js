@@ -12,11 +12,13 @@ import {
   PaginatedResource,
   ResourceListOptions,
   TagResourcePayload,
+  GetResourceOptions,
 } from '../Resource/types';
 import { stringLiteral } from '@babel/types';
+import { Observable } from '../../../nexus-link/lib';
 
 const NexusFile = (
-  { httpGet, httpPost, httpPut, httpDelete },
+  { httpGet, httpPost, httpPut, httpDelete, poll },
   context: any,
 ) => {
   return {
@@ -169,6 +171,22 @@ const NexusFile = (
           }/file/${orgLabel}/${projectLabel}/${fileId}/tags?rev=${previousRev}`,
         }),
       );
+    },
+    poll: (
+      orgLabel: string,
+      projectLabel: string,
+      fileId: string,
+      options?: GetResourceOptions & { pollTime: number },
+    ): Observable<NexusFile> => {
+      const { pollTime, ...getResourceOptions } = options;
+      return poll({
+        path: `${context.uri}/${
+          context.version
+        }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(
+          getResourceOptions,
+        )}`,
+        context: { pollTime: pollTime || 1000 },
+      });
     },
   };
 };

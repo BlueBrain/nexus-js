@@ -1,7 +1,7 @@
 import { toPromise, Observable } from '@bbp/nexus-link';
 import { Fetchers, Resource } from '../types';
 import { NexusContext } from '../nexusSdk';
-import { View, ViewList, ViewPayload } from './types';
+import { View, ViewList, ViewPayload, Statistics } from './types';
 import { buildQueryParams } from '../utils';
 
 const View = (
@@ -138,6 +138,18 @@ const View = (
         }),
       );
     },
+    statistics: (
+      orgLabel: string,
+      projectLabel: string,
+      viewId: string,
+    ): Promise<Statistics> =>
+      toPromise(
+        httpGet({
+          path: `${context.uri}/${
+            context.version
+          }/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
+        }),
+      ),
   };
 };
 

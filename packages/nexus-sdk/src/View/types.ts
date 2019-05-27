@@ -96,3 +96,15 @@ export type ViewPayload =
   | AggregatedElasticSearchViewPayload
   | SparqlViewPayload
   | AggregatedSparqlViewPayload;
+
+export type Statistics = {
+  '@context': string;
+  delayInSeconds: string;
+  discardedEvents: string;
+  evaluatedEvents: string;
+  lastEventDateTime: string;
+  lastProcessedEventDateTime: string;
+  processedEvents: string;
+  remainingEvents: string;
+  totalEvents: number;
+};

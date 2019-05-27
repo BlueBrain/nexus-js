@@ -1,6 +1,11 @@
 import FormData from 'isomorphic-form-data';
 import { toPromise, FetchAs } from '@bbp/nexus-link';
-import { GetFileOptions, NexusFile, FilePayload } from './types';
+import {
+  GetFileOptions,
+  NexusFile,
+  FilePayload,
+  LinkFilePayload,
+} from './types';
 import { buildQueryParams, isBrowser } from '../utils';
 import { PaginatedResource, ResourceListOptions } from '../Resource/types';
 
@@ -64,6 +69,30 @@ const NexusFile = ({ httpGet, httpPost, httpPut }, context: any) => {
             })
           : httpPost({
               headers,
+              body,
+              path: `${context.uri}/${
+                context.version
+              }/files/${orgLabel}/${projectLabel}${opts}`,
+            }),
+      );
+    },
+
+    link: (
+      orgLabel: string,
+      projectLabel: string,
+      payload: LinkFilePayload,
+    ): Promise<NexusFile> => {
+      const { '@id': fileId, storage, ...body } = payload;
+      const opts = buildQueryParams({ storage });
+      return toPromise(
+        fileId
+          ? httpPut({
+              body,
+              path: `${context.uri}/${
+                context.version
+              }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
+            })
+          : httpPost({
               body,
               path: `${context.uri}/${
                 context.version

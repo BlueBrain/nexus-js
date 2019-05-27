@@ -21,3 +21,11 @@ export type FilePayload = {
   storage?: string;
   file: File | Blob | string;
 };
+
+export type LinkFilePayload = {
+  '@id'?: string;
+  storage?: string;
+  filename: string;
+  path: string;
+  mediaType: string;
+};

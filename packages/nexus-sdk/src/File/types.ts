@@ -22,6 +22,11 @@ export type FilePayload = {
   file: File | Blob | string;
 };
 
+export type UpdateFilePayload = FilePayload & {
+  rev: string;
+  [key: string]: string;
+};
+
 export type LinkFilePayload = {
   '@id'?: string;
   storage?: string;

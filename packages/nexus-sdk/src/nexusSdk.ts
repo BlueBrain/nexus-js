@@ -7,6 +7,7 @@ import View from './View';
 import Resolver from './Resolver';
 import Storage from './Storage';
 import Schema from './Schema';
+import Identity from './Identity';
 
 export type NexusContext = Context & {
   uri: string;
@@ -39,5 +40,6 @@ export function createNexusClient(options: NexusClientOptions) {
     Schema: Schema(fetchers, context),
     File: NexusFile(fetchers, context),
     Storage: Storage(fetchers, context),
+    Identity: Identity(fetchers, context),
   };
 }

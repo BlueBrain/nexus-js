@@ -3,13 +3,7 @@ import { NexusClientOptions, Fetchers } from './types';
 import Organization from './Organization';
 import NexusFile from './File';
 import Project from './Project';
-import {
-  View,
-  SparqlView,
-  ElasticSearchView,
-  AggregatedElasticSearchView,
-  AggregatedSparqlView,
-} from './View';
+import View from './View';
 import Resolver from './Resolver';
 import Storage from './Storage';
 import Schema from './Schema';
@@ -41,10 +35,6 @@ export function createNexusClient(options: NexusClientOptions) {
     Organization: Organization(fetchers, context),
     Project: Project(fetchers, context),
     View: View(fetchers, context),
-    SparqlView: SparqlView(fetchers, context),
-    ElasticSearchView: ElasticSearchView(fetchers, context),
-    AggregatedElasticSearchView: AggregatedElasticSearchView(fetchers, context),
-    AggregatedSparqlView: AggregatedSparqlView(fetchers, context),
     Resolver: Resolver(fetchers, context),
     Schema: Schema(fetchers, context),
     File: NexusFile(fetchers, context),

@@ -90,3 +90,9 @@ export type AggregatedSparqlViewPayload = {
   '@type': ['AggregatedSparqlView'];
   views: { project: string; viewId: string }[];
 };
+
+export type ViewPayload =
+  | ElasticSearchViewPayload
+  | AggregatedElasticSearchViewPayload
+  | SparqlViewPayload
+  | AggregatedSparqlViewPayload;

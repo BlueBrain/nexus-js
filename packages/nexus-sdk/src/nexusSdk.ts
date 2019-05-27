@@ -11,6 +11,7 @@ import {
   AggregatedSparqlView,
 } from './View';
 import Resolver from './Resolver';
+import Storage from './Storage';
 
 export type NexusContext = Context & {
   uri: string;
@@ -45,5 +46,6 @@ export function createNexusClient(options: NexusClientOptions) {
     AggregatedSparqlView: AggregatedSparqlView(fetchers, context),
     Resolver: Resolver(fetchers, context),
     File: NexusFile(fetchers, context),
+    Storage: Storage(fetchers, context),
   };
 }

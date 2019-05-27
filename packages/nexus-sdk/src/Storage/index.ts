@@ -1,16 +1,15 @@
 import { toPromise, Observable } from '@bbp/nexus-link';
 import { Fetchers } from '../types';
 import {
-  Resolver,
-  ResolverList,
-  GetResolverOptions,
-  ListResolverOptions,
-  ResolverPayload,
+  GetStorageOptions,
+  ListStorageOptions,
+  StorageList,
+  StoragePayload,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
 
-const Resolver = (
+const Storage = (
   { httpGet, httpPut, httpDelete, poll }: Fetchers,
   context: NexusContext,
 ) => {
@@ -18,85 +17,83 @@ const Resolver = (
     get: (
       orgLabel: string,
       projectLabel: string,
-      resolverId: string,
-      options?: GetResolverOptions,
-    ): Promise<Resolver> => {
+      storageId: string,
+      options?: GetStorageOptions,
+    ): Promise<Storage> => {
       const opts = buildQueryParams(options);
       return toPromise(
         httpGet({
           path: `${context.uri}/${
             context.version
-          }/resolvers/${orgLabel}/${projectLabel}/${resolverId}${opts}`,
+          }/storages/${orgLabel}/${projectLabel}/${storageId}${opts}`,
         }),
       );
     },
     list: (
       orgLabel?: string,
-      options?: ListResolverOptions,
-    ): Promise<ResolverList> => {
+      options?: ListStorageOptions,
+    ): Promise<StorageList> => {
       const opts = buildQueryParams(options);
       return toPromise(
         httpGet({
-          path: `${context.uri}/${
-            context.version
-          }/resolvers/${orgLabel}${opts}`,
+          path: `${context.uri}/${context.version}/storages/${orgLabel}${opts}`,
         }),
       );
     },
     create: (
       orgLabel: string,
       projectLabel: string,
-      payload: ResolverPayload,
-    ): Promise<Resolver> =>
+      payload: StoragePayload,
+    ): Promise<Storage> =>
       toPromise(
         httpPut({
           path: `${context.uri}/${
             context.version
-          }/resolvers/${orgLabel}/${projectLabel}`,
+          }/storages/${orgLabel}/${projectLabel}`,
           body: JSON.stringify(payload),
         }),
       ),
     update: (
       orgLabel: string,
       projectLabel: string,
-      resolverId: string,
+      storageId: string,
       rev: number,
-      payload: ResolverPayload,
-    ): Promise<Resolver> =>
+      payload: StoragePayload,
+    ): Promise<Storage> =>
       toPromise(
         httpPut({
           path: `${context.uri}/${
             context.version
-          }/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
+          }/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
           body: JSON.stringify(payload),
         }),
       ),
     deprecate: (
       orgLabel: string,
       projectLabel: string,
-      resolverId: string,
+      storageId: string,
       rev: number,
-    ): Promise<Resolver> =>
+    ): Promise<Storage> =>
       toPromise(
         httpDelete({
           path: `${context.uri}/${
             context.version
-          }/resolver/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
+          }/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
         }),
       ),
     poll: (
       orgLabel: string,
       projectLabel: string,
-      resolverId: string,
+      storageId: string,
       options?: { pollTime: number },
-    ): Observable<Resolver> =>
+    ): Observable<Storage> =>
       poll({
         path: `${context.uri}/${
           context.version
-        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}`,
+        }/storages/${orgLabel}/${projectLabel}/${storageId}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
   };
 };
 
-export default Resolver;
+export default Storage;

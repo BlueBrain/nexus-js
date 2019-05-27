@@ -1,4 +1,7 @@
-import { toPromise } from '@bbp/nexus-link';
+import { toPromise, FetchAs } from '@bbp/nexus-link';
+import { GetFileOptions, NexusFile } from './types';
+import { buildQueryParams } from '../utils';
+import { PaginatedResource, ResourceListOptions } from '../Resource/types';
 
 const NexusFile = ({ httpGet }, context: any) => {
   return {
@@ -6,17 +9,37 @@ const NexusFile = ({ httpGet }, context: any) => {
       orgLabel: string,
       projectLabel: string,
       fileId: string,
-    ): Promise<Blob> =>
-      toPromise(
+      options?: GetFileOptions,
+    ): Promise<NexusFile | Blob | string> => {
+      const { as = FetchAs.BLOB, ...opts } = options;
+      return toPromise(
         httpGet({
           path: `${context.uri}/${
             context.version
-          }/files/${orgLabel}/${projectLabel}/${fileId}`,
+          }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(
+            opts,
+          )}`,
           context: {
-            as: 'blob',
+            as,
           },
         }),
-      ),
+      );
+    },
+
+    list: (
+      orgLabel: string,
+      projectLabel: string,
+      options?: ResourceListOptions,
+    ): Promise<PaginatedResource<NexusFile>> => {
+      const opts = buildQueryParams(options);
+      return toPromise(
+        httpGet({
+          path: `${context.uri}/${
+            context.version
+          }/files/${orgLabel}/${projectLabel}${opts}`,
+        }),
+      );
+    },
   };
 };
 

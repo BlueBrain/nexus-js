@@ -4,7 +4,7 @@
  */
 
 import { Observable } from 'zen-observable-ts';
-import { Link, Operation } from './types';
+import { Link, Operation, FetchAs } from './types';
 
 export const setMethod = (method: string): Link => (
   operation: Operation,
@@ -32,12 +32,13 @@ export const triggerFetch: Link = (operation: Operation) =>
         } else {
           const parseAs = operation.context && operation.context.as;
           switch (parseAs) {
-            case 'text':
+            case FetchAs.TEXT:
               observer.next(await response.text());
-            case 'blob':
+            case FetchAs.BLOB:
               observer.next(await response.blob());
-            case 'document':
+            case FetchAs.DOCUMENT:
               observer.next(await response.formData());
+            case FetchAs.JSON:
             default:
               observer.next(await response.json());
           }

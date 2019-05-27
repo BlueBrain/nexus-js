@@ -1,8 +1,6 @@
-import { Context } from '../types';
-
-export type NexusFile = {
-  '@context': Context;
-  '@id': string;
+import { GetResourceOptions, Resource } from '../Resource/types';
+import { FetchAsValues } from '@bbp/nexus-link';
+export type NexusFile = Resource & {
   '@type': 'File';
   _bytes: number;
   _digest: {
@@ -11,13 +9,8 @@ export type NexusFile = {
   };
   _filename: string;
   _mediaType: string;
-  _self: string;
-  _constrainedBy: string;
-  _project: string;
-  _rev: number;
-  _deprecated: boolean;
-  _createdAt: string;
-  _createdBy: string;
-  _updatedAt: string;
-  _updatedBy: string;
+};
+
+export type GetFileOptions = GetResourceOptions & {
+  as?: FetchAsValues;
 };

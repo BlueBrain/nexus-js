@@ -1,7 +1,18 @@
 import { Resource, PaginatedResource, Context } from '../types';
 
-//TODO: define shape type
-export type Shape = {};
+export type Property = {
+  datatype: string;
+  minCount: number;
+  path: string;
+};
+
+export type Shape = {
+  '@id': string;
+  '@type': string;
+  nodeKind: string;
+  property: Property[];
+  targetClass: string;
+};
 
 export type Schema = Resource & {
   '@type': 'Schema';

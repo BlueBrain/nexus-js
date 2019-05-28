@@ -1,5 +1,5 @@
 import FormData from 'isomorphic-form-data';
-import { toPromise, FetchAs } from '@bbp/nexus-link';
+import { toPromise } from '@bbp/nexus-link';
 import {
   GetFileOptions,
   NexusFile,
@@ -28,7 +28,7 @@ const NexusFile = (
       fileId: string,
       options?: GetFileOptions,
     ): Promise<NexusFile | Blob | string | FormData> => {
-      const { as = FetchAs.BLOB, ...opts } = options;
+      const { as = 'blob', ...opts } = options;
       return toPromise(
         httpGet({
           path: `${context.uri}/${

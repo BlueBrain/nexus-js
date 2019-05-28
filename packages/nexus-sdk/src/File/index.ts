@@ -27,9 +27,16 @@ const NexusFile = (
       fileId: string,
       options?: GetFileOptions,
     ): Promise<NexusFile | Blob | string | FormData> => {
-      const { as = 'blob', ...opts } = options;
+      const { as = 'json', ...opts } = options;
+      const headers =
+        as === 'json'
+          ? {
+              'Content-Type': 'application/json',
+            }
+          : {};
       return toPromise(
         httpGet({
+          headers,
           path: `${context.uri}/${
             context.version
           }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(

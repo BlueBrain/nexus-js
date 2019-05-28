@@ -6,7 +6,7 @@
 
 ```typescript
 // Resources
-nexus.File.get('myOrg', 'myProject', 'myID', { as: 'BLOB' })
+nexus.File.get('myOrg', 'myProject', 'myID', { as: 'blob' })
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
 
@@ -18,10 +18,12 @@ nexus.File.list('myOrg', 'myProject')
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
 
+const formData = new FormData();
+formData.add(myFile);
 nexus.File.create('myOrg', 'myProject', {
   '@id': 'myId',
   storage: 'myFileId',
-  file: File,
+  file: formData,
 })
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));

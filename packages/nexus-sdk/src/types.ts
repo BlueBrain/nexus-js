@@ -16,6 +16,13 @@ export type Fetchers = {
   poll: Link;
 };
 
+export enum FetchAs {
+  BLOB = 'blob',
+  TEXT = 'text',
+  DOCUMENT = 'document',
+  JSON = 'json',
+}
+
 export type Context = string | (string | { [key: string]: string })[];
 
 export * from './Resource/types';

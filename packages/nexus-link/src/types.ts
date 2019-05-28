@@ -33,12 +33,6 @@ export type Fetchers = {
   poll: Link;
 };
 
-export type FetchAsValues =
-  | FetchAs.BLOB
-  | FetchAs.TEXT
-  | FetchAs.DOCUMENT
-  | FetchAs.JSON;
-
 export enum FetchAs {
   BLOB = 'blob',
   TEXT = 'text',

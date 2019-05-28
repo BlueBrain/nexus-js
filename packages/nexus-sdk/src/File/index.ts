@@ -6,8 +6,9 @@ import {
   FilePayload,
   LinkFilePayload,
   UpdateFilePayload,
+  CreateFileOptions,
 } from './types';
-import { buildQueryParams, isBrowser } from '../utils';
+import { buildQueryParams } from '../utils';
 import {
   PaginatedResource,
   ResourceListOptions,
@@ -61,13 +62,11 @@ const NexusFile = (
       orgLabel: string,
       projectLabel: string,
       payload: FilePayload,
+      options?: CreateFileOptions,
     ): Promise<NexusFile> => {
-      const { '@id': fileId, file, storage } = payload;
-      const body = new FormData();
-      body.append('file', file);
-      // if in Node.js, we need to manually set headers
-      const headers = isBrowser ? {} : body.getHeaders();
+      const { '@id': fileId, file: body, storage } = payload;
       const opts = buildQueryParams({ storage });
+      const headers = (options && options.extraHeaders) || {};
       return toPromise(
         fileId
           ? httpPut({
@@ -115,13 +114,11 @@ const NexusFile = (
       orgLabel: string,
       projectLabel: string,
       payload: UpdateFilePayload,
+      options?: CreateFileOptions,
     ): Promise<NexusFile> => {
-      const { '@id': fileId, file, ...options } = payload;
-      const body = new FormData();
-      body.append('file', file);
-      // if in Node.js, we need to manually set headers
-      const headers = isBrowser ? {} : body.getHeaders();
-      const opts = buildQueryParams(options);
+      const { '@id': fileId, file: body, storage } = payload;
+      const opts = buildQueryParams({ storage });
+      const headers = (options && options.extraHeaders) || {};
       return toPromise(
         fileId
           ? httpPut({

@@ -20,7 +20,7 @@ export const setMethod = (method: string): Link => (
   return forward(nextOperation);
 };
 
-export const triggerFetch: Link = (operation: Operation) =>
+export const triggerFetch = (fetch?: any): Link => (operation: Operation) =>
   new Observable(observer => {
     const controller = new AbortController();
     const signal = controller.signal;

@@ -13,36 +13,28 @@
 ```typescript
 import { createNexusClient } from '@bbp/nexus-sdk';
 
+const nexus = createNexusClient({ uri: 'https://api.url', version: 'v1' })
+
+```
+
+**Node.js support**
+
+The Nexus SDK relies on [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), so in order to use this library in Node.js, you need to provide a `fetch` implementation when creating a new client. We recommend using [`node-fetch`](https://www.npmjs.com/package/node-fetch)
+
+Request Cancellation is using `AbortController`, so you need to polyfill it. As [documented](https://www.npmjs.com/package/node-fetch#request-cancellation-with-abortsignal) in `node-fetch`, you can use [`abort-controller`](https://www.npmjs.com/package/abort-controller) as a polyfill.
+
+Example:
+
+```javascript
+const fetch = require('node-fetch');
+require("abort-controller/polyfill")
+
 const nexus = createNexusClient({
   uri: 'https://sandbox.bluebrainnexus.io',
   version: 'v1',
-  links: [logResponseTime, new OperationCount(), reduxDispatcher(console.log)], // list of links
+  fetch,
 });
 
-nexus.Organization.list()
-  .then(d => console.log('res>', d))
-  .catch(e => console.error(e));
+nexus.Organization.list().then(orgs => console.log(orgs)).catch(e => console.error(e));
 
-nexus.Organization.create('blah', { description: 'asd das da ' })
-  .then(d => console.log('res>', d))
-  .catch(e => console.error(e));
-
-nexus.Organization.get('public')
-  .then(d => console.log('res>', d))
-  .catch(e => console.error(e));
-
-const sub: Subscriber<any> = nexus.Organization.poll('public', {
-  pollTime: 1000,
-}).subscribe(s => console.log('res>', s));
-setTimeout(() => {
-  sub.unsubscribe();
-}, 4000);
-
-nexus.File.get(
-  'public',
-  'album',
-  'https%3A%2F%2Fsandbox.bluebrainnexus.io%2Fv1%2Fresources%2Fpublic%2Falbum%2F_%2Fe539bc98-d9e4-40e8-8eb7-551dfa09df93',
-)
-  .then(d => console.log(d.type, d.size))
-  .catch(e => console.error(e));
 ```

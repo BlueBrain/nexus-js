@@ -35,3 +35,5 @@ export * from './Schema/types';
 export * from './Storage/types';
 export * from './View/types';
 export * from './Realm/types';
+export * from './Permissions/types';
+export * from './ACL/types';

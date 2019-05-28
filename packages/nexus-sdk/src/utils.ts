@@ -15,3 +15,8 @@ export function buildQueryParams(options?: {
   }
   return opts;
 }
+
+export function removeLeadingSlash(string: string) {
+  return string.replace(/^\/+/g, '');
+}
+export const isBrowser = (): boolean => typeof window !== 'undefined';

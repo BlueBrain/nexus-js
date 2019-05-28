@@ -9,6 +9,8 @@ import Storage from './Storage';
 import Schema from './Schema';
 import Identity from './Identity';
 import Realm from './Realm';
+import Permissions from './Permissions';
+import ACL from './ACL';
 
 export type NexusContext = Context & {
   uri: string;
@@ -43,5 +45,7 @@ export function createNexusClient(options: NexusClientOptions) {
     Storage: Storage(fetchers, context),
     Identity: Identity(fetchers, context),
     Realm: Realm(fetchers, context),
+    Permissions: Permissions(fetchers, context),
+    ACL: ACL(fetchers, context),
   };
 }

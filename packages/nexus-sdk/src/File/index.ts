@@ -1,4 +1,3 @@
-import FormData from 'isomorphic-form-data';
 import { toPromise } from '@bbp/nexus-link';
 import {
   GetFileOptions,

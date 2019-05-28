@@ -27,11 +27,11 @@ const NexusFile = (
       fileId: string,
       options?: GetFileOptions,
     ): Promise<NexusFile | Blob | string | FormData> => {
-      const { as = 'json', ...opts } = options;
+      const { as = 'json', ...opts } = options || {};
       const headers =
         as === 'json'
           ? {
-              'Content-Type': 'application/json',
+              Accept: 'application/json',
             }
           : {};
       return toPromise(

@@ -99,12 +99,12 @@ export type ViewPayload =
 
 export type Statistics = {
   '@context': string;
-  delayInSeconds: string;
-  discardedEvents: string;
-  evaluatedEvents: string;
+  delayInSeconds: number;
+  discardedEvents: number;
+  evaluatedEvents: number;
   lastEventDateTime: string;
   lastProcessedEventDateTime: string;
-  processedEvents: string;
-  remainingEvents: string;
+  processedEvents: number;
+  remainingEvents: number;
   totalEvents: number;
 };

@@ -18,8 +18,8 @@ export type NexusContext = Context & {
 };
 export function createNexusClient(options: NexusClientOptions) {
   const links = options.links
-    ? [...options.links, triggerFetch]
-    : [triggerFetch];
+    ? [...options.links, triggerFetch(options.fetch)]
+    : [triggerFetch(options.fetch)];
   const requestHandler = pipe(links);
   const defaultContext = { uri: options.uri, version: options.version };
   const context: NexusContext = options.context

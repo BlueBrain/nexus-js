@@ -5,6 +5,7 @@ export type NexusClientOptions = {
   version: string;
   links?: (StatefulLink | Link)[];
   context?: Context;
+  fetch?: any; // fetch api implementation
 };
 
 export type Fetchers = {

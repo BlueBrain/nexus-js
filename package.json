@@ -85,7 +85,8 @@
   },
   "dependencies": {
     "cross-fetch": "^3.0.2",
-    "eventsource": "^1.0.7"
+    "eventsource": "^1.0.7",
+    "isomorphic-form-data": "^2.0.0"
   },
   "husky": {
     "hooks": {

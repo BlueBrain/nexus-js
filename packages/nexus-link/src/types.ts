@@ -32,3 +32,10 @@ export type Fetchers = {
   httpDelete: Link;
   poll: Link;
 };
+
+export enum FetchAs {
+  BLOB = 'blob',
+  TEXT = 'text',
+  DOCUMENT = 'document',
+  JSON = 'json',
+}

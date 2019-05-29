@@ -29,12 +29,12 @@ pipeline {
             parallel {
                 stage('Lint') {
                     steps {
-                        sh 'make lint -- -c tslint.prod.json'
+                        sh 'make lint'
                     }
                 }
                 stage('Test') {
                     steps {
-                        sh 'npm run test'
+                        sh 'make test'
                         sh "npm run codecov -- --token=\"`oc get secrets codecov-secret --template='{{.data.nexus_sdk_js}}' | base64 -d`\""
                     }
                 }

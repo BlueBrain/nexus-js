@@ -147,12 +147,23 @@ describe('Views', () => {
   });
 
   describe('deprecate', () => {
-    it('should make httpPut call to the views api', async () => {
+    it('should make httpDELETE call to the views api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await view.deprecate('org', 'project', 'myViewId', 1);
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project/myViewId?rev=1',
+      );
+    });
+  });
+
+  describe('statistics', () => {
+    it('should make httpGet call to the views api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await view.statistics('org', 'project', 'myViewId');
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myViewId/statistics',
       );
     });
   });

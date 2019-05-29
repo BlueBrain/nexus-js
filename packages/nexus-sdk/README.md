@@ -107,7 +107,7 @@ This repo is managed as a _monorepo_ using [lerna](https://github.com/lerna/lern
 - Install: `make install`
 - Build: `make build`
 - Test: `make test`
-- Lint: `makelint`
+- Lint: `make lint`
 
 # License
 

@@ -1,4 +1,4 @@
-import { toPromise, Observable } from '@bbp/nexus-link';
+import { Observable } from '@bbp/nexus-link';
 import { Fetchers } from '../types';
 import {
   Permissions,

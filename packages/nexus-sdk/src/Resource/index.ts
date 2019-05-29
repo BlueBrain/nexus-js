@@ -1,4 +1,4 @@
-import { toPromise, Observable } from '@bbp/nexus-link';
+import { Observable } from '@bbp/nexus-link';
 import { Fetchers, GetResourceOptions, Resource } from '../types';
 import {
   ResourceListOptions,

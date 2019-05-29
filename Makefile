@@ -16,7 +16,7 @@ build:
 
 test:
 	@echo "Running tests... 🧪"
-	@npx lerna run test --stream
+	@npm test
 
 lint:
 	@echo "Linting... ✨"

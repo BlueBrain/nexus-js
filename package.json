@@ -61,7 +61,7 @@
   "jest": {
     "automock": false,
     "roots": [
-      "<rootDir>/src"
+      "<rootDir>/packages"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
@@ -76,7 +76,7 @@
       "node"
     ],
     "setupFiles": [
-      "./test/setupJest.js"
+      "<rootDir>/scripts/setupJest.ts"
     ]
   },
   "prettier": {

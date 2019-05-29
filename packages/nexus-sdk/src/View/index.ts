@@ -1,4 +1,4 @@
-import { toPromise, Observable } from '@bbp/nexus-link';
+import { Observable } from '@bbp/nexus-link';
 import { Fetchers, Resource } from '../types';
 import { NexusContext } from '../nexusSdk';
 import { View, ViewList, ViewPayload, Statistics } from './types';

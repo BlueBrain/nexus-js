@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`Project Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/kg/kg-resources-api.html)
+[`Resource Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/kg/kg-resources-api.html)
 
 ```typescript
 // Resources

@@ -26,7 +26,6 @@ export type GetSchemaOptions = {
   tag?: string;
 };
 export type ListSchemaOptions = {
-  full_text_search_query?: string;
   from?: number;
   size?: number;
   deprecated?: boolean;

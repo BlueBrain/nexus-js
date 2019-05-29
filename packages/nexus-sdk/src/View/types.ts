@@ -5,7 +5,7 @@ export type SparqlView = Resource & {
   _uuid: string;
 };
 export type ElasticSearchView = Resource & {
-  '@id': ['ElasticSearchView', 'View'];
+  '@type': ['ElasticSearchView', 'View'];
   _uuid: string;
   mapping: {};
   sourceAsText?: boolean;
@@ -56,6 +56,13 @@ export type ElasticSearchViewQueryResponse = {
   took: number;
 };
 
+export enum ViewTypes {
+  ElasticSearchView = 'ElasticSearchView',
+  AggregatedElasticSearchView = 'AggregatedElasticSearchView',
+  SparqlView = 'SparqlView',
+  AggregatedSparqlView = 'AggregatedSparqlView',
+}
+
 export type ElasticSearchViewPayload = {
   '@id'?: string;
   '@type': ['ElasticSearchView'];
@@ -63,8 +70,8 @@ export type ElasticSearchViewPayload = {
   sourceAsText?: boolean;
   includeMetadata?: boolean;
   includeDeprecated?: boolean;
-  resourceSchemas?: string[];
-  resourceTypes?: string[];
+  resourceSchemas?: string | string[];
+  resourceTypes?: string | string[];
 };
 
 export type AggregatedElasticSearchViewPayload = {

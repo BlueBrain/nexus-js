@@ -95,13 +95,19 @@ Set up rules for authentication and authorization for your instance of Nexus
 
 This repo is managed as a _monorepo_ using [lerna](https://github.com/lerna/lerna) that is composed of multiple npm packages.
 
+> Make sure you perform the make actions in the repository root directory!
+
+### Using Docker
+
 > If you don't have Node.js installed on your machine, you can run a "docker shell" with `make dshell` from which you'll have a fully working Node.js environment.
 > Make sure you have already installed both [Docker Engine](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
 
+### Do things
+
 - Install: `make install`
 - Build: `make build`
-- Test: `npm run test`
-- Lint: `npm run lint`
+- Test: `make test`
+- Lint: `makelint`
 
 # License
 

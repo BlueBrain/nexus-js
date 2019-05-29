@@ -27,12 +27,12 @@ Javascript tools to make developing on top of <a href="https://bluebrainnexus.io
 ### [`@bbp/nexus-sdk`](./packages/nexus-sdk/README.md#readme)
 
 An abstracted sdk layer over Blue Brain Nexus to make developing clients and services more simple.
-[npm](https://www.npmjs.com/package/@bbp/nexus-sdk) | [Readme](./packages/nexus-sdk/README.md#readme)
+[npm](https://www.npmjs.com/package/@bbp/nexus-sdk) | [Readme](./packages/nexus-sdk#readme)
 
 ### `@bbp/nexus-link`
 
 A middleware or "link" library that makes chaining operations very simple, especially useful for things like making requests.
-[npm](https://www.npmjs.com/package/@bbp/nexus-link) | [Readme](./packages/nexus-link/README.md#readme)
+[npm](https://www.npmjs.com/package/@bbp/nexus-link) | [Readme](./packages/nexus-link#readme)
 
 #### How is the repo structured?
 

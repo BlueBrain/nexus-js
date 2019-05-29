@@ -84,7 +84,7 @@ nexus.ACL.delete('myOrg/myProject', 1)
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
 
-nexus.Organization.poll('myOrg/myProject', { pollTime: 1000 })
+nexus.ACL.poll('myOrg/myProject', { pollTime: 1000 })
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
 ```

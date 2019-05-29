@@ -1,10 +1,10 @@
-import { toPromise, Observable } from '@bbp/nexus-link';
+import { Observable } from '@bbp/nexus-link';
 import { Fetchers } from '../types';
 import { ACLList, ListACLOptions, ACLPayload, ACL } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams, removeLeadingSlash } from '../utils';
 
-const Resolver = (
+const ACL = (
   { httpGet, httpPut, httpPatch, httpDelete, poll }: Fetchers,
   context: NexusContext,
 ) => {
@@ -61,4 +61,4 @@ const Resolver = (
   };
 };
 
-export default Resolver;
+export default ACL;

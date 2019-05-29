@@ -1,5 +1,5 @@
 import { Observable } from '@bbp/nexus-link';
-import { Fetchers } from '../types';
+import { Fetchers, Resource } from '../types';
 import {
   GetSchemaOptions,
   ListSchemaOptions,
@@ -10,7 +10,7 @@ import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
 
 const Schema = (
-  { httpGet, httpPut, httpDelete, poll }: Fetchers,
+  { httpGet, httpPost, httpPut, httpDelete, poll }: Fetchers,
   context: NexusContext,
 ) => {
   return {
@@ -28,12 +28,13 @@ const Schema = (
       });
     },
     list: (
-      orgLabel?: string,
+      orgLabel: string,
+      projectLabel: string,
       options?: ListSchemaOptions,
     ): Promise<SchemaList> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/schemas/${orgLabel}${opts}`,
+        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}${opts}`,
       });
     },
     create: (
@@ -41,7 +42,7 @@ const Schema = (
       projectLabel: string,
       payload: SchemaPayload,
     ): Promise<Storage> =>
-      httpPut({
+      httpPost({
         path: `${context.uri}/schemas/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
@@ -56,6 +57,22 @@ const Schema = (
         path: `${
           context.uri
         }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
+        body: JSON.stringify(payload),
+      }),
+    tag: (
+      orgLabel: string,
+      projectLabel: string,
+      storageId: string,
+      rev: number,
+      payload: {
+        tag: string;
+        rev: number;
+      },
+    ): Promise<Resource> =>
+      httpPost({
+        path: `${
+          context.uri
+        }/schemas/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (

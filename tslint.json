@@ -3,7 +3,6 @@
   "extends": ["tslint-config-airbnb", "tslint-config-prettier"],
   "jsRules": {},
   "rules": {
-    "import-name": false
-  },
-  "rulesDirectory": []
+    "variable-name": [false]
+  }
 }

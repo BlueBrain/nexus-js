@@ -12,7 +12,7 @@ install:
 
 build:
 	@echo "Building projects... 👷"
-	@npx lerna run build --stream
+	@npx lerna run build
 
 test:
 	@echo "Running tests... 🧪"
@@ -20,7 +20,7 @@ test:
 
 lint:
 	@echo "Linting... ✨"
-	@npx lerna run lint --stream
+	@npx lerna run lint
 
 clean:
 	@echo "Cleaning... 🗑"

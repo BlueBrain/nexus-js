@@ -21,7 +21,7 @@ pipeline {
         stage('Checkout and Install dependencies') {
             steps {
                 checkout scm
-                sh 'npm ci'
+                sh 'make install'
             }
         }
 
@@ -29,7 +29,7 @@ pipeline {
             parallel {
                 stage('Lint') {
                     steps {
-                        sh 'npm run lint -- -c tslint.prod.json'
+                        sh 'make lint -- -c tslint.prod.json'
                     }
                 }
                 stage('Test') {
@@ -40,7 +40,7 @@ pipeline {
                 }
                 stage('Build') {
                     steps {
-                        sh 'npm run build'
+                        sh 'make build'
                     }
                 }
             }

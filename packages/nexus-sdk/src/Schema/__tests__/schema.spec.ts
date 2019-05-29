@@ -10,7 +10,7 @@ describe('Views', () => {
   });
 
   describe('get', () => {
-    it('should make httpGet call to the views api with the right url', async () => {
+    it('should make httpGet call to the schema api with the right url', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await schema.get('org', 'project', 'myId');
       expect(fetchMock.mock.calls.length).toEqual(1);
@@ -20,7 +20,7 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 
-    it('should make httpGet call to the views api with the right url and query params', async () => {
+    it('should make httpGet call to the schema api with the right url and query params', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await schema.get('org', 'project', 'myId', { rev: 1 });
       expect(fetchMock.mock.calls.length).toEqual(1);
@@ -32,7 +32,7 @@ describe('Views', () => {
   });
 
   describe('list', () => {
-    it('should make httpGet call to the views api', async () => {
+    it('should make httpGet call to the schema api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await schema.list('org', 'project');
       expect(fetchMock.mock.calls.length).toEqual(1);
@@ -57,7 +57,7 @@ describe('Views', () => {
   });
 
   describe('create', () => {
-    it('should make httpPost call to the views api', async () => {
+    it('should make httpPost call to the schema api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const payload: SchemaPayload = {
         '@context': {
@@ -102,7 +102,7 @@ describe('Views', () => {
   });
 
   describe('update', () => {
-    it('should make httpPut call to the views api', async () => {
+    it('should make httpPut call to the schema api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const payload: SchemaPayload = {
         '@context': {
@@ -147,7 +147,7 @@ describe('Views', () => {
   });
 
   describe('tag', () => {
-    it('should make httpPost call to the views api', async () => {
+    it('should make httpPost call to the schema api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const payload = {
         rev: 1,
@@ -164,7 +164,7 @@ describe('Views', () => {
   });
 
   describe('deprecate', () => {
-    it('should make httpDELETE call to the views api', async () => {
+    it('should make httpDELETE call to the schema api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await schema.deprecate('org', 'project', 'myViewId', 1);
       expect(fetchMock.mock.calls.length).toEqual(1);

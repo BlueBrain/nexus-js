@@ -19,7 +19,7 @@ const Schema = (
       projectLabel: string,
       schemaId: string,
       options?: GetSchemaOptions,
-    ): Promise<Storage> => {
+    ): Promise<Resource> => {
       const opts = buildQueryParams(options);
       return httpGet({
         path: `${
@@ -41,7 +41,7 @@ const Schema = (
       orgLabel: string,
       projectLabel: string,
       payload: SchemaPayload,
-    ): Promise<Storage> =>
+    ): Promise<Resource> =>
       httpPost({
         path: `${context.uri}/schemas/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
@@ -52,7 +52,7 @@ const Schema = (
       schemaId: string,
       rev: number,
       payload: SchemaPayload,
-    ): Promise<Storage> =>
+    ): Promise<Resource> =>
       httpPut({
         path: `${
           context.uri
@@ -62,7 +62,7 @@ const Schema = (
     tag: (
       orgLabel: string,
       projectLabel: string,
-      storageId: string,
+      schemaId: string,
       rev: number,
       payload: {
         tag: string;
@@ -72,7 +72,7 @@ const Schema = (
       httpPost({
         path: `${
           context.uri
-        }/schemas/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
+        }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -80,7 +80,7 @@ const Schema = (
       projectLabel: string,
       schemaId: string,
       rev: number,
-    ): Promise<Storage> =>
+    ): Promise<Resource> =>
       httpDelete({
         path: `${
           context.uri
@@ -89,11 +89,11 @@ const Schema = (
     poll: (
       orgLabel: string,
       projectLabel: string,
-      schemasId: string,
+      schemaId: string,
       options?: { pollTime: number },
-    ): Observable<Storage> =>
+    ): Observable<Resource> =>
       poll({
-        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemasId}`,
+        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemaId}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
   };

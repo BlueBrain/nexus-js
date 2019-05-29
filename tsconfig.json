@@ -22,5 +22,6 @@
     "dist",
     "**/__mocks__/**",
     "**/__tests__/**"
-  ]
+  ],
+  "files": ["./scripts/custom.d.ts"]
 }

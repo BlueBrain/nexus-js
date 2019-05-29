@@ -1,4 +1,4 @@
-import { toPromise } from '@bbp/nexus-link';
+import { Observable } from '@bbp/nexus-link';
 import {
   GetFileOptions,
   NexusFile,
@@ -14,12 +14,12 @@ import {
   TagResourcePayload,
   GetResourceOptions,
 } from '../Resource/types';
-import { Observable } from '../../../nexus-link/lib';
 import { Fetchers } from '../types';
+import { NexusContext } from '../nexusSdk';
 
 const NexusFile = (
   { httpGet, httpPost, httpPut, httpDelete, poll }: Fetchers,
-  context: any,
+  context: NexusContext,
 ) => {
   return {
     get: (

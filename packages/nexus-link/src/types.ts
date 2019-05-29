@@ -1,5 +1,4 @@
 import Observable from 'zen-observable-ts';
-import { StatefulLink } from './nexusLink';
 
 export type Operation = RequestInit & {
   path: string | RequestInfo;
@@ -16,22 +15,6 @@ export type Link = (
 ) => Observable<any>;
 
 export type NextLink = (operation: Operation) => Observable<any>;
-
-export type NexusClientOptions = {
-  uri: string;
-  version: string;
-  links?: (StatefulLink | Link)[];
-  context?: Context;
-};
-
-export type Fetchers = {
-  httpGet: Link;
-  httpPost: Link;
-  httpPut: Link;
-  httpPatch: Link;
-  httpDelete: Link;
-  poll: Link;
-};
 
 export enum FetchAs {
   BLOB = 'blob',

@@ -17,48 +17,38 @@ const Realm = (
   return {
     get: (realmLabel: string, options?: GetRealmOptions): Promise<Realm> => {
       const opts = buildQueryParams(options);
-      return toPromise(
-        httpGet({
-          path: `${context.uri}/${context.version}/realms/${realmLabel}${opts}`,
-        }),
-      );
+      return httpGet({
+        path: `${context.uri}/${context.version}/realms/${realmLabel}${opts}`,
+      });
     },
     list: (options?: ListRealmOptions): Promise<RealmList> => {
       const opts = buildQueryParams(options);
-      return toPromise(
-        httpGet({
-          path: `${context.uri}/${context.version}/realms${opts}`,
-        }),
-      );
+      return httpGet({
+        path: `${context.uri}/${context.version}/realms${opts}`,
+      });
     },
     create: (realmLabel: string, payload: RealmPayload): Promise<Storage> =>
-      toPromise(
-        httpPut({
-          path: `${context.uri}/${context.version}/realms/${realmLabel}`,
-          body: JSON.stringify(payload),
-        }),
-      ),
+      httpPut({
+        path: `${context.uri}/${context.version}/realms/${realmLabel}`,
+        body: JSON.stringify(payload),
+      }),
     update: (
       realmLabel: string,
       rev: number,
       payload: RealmPayload,
     ): Promise<Storage> =>
-      toPromise(
-        httpPut({
-          path: `${context.uri}/${
-            context.version
-          }/realms/${realmLabel}?rev=${rev}`,
-          body: JSON.stringify(payload),
-        }),
-      ),
+      httpPut({
+        path: `${context.uri}/${
+          context.version
+        }/realms/${realmLabel}?rev=${rev}`,
+        body: JSON.stringify(payload),
+      }),
     deprecate: (realmLabel: string, rev: number): Promise<Storage> =>
-      toPromise(
-        httpDelete({
-          path: `${context.uri}/${
-            context.version
-          }/realms/${realmLabel}?rev=${rev}`,
-        }),
-      ),
+      httpDelete({
+        path: `${context.uri}/${
+          context.version
+        }/realms/${realmLabel}?rev=${rev}`,
+      }),
     poll: (
       realmLabel: string,
       options?: { pollTime: number },

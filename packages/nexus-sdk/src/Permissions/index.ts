@@ -15,42 +15,32 @@ const Organization = (
   return {
     get: (options?: GetPermissionsOptions): Promise<Permissions> => {
       const opts = buildQueryParams(options);
-      return toPromise(
-        httpGet({
-          path: `${context.uri}/${context.version}/permissions${opts}`,
-        }),
-      );
+      return httpGet({
+        path: `${context.uri}/${context.version}/permissions${opts}`,
+      });
     },
     replace: (rev: number, payload: PermissionsPayload): Promise<Permissions> =>
-      toPromise(
-        httpPut({
-          path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
-          body: JSON.stringify(payload),
-        }),
-      ),
+      httpPut({
+        path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
+        body: JSON.stringify(payload),
+      }),
     subtract: (
       rev: number,
       payload: PermissionsPayload,
     ): Promise<Permissions> =>
-      toPromise(
-        httpPatch({
-          path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
-          body: JSON.stringify({ '@type': 'Subtract', permissions: payload }),
-        }),
-      ),
+      httpPatch({
+        path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
+        body: JSON.stringify({ '@type': 'Subtract', permissions: payload }),
+      }),
     append: (rev: number, payload: PermissionsPayload): Promise<Permissions> =>
-      toPromise(
-        httpPatch({
-          path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
-          body: JSON.stringify({ '@type': 'Append', permissions: payload }),
-        }),
-      ),
+      httpPatch({
+        path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
+        body: JSON.stringify({ '@type': 'Append', permissions: payload }),
+      }),
     delete: (rev: number): Promise<Permissions> =>
-      toPromise(
-        httpDelete({
-          path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
-        }),
-      ),
+      httpDelete({
+        path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
+      }),
     poll: (options?: { pollTime: number }): Observable<Permissions> =>
       poll({
         path: `${context.uri}/${context.version}/permissions`,

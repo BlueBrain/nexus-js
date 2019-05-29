@@ -1,4 +1,4 @@
-import { StatefulLink, Link, Context } from '@bbp/nexus-link';
+import { StatefulLink, Link, Context, Operation } from '@bbp/nexus-link';
 
 export type NexusClientOptions = {
   uri: string;
@@ -9,11 +9,11 @@ export type NexusClientOptions = {
 };
 
 export type Fetchers = {
-  httpGet: Link;
-  httpPost: Link;
-  httpPut: Link;
-  httpPatch: Link;
-  httpDelete: Link;
+  httpGet: (operation: Operation) => Promise<any>;
+  httpPost: (operation: Operation) => Promise<any>;
+  httpPut: (operation: Operation) => Promise<any>;
+  httpPatch: (operation: Operation) => Promise<any>;
+  httpDelete: (operation: Operation) => Promise<any>;
   poll: Link;
 };
 

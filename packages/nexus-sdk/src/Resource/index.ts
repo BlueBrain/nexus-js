@@ -20,42 +20,36 @@ const Resource = (
       resourceId: string,
       options?: GetResourceOptions,
     ): Promise<Resource> =>
-      toPromise(
-        httpGet({
-          path: `${context.uri}/${
-            context.version
-          }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
-            options,
-          )}`,
-        }),
-      ),
+      httpGet({
+        path: `${context.uri}/${
+          context.version
+        }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
+          options,
+        )}`,
+      }),
     list: (
       orgLabel: string,
       projectLabel: string,
       options?: ResourceListOptions,
     ): Promise<PaginatedResource> => {
       const opts = buildQueryParams(options);
-      return toPromise(
-        httpGet({
-          path: `${context.uri}/${
-            context.version
-          }/resources/${orgLabel}/${projectLabel}${opts}`,
-        }),
-      );
+      return httpGet({
+        path: `${context.uri}/${
+          context.version
+        }/resources/${orgLabel}/${projectLabel}${opts}`,
+      });
     },
     create: (
       orgLabel: string,
       projectLabel: string,
       payload: ResourcePayload,
     ): Promise<Resource> =>
-      toPromise(
-        httpPost({
-          path: `${context.uri}/${
-            context.version
-          }/resources/${orgLabel}/${projectLabel}`,
-          body: JSON.stringify(payload),
-        }),
-      ),
+      httpPost({
+        path: `${context.uri}/${
+          context.version
+        }/resources/${orgLabel}/${projectLabel}`,
+        body: JSON.stringify(payload),
+      }),
     update: (
       orgLabel: string,
       projectLabel: string,
@@ -64,15 +58,13 @@ const Resource = (
       payload: ResourcePayload,
       schemaId?: string,
     ): Promise<Resource> =>
-      toPromise(
-        httpPut({
-          path: `${context.uri}/${
-            context.version
-          }/resources/${orgLabel}/${projectLabel}/${schemaId ||
-            DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
-          body: JSON.stringify(payload),
-        }),
-      ),
+      httpPut({
+        path: `${context.uri}/${
+          context.version
+        }/resources/${orgLabel}/${projectLabel}/${schemaId ||
+          DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
+        body: JSON.stringify(payload),
+      }),
     deprecate: (
       orgLabel: string,
       projectLabel: string,
@@ -80,14 +72,12 @@ const Resource = (
       rev: number,
       schemaId?: string,
     ): Promise<Resource> =>
-      toPromise(
-        httpDelete({
-          path: `${context.uri}/${
-            context.version
-          }/resources/${orgLabel}/${projectLabel}/${schemaId ||
-            DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
-        }),
-      ),
+      httpDelete({
+        path: `${context.uri}/${
+          context.version
+        }/resources/${orgLabel}/${projectLabel}/${schemaId ||
+          DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
+      }),
     poll: (
       orgLabel: string,
       projectLabel: string,

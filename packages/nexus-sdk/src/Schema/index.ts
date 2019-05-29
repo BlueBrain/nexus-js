@@ -21,38 +21,32 @@ const Schema = (
       options?: GetSchemaOptions,
     ): Promise<Storage> => {
       const opts = buildQueryParams(options);
-      return toPromise(
-        httpGet({
-          path: `${context.uri}/${
-            context.version
-          }/schemas/${orgLabel}/${projectLabel}/${schemaId}${opts}`,
-        }),
-      );
+      return httpGet({
+        path: `${context.uri}/${
+          context.version
+        }/schemas/${orgLabel}/${projectLabel}/${schemaId}${opts}`,
+      });
     },
     list: (
       orgLabel?: string,
       options?: ListSchemaOptions,
     ): Promise<SchemaList> => {
       const opts = buildQueryParams(options);
-      return toPromise(
-        httpGet({
-          path: `${context.uri}/${context.version}/schemas/${orgLabel}${opts}`,
-        }),
-      );
+      return httpGet({
+        path: `${context.uri}/${context.version}/schemas/${orgLabel}${opts}`,
+      });
     },
     create: (
       orgLabel: string,
       projectLabel: string,
       payload: SchemaPayload,
     ): Promise<Storage> =>
-      toPromise(
-        httpPut({
-          path: `${context.uri}/${
-            context.version
-          }/schemas/${orgLabel}/${projectLabel}`,
-          body: JSON.stringify(payload),
-        }),
-      ),
+      httpPut({
+        path: `${context.uri}/${
+          context.version
+        }/schemas/${orgLabel}/${projectLabel}`,
+        body: JSON.stringify(payload),
+      }),
     update: (
       orgLabel: string,
       projectLabel: string,
@@ -60,27 +54,23 @@ const Schema = (
       rev: number,
       payload: SchemaPayload,
     ): Promise<Storage> =>
-      toPromise(
-        httpPut({
-          path: `${context.uri}/${
-            context.version
-          }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
-          body: JSON.stringify(payload),
-        }),
-      ),
+      httpPut({
+        path: `${context.uri}/${
+          context.version
+        }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
+        body: JSON.stringify(payload),
+      }),
     deprecate: (
       orgLabel: string,
       projectLabel: string,
       schemaId: string,
       rev: number,
     ): Promise<Storage> =>
-      toPromise(
-        httpDelete({
-          path: `${context.uri}/${
-            context.version
-          }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
-        }),
-      ),
+      httpDelete({
+        path: `${context.uri}/${
+          context.version
+        }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
+      }),
     poll: (
       orgLabel: string,
       projectLabel: string,

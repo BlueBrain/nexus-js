@@ -31,7 +31,7 @@ nexus.Resource.update('myOrg', 'myProject', 'myId', 1, {
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
 
-nexus.Project.deprecate('myOrg', 'myProject', 'myId', 1)
+nexus.Resource.deprecate('myOrg', 'myProject', 'myId', 1)
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
 ```

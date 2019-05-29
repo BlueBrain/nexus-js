@@ -75,19 +75,19 @@ nexus.Organization.list()
 
 Set up restricted projects within organizations to contain your knowledge graph
 
-[`Orgs`](./src/Project#readme) | [`Projects`](./src/Project#readme)
+[Orgs](./src/Project#readme) | [Projects](./src/Project#readme)
 
 #### Data
 
 Interact with the knowledge graph
 
-[`Resources`](./src/Resource#readme) | [`Schema`](./src/Schema#readme) | [`Files`](./src/File#readme) | [`Views`](./src/View#readme) | [`Storage`](./src/Storage#readme) | [`Resolver`](./src/Schema#Resolver)
+[Resources](./src/Resource#readme) | [Schema](./src/Schema#readme) | [Files](./src/File#readme) | [Views](./src/View#readme) | [Storage](./src/Storage#readme) | [Resolver](./src/Schema#Resolver)
 
 #### IAM
 
 Set up rules for authentication and authorization for your instance of Nexus
 
-[`Realm`](./src/Realm#readme) | [`Permissions`](./src/Permissions#readme) | [`Identities`](./src/Identity#readme) | [`ACL`](./src/ACL#readme)
+[Realm](./src/Realm#readme) | [Permissions](./src/Permissions#readme) | [Identities](./src/Identity#readme) | [ACL](./src/ACL#readme)
 
 ## Development
 

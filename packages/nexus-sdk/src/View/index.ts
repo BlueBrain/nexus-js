@@ -114,13 +114,13 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
-      query: {},
+      query: string,
     ): Promise<T> => {
       return httpPost({
         path: `${
           context.uri
         }/views/${orgLabel}/${projectLabel}/${viewId}/sparql`,
-        body: JSON.stringify(query),
+        body: query,
         headers: {
           'Content-Type': 'text/plain',
         },

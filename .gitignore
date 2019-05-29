@@ -10,3 +10,4 @@ envs/*.env
 coverage/
 npm-cache/
 .ocp-port-forwarding.js
+*.log

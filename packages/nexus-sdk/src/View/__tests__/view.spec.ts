@@ -16,6 +16,7 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project/myId',
       );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 
     it('should make httpGet call to the views api with the right url and query params', async () => {
@@ -25,6 +26,7 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project/myId?rev=1',
       );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
 
@@ -36,6 +38,7 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project',
       );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 
     it('should make httpGet with query params', async () => {
@@ -48,6 +51,7 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project?createdBy=me&type=ElasticSearchView',
       );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
 
@@ -87,7 +91,7 @@ describe('Views', () => {
         'http://api.url/v1/views/org/project',
       );
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
-      // expect(fetchMock.mock.calls[0][1].).toEqual(JSON.stringify(payload));
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
     });
   });
 
@@ -127,11 +131,12 @@ describe('Views', () => {
         'http://api.url/v1/views/org/project/myViewId?rev=1',
       );
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
+      expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
     });
   });
 
   describe('tag', () => {
-    it('should make httpPut call to the views api', async () => {
+    it('should make httpPost call to the views api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const payload = {
         rev: 1,
@@ -143,6 +148,7 @@ describe('Views', () => {
         'http://api.url/v1/views/org/project/myViewId?rev=1',
       );
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
     });
   });
 
@@ -154,6 +160,7 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project/myViewId?rev=1',
       );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
 
@@ -166,6 +173,44 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project/myViewId',
       );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+  });
+
+  describe('elasticSearchQuery', () => {
+    it('should make httpPost call to the views query api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const payload = {
+        query: {
+          term: {
+            _deprecated: true,
+          },
+        },
+      };
+      await view.elasticSearchQuery('org', 'project', 'myId', payload);
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myId/_search',
+      );
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+    });
+  });
+
+  describe('sparqlQuery', () => {
+    it('should make httpPost call to the views query api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const payload = 'SELECT ?s ?p ?o WHERE {?s ?p ?o} LIMIT 20';
+      await view.sparqlQuery('org', 'project', 'myId', payload);
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myId/sparql',
+      );
+      expect(fetchMock.mock.calls[0][1].body).toEqual(payload);
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        'Content-Type': 'text/plain',
+      });
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
     });
   });
 
@@ -177,6 +222,7 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project/myViewId/statistics',
       );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
 });

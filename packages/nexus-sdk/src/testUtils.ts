@@ -12,5 +12,5 @@ export const mockFetchers: Fetchers = {
     fetch(operation.path, { headers: operation.headers, body: operation.body }),
   httpDelete: (operation: Operation) =>
     fetch(operation.path, { headers: operation.headers, body: operation.body }),
-  poll: (operation: Operation) => new Observable(() => {}),
+  poll: (operation: Operation) => new Observable(() => {})
 };

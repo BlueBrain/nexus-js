@@ -9,7 +9,10 @@ export type Fetchers = {
   poll: Link;
 };
 
-export type Context = string | (string | { [key: string]: string })[];
+export type Context =
+  | string
+  | (string | { [key: string]: string })[]
+  | { [key: string]: string };
 
 export * from './Resource/types';
 export * from './File/types';

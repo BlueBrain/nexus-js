@@ -15,9 +15,10 @@ import {
   GetResourceOptions,
 } from '../Resource/types';
 import { Observable } from '../../../nexus-link/lib';
+import { Fetchers } from '../types';
 
 const NexusFile = (
-  { httpGet, httpPost, httpPut, httpDelete, poll },
+  { httpGet, httpPost, httpPut, httpDelete, poll }: Fetchers,
   context: any,
 ) => {
   return {
@@ -34,19 +35,15 @@ const NexusFile = (
               Accept: 'application/json',
             }
           : {};
-      return toPromise(
-        httpGet({
-          headers,
-          path: `${context.uri}/${
-            context.version
-          }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(
-            opts,
-          )}`,
-          context: {
-            as,
-          },
-        }),
-      );
+      return httpGet({
+        headers,
+        path: `${context.uri}/${
+          context.version
+        }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(opts)}`,
+        context: {
+          as,
+        },
+      });
     },
 
     list: (
@@ -55,13 +52,11 @@ const NexusFile = (
       options?: ResourceListOptions,
     ): Promise<PaginatedResource<NexusFile>> => {
       const opts = buildQueryParams(options);
-      return toPromise(
-        httpGet({
-          path: `${context.uri}/${
-            context.version
-          }/files/${orgLabel}/${projectLabel}${opts}`,
-        }),
-      );
+      return httpGet({
+        path: `${context.uri}/${
+          context.version
+        }/files/${orgLabel}/${projectLabel}${opts}`,
+      });
     },
 
     create: (
@@ -73,23 +68,21 @@ const NexusFile = (
       const { '@id': fileId, file: body, storage } = payload;
       const opts = buildQueryParams({ storage });
       const headers = (options && options.extraHeaders) || {};
-      return toPromise(
-        fileId
-          ? httpPut({
-              headers,
-              body,
-              path: `${context.uri}/${
-                context.version
-              }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
-            })
-          : httpPost({
-              headers,
-              body,
-              path: `${context.uri}/${
-                context.version
-              }/files/${orgLabel}/${projectLabel}${opts}`,
-            }),
-      );
+      return fileId
+        ? httpPut({
+            headers,
+            body,
+            path: `${context.uri}/${
+              context.version
+            }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
+          })
+        : httpPost({
+            headers,
+            body,
+            path: `${context.uri}/${
+              context.version
+            }/files/${orgLabel}/${projectLabel}${opts}`,
+          });
     },
 
     link: (
@@ -99,21 +92,19 @@ const NexusFile = (
     ): Promise<NexusFile> => {
       const { '@id': fileId, storage, ...body } = payload;
       const opts = buildQueryParams({ storage });
-      return toPromise(
-        fileId
-          ? httpPut({
-              body,
-              path: `${context.uri}/${
-                context.version
-              }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
-            })
-          : httpPost({
-              body,
-              path: `${context.uri}/${
-                context.version
-              }/files/${orgLabel}/${projectLabel}${opts}`,
-            }),
-      );
+      return fileId
+        ? httpPut({
+            body: JSON.stringify(body),
+            path: `${context.uri}/${
+              context.version
+            }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
+          })
+        : httpPost({
+            body: JSON.stringify(body),
+            path: `${context.uri}/${
+              context.version
+            }/files/${orgLabel}/${projectLabel}${opts}`,
+          });
     },
 
     update: (
@@ -125,23 +116,21 @@ const NexusFile = (
       const { '@id': fileId, file: body, storage } = payload;
       const opts = buildQueryParams({ storage });
       const headers = (options && options.extraHeaders) || {};
-      return toPromise(
-        fileId
-          ? httpPut({
-              headers,
-              body,
-              path: `${context.uri}/${
-                context.version
-              }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
-            })
-          : httpPost({
-              headers,
-              body,
-              path: `${context.uri}/${
-                context.version
-              }/files/${orgLabel}/${projectLabel}${opts}`,
-            }),
-      );
+      return fileId
+        ? httpPut({
+            headers,
+            body,
+            path: `${context.uri}/${
+              context.version
+            }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
+          })
+        : httpPost({
+            headers,
+            body,
+            path: `${context.uri}/${
+              context.version
+            }/files/${orgLabel}/${projectLabel}${opts}`,
+          });
     },
 
     deprecate: (
@@ -150,13 +139,11 @@ const NexusFile = (
       fileId: string,
       rev: number,
     ): Promise<NexusFile> =>
-      toPromise(
-        httpDelete({
-          path: `${context.uri}/${
-            context.version
-          }/file/${orgLabel}/${projectLabel}/${fileId}?rev=${rev}`,
-        }),
-      ),
+      httpDelete({
+        path: `${context.uri}/${
+          context.version
+        }/file/${orgLabel}/${projectLabel}/${fileId}?rev=${rev}`,
+      }),
 
     tag: (
       orgLabel: string,
@@ -165,14 +152,12 @@ const NexusFile = (
       payload: TagResourcePayload,
     ): Promise<NexusFile> => {
       const { previousRev, ...body } = payload;
-      return toPromise(
-        httpPost({
-          body,
-          path: `${context.uri}/${
-            context.version
-          }/file/${orgLabel}/${projectLabel}/${fileId}/tags?rev=${previousRev}`,
-        }),
-      );
+      return httpPost({
+        body: JSON.stringify(body),
+        path: `${context.uri}/${
+          context.version
+        }/file/${orgLabel}/${projectLabel}/${fileId}/tags?rev=${previousRev}`,
+      });
     },
     poll: (
       orgLabel: string,

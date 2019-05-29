@@ -6,11 +6,9 @@ import { NexusContext } from '../nexusSdk';
 const Resolver = ({ httpGet, poll }: Fetchers, context: NexusContext) => {
   return {
     list: (): Promise<IdentityList> =>
-      toPromise(
-        httpGet({
-          path: `${context.uri}/${context.version}/identities`,
-        }),
-      ),
+      httpGet({
+        path: `${context.uri}/${context.version}/identities`,
+      }),
     poll: (options?: { pollTime: number }): Observable<IdentityList> =>
       poll({
         path: `${context.uri}/${context.version}/identities`,

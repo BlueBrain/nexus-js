@@ -15,65 +15,55 @@ const Project = (
 ) => {
   return {
     get: (orgLabel: string, projectLabel: string): Promise<Project> =>
-      toPromise(
-        httpGet({
-          path: `${context.uri}/${
-            context.version
-          }/projects/${orgLabel}/${projectLabel}`,
-        }),
-      ),
+      httpGet({
+        path: `${context.uri}/${
+          context.version
+        }/projects/${orgLabel}/${projectLabel}`,
+      }),
     list: (
       orgLabel?: string,
       options?: ProjectListOptions,
     ): Promise<ProjectList> => {
       const opts = buildQueryParams(options);
-      return toPromise(
-        httpGet({
-          path: orgLabel
-            ? `${context.uri}/${context.version}/projects/${orgLabel}/${opts}`
-            : `${context.uri}/${context.version}/projects/${opts}`,
-        }),
-      );
+      return httpGet({
+        path: orgLabel
+          ? `${context.uri}/${context.version}/projects/${orgLabel}/${opts}`
+          : `${context.uri}/${context.version}/projects/${opts}`,
+      });
     },
     create: (
       orgLabel: string,
       projectLabel: string,
       payload: ProjectPayload,
     ): Promise<Project> =>
-      toPromise(
-        httpPut({
-          path: `${context.uri}/${
-            context.version
-          }/projects/${orgLabel}/${projectLabel}`,
-          body: JSON.stringify(payload),
-        }),
-      ),
+      httpPut({
+        path: `${context.uri}/${
+          context.version
+        }/projects/${orgLabel}/${projectLabel}`,
+        body: JSON.stringify(payload),
+      }),
     update: (
       orgLabel: string,
       projectLabel: string,
       rev: number,
       payload: ProjectPayload,
     ): Promise<Project> =>
-      toPromise(
-        httpPut({
-          path: `${context.uri}/${
-            context.version
-          }/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
-          body: JSON.stringify(payload),
-        }),
-      ),
+      httpPut({
+        path: `${context.uri}/${
+          context.version
+        }/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
+        body: JSON.stringify(payload),
+      }),
     deprecate: (
       orgLabel: string,
       projectLabel: string,
       rev: number,
     ): Promise<Project> =>
-      toPromise(
-        httpDelete({
-          path: `${context.uri}/${
-            context.version
-          }/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
-        }),
-      ),
+      httpDelete({
+        path: `${context.uri}/${
+          context.version
+        }/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
+      }),
     poll: (
       orgLabel: string,
       projectLabel: string,

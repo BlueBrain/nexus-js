@@ -1,4 +1,11 @@
-import { pipe, triggerFetch, setMethod, poll, Context } from '@bbp/nexus-link';
+import {
+  pipe,
+  triggerFetch,
+  setMethod,
+  poll,
+  Context,
+  toPromise,
+} from '@bbp/nexus-link';
 import { NexusClientOptions, Fetchers } from './types';
 import Organization from './Organization';
 import NexusFile from './File';
@@ -27,11 +34,15 @@ export function createNexusClient(options: NexusClientOptions) {
     : defaultContext;
 
   const fetchers: Fetchers = {
-    httpGet: requestHandler,
-    httpPost: pipe([setMethod('POST'), requestHandler]),
-    httpPut: pipe([setMethod('PUT'), requestHandler]),
-    httpPatch: pipe([setMethod('PATH'), requestHandler]),
-    httpDelete: pipe([setMethod('DELETE'), requestHandler]),
+    httpGet: operation => toPromise(requestHandler(operation)),
+    httpPost: operation =>
+      toPromise(pipe([setMethod('POST'), requestHandler])(operation)),
+    httpPut: operation =>
+      toPromise(pipe([setMethod('PUT'), requestHandler])(operation)),
+    httpPatch: operation =>
+      toPromise(pipe([setMethod('PATH'), requestHandler])(operation)),
+    httpDelete: operation =>
+      toPromise(pipe([setMethod('DELETE'), requestHandler])(operation)),
     poll: pipe([poll(1000), requestHandler]),
   };
 

@@ -18,18 +18,18 @@ const Realm = (
     get: (realmLabel: string, options?: GetRealmOptions): Promise<Realm> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${context.version}/realms/${realmLabel}${opts}`,
+        path: `${context.uri}/realms/${realmLabel}${opts}`,
       });
     },
     list: (options?: ListRealmOptions): Promise<RealmList> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${context.version}/realms${opts}`,
+        path: `${context.uri}/realms${opts}`,
       });
     },
     create: (realmLabel: string, payload: RealmPayload): Promise<Storage> =>
       httpPut({
-        path: `${context.uri}/${context.version}/realms/${realmLabel}`,
+        path: `${context.uri}/realms/${realmLabel}`,
         body: JSON.stringify(payload),
       }),
     update: (
@@ -38,23 +38,19 @@ const Realm = (
       payload: RealmPayload,
     ): Promise<Storage> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
-        }/realms/${realmLabel}?rev=${rev}`,
+        path: `${context.uri}/realms/${realmLabel}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (realmLabel: string, rev: number): Promise<Storage> =>
       httpDelete({
-        path: `${context.uri}/${
-          context.version
-        }/realms/${realmLabel}?rev=${rev}`,
+        path: `${context.uri}/realms/${realmLabel}?rev=${rev}`,
       }),
     poll: (
       realmLabel: string,
       options?: { pollTime: number },
     ): Observable<Storage> =>
       poll({
-        path: `${context.uri}/${context.version}/realms/${realmLabel}`,
+        path: `${context.uri}/realms/${realmLabel}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
   };

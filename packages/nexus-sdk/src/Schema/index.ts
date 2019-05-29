@@ -22,8 +22,8 @@ const Schema = (
     ): Promise<Storage> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/schemas/${orgLabel}/${projectLabel}/${schemaId}${opts}`,
       });
     },
@@ -33,7 +33,7 @@ const Schema = (
     ): Promise<SchemaList> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${context.version}/schemas/${orgLabel}${opts}`,
+        path: `${context.uri}/schemas/${orgLabel}${opts}`,
       });
     },
     create: (
@@ -42,9 +42,7 @@ const Schema = (
       payload: SchemaPayload,
     ): Promise<Storage> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
-        }/schemas/${orgLabel}/${projectLabel}`,
+        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
     update: (
@@ -55,8 +53,8 @@ const Schema = (
       payload: SchemaPayload,
     ): Promise<Storage> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
@@ -67,8 +65,8 @@ const Schema = (
       rev: number,
     ): Promise<Storage> =>
       httpDelete({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
       }),
     poll: (
@@ -78,9 +76,7 @@ const Schema = (
       options?: { pollTime: number },
     ): Observable<Storage> =>
       poll({
-        path: `${context.uri}/${
-          context.version
-        }/schemas/${orgLabel}/${projectLabel}/${schemasId}`,
+        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemasId}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
   };

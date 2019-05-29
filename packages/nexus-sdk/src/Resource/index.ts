@@ -21,8 +21,8 @@ const Resource = (
       options?: GetResourceOptions,
     ): Promise<Resource> =>
       httpGet({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
           options,
         )}`,
@@ -34,9 +34,7 @@ const Resource = (
     ): Promise<PaginatedResource> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${
-          context.version
-        }/resources/${orgLabel}/${projectLabel}${opts}`,
+        path: `${context.uri}/resources/${orgLabel}/${projectLabel}${opts}`,
       });
     },
     create: (
@@ -45,9 +43,7 @@ const Resource = (
       payload: ResourcePayload,
     ): Promise<Resource> =>
       httpPost({
-        path: `${context.uri}/${
-          context.version
-        }/resources/${orgLabel}/${projectLabel}`,
+        path: `${context.uri}/resources/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
     update: (
@@ -59,8 +55,8 @@ const Resource = (
       schemaId?: string,
     ): Promise<Resource> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/resources/${orgLabel}/${projectLabel}/${schemaId ||
           DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
         body: JSON.stringify(payload),
@@ -73,8 +69,8 @@ const Resource = (
       schemaId?: string,
     ): Promise<Resource> =>
       httpDelete({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/resources/${orgLabel}/${projectLabel}/${schemaId ||
           DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
       }),
@@ -86,8 +82,8 @@ const Resource = (
     ): Observable<Resource> => {
       const { pollTime, ...getResourceOptions } = options;
       return poll({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
           getResourceOptions,
         )}`,

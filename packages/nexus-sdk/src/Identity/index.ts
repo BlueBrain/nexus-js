@@ -7,11 +7,11 @@ const Resolver = ({ httpGet, poll }: Fetchers, context: NexusContext) => {
   return {
     list: (): Promise<IdentityList> =>
       httpGet({
-        path: `${context.uri}/${context.version}/identities`,
+        path: `${context.uri}/identities`,
       }),
     poll: (options?: { pollTime: number }): Observable<IdentityList> =>
       poll({
-        path: `${context.uri}/${context.version}/identities`,
+        path: `${context.uri}/identities`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
   };

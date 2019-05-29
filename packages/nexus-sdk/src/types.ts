@@ -1,12 +1,4 @@
-import { StatefulLink, Link, Context, Operation } from '@bbp/nexus-link';
-
-export type NexusClientOptions = {
-  uri: string;
-  version: string;
-  links?: (StatefulLink | Link)[];
-  context?: Context;
-  fetch?: any; // fetch api implementation
-};
+import { Link, Context, Operation } from '@bbp/nexus-link';
 
 export type Fetchers = {
   httpGet: (operation: Operation) => Promise<any>;

@@ -47,8 +47,6 @@ const nexus = createNexusClient({ uri: 'https://api.url' });
 
 Now go and add use Nexus, such as adding [`resources`](./src/Resource#readme) to a [`project`](./src/Project#readme)
 
-## Recipes
-
 ### Setup your token on client creation
 
 ```typescript
@@ -59,6 +57,36 @@ const nexus = createNexusClient({
 ```
 
 ### Middleware
+
+You can enhance the behaviour of Nexus Client with middlewares called Links.
+
+```typescript
+const nexus = createNexusClient({
+  uri: 'https://api.url',
+  links: [someMiddleware],
+});
+```
+
+### Context
+
+You can setup a "context" object that will be passed from links to links as part of the operation
+
+```typescript
+const myMiddleware: Link = (operation: Operation, forward: Link) => {
+  const { myApiClient } = operation.context;
+  // do something with your API client
+  return forward(operation);
+};
+
+const nexus = createNexusClient({
+  uri: 'https://api.url',
+  context: {
+    myApiClient,
+  },
+});
+```
+
+## Recipes
 
 Set your bearer token before each request:
 

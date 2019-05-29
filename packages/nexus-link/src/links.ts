@@ -1,6 +1,5 @@
 /**
  * A set of useful links
- * TODO: maybe move each individual links in there own package
  */
 
 import { Observable } from 'zen-observable-ts';
@@ -16,6 +15,23 @@ export const setMethod = (method: string): Link => (
   const nextOperation = {
     ...operation,
     method,
+  };
+  return forward(nextOperation);
+};
+
+export const setToken = (token: string): Link => (
+  operation: Operation,
+  forward?: Link,
+) => {
+  if (!forward) {
+    throw new Error('No link to forward Operation to.');
+  }
+  const nextOperation = {
+    ...operation,
+    headers: {
+      ...operation.headers,
+      Authorization: `bearer ${token}`,
+    },
   };
   return forward(nextOperation);
 };

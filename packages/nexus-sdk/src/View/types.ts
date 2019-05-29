@@ -56,13 +56,6 @@ export type ElasticSearchViewQueryResponse = {
   took: number;
 };
 
-export enum ViewTypes {
-  ElasticSearchView = 'ElasticSearchView',
-  AggregatedElasticSearchView = 'AggregatedElasticSearchView',
-  SparqlView = 'SparqlView',
-  AggregatedSparqlView = 'AggregatedSparqlView',
-}
-
 export type ElasticSearchViewPayload = {
   '@id'?: string;
   '@type': ['ElasticSearchView'];

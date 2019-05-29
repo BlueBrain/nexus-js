@@ -3,6 +3,7 @@ import { Fetchers, Resource } from '../types';
 import { NexusContext } from '../nexusSdk';
 import { View, ViewList, ViewPayload, Statistics } from './types';
 import { buildQueryParams } from '../utils';
+import { GetResourceOptions, ResourceListOptions } from '../Resource/types';
 
 const View = (
   { httpGet, httpPost, httpPut, httpDelete, poll }: Fetchers,
@@ -13,20 +14,31 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
+      options?: GetResourceOptions,
     ): Promise<View> =>
       httpGet({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}`,
+        path: `${
+          context.uri
+        }/views/${orgLabel}/${projectLabel}/${viewId}${buildQueryParams(
+          options,
+        )}`,
       }),
-    list: (orgLabel: string, projectLabel: string): Promise<ViewList> =>
+    list: (
+      orgLabel: string,
+      projectLabel: string,
+      options?: ResourceListOptions,
+    ): Promise<ViewList> =>
       httpGet({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}`,
+        path: `${
+          context.uri
+        }/views/${orgLabel}/${projectLabel}${buildQueryParams(options)}`,
       }),
     create: (
       orgLabel: string,
       projectLabel: string,
       payload: ViewPayload,
     ): Promise<Resource> =>
-      httpPut({
+      httpPost({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
@@ -102,13 +114,13 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
-      query: {},
+      query: string,
     ): Promise<T> => {
       return httpPost({
         path: `${
           context.uri
         }/views/${orgLabel}/${projectLabel}/${viewId}/sparql`,
-        body: JSON.stringify(query),
+        body: query,
         headers: {
           'Content-Type': 'text/plain',
         },

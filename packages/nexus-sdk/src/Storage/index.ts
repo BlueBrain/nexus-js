@@ -8,9 +8,10 @@ import {
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
+import { Resource } from '../Resource/types';
 
 const Storage = (
-  { httpGet, httpPut, httpDelete, poll }: Fetchers,
+  { httpGet, httpPut, httpDelete, httpPost, poll }: Fetchers,
   context: NexusContext,
 ) => {
   return {
@@ -28,20 +29,21 @@ const Storage = (
       });
     },
     list: (
-      orgLabel?: string,
+      orgLabel: string,
+      projectLabel: string,
       options?: ListStorageOptions,
     ): Promise<StorageList> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/storages/${orgLabel}${opts}`,
+        path: `${context.uri}/storages/${orgLabel}/${projectLabel}${opts}`,
       });
     },
     create: (
       orgLabel: string,
       projectLabel: string,
       payload: StoragePayload,
-    ): Promise<Storage> =>
-      httpPut({
+    ): Promise<Resource> =>
+      httpPost({
         path: `${context.uri}/storages/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
@@ -51,8 +53,24 @@ const Storage = (
       storageId: string,
       rev: number,
       payload: StoragePayload,
-    ): Promise<Storage> =>
+    ): Promise<Resource> =>
       httpPut({
+        path: `${
+          context.uri
+        }/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
+        body: JSON.stringify(payload),
+      }),
+    tag: (
+      orgLabel: string,
+      projectLabel: string,
+      storageId: string,
+      rev: number,
+      payload: {
+        tag: string;
+        rev: number;
+      },
+    ): Promise<Resource> =>
+      httpPost({
         path: `${
           context.uri
         }/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
@@ -63,7 +81,7 @@ const Storage = (
       projectLabel: string,
       storageId: string,
       rev: number,
-    ): Promise<Storage> =>
+    ): Promise<Resource> =>
       httpDelete({
         path: `${
           context.uri

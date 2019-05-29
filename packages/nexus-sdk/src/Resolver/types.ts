@@ -21,7 +21,6 @@ export type GetResolverOptions = {
   tag?: string;
 };
 export type ListResolverOptions = {
-  full_text_search_query?: string;
   from?: number;
   size?: number;
   deprecated?: boolean;

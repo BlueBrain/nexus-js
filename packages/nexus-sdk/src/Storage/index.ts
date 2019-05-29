@@ -22,8 +22,8 @@ const Storage = (
     ): Promise<Storage> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/storages/${orgLabel}/${projectLabel}/${storageId}${opts}`,
       });
     },
@@ -33,7 +33,7 @@ const Storage = (
     ): Promise<StorageList> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${context.version}/storages/${orgLabel}${opts}`,
+        path: `${context.uri}/storages/${orgLabel}${opts}`,
       });
     },
     create: (
@@ -42,9 +42,7 @@ const Storage = (
       payload: StoragePayload,
     ): Promise<Storage> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
-        }/storages/${orgLabel}/${projectLabel}`,
+        path: `${context.uri}/storages/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
     update: (
@@ -55,8 +53,8 @@ const Storage = (
       payload: StoragePayload,
     ): Promise<Storage> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
@@ -67,8 +65,8 @@ const Storage = (
       rev: number,
     ): Promise<Storage> =>
       httpDelete({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
       }),
     poll: (
@@ -78,8 +76,8 @@ const Storage = (
       options?: { pollTime: number },
     ): Observable<Storage> =>
       poll({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/storages/${orgLabel}/${projectLabel}/${storageId}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),

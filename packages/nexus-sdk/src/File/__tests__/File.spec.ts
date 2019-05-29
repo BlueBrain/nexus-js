@@ -1,7 +1,7 @@
 import NexusFile from '..';
 import { mockFetchers } from '../../testUtils';
 
-const file = NexusFile(mockFetchers, { uri: 'http://api.url', version: 'v1' });
+const file = NexusFile(mockFetchers, { uri: 'http://api.url/v1' });
 
 describe('KG', () => {
   describe('File', () => {

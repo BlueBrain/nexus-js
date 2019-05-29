@@ -16,12 +16,12 @@ const Organization = (
     get: (options?: GetPermissionsOptions): Promise<Permissions> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${context.version}/permissions${opts}`,
+        path: `${context.uri}/permissions${opts}`,
       });
     },
     replace: (rev: number, payload: PermissionsPayload): Promise<Permissions> =>
       httpPut({
-        path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
+        path: `${context.uri}/permissions?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     subtract: (
@@ -29,21 +29,21 @@ const Organization = (
       payload: PermissionsPayload,
     ): Promise<Permissions> =>
       httpPatch({
-        path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
+        path: `${context.uri}/permissions?rev=${rev}`,
         body: JSON.stringify({ '@type': 'Subtract', permissions: payload }),
       }),
     append: (rev: number, payload: PermissionsPayload): Promise<Permissions> =>
       httpPatch({
-        path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
+        path: `${context.uri}/permissions?rev=${rev}`,
         body: JSON.stringify({ '@type': 'Append', permissions: payload }),
       }),
     delete: (rev: number): Promise<Permissions> =>
       httpDelete({
-        path: `${context.uri}/${context.version}/permissions?rev=${rev}`,
+        path: `${context.uri}/permissions?rev=${rev}`,
       }),
     poll: (options?: { pollTime: number }): Observable<Permissions> =>
       poll({
-        path: `${context.uri}/${context.version}/permissions`,
+        path: `${context.uri}/permissions`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
   };

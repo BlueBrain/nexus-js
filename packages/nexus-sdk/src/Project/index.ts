@@ -16,9 +16,7 @@ const Project = (
   return {
     get: (orgLabel: string, projectLabel: string): Promise<Project> =>
       httpGet({
-        path: `${context.uri}/${
-          context.version
-        }/projects/${orgLabel}/${projectLabel}`,
+        path: `${context.uri}/projects/${orgLabel}/${projectLabel}`,
       }),
     list: (
       orgLabel?: string,
@@ -27,8 +25,8 @@ const Project = (
       const opts = buildQueryParams(options);
       return httpGet({
         path: orgLabel
-          ? `${context.uri}/${context.version}/projects/${orgLabel}/${opts}`
-          : `${context.uri}/${context.version}/projects/${opts}`,
+          ? `${context.uri}/projects/${orgLabel}/${opts}`
+          : `${context.uri}/projects/${opts}`,
       });
     },
     create: (
@@ -37,9 +35,7 @@ const Project = (
       payload: ProjectPayload,
     ): Promise<Project> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
-        }/projects/${orgLabel}/${projectLabel}`,
+        path: `${context.uri}/projects/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
     update: (
@@ -49,9 +45,7 @@ const Project = (
       payload: ProjectPayload,
     ): Promise<Project> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
-        }/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
+        path: `${context.uri}/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -60,9 +54,7 @@ const Project = (
       rev: number,
     ): Promise<Project> =>
       httpDelete({
-        path: `${context.uri}/${
-          context.version
-        }/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
+        path: `${context.uri}/projects/${orgLabel}/${projectLabel}?rev=${rev}`,
       }),
     poll: (
       orgLabel: string,
@@ -70,9 +62,7 @@ const Project = (
       options?: { pollTime: number },
     ): Observable<Project> =>
       poll({
-        path: `${context.uri}/${
-          context.version
-        }/projects/${orgLabel}/${projectLabel}`,
+        path: `${context.uri}/projects/${orgLabel}/${projectLabel}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
   };

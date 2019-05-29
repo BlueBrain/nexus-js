@@ -37,8 +37,8 @@ const NexusFile = (
           : {};
       return httpGet({
         headers,
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(opts)}`,
         context: {
           as,
@@ -53,9 +53,7 @@ const NexusFile = (
     ): Promise<PaginatedResource<NexusFile>> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${
-          context.version
-        }/files/${orgLabel}/${projectLabel}${opts}`,
+        path: `${context.uri}/files/${orgLabel}/${projectLabel}${opts}`,
       });
     },
 
@@ -72,16 +70,14 @@ const NexusFile = (
         ? httpPut({
             headers,
             body,
-            path: `${context.uri}/${
-              context.version
+            path: `${
+              context.uri
             }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
           })
         : httpPost({
             headers,
             body,
-            path: `${context.uri}/${
-              context.version
-            }/files/${orgLabel}/${projectLabel}${opts}`,
+            path: `${context.uri}/files/${orgLabel}/${projectLabel}${opts}`,
           });
     },
 
@@ -95,15 +91,13 @@ const NexusFile = (
       return fileId
         ? httpPut({
             body: JSON.stringify(body),
-            path: `${context.uri}/${
-              context.version
+            path: `${
+              context.uri
             }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
           })
         : httpPost({
             body: JSON.stringify(body),
-            path: `${context.uri}/${
-              context.version
-            }/files/${orgLabel}/${projectLabel}${opts}`,
+            path: `${context.uri}/files/${orgLabel}/${projectLabel}${opts}`,
           });
     },
 
@@ -120,16 +114,14 @@ const NexusFile = (
         ? httpPut({
             headers,
             body,
-            path: `${context.uri}/${
-              context.version
+            path: `${
+              context.uri
             }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
           })
         : httpPost({
             headers,
             body,
-            path: `${context.uri}/${
-              context.version
-            }/files/${orgLabel}/${projectLabel}${opts}`,
+            path: `${context.uri}/files/${orgLabel}/${projectLabel}${opts}`,
           });
     },
 
@@ -140,8 +132,8 @@ const NexusFile = (
       rev: number,
     ): Promise<NexusFile> =>
       httpDelete({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/file/${orgLabel}/${projectLabel}/${fileId}?rev=${rev}`,
       }),
 
@@ -154,8 +146,8 @@ const NexusFile = (
       const { previousRev, ...body } = payload;
       return httpPost({
         body: JSON.stringify(body),
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/file/${orgLabel}/${projectLabel}/${fileId}/tags?rev=${previousRev}`,
       });
     },
@@ -167,8 +159,8 @@ const NexusFile = (
     ): Observable<NexusFile> => {
       const { pollTime, ...getResourceOptions } = options;
       return poll({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(
           getResourceOptions,
         )}`,

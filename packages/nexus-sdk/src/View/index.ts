@@ -15,15 +15,11 @@ const View = (
       viewId: string,
     ): Promise<View> =>
       httpGet({
-        path: `${context.uri}/${
-          context.version
-        }/views/${orgLabel}/${projectLabel}/${viewId}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}`,
       }),
     list: (orgLabel: string, projectLabel: string): Promise<ViewList> =>
       httpGet({
-        path: `${context.uri}/${
-          context.version
-        }/views/${orgLabel}/${projectLabel}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}`,
       }),
     create: (
       orgLabel: string,
@@ -31,9 +27,7 @@ const View = (
       payload: ViewPayload,
     ): Promise<Resource> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
-        }/views/${orgLabel}/${projectLabel}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
     update: (
@@ -44,8 +38,8 @@ const View = (
       payload: ViewPayload,
     ): Promise<Resource> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
@@ -60,8 +54,8 @@ const View = (
       },
     ): Promise<Resource> =>
       httpPost({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
@@ -72,8 +66,8 @@ const View = (
       rev: number,
     ): Promise<Resource> =>
       httpDelete({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
       }),
     poll: (
@@ -83,9 +77,7 @@ const View = (
       options?: { pollTime: number },
     ): Observable<View> =>
       poll({
-        path: `${context.uri}/${
-          context.version
-        }/views/${orgLabel}/${projectLabel}/${viewId}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
     elasticSearchQuery: <T = any>(
@@ -100,8 +92,8 @@ const View = (
     ): Promise<T> => {
       const opts = buildQueryParams(options);
       return httpPost({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/views/${orgLabel}/${projectLabel}/${viewId}/_search${opts}`,
         body: JSON.stringify(query),
       });
@@ -113,8 +105,8 @@ const View = (
       query: {},
     ): Promise<T> => {
       return httpPost({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/views/${orgLabel}/${projectLabel}/${viewId}/sparql`,
         body: JSON.stringify(query),
         headers: {
@@ -128,8 +120,8 @@ const View = (
       viewId: string,
     ): Promise<Statistics> =>
       httpGet({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
       }),
   };

@@ -16,15 +16,15 @@ const Organization = (
   return {
     get: (label: string): Promise<Organization> =>
       httpGet({
-        path: `${context.uri}/${context.version}/orgs/${label}`,
+        path: `${context.uri}/orgs/${label}`,
       }),
     list: (options?: ListOrgOptions): Promise<OrganizationList> => {
       const opts = buildQueryParams(options);
-      return httpGet({ path: `${context.uri}/${context.version}/orgs${opts}` });
+      return httpGet({ path: `${context.uri}/orgs${opts}` });
     },
     create: (label: string, payload: CreateOrgPayload): Promise<any> =>
       httpPut({
-        path: `${context.uri}/${context.version}/orgs/${label}`,
+        path: `${context.uri}/orgs/${label}`,
         body: JSON.stringify(payload),
       }),
     update: (
@@ -33,19 +33,19 @@ const Organization = (
       payload: CreateOrgPayload,
     ): Promise<any> =>
       httpPut({
-        path: `${context.uri}/${context.version}/orgs/${label}?rev=${rev}`,
+        path: `${context.uri}/orgs/${label}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (label: string, rev: number): Promise<any> =>
       httpDelete({
-        path: `${context.uri}/${context.version}/orgs/${label}?rev=${rev}`,
+        path: `${context.uri}/orgs/${label}?rev=${rev}`,
       }),
     poll: (
       label: string,
       options?: { pollTime: number },
     ): Observable<Organization> =>
       poll({
-        path: `${context.uri}/${context.version}/orgs/${label}`,
+        path: `${context.uri}/orgs/${label}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
   };

@@ -47,6 +47,97 @@ const nexus = createNexusClient({ uri: 'https://api.url' });
 
 Now go and add use Nexus, such as adding [`resources`](./src/Resource#readme) to a [`project`](./src/Project#readme)
 
+### Setup your token on client creation
+
+```typescript
+const nexus = createNexusClient({
+  uri: 'https://api.url',
+  token: 'my_bearer_token',
+});
+```
+
+### Middleware
+
+You can enhance the behaviour of Nexus Client with middlewares called Links.
+
+```typescript
+const nexus = createNexusClient({
+  uri: 'https://api.url',
+  links: [someMiddleware],
+});
+```
+
+### Context
+
+You can setup a "context" object that will be passed from links to links as part of the operation
+
+```typescript
+const myMiddleware: Link = (operation: Operation, forward: Link) => {
+  const { myApiClient } = operation.context;
+  // do something with your API client
+  return forward(operation);
+};
+
+const nexus = createNexusClient({
+  uri: 'https://api.url',
+  context: {
+    myApiClient,
+  },
+});
+```
+
+## Recipes
+
+Set your bearer token before each request:
+
+```typescript
+const setToken: Link = (operation: Operation, forward: Link) => {
+  const token = localStorage.getItem('myToken'); // get your token from somewhere
+  const nextOperation = {
+    ...operation,
+    headers: {
+      ...operation.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  return forward(nextOperation);
+};
+
+const nexus = createNexusClient({ uri: 'https://api.url', links: [setToken] });
+```
+
+Log response time:
+
+```typescript
+const logResponseTime: Link = (operation: Operation, forward: Link) => {
+  const time = Date.now();
+  return forward(operation).map(data => {
+    console.log('request took', Date.now() - time, 'ms');
+    return data;
+  });
+};
+```
+
+Dispatch a redux action on every requests:
+
+```typescript
+const reduxDispatcher: (dispatch: any) => Link = dispatch => (
+  operation: Operation,
+  forward: Link,
+) => {
+  const prefix = '@@nexus';
+  const actionName: string = getActionNameFromPath(operation.path);
+  dispatch({
+    name: `${prefix}/${actionName}_FETCHING`,
+    payload: operation,
+  });
+  return forward(operation).map(data => {
+    dispatch({ name: `${prefix}/${actionName}_SUCCESS`, payload: data });
+    return data;
+  });
+};
+```
+
 ### Node.js support
 
 The Nexus SDK relies on [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), so in order to use this library in Node.js, you need to provide a `fetch` implementation when creating a new client. We recommend using [`node-fetch`](https://www.npmjs.com/package/node-fetch)

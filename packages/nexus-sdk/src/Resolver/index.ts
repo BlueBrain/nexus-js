@@ -23,8 +23,8 @@ const Resolver = (
     ): Promise<Resolver> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/resolvers/${orgLabel}/${projectLabel}/${resolverId}${opts}`,
       });
     },
@@ -34,7 +34,7 @@ const Resolver = (
     ): Promise<ResolverList> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/${context.version}/resolvers/${orgLabel}${opts}`,
+        path: `${context.uri}/resolvers/${orgLabel}${opts}`,
       });
     },
     create: (
@@ -43,9 +43,7 @@ const Resolver = (
       payload: ResolverPayload,
     ): Promise<Resolver> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
-        }/resolvers/${orgLabel}/${projectLabel}`,
+        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
     update: (
@@ -56,8 +54,8 @@ const Resolver = (
       payload: ResolverPayload,
     ): Promise<Resolver> =>
       httpPut({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
@@ -68,8 +66,8 @@ const Resolver = (
       rev: number,
     ): Promise<Resolver> =>
       httpDelete({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/resolver/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
       }),
     poll: (
@@ -79,8 +77,8 @@ const Resolver = (
       options?: { pollTime: number },
     ): Observable<Resolver> =>
       poll({
-        path: `${context.uri}/${
-          context.version
+        path: `${
+          context.uri
         }/resolvers/${orgLabel}/${projectLabel}/${resolverId}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),

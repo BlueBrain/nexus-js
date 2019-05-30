@@ -61,6 +61,22 @@ const Resource = (
           DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
+    tag: (
+      orgLabel: string,
+      projectLabel: string,
+      resourceId: string,
+      rev: number,
+      payload: {
+        tag: string;
+        rev: number;
+      },
+    ): Promise<Resource> =>
+      httpPost({
+        path: `${
+          context.uri
+        }/resources/${orgLabel}/${projectLabel}/${resourceId}?rev=${rev}`,
+        body: JSON.stringify(payload),
+      }),
     deprecate: (
       orgLabel: string,
       projectLabel: string,

@@ -9,9 +9,10 @@ import {
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
+import { Resource } from '../Resource/types';
 
 const Resolver = (
-  { httpGet, httpPut, httpDelete, poll }: Fetchers,
+  { httpGet, httpPut, httpDelete, httpPost, poll }: Fetchers,
   context: NexusContext,
 ) => {
   return {
@@ -20,7 +21,7 @@ const Resolver = (
       projectLabel: string,
       resolverId: string,
       options?: GetResolverOptions,
-    ): Promise<Resolver> => {
+    ): Promise<Resource> => {
       const opts = buildQueryParams(options);
       return httpGet({
         path: `${
@@ -29,20 +30,21 @@ const Resolver = (
       });
     },
     list: (
-      orgLabel?: string,
+      orgLabel: string,
+      projectLabel: string,
       options?: ListResolverOptions,
     ): Promise<ResolverList> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${context.uri}/resolvers/${orgLabel}${opts}`,
+        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}${opts}`,
       });
     },
     create: (
       orgLabel: string,
       projectLabel: string,
       payload: ResolverPayload,
-    ): Promise<Resolver> =>
-      httpPut({
+    ): Promise<Resource> =>
+      httpPost({
         path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}`,
         body: JSON.stringify(payload),
       }),
@@ -52,11 +54,27 @@ const Resolver = (
       resolverId: string,
       rev: number,
       payload: ResolverPayload,
-    ): Promise<Resolver> =>
+    ): Promise<Resource> =>
       httpPut({
         path: `${
           context.uri
         }/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
+        body: JSON.stringify(payload),
+      }),
+    tag: (
+      orgLabel: string,
+      projectLabel: string,
+      resourceId: string,
+      rev: number,
+      payload: {
+        tag: string;
+        rev: number;
+      },
+    ): Promise<Resource> =>
+      httpPost({
+        path: `${
+          context.uri
+        }/resolvers/${orgLabel}/${projectLabel}/${resourceId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -64,18 +82,18 @@ const Resolver = (
       projectLabel: string,
       resolverId: string,
       rev: number,
-    ): Promise<Resolver> =>
+    ): Promise<Resource> =>
       httpDelete({
         path: `${
           context.uri
-        }/resolver/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
+        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
       }),
     poll: (
       orgLabel: string,
       projectLabel: string,
       resolverId: string,
       options?: { pollTime: number },
-    ): Observable<Resolver> =>
+    ): Observable<Resource> =>
       poll({
         path: `${
           context.uri

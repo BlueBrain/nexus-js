@@ -4,7 +4,7 @@ import { ACLPayload } from '../types';
 
 const acl = ACL(mockFetchers, { uri: 'http://api.url/v1' });
 
-describe('Views', () => {
+describe('ACLS', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });

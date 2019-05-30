@@ -26,8 +26,9 @@ export type CreateFileOptions = {
 };
 
 export type UpdateFilePayload = FilePayload & {
-  rev: string;
-  [key: string]: string;
+  '@id': string; // mandatory
+  rev: number;
+  [key: string]: any;
 };
 
 export type LinkFilePayload = {

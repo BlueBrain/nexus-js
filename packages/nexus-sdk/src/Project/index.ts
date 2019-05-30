@@ -8,15 +8,22 @@ import {
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
+import { GetResourceOptions } from '../Resource/types';
 
 const Project = (
   { httpGet, httpPut, httpDelete, poll }: Fetchers,
   context: NexusContext,
 ) => {
   return {
-    get: (orgLabel: string, projectLabel: string): Promise<Project> =>
+    get: (
+      orgLabel: string,
+      projectLabel: string,
+      options?: GetResourceOptions,
+    ): Promise<Project> =>
       httpGet({
-        path: `${context.uri}/projects/${orgLabel}/${projectLabel}`,
+        path: `${
+          context.uri
+        }/projects/${orgLabel}/${projectLabel}${buildQueryParams(options)}`,
       }),
     list: (
       orgLabel?: string,
@@ -25,8 +32,8 @@ const Project = (
       const opts = buildQueryParams(options);
       return httpGet({
         path: orgLabel
-          ? `${context.uri}/projects/${orgLabel}/${opts}`
-          : `${context.uri}/projects/${opts}`,
+          ? `${context.uri}/projects/${orgLabel}${opts}`
+          : `${context.uri}/projects${opts}`,
       });
     },
     create: (

@@ -51,7 +51,7 @@ pipeline {
                 expression { isRelease }
             }
             steps {
-                sh 'echo "//registry.npmjs.org/:_authToken=${NPM_NEXUS_TOKEN}" > .npmrc && lerna publish'
+                sh 'echo "//registry.npmjs.org/:_authToken=${NPM_NEXUS_TOKEN}" > .npmrc && npx lerna publish from-package --yes'
             }
         }
     }

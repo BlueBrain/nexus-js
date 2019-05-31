@@ -35,7 +35,6 @@ export type ProjectList = {
 };
 
 export type ProjectListOptions = {
-  full_text_search?: string;
   from?: number;
   size?: number;
   deprecated?: boolean;

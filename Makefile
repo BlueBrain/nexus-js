@@ -16,7 +16,7 @@ build:
 
 test:
 	@echo "Running tests... 🛫🛬"
-	@npm test -- --coverage
+	@yarn test --coverage
 
 lint:
 	@echo "Linting... ✨"

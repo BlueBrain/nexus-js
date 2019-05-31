@@ -18,6 +18,10 @@ test:
 	@echo "Running tests... 🛫🛬"
 	@npm test -- --coverage
 
+coverage:
+	@echo "Running tests... 🛫🛬"
+	@npx lerna run coverage
+
 lint:
 	@echo "Linting... ✨"
 	@npm run lint

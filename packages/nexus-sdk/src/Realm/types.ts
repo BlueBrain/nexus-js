@@ -31,6 +31,8 @@ export type GetRealmOptions = {
   [key: string]: any;
 };
 
+// TODO: are createdBy and updatedBy available for this endpoint?
+// https://bluebrainnexus.io/docs/api/1.1/iam/iam-realms-api.html#list-realms
 export type ListRealmOptions = {
   from?: number;
   size?: number;

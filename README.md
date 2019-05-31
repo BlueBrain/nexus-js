@@ -1,6 +1,7 @@
 <p align="center"><a href="https://github.com/BlueBrain/nexus-sdk-js" target="_blank" rel="noopener noreferrer"><img width="100" src="https://raw.githubusercontent.com/BlueBrain/nexus-webapp-commons/HEAD/nexus-js-logo.png" alt="Nexus Sdk logo"></a></p>
 
 <p align="center">
+<a href="https://codecov.io/gh/BlueBrain/nexus-sdk-js"><img src="https://codecov.io/gh/BlueBrain/nexus-sdk-js/branch/master/graph/badge.svg" alt="Coverage Status"></a>
  <a href="https://twitter.com/intent/follow?screen_name=bluebrainnexus"><img alt="Follow on Twitter" src="https://img.shields.io/twitter/follow/bluebrainnexus.svg?style=social&label=Follow"></a>
 </p>
 
@@ -19,7 +20,7 @@
 </p>
 
 <p align="center">
-Javascript tools to make developing on top of <a href="https://bluebrainnexus.io">Blue Brain Nexus</a> even easier.
+Javascript tools to make developing on top of <a href="https://bluebrainnexus.io">Blue Brain Nexus</a> easier.
 </p>
 
 ## Packages

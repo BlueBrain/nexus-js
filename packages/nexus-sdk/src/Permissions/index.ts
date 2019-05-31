@@ -8,12 +8,12 @@ import {
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
 
-const Organization = (
+const Permissions = (
   { httpGet, httpPut, httpDelete, httpPatch, poll }: Fetchers,
   context: NexusContext,
 ) => {
   return {
-    get: (options?: GetPermissionsOptions): Promise<Permissions> => {
+    list: (options?: GetPermissionsOptions): Promise<Permissions> => {
       const opts = buildQueryParams(options);
       return httpGet({
         path: `${context.uri}/permissions${opts}`,
@@ -30,12 +30,12 @@ const Organization = (
     ): Promise<Permissions> =>
       httpPatch({
         path: `${context.uri}/permissions?rev=${rev}`,
-        body: JSON.stringify({ '@type': 'Subtract', permissions: payload }),
+        body: JSON.stringify({ ...payload, '@type': 'Subtract' }),
       }),
     append: (rev: number, payload: PermissionsPayload): Promise<Permissions> =>
       httpPatch({
         path: `${context.uri}/permissions?rev=${rev}`,
-        body: JSON.stringify({ '@type': 'Append', permissions: payload }),
+        body: JSON.stringify({ ...payload, '@type': 'Append' }),
       }),
     delete: (rev: number): Promise<Permissions> =>
       httpDelete({
@@ -49,4 +49,4 @@ const Organization = (
   };
 };
 
-export default Organization;
+export default Permissions;

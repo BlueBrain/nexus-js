@@ -32,6 +32,7 @@
     "build": "tsc && rollup -c",
     "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/",
     "test": "jest",
+    "coverage": "jest --coverage",
     "codecov": "codecov"
   },
   "bugs": {

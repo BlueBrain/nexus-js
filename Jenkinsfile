@@ -34,7 +34,7 @@ pipeline {
                 }
                 stage('Test') {
                     steps {
-                        sh 'make test'
+                        sh 'lerna run coverage'
                         sh "npm run codecov -- --token=\"`oc get secrets codecov-secret --template='{{.data.nexus_sdk_js}}' | base64 -d`\""
                     }
                 }

@@ -3,7 +3,7 @@ import { Fetchers } from '../types';
 import { IdentityList } from './types';
 import { NexusContext } from '../nexusSdk';
 
-const Resolver = ({ httpGet, poll }: Fetchers, context: NexusContext) => {
+const Identity = ({ httpGet, poll }: Fetchers, context: NexusContext) => {
   return {
     list: (): Promise<IdentityList> =>
       httpGet({
@@ -17,4 +17,4 @@ const Resolver = ({ httpGet, poll }: Fetchers, context: NexusContext) => {
   };
 };
 
-export default Resolver;
+export default Identity;

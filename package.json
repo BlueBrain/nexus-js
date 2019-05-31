@@ -23,8 +23,7 @@
     "build:es": "tsc --module es2015 --target es5 --outDir es",
     "build:umd": "rollup -c rollup.config.old.js",
     "documentation": "typedoc --out documentation/ --exclude \"**/*+(test|spec).ts\" src/",
-    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr documentation/",
-    "prepublishOnly": "npm run clean && npm run test && npm run lint && npm run build"
+    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr documentation/"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

@@ -17,7 +17,7 @@
   "unpkg": "dist/nexus-sdk.js",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
     "codecov": "codecov",
     "lint": "tslint packages/**/src/**/* -e **/*.md",
     "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd",

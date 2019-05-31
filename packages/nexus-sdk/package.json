@@ -36,7 +36,7 @@
     "url": "https://github.com/BlueBrain/nexus-webapp-commons/issues"
   },
   "dependencies": {
-    "@bbp/nexus-link": "^0.0.0"
+    "@bbp/nexus-link": "^1.1.0"
   },
   "publishConfig": {
     "access": "public"

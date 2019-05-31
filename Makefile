@@ -16,7 +16,7 @@ build:
 
 test:
 	@echo "Running tests... 🧪"
-	@npm test
+	@npx lerna bootstrap && npm test
 
 lint:
 	@echo "Linting... ✨"

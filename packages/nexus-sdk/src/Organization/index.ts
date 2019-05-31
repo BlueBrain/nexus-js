@@ -4,7 +4,8 @@ import {
   Organization,
   OrganizationList,
   ListOrgOptions,
-  CreateOrgPayload,
+  GetOrgOptions,
+  OrgPayload,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
@@ -14,24 +15,20 @@ const Organization = (
   context: NexusContext,
 ) => {
   return {
-    get: (label: string): Promise<Organization> =>
+    get: (label: string, options?: GetOrgOptions): Promise<Organization> =>
       httpGet({
-        path: `${context.uri}/orgs/${label}`,
+        path: `${context.uri}/orgs/${label}${buildQueryParams(options)}`,
       }),
     list: (options?: ListOrgOptions): Promise<OrganizationList> => {
       const opts = buildQueryParams(options);
       return httpGet({ path: `${context.uri}/orgs${opts}` });
     },
-    create: (label: string, payload: CreateOrgPayload): Promise<any> =>
+    create: (label: string, payload: OrgPayload): Promise<any> =>
       httpPut({
         path: `${context.uri}/orgs/${label}`,
         body: JSON.stringify(payload),
       }),
-    update: (
-      label: string,
-      rev: number,
-      payload: CreateOrgPayload,
-    ): Promise<any> =>
+    update: (label: string, rev: number, payload: OrgPayload): Promise<any> =>
       httpPut({
         path: `${context.uri}/orgs/${label}?rev=${rev}`,
         body: JSON.stringify(payload),

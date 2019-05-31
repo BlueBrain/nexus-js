@@ -27,13 +27,17 @@ export type OrganizationList = {
 };
 
 export type ListOrgOptions = {
-  full_text_search?: string;
   from?: number;
   size?: number;
   deprecated?: boolean;
   [key: string]: any;
 };
 
-export type CreateOrgPayload = {
+export type OrgPayload = {
   description?: string;
+};
+
+export type GetOrgOptions = {
+  rev?: number;
+  [key: string]: any;
 };

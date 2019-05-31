@@ -15,8 +15,8 @@ build:
 	@npx lerna run build
 
 test:
-	@echo "Running tests... 🧪"
-	@npx lerna bootstrap && npm test -- --coverage
+	@echo "Running tests... 🛫🛬"
+	@npm test -- --coverage
 
 lint:
 	@echo "Linting... ✨"

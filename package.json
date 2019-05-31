@@ -10,9 +10,6 @@
     "type": "git",
     "url": "git+https://github.com/BlueBrain/nexus-webapp-commons/tree/master/nexus-sdk-js"
   },
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "unpkg": "dist/nexus-sdk.js",
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest",
@@ -45,7 +42,6 @@
     "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
     "tslint-config-prettier": "^1.18.0",
-    "typedoc": "^0.14.2",
     "typescript": "^3.4.5"
   },
   "babel": {

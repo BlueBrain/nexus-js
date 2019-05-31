@@ -1,4 +1,5 @@
 import { Link, Context, Operation } from '@bbp/nexus-link';
+import { createNexusClient } from './nexusSdk';
 
 export type Fetchers = {
   httpGet: (operation: Operation) => Promise<any>;
@@ -13,6 +14,10 @@ export type Context =
   | string
   | (string | { [key: string]: string })[]
   | { [key: string]: string };
+
+// TODO: find the real way, I know this is cheating...
+const nexus = createNexusClient({ uri: '' });
+export type NexusClient = typeof nexus;
 
 export * from './Resource/types';
 export * from './File/types';

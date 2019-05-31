@@ -8,7 +8,7 @@ dshell:
 
 install:
 	@echo "Installing project's dependencies... 🚀"
-	@npm i && npx lerna bootstrap
+	@npm ci && npx lerna bootstrap
 
 build:
 	@echo "Building projects... 👷"

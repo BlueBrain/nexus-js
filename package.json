@@ -1,12 +1,10 @@
 {
-  "name": "@bbp/nexus-sdk",
-  "version": "1.0.0-beta.25",
-  "description": "JavaScript SDK from Nexus",
   "keywords": [
     "typescript",
     "nexus",
     "sdk",
-    "bbp"
+    "bbp",
+    "js"
   ],
   "repository": {
     "type": "git",

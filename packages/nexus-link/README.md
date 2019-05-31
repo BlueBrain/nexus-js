@@ -1,6 +1,16 @@
-# `@bbp/nexus-link`
+<p align="center"><a href="https://github.com/BlueBrain/nexus-sdk-js" target="_blank" rel="noopener noreferrer"><img width="100" src="https://raw.githubusercontent.com/BlueBrain/nexus-webapp-commons/HEAD/nexus-js-logo.png" alt="Nexus Sdk logo"></a></p>
 
-> Utilities for creating links 🔗. 
+<h2 align="center">@bbp/nexus-link</h2>
+
+<p align="center">
+  <a href="https://codecov.io/gh/BlueBrain/nexus-sdk-js"><img src="https://codecov.io/gh/BlueBrain/nexus-sdk-js/branch/master/graph/badge.svg" alt="Coverage Status"></a>
+  <a href="https://npmcharts.com/compare/@bbp/nexus-sdk?minimal=true"><img src="https://img.shields.io/npm/dm/@bbp/nexus-sdk.svg" alt="Downloads"></a>
+  <a href="https://www.npmjs.com/package/@bbp/nexus-sdk"><img src="https://img.shields.io/npm/v/@bbp/nexus-sdk.svg" alt="Version"></a>
+  <a href="https://www.npmjs.com/package/@bbp/nexus-sdk"><img src="https://img.shields.io/npm/l/@bbp/nexus-sdk.svg" alt="License"></a>
+ <a href="https://twitter.com/intent/follow?screen_name=bluebrainnexus"><img alt="Follow on Twitter" src="https://img.shields.io/twitter/follow/bluebrainnexus.svg?style=social&label=Follow"></a>
+</p>
+
+> Utilities for creating links 🔗.
 
 Links are sort of middlewares, they allow us to control a request flow.
 
@@ -25,25 +35,25 @@ response <- logger does log(Date.now()-start) <- bubble the chain of handlers  <
 ```
 
 There are 2 types of Links:
- - stateless
- - stateful
+
+- stateless
+- stateful
 
 A little bit like a react component can be:
 
 ```typescript
-const myComponent: React.FunctionComponent = () => <p>Hello</p>
+const myComponent: React.FunctionComponent = () => <p>Hello</p>;
 ```
 
 or
 
 ```typescript
 class MyComponent extends React.Component {
- render() {
-   return <p>Hello</p>
- }
+  render() {
+    return <p>Hello</p>;
+  }
 }
 ```
-
 
 A Link can be
 
@@ -63,7 +73,6 @@ class MyLink extends StatefulLink {
 
 ## Documentation
 
-
 ### some links
 
 `setMethod` link that sets the method of the request (GET, POST, etc...)
@@ -81,4 +90,3 @@ class MyLink extends StatefulLink {
 `toLink` transforms a stateless link into a stateful link
 
 `toPromise` transform an observable into a promise
-

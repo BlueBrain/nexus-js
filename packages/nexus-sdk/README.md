@@ -4,8 +4,7 @@
 
 <p align="center">
   <a href="https://codecov.io/gh/BlueBrain/nexus-sdk-js"><img src="https://codecov.io/gh/BlueBrain/nexus-sdk-js/branch/master/graph/badge.svg" alt="Coverage Status"></a>
-  <a href="https://npmcharts.com/compare/@bbp/nexus-sdk?minimal=true"><img src="https://img.shields.io/npm/dm/@bbp/nexus-sdk.svg" alt="Downloads"></a><br/>
-  <a href="https://libraries.io/npm/@bbp%2Fnexus-sdk"><img src="https://img.shields.io/librariesio/github/BlueBrain/nexus-sdk-js.svg" alt="Dependencies"></a>
+  <a href="https://npmcharts.com/compare/@bbp/nexus-sdk?minimal=true"><img src="https://img.shields.io/npm/dm/@bbp/nexus-sdk.svg" alt="Downloads"></a>
   <a href="https://www.npmjs.com/package/@bbp/nexus-sdk"><img src="https://img.shields.io/npm/v/@bbp/nexus-sdk.svg" alt="Version"></a>
   <a href="https://www.npmjs.com/package/@bbp/nexus-sdk"><img src="https://img.shields.io/npm/l/@bbp/nexus-sdk.svg" alt="License"></a>
  <a href="https://twitter.com/intent/follow?screen_name=bluebrainnexus"><img alt="Follow on Twitter" src="https://img.shields.io/twitter/follow/bluebrainnexus.svg?style=social&label=Follow"></a>

@@ -8,25 +8,20 @@ dshell:
 
 install:
 	@echo "Installing project's dependencies... 🚀"
-	@npm i
+	@npm ci && npx lerna bootstrap
 
 build:
-	@echo "Building project... 👷"
-	@npm run build
+	@echo "Building projects... 👷"
+	@npx lerna run build
 
 test:
-	@echo "Running tests... 🧪"
-	@npm test
+	@echo "Running tests... 🛫🛬"
+	@npm test -- --coverage
 
 lint:
 	@echo "Linting... ✨"
 	@npm run lint
 
-documentation:
-	@echo "Generating documentation... 📑"
-	@npm run documentation
-
 clean:
 	@echo "Cleaning... 🗑"
-	@npm run clean
-	@rm -fr node_modules/
+	@ npx lerna clean && npm run clean

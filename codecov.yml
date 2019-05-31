@@ -4,10 +4,10 @@ coverage:
       default: off
       nexus-sdk:
         target: 85%
-        flags: first-app
+        flags: nexus-sdk
       nexus-link:
         target: 85%
-        flags: first-elixir-app
+        flags: nexus-link
 
 flags:
   # filter the folder(s) you wish to measure by that flag

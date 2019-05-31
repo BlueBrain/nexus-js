@@ -30,9 +30,7 @@
   "scripts": {
     "prebuild": "npm run clean",
     "build": "tsc && rollup -c",
-    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/",
-    "test": "jest",
-    "codecov": "codecov"
+    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/"
   },
   "bugs": {
     "url": "https://github.com/BlueBrain/nexus-webapp-commons/issues"

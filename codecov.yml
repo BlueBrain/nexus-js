@@ -1,0 +1,20 @@
+coverage:
+  status:
+    project:
+      default: off
+      nexus-sdk:
+        target: 85%
+        flags: nexus-sdk
+      nexus-link:
+        target: 85%
+        flags: nexus-link
+
+flags:
+  # filter the folder(s) you wish to measure by that flag
+  nexus-sdk:
+    # only include files in the backend folder
+    paths:
+      - packages/nexus-sdk
+  nexus-link:
+    paths:
+      - packages/nexus-link

@@ -107,24 +107,17 @@ const NexusFile = (
       payload: UpdateFilePayload,
       options?: CreateFileOptions,
     ): Promise<NexusFile> => {
-      const { '@id': fileId, file: body, storage } = payload;
-      const opts = buildQueryParams({ storage });
+      const { '@id': fileId, file: body, storage, rev } = payload;
+      const opts = buildQueryParams({ rev, storage });
       const headers = (options && options.extraHeaders) || {};
-      return fileId
-        ? httpPut({
-            headers,
-            body,
-            path: `${
-              context.uri
-            }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
-          })
-        : httpPost({
-            headers,
-            body,
-            path: `${context.uri}/files/${orgLabel}/${projectLabel}${opts}`,
-          });
+      return httpPut({
+        headers,
+        body,
+        path: `${
+          context.uri
+        }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
+      });
     },
-
     deprecate: (
       orgLabel: string,
       projectLabel: string,
@@ -134,9 +127,8 @@ const NexusFile = (
       httpDelete({
         path: `${
           context.uri
-        }/file/${orgLabel}/${projectLabel}/${fileId}?rev=${rev}`,
+        }/files/${orgLabel}/${projectLabel}/${fileId}?rev=${rev}`,
       }),
-
     tag: (
       orgLabel: string,
       projectLabel: string,
@@ -148,7 +140,7 @@ const NexusFile = (
         body: JSON.stringify(body),
         path: `${
           context.uri
-        }/file/${orgLabel}/${projectLabel}/${fileId}/tags?rev=${previousRev}`,
+        }/files/${orgLabel}/${projectLabel}/${fileId}/tags?rev=${previousRev}`,
       });
     },
     poll: (

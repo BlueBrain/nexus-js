@@ -1,6 +1,6 @@
 {
   "name": "@bbp/nexus-link",
-  "version": "0.0.0",
+  "version": "1.1.0",
   "description": "A powerful, extandable way of controlling requests/responses to/from Nexus. Inspired by Apollo-link.",
   "keywords": [
     "observable",

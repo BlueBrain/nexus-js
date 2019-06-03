@@ -40,8 +40,8 @@ export const triggerFetch = (fetch?: any): Link => (operation: Operation) =>
   new Observable(observer => {
     const controller = new AbortController();
     const signal = controller.signal;
-    const { path, body, headers } = operation;
-    fetch(path, { body, headers, signal })
+    const { path, body, headers, method } = operation;
+    fetch(path, { body, headers, signal, method })
       .then(async (response: Response) => {
         if (response.status >= 400) {
           observer.error(await response.json());

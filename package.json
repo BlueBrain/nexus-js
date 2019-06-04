@@ -18,13 +18,8 @@
     "test": "jest",
     "codecov": "codecov",
     "lint": "tslint packages/**/src/**/* -e **/*.md",
-    "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd",
-    "build:commonjs": "tsc --module commonjs --target es5 --outDir lib",
-    "build:es": "tsc --module es2015 --target es5 --outDir es",
-    "build:umd": "rollup -c rollup.config.old.js",
-    "documentation": "typedoc --out documentation/ --exclude \"**/*+(test|spec).ts\" src/",
     "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr documentation/",
-    "prepublishOnly": "npm run test && npm run lint && npm run build"
+    "prepublishOnly": "npm run test && npm run lint"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

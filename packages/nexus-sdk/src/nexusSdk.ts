@@ -52,7 +52,7 @@ export function createNexusClient(options: NexusClientOptions) {
     httpPut: operation =>
       toPromise(pipe([setMethod('PUT'), requestHandler])(operation)),
     httpPatch: operation =>
-      toPromise(pipe([setMethod('PATH'), requestHandler])(operation)),
+      toPromise(pipe([setMethod('PATCH'), requestHandler])(operation)),
     httpDelete: operation =>
       toPromise(pipe([setMethod('DELETE'), requestHandler])(operation)),
     poll: pipe([poll(1000), requestHandler]),

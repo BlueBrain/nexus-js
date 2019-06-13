@@ -81,7 +81,7 @@ const checkPermissions = (
     [],
   );
 
-  // grap the list of permissions that are not in the ACLs
+  // grab the list of permissions that are not in the ACLs
   const checkList = validAcls.reduce((checkList, acl) => {
     return checkList.filter(
       permission => !acl.permissions.includes(permission),
@@ -98,13 +98,17 @@ const checkPermissions = (
   });
 };
 
-interface AccessControlProps {
+export type AccessControlProps = {
   permissions: Array<string>;
   path: string;
   children: React.ReactNode;
-  noAccessComponent?: React.ReactNode;
+  noAccessComponent?: ({
+    missingPermissions,
+  }: {
+    missingPermissions: [string];
+  }) => React.ReactNode | React.ReactNode;
   loadingComponent?: React.ReactNode;
-}
+};
 
 /**
  * Usage:
@@ -118,21 +122,21 @@ interface AccessControlProps {
  *   <Access />
  * </AccessControl>
  */
-const AccessControl: React.FunctionComponent<AccessControlProps> = props => {
-  const state = useNexus(checkPermissions(props.permissions, props.path));
+export const AccessControl: React.FunctionComponent<
+  AccessControlProps
+> = props => {
+  const state = useNexus<any, [string]>(
+    checkPermissions(props.permissions, props.path),
+  );
   if (state.loading) {
-    return props.loadingComponent ? <>{props.loadingComponent}</> : null;
+    return props.loadingComponent ? props.loadingComponent : null;
   }
   if (state.error) {
-    return props.noAccessComponent ? (
-      typeof props.noAccessComponent === 'function' ? (
-        props.noAccessComponent({ missingPermissions: state.error })
-      ) : (
-        <>{props.noAccessComponent}</>
-      )
-    ) : null;
+    return props.noAccessComponent
+      ? typeof props.noAccessComponent === 'function'
+        ? props.noAccessComponent({ missingPermissions: state.error })
+        : props.noAccessComponent
+      : null;
   }
-  return <>{props.children}</>;
+  return props.children;
 };
-
-export default AccessControl;

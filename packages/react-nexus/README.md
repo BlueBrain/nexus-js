@@ -35,28 +35,30 @@ render(
 );
 ```
 
-Use any API calls as React component
+Use the `useNexus` hook to call your nexus client instance:
 
 ```tsx
-import { Organization } from '@bbp/react-nexus';
+import { useNexus } from '@bbp/react-nexus';
+import { OrganizationList, ListOrgOptions } from '@bbp/nexus-sdk';
 
-const ListOrgs = () => (
-  <Organization.List>
-    {({ data, loading, error }) => {
-      if (loading) {
-        return <p>Loading Organization...</p>;
-      }
-      if (error) {
-        return <p>An error occured: {error.reason}</p>;
-      }
-      // @ts-ignore
-      return data._results.map(org => <p>org._label</p>);
-    }}
-  </Organization.List>
-);
+const ListOrg = ({ options }: { options?: ListOrgOptions }) => {
+  const state = useNexus<OrganizationList>(nexus =>
+    nexus.Organization.list(options),
+  );
+
+  if (state.loading) {
+    return <p>Loading Organization...</p>;
+  }
+  if (state.error) {
+    return <p>An error occurred: {state.error.reason}</p>;
+  }
+  return state.data._results.map(org => <p>{org._label}</p>);
+};
+
+<ListOrg deprecated={true} />
 ```
 
-There are some very handy components too
+There are some very handy components too:
 
 ```tsx
 import { AccessControl } from '@bbp/react-nexus';

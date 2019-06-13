@@ -21,10 +21,13 @@ describe('Resource', () => {
 
     it('should make httpGet call to the resources api with the right url and query params', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
-      await resource.get('org', 'project', 'myId', { rev: 1 });
+      await resource.get('org', 'project', 'myId', {
+        rev: 1,
+        q: 'myTextString',
+      });
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resources/org/project/_/myId?rev=1',
+        'http://api.url/v1/resources/org/project/_/myId?rev=1&q=myTextString',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });

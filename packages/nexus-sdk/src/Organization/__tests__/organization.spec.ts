@@ -22,10 +22,10 @@ describe('Organization', () => {
 
     it('should make httpGet call to the organizations api with the right url and query params', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
-      await organization.get('organizationLabel', { rev: 1 });
+      await organization.get('organizationLabel', { rev: 1, label: 'myOrg' });
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/orgs/organizationLabel?rev=1',
+        'http://api.url/v1/orgs/organizationLabel?rev=1&label=myOrg',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });

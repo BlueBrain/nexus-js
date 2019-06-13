@@ -3,7 +3,7 @@ import { Context, Resource, PaginatedResource } from '../types';
 export const DEFAULT_SCHEMA_ID = '_';
 
 export type ResourceListOptions = {
-  full_text_search?: string;
+  q?: string; // full text search query
   from?: number;
   size?: number;
   deprecated?: boolean;

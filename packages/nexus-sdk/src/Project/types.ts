@@ -37,6 +37,7 @@ export type ProjectList = {
 export type ProjectListOptions = {
   from?: number;
   size?: number;
+  label?: string;
   deprecated?: boolean;
   [key: string]: any;
 };

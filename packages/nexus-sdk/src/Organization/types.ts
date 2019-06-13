@@ -29,6 +29,7 @@ export type OrganizationList = {
 export type ListOrgOptions = {
   from?: number;
   size?: number;
+  label?: string;
   deprecated?: boolean;
   [key: string]: any;
 };

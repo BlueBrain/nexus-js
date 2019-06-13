@@ -46,10 +46,11 @@ describe('Project', () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await project.list('org', {
         deprecated: true,
+        label: 'myProject',
       });
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/projects/org?deprecated=true',
+        'http://api.url/v1/projects/org?deprecated=true&label=myProject',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });

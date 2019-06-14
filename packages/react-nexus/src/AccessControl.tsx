@@ -105,38 +105,41 @@ export type AccessControlProps = {
   noAccessComponent?: ({
     missingPermissions,
   }: {
-    missingPermissions: [string];
+    missingPermissions: string[];
   }) => React.ReactNode | React.ReactNode;
   loadingComponent?: React.ReactNode;
 };
 
 /**
  * Usage:
- *
+ * ```tsx
  * <AccessControl
- *  permissions={["projects/read", "resources/write"]}
+ *    permissions={["projects/read", "resources/write"]}
  *    path="/org"
- *   noAccessComponent={(missingPerms) => <NoAccess />}
- *   loadingComponent={}
+ *    noAccessComponent={(missingPerms: string[]) => <NoAccessComponent />}
+ *    loadingComponent={}
  * >
- *   <Access />
+ *   <AccessComponent />
  * </AccessControl>
+ * ```
  */
 export const AccessControl: React.FunctionComponent<
   AccessControlProps
 > = props => {
-  const state = useNexus<any, [string]>(
+  const state = useNexus<any, string[]>(
     checkPermissions(props.permissions, props.path),
   );
   if (state.loading) {
-    return props.loadingComponent ? props.loadingComponent : null;
+    return props.loadingComponent ? <>props.loadingComponent</> : null;
   }
   if (state.error) {
-    return props.noAccessComponent
-      ? typeof props.noAccessComponent === 'function'
-        ? props.noAccessComponent({ missingPermissions: state.error })
-        : props.noAccessComponent
-      : null;
+    return props.noAccessComponent ? (
+      typeof props.noAccessComponent === 'function' ? (
+        <>{props.noAccessComponent({ missingPermissions: state.error })}</>
+      ) : (
+        <>props.noAccessComponent</>
+      )
+    ) : null;
   }
-  return props.children;
+  return <>props.children</>;
 };

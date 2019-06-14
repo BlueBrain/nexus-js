@@ -62,6 +62,7 @@ There are some very handy components too:
 
 ```tsx
 import { AccessControl } from '@bbp/react-nexus';
+
 const RenderBasedOnPermission = () => (
   <AccessControl
     permissions={["projects/read", "resources/write"]}

@@ -14,6 +14,12 @@
 
 ## Usage
 
+Install:
+
+```sh
+npm i @bbp/react-nexus @bbp/nexus-sdk
+```
+
 Wrap your App with the Provider
 
 ```tsx

@@ -31,7 +31,7 @@ const matchGroup = (identity, acl) => {
     acl['group'] === identity['group']
   );
 };
-// matches a list of identitys with an ACL
+// matches a list of identities with an ACL
 const matchIdentity = (identities: Array<any>, acl: any): any | false => {
   const doesMatch = identities.find(identity => {
     if (identity['@type'] === acl['@type']) {
@@ -51,8 +51,8 @@ const matchIdentity = (identities: Array<any>, acl: any): any | false => {
   return doesMatch ? acl : false;
 };
 
-// for each ALC, match self_identity with acl_identity
-// if match, check if permissions contains one or more requiredPermissions
+// for each ACL, match self_identity with acl_identity
+// if match, check if permissions contain one or more requiredPermissions
 // if yes, remove requiredPermission(s) from check list
 // in the end, return check list
 // if empty, you have access, if not, you don't (and you get the list of missing permissions)
@@ -93,7 +93,7 @@ const checkPermissions = (
     if (checkList.length === 0) {
       resolve(true);
     }
-    // if not  reject with missing permissions
+    // if not reject with missing permissions
     reject(checkList);
   });
 };

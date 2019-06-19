@@ -16,6 +16,7 @@ export type Context =
   | { [key: string]: string };
 
 // TODO: find the real way, I know this is cheating...
+// but this essentially generates the "global type" the nexus client is made of
 const nexus = createNexusClient({ uri: '' });
 export type NexusClient = typeof nexus;
 

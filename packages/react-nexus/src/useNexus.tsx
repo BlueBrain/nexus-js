@@ -5,7 +5,7 @@ import nexusContext from './nexusContext';
 
 const warningMessage =
   'No Nexus client found. ' +
-  'To use nexus-react components, make sure you wrap your React app with the NexusProvider component' +
+  'To use react-nexus components, make sure you wrap your React app with the NexusProvider component' +
   ' like: <NexusProvider nexusClient={myClient)><App /></NexusProvider>. ';
 
 export default function useNexus<T = any, S = any>(

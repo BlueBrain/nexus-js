@@ -28,11 +28,19 @@ Javascript tools to make developing on top of <a href="https://bluebrainnexus.io
 ### [`@bbp/nexus-sdk`](./packages/nexus-sdk/README.md#readme)
 
 An abstracted sdk layer over Blue Brain Nexus to make developing clients and services more simple.
+
 [npm](https://www.npmjs.com/package/@bbp/nexus-sdk) | [Readme](./packages/nexus-sdk#readme)
+
+### [`@bbp/react-nexus`](./packages/react-nexus/README.md#readme)
+
+A set of react tools to allow an easier and faster integration with Nexus.
+
+[npm](https://www.npmjs.com/package/@bbp/react-nexus) | [Readme](./packages/react-nexus#readme)
 
 ### [`@bbp/nexus-link`](./packages/nexus-link/README.md#readme)
 
-A middleware or "link" library that makes chaining operations very simple, especially useful for things like making requests.
+The core of `nexus-sdk`, this library allows to control the request/response flow by chaining "middlewares". It uses the Observable pattern which allows to contain the request/response logic into 1 function called "links".
+
 [npm](https://www.npmjs.com/package/@bbp/nexus-link) | [Readme](./packages/nexus-link#readme)
 
 #### How is the repo structured?
@@ -53,7 +61,7 @@ This repo is managed as a _monorepo_ using [lerna](https://github.com/lerna/lern
 - Install: `make install`
 - Build: `make build`
 - Test: `make test`
-- Lint: `makelint`
+- Lint: `make lint`
 
 # License
 

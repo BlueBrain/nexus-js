@@ -1,0 +1,46 @@
+{
+  "name": "@bbp/react-nexus",
+  "version": "1.1.0",
+  "description": "A set of React components for Nexus",
+  "keywords": [
+    "react",
+    "nexus",
+    "javascript",
+    "typescript"
+  ],
+  "author": "Julien Machon <julien.machon@epfl.ch>",
+  "homepage": "https://github.com/BlueBrain/nexus-sdk-js#readme",
+  "license": "Apache-2.0",
+  "main": "./lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BlueBrain/nexus-sdk-js.git"
+  },
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc && rollup -c",
+    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/"
+  },
+  "bugs": {
+    "url": "https://github.com/BlueBrain/nexus-sdk-js/issues"
+  },
+  "dependencies": {
+    "ts-invariant": "0.4.1"
+  },
+  "peerDependencies": {
+    "@bbp/nexus-sdk": "^1.1.2",
+    "react": "^16.8.3"
+  },
+  "devDependencies": {
+    "@bbp/nexus-sdk": "^1.1.2",
+    "@types/react": "^16.8.3",
+    "react": "^16.8.3"
+  }
+}

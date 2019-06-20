@@ -8,6 +8,9 @@ coverage:
       nexus-link:
         target: 85%
         flags: nexus-link
+      react-nexus:
+        target: 85%
+        flags: react-nexus
 
 flags:
   # filter the folder(s) you wish to measure by that flag
@@ -18,3 +21,6 @@ flags:
   nexus-link:
     paths:
       - packages/nexus-link
+  react-nexus:
+    paths:
+      - packages/react-nexus

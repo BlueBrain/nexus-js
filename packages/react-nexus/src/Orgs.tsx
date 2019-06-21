@@ -19,7 +19,6 @@ const List = ({
     nexus => nexus.Organization.list(options),
     [options && options.label],
   );
-  // @ts-ignore
   return children({ ...state });
 };
 

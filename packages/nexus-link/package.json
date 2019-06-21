@@ -29,7 +29,7 @@
   },
   "scripts": {
     "prebuild": "npm run clean",
-    "build": "tsc && rollup -c",
+    "build": "rollup -c",
     "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/"
   },
   "bugs": {

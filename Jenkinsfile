@@ -25,6 +25,12 @@ pipeline {
             }
         }
 
+        stage('Build packages') {
+            steps {
+                sh 'make build'
+            }
+        }
+
         stage('Review') {
             parallel {
                 stage('Lint') {
@@ -36,11 +42,6 @@ pipeline {
                     steps {
                         sh 'make test'
                         sh "npm run codecov -- --token=\"`oc get secrets codecov-secret --template='{{.data.nexus_sdk_js}}' | base64 -d`\""
-                    }
-                }
-                stage('Build') {
-                    steps {
-                        sh 'make build'
                     }
                 }
             }

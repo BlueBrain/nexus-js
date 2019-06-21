@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   nexus-sdk:
@@ -9,5 +9,5 @@ services:
       - .:/app
     environment:
       - npm_config_cache=npm-cache
-    entrypoint: npm
-    command: ["run", "build"]
+    entrypoint: yarn
+    command: ['build']

@@ -8,7 +8,7 @@ dshell:
 
 install:
 	@echo "Installing project's dependencies... 🚀"
-	@npm ci && yarn lerna bootstrap
+	@yarn && yarn lerna bootstrap
 
 build:
 	@echo "Building projects... 👷"
@@ -20,8 +20,8 @@ test:
 
 lint:
 	@echo "Linting... ✨"
-	@npm run lint
+	@yarn lint
 
 clean:
 	@echo "Cleaning... 🗑"
-	@ npx lerna clean && npm run clean
+	@yarn lerna clean && yarn clean

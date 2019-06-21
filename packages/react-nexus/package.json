@@ -26,6 +26,7 @@
   "scripts": {
     "prebuild": "npm run clean",
     "build": "rollup -c",
+    "build:watch": "rollup -c -w",
     "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/"
   },
   "bugs": {

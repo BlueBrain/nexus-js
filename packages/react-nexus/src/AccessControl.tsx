@@ -130,16 +130,16 @@ export const AccessControl: React.FunctionComponent<
     checkPermissions(props.permissions, props.path),
   );
   if (state.loading) {
-    return props.loadingComponent ? <>props.loadingComponent</> : null;
+    return props.loadingComponent ? <>{props.loadingComponent}</> : null;
   }
   if (state.error) {
     return props.noAccessComponent ? (
       typeof props.noAccessComponent === 'function' ? (
         <>{props.noAccessComponent({ missingPermissions: state.error })}</>
       ) : (
-        <>props.noAccessComponent</>
+        <>{props.noAccessComponent}</>
       )
     ) : null;
   }
-  return <>props.children</>;
+  return <>{props.children}</>;
 };

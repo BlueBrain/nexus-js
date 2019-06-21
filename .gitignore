@@ -11,3 +11,4 @@ coverage/
 npm-cache/
 .ocp-port-forwarding.js
 *.log
+.rpt2_cache

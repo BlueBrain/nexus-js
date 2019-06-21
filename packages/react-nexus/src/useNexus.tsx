@@ -8,14 +8,14 @@ const warningMessage =
   'To use react-nexus components, make sure you wrap your React app with the NexusProvider component' +
   ' like: <NexusProvider nexusClient={myClient)><App /></NexusProvider>. ';
 
-export default function useNexus<T = any>(
+export default function useNexus<T = any, S = any>(
   apiCall: (nexus: NexusClient) => Promise<any>,
   reloader?: any[],
 ) {
   const nexus = React.useContext<NexusClient>(nexusContext);
   const [state, setState] = React.useState<{
     loading: boolean;
-    error: Error | null;
+    error: S;
     data: T;
   }>({
     loading: true,
@@ -27,7 +27,7 @@ export default function useNexus<T = any>(
     setState({ ...state, loading: true });
     apiCall(nexus)
       .then((data: T) => setState({ ...state, data, loading: false }))
-      .catch((error: Error) => setState({ ...state, error, loading: false }));
+      .catch((error: S) => setState({ ...state, error, loading: false }));
   }, reloader || []);
 
   return state;

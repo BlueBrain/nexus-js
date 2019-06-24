@@ -1,6 +1,6 @@
 import { Context } from '../types';
 
-type OrgResponseCommon = {
+export type OrgResponseCommon = {
   '@id': string;
   '@type': string;
   _uuid: string;

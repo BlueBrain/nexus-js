@@ -12,6 +12,7 @@ type ProjectResponseCommon = {
   base?: string;
   description?: string;
   vocab?: string;
+  _label: string;
   _organizationLabel: string;
   _organizationUuid: string;
   _rev: number;

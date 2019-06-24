@@ -28,7 +28,7 @@ export default function useNexus<T = any, S = any>(
     apiCall(nexus)
       .then((data: T) => setState({ ...state, data, loading: false }))
       .catch((error: S) => setState({ ...state, error, loading: false }));
-  }, inputs);
+  }, inputs || []);
 
   return state;
 }

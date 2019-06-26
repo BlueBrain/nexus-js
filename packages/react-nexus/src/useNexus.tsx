@@ -10,7 +10,7 @@ const warningMessage =
 
 export default function useNexus<T = any, S = any>(
   apiCall: (nexus: NexusClient) => Promise<any>,
-  inputs?: any[],
+  inputs: any[] = [],
 ) {
   const nexus = React.useContext<NexusClient>(nexusContext);
   const [state, setState] = React.useState<{

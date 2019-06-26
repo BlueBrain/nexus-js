@@ -64,6 +64,35 @@ const ListOrg = ({ options }: { options?: ListOrgOptions }) => {
 <ListOrg deprecated={true} />
 ```
 
+`useNexus` hook uses the default react's `useEffect` so you can pass a list of values to watch in order to automatically refresh a new state:
+
+```tsx
+const GetOrg = ({ orgLabel }: { orgLabel: String }) => {
+  const state = useNexus(nexus => nexus.Organization.get(orgLabel), [orgLabel]);
+  return children({ ...state });
+};
+
+const App = () => {
+  const [orgLabel, setOrgLabel] = React.useState("defaultOrg");
+  return (
+    <>
+      <input name="org-label" onChange={e => setOrgLabel(e.target.value)} />
+      <GetOrg orgLabel={orgLabel}>
+        {({ data, loading, error }) => {
+          if (loading) {
+            return <p>Loading Organization...</p>;
+          }
+          if (error) {
+            return <p>An error occurred loading your the organization {orgLabel}: {error.reason}</p>;
+          }
+          return (<p>{data._label}</p>);
+        }}
+      </GetOrg>
+    </>
+  );
+}
+```
+
 There are some very handy components too:
 
 ```tsx

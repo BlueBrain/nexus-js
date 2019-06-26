@@ -5,13 +5,14 @@ type ApiMapping = {
   namespace: string;
 };
 
-type ProjectResponseCommon = {
+export type ProjectResponseCommon = {
   '@id': string;
   '@type': 'Project';
   apiMappings?: ApiMapping[];
   base?: string;
   description?: string;
   vocab?: string;
+  _label: string;
   _organizationLabel: string;
   _organizationUuid: string;
   _rev: number;

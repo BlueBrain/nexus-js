@@ -10,6 +10,7 @@ const warningMessage =
 
 export default function useNexus<T = any, S = any>(
   apiCall: (nexus: NexusClient) => Promise<any>,
+  inputs: any[] = [],
 ) {
   const nexus = React.useContext<NexusClient>(nexusContext);
   const [state, setState] = React.useState<{
@@ -25,9 +26,9 @@ export default function useNexus<T = any, S = any>(
   React.useEffect(() => {
     setState({ ...state, loading: true });
     apiCall(nexus)
-      .then((data: T) => setState({ ...state, loading: false, data }))
-      .catch((error: S) => setState({ ...state, loading: false, error }));
-  }, []);
+      .then((data: T) => setState({ ...state, data, loading: false }))
+      .catch((error: S) => setState({ ...state, error, loading: false }));
+  }, inputs);
 
   return state;
 }

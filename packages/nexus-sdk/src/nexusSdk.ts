@@ -72,5 +72,6 @@ export function createNexusClient(options: NexusClientOptions) {
     Realm: Realm(fetchers, context),
     Permissions: Permissions(fetchers, context),
     ACL: ACL(fetchers, context),
+    ...fetchers,
   };
 }

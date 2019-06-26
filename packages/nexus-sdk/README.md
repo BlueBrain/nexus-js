@@ -179,6 +179,31 @@ Set up rules for authentication and authorization for your instance of Nexus
 
 [Realm](./src/Realm#readme) | [Permissions](./src/Permissions#readme) | [Identities](./src/Identity#readme) | [ACL](./src/ACL#readme)
 
+#### Misc.
+
+The client also exposes bare http methods that can be use for operations on a resources using the `_self` url for example.
+
+```typescript
+/**
+ * Methods exposed are:
+ * - nexus.httpGet
+ * - nexus.httpPost
+ * - nexus.httpPut
+ * - nexus.httpDelete
+ * - nexus.poll
+*/
+
+// post something as text
+nexus.httpPost({ path: 'https://mySelfUrl.com', headers: { 'Content-type': 'text/plain' }, body: 'Some text' });
+
+// get something as blob
+nexus.get({ path: 'https://mySelfUrl.com', context: { as: 'blob' } })
+
+// poll something
+nexus.poll({ path: 'https://mySelfUrl.com', context: { pollTime: 1000 } });
+```
+
+
 ## Development
 
 ### How is the repo structured?

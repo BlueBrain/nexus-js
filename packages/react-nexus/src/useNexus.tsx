@@ -2,6 +2,7 @@ import * as React from 'react';
 import invariant from 'ts-invariant';
 import { NexusClient } from '@bbp/nexus-sdk';
 import nexusContext from './nexusContext';
+import { Observable } from '@bbp/nexus-link';
 
 const warningMessage =
   'No Nexus client found. ' +
@@ -9,7 +10,7 @@ const warningMessage =
   ' like: <NexusProvider nexusClient={myClient)><App /></NexusProvider>. ';
 
 export default function useNexus<T = any, S = any>(
-  apiCall: (nexus: NexusClient) => Promise<any>,
+  apiCall: (nexus: NexusClient) => Promise<any> | Observable<any>,
   inputs: any[] = [],
 ) {
   const nexus = React.useContext<NexusClient>(nexusContext);
@@ -25,9 +26,25 @@ export default function useNexus<T = any, S = any>(
   invariant(nexus, warningMessage);
   React.useEffect(() => {
     setState({ ...state, loading: true });
-    apiCall(nexus)
-      .then((data: T) => setState({ ...state, data, loading: false }))
-      .catch((error: S) => setState({ ...state, error, loading: false }));
+    const res = apiCall(nexus);
+    if (res instanceof Promise) {
+      res
+        .then((data: T) => setState({ ...state, data, loading: false }))
+        .catch((error: S) => setState({ ...state, error, loading: false }));
+      return () => {};
+    }
+    const subscription = (res as Observable<T>).subscribe({
+      next: (data: T) => {
+        setState({ ...state, data, loading: false });
+      },
+      error: (error: S) => {
+        setState({ ...state, error, loading: false });
+      },
+      complete: () => {
+        subscription.unsubscribe();
+      }
+    });
+    return () => subscription.unsubscribe();
   }, inputs);
 
   return state;

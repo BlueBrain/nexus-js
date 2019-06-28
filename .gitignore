@@ -12,3 +12,4 @@ npm-cache/
 .ocp-port-forwarding.js
 *.log
 .rpt2_cache
+package-lock.json

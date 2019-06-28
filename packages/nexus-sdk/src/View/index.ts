@@ -50,9 +50,7 @@ const View = (
       payload: ViewPayload,
     ): Promise<Resource> =>
       httpPut({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     tag: (
@@ -66,9 +64,7 @@ const View = (
       },
     ): Promise<Resource> =>
       httpPost({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -78,9 +74,7 @@ const View = (
       rev: number,
     ): Promise<Resource> =>
       httpDelete({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
       }),
     poll: (
       orgLabel: string,
@@ -104,9 +98,7 @@ const View = (
     ): Promise<T> => {
       const opts = buildQueryParams(options);
       return httpPost({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}/_search${opts}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/_search${opts}`,
         body: JSON.stringify(query),
       });
     },
@@ -117,9 +109,7 @@ const View = (
       query: string,
     ): Promise<T> => {
       return httpPost({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}/sparql`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/sparql`,
         body: query,
         headers: {
           'Content-Type': 'text/plain',
@@ -132,9 +122,17 @@ const View = (
       viewId: string,
     ): Promise<Statistics> =>
       httpGet({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
+      }),
+    pollStatistics: (
+      orgLabel: string,
+      projectLabel: string,
+      viewId: string,
+      options?: { pollTime: number },
+    ): Observable<Statistics> =>
+      poll({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
+        context: { pollTime: options && options.pollTime | 1000 },
       }),
   };
 };

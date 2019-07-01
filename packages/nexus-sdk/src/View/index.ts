@@ -5,6 +5,9 @@ import { View, ViewList, ViewPayload, Statistics } from './types';
 import { buildQueryParams } from '../utils';
 import { GetResourceOptions, ResourceListOptions } from '../Resource/types';
 
+export const DEFAULT_ELASTIC_SEARCH_VIEW_ID = 'nxv:defaultElasticSearchIndex';
+export const DEFAULT_SPARQL_VIEW_ID = 'nxv:defaultSparqlIndex';
+
 const View = (
   { httpGet, httpPost, httpPut, httpDelete, poll }: Fetchers,
   context: NexusContext,
@@ -50,9 +53,7 @@ const View = (
       payload: ViewPayload,
     ): Promise<Resource> =>
       httpPut({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     tag: (
@@ -66,9 +67,7 @@ const View = (
       },
     ): Promise<Resource> =>
       httpPost({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -78,9 +77,7 @@ const View = (
       rev: number,
     ): Promise<Resource> =>
       httpDelete({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
       }),
     poll: (
       orgLabel: string,
@@ -104,9 +101,7 @@ const View = (
     ): Promise<T> => {
       const opts = buildQueryParams(options);
       return httpPost({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}/_search${opts}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/_search${opts}`,
         body: JSON.stringify(query),
       });
     },
@@ -117,9 +112,7 @@ const View = (
       query: string,
     ): Promise<T> => {
       return httpPost({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}/sparql`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/sparql`,
         body: query,
         headers: {
           'Content-Type': 'text/plain',
@@ -132,9 +125,7 @@ const View = (
       viewId: string,
     ): Promise<Statistics> =>
       httpGet({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
       }),
   };
 };

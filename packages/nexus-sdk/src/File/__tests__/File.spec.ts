@@ -305,17 +305,4 @@ describe('File', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
-
-  describe('poll', () => {
-    xit('should make httpGet call to the files api', async () => {
-      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
-      await file.poll('org', 'project', 'myFileId', { pollTime: 50 });
-      console.log(fetchMock.mock.calls[0]);
-      expect(fetchMock.mock.calls.length).toEqual(1);
-      expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/files/org/project/myFileId',
-      );
-      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
-    });
-  });
 });

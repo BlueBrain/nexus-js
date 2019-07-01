@@ -14,12 +14,12 @@ const Resource = (
   context: NexusContext,
 ) => {
   return {
-    get: <T = {}>(
+    get: (
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
       options?: GetResourceOptions,
-    ): Promise<Resource & T> =>
+    ): Promise<Resource> =>
       httpGet({
         path: `${
           context.uri

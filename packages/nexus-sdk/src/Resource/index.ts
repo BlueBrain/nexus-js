@@ -3,11 +3,11 @@ import { Fetchers, GetResourceOptions, Resource } from '../types';
 import {
   ResourceListOptions,
   ResourcePayload,
-  DEFAULT_SCHEMA_ID,
   PaginatedResource,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
+import { DEFAULTS } from '../constants';
 
 const Resource = (
   { httpGet, httpPut, httpPost, httpDelete, poll }: Fetchers,
@@ -21,11 +21,9 @@ const Resource = (
       options?: GetResourceOptions,
     ): Promise<Resource> =>
       httpGet({
-        path: `${
-          context.uri
-        }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
-          options,
-        )}`,
+        path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${
+          DEFAULTS.SCHEMA_ID
+        }/${resourceId}${buildQueryParams(options)}`,
       }),
     list: (
       orgLabel: string,
@@ -58,7 +56,7 @@ const Resource = (
         path: `${
           context.uri
         }/resources/${orgLabel}/${projectLabel}/${schemaId ||
-          DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
+          DEFAULTS.SCHEMA_ID}/${resourceId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     tag: (
@@ -72,9 +70,7 @@ const Resource = (
       },
     ): Promise<Resource> =>
       httpPost({
-        path: `${
-          context.uri
-        }/resources/${orgLabel}/${projectLabel}/${resourceId}?rev=${rev}`,
+        path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${resourceId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -88,7 +84,7 @@ const Resource = (
         path: `${
           context.uri
         }/resources/${orgLabel}/${projectLabel}/${schemaId ||
-          DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
+          DEFAULTS.SCHEMA_ID}/${resourceId}?rev=${rev}`,
       }),
     poll: (
       orgLabel: string,
@@ -98,11 +94,9 @@ const Resource = (
     ): Observable<Resource> => {
       const { pollTime, ...getResourceOptions } = options;
       return poll({
-        path: `${
-          context.uri
-        }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
-          getResourceOptions,
-        )}`,
+        path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${
+          DEFAULTS.SCHEMA_ID
+        }/${resourceId}${buildQueryParams(getResourceOptions)}`,
         context: { pollTime: pollTime || 1000 },
       });
     },

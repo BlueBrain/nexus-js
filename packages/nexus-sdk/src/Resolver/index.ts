@@ -24,9 +24,7 @@ const Resolver = (
     ): Promise<Resource> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${
-          context.uri
-        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}${opts}`,
+        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}/${resolverId}${opts}`,
       });
     },
     list: (
@@ -56,9 +54,7 @@ const Resolver = (
       payload: ResolverPayload,
     ): Promise<Resource> =>
       httpPut({
-        path: `${
-          context.uri
-        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
+        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     tag: (
@@ -72,9 +68,7 @@ const Resolver = (
       },
     ): Promise<Resource> =>
       httpPost({
-        path: `${
-          context.uri
-        }/resolvers/${orgLabel}/${projectLabel}/${resourceId}?rev=${rev}`,
+        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}/${resourceId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -84,22 +78,24 @@ const Resolver = (
       rev: number,
     ): Promise<Resource> =>
       httpDelete({
-        path: `${
-          context.uri
-        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
+        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
       }),
     poll: (
       orgLabel: string,
       projectLabel: string,
       resolverId: string,
-      options?: { pollTime: number },
-    ): Observable<Resource> =>
-      poll({
+      options?: GetResolverOptions & { pollIntervalMs: number },
+    ): Observable<Resource> => {
+      const { pollIntervalMs, ...getResolverOptions } = options;
+      return poll({
         path: `${
           context.uri
-        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}`,
-        context: { pollTime: options && options.pollTime | 1000 },
-      }),
+        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}${buildQueryParams(
+          getResolverOptions,
+        )}`,
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
+      });
+    },
   };
 };
 

@@ -70,9 +70,7 @@ const NexusFile = (
         ? httpPut({
             headers,
             body,
-            path: `${
-              context.uri
-            }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
+            path: `${context.uri}/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
           })
         : httpPost({
             headers,
@@ -91,9 +89,7 @@ const NexusFile = (
       return fileId
         ? httpPut({
             body: JSON.stringify(body),
-            path: `${
-              context.uri
-            }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
+            path: `${context.uri}/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
           })
         : httpPost({
             body: JSON.stringify(body),
@@ -113,9 +109,7 @@ const NexusFile = (
       return httpPut({
         headers,
         body,
-        path: `${
-          context.uri
-        }/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
+        path: `${context.uri}/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
       });
     },
     deprecate: (
@@ -125,9 +119,7 @@ const NexusFile = (
       rev: number,
     ): Promise<NexusFile> =>
       httpDelete({
-        path: `${
-          context.uri
-        }/files/${orgLabel}/${projectLabel}/${fileId}?rev=${rev}`,
+        path: `${context.uri}/files/${orgLabel}/${projectLabel}/${fileId}?rev=${rev}`,
       }),
     tag: (
       orgLabel: string,
@@ -138,25 +130,23 @@ const NexusFile = (
       const { previousRev, ...body } = payload;
       return httpPost({
         body: JSON.stringify(body),
-        path: `${
-          context.uri
-        }/files/${orgLabel}/${projectLabel}/${fileId}/tags?rev=${previousRev}`,
+        path: `${context.uri}/files/${orgLabel}/${projectLabel}/${fileId}/tags?rev=${previousRev}`,
       });
     },
     poll: (
       orgLabel: string,
       projectLabel: string,
       fileId: string,
-      options?: GetResourceOptions & { pollTime: number },
+      options?: GetResourceOptions & { pollIntervalMs: number },
     ): Observable<NexusFile> => {
-      const { pollTime, ...getResourceOptions } = options;
+      const { pollIntervalMs, ...getResourceOptions } = options;
       return poll({
         path: `${
           context.uri
         }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(
           getResourceOptions,
         )}`,
-        context: { pollTime: pollTime || 1000 },
+        context: { pollIntervalMs: pollIntervalMs || 1000 },
       });
     },
   };

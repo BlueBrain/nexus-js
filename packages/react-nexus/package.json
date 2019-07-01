@@ -33,6 +33,7 @@
     "url": "https://github.com/BlueBrain/nexus-sdk-js/issues"
   },
   "dependencies": {
+    "@bbp/nexus-link": ">= 1.1.2",
     "ts-invariant": "0.4.1"
   },
   "peerDependencies": {

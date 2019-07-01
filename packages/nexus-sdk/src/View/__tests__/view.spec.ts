@@ -164,19 +164,6 @@ describe('Views', () => {
     });
   });
 
-  describe('poll', () => {
-    xit('should make httpGet call to the views api', async () => {
-      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
-      await view.poll('org', 'project', 'myViewId', { pollTime: 50 });
-      console.log(fetchMock.mock.calls[0]);
-      expect(fetchMock.mock.calls.length).toEqual(1);
-      expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/views/org/project/myViewId',
-      );
-      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
-    });
-  });
-
   describe('elasticSearchQuery', () => {
     it('should make httpPost call to the views query api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));

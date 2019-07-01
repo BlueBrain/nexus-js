@@ -22,9 +22,7 @@ const Schema = (
     ): Promise<Resource> => {
       const opts = buildQueryParams(options);
       return httpGet({
-        path: `${
-          context.uri
-        }/schemas/${orgLabel}/${projectLabel}/${schemaId}${opts}`,
+        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemaId}${opts}`,
       });
     },
     list: (
@@ -54,9 +52,7 @@ const Schema = (
       payload: SchemaPayload,
     ): Promise<Resource> =>
       httpPut({
-        path: `${
-          context.uri
-        }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
+        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     tag: (
@@ -70,9 +66,7 @@ const Schema = (
       },
     ): Promise<Resource> =>
       httpPost({
-        path: `${
-          context.uri
-        }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
+        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -82,20 +76,24 @@ const Schema = (
       rev: number,
     ): Promise<Resource> =>
       httpDelete({
-        path: `${
-          context.uri
-        }/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
+        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
       }),
     poll: (
       orgLabel: string,
       projectLabel: string,
       schemaId: string,
-      options?: { pollTime: number },
-    ): Observable<Resource> =>
-      poll({
-        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemaId}`,
-        context: { pollTime: options && options.pollTime | 1000 },
-      }),
+      options?: GetSchemaOptions & { pollIntervalMs: number },
+    ): Observable<Resource> => {
+      const { pollIntervalMs, ...getSchemaOptions } = options;
+      return poll({
+        path: `${
+          context.uri
+        }/schemas/${orgLabel}/${projectLabel}/${schemaId}${buildQueryParams(
+          getSchemaOptions,
+        )}`,
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
+      });
+    },
   };
 };
 

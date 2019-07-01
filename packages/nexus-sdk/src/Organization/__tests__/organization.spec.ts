@@ -96,17 +96,4 @@ describe('Organization', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
-
-  describe('poll', () => {
-    xit('should make httpGet call to the organizations api', async () => {
-      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
-      await organization.poll('organizationLabel', { pollTime: 50 });
-      console.log(fetchMock.mock.calls[0]);
-      expect(fetchMock.mock.calls.length).toEqual(1);
-      expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/orgs/organizationLabel',
-      );
-      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
-    });
-  });
 });

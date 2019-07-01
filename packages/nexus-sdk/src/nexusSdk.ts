@@ -34,6 +34,7 @@ export type NexusClientOptions = {
 export type NexusContext = Context & {
   uri: string;
 };
+
 export function createNexusClient(options: NexusClientOptions) {
   const defaultLinks = [triggerFetch(options.fetch)];
   options.token && defaultLinks.unshift(setToken(options.token));

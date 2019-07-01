@@ -19,7 +19,6 @@ export type Context =
 // but this essentially generates the "global type" the nexus client is made of
 const nexus = createNexusClient({ uri: '' });
 export type NexusClient = typeof nexus;
-
 export * from './Resource/types';
 export * from './File/types';
 export * from './Identity/types';

@@ -9,10 +9,10 @@ const Identity = ({ httpGet, poll }: Fetchers, context: NexusContext) => {
       httpGet({
         path: `${context.uri}/identities`,
       }),
-    poll: (options?: { pollTime: number }): Observable<IdentityList> =>
+    poll: (options?: { pollIntervalMs: number }): Observable<IdentityList> =>
       poll({
         path: `${context.uri}/identities`,
-        context: { pollTime: options && options.pollTime | 1000 },
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
       }),
   };
 };

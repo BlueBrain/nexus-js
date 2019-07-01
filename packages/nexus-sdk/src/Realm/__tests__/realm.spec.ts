@@ -102,17 +102,4 @@ describe('Realm', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
-
-  describe('poll', () => {
-    xit('should make httpGet call to the realms api', async () => {
-      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
-      await realm.poll('realmLabel', { pollTime: 50 });
-      console.log(fetchMock.mock.calls[0]);
-      expect(fetchMock.mock.calls.length).toEqual(1);
-      expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/realms/realmLabel',
-      );
-      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
-    });
-  });
 });

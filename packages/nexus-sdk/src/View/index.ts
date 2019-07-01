@@ -80,12 +80,18 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
-      options?: { pollTime: number },
-    ): Observable<View> =>
-      poll({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}`,
-        context: { pollTime: options && options.pollTime | 1000 },
-      }),
+      options?: GetResourceOptions & { pollIntervalMs: number },
+    ): Observable<View> => {
+      const { pollIntervalMs, ...getViewOptions } = options;
+      return poll({
+        path: `${
+          context.uri
+        }/views/${orgLabel}/${projectLabel}/${viewId}${buildQueryParams(
+          getViewOptions,
+        )}`,
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
+      });
+    },
     elasticSearchQuery: <T = any>(
       orgLabel: string,
       projectLabel: string,
@@ -128,11 +134,11 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
-      options?: { pollTime: number },
+      options?: { pollIntervalMs: number },
     ): Observable<Statistics> =>
       poll({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
-        context: { pollTime: options && options.pollTime | 1000 },
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
       }),
   };
 };

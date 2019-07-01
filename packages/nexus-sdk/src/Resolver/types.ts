@@ -19,6 +19,7 @@ export type ResolverList = PaginatedResource<Resolver>;
 export type GetResolverOptions = {
   rev?: number;
   tag?: string;
+  [key: string]: string | number | boolean;
 };
 export type ListResolverOptions = {
   from?: number;

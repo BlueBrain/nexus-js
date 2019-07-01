@@ -66,12 +66,18 @@ const Project = (
     poll: (
       orgLabel: string,
       projectLabel: string,
-      options?: { pollTime: number },
-    ): Observable<Project> =>
-      poll({
-        path: `${context.uri}/projects/${orgLabel}/${projectLabel}`,
-        context: { pollTime: options && options.pollTime | 1000 },
-      }),
+      options?: GetResourceOptions & { pollIntervalMs: number },
+    ): Observable<Project> => {
+      const { pollIntervalMs, ...getProjectOptions } = options;
+      return poll({
+        path: `${
+          context.uri
+        }/projects/${orgLabel}/${projectLabel}${buildQueryParams(
+          getProjectOptions,
+        )}`,
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
+      });
+    },
   };
 };
 

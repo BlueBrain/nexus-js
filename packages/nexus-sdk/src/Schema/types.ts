@@ -24,6 +24,7 @@ export type SchemaList = PaginatedResource<Schema>;
 export type GetSchemaOptions = {
   rev?: number;
   tag?: string;
+  [key: string]: string | number | boolean;
 };
 export type ListSchemaOptions = {
   from?: number;

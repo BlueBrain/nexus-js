@@ -41,11 +41,17 @@ const Permissions = (
       httpDelete({
         path: `${context.uri}/permissions?rev=${rev}`,
       }),
-    poll: (options?: { pollTime: number }): Observable<Permissions> =>
-      poll({
-        path: `${context.uri}/permissions`,
-        context: { pollTime: options && options.pollTime | 1000 },
-      }),
+    poll: (
+      options?: GetPermissionsOptions & { pollIntervalMs: number },
+    ): Observable<Permissions> => {
+      const { pollIntervalMs, ...getPermissionsOptions } = options;
+      return poll({
+        path: `${context.uri}/permissions${buildQueryParams(
+          getPermissionsOptions,
+        )}`,
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
+      });
+    },
   };
 };
 

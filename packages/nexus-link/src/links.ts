@@ -77,7 +77,7 @@ export const triggerFetch = (fetch?: any): Link => (operation: Operation) =>
     return () => controller.abort();
   });
 
-export const poll = (pollTime: number): Link => (
+export const poll = (pollIntervalMs: number): Link => (
   operation: Operation,
   forward?: Link,
 ) => {
@@ -85,7 +85,7 @@ export const poll = (pollTime: number): Link => (
     throw new Error('No link to forward Operation to.');
   }
   const pollEvery =
-    (operation.context && operation.context.pollTime) || pollTime;
+    (operation.context && operation.context.pollIntervalMs) || pollIntervalMs;
   return new Observable(observer => {
     const interval = setInterval(() => {
       forward(operation).subscribe(s => observer.next(s));

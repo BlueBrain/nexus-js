@@ -39,12 +39,15 @@ const ACL = (
       httpDelete({
         path: `${context.uri}/acls/${removeLeadingSlash(path)}?rev=${rev}`,
       }),
-    poll: (path: string, options?: ListACLOptions): Observable<ACLList> =>
+    poll: (
+      path: string,
+      options?: ListACLOptions & { pollIntervalMs: number },
+    ): Observable<ACLList> =>
       poll({
         path: `${context.uri}/acls/${removeLeadingSlash(
           path,
         )}${buildQueryParams(options)}`,
-        context: { pollTime: options && options.pollTime | 1000 },
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
       }),
   };
 };

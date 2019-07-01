@@ -47,12 +47,16 @@ const Realm = (
       }),
     poll: (
       realmLabel: string,
-      options?: { pollTime: number },
-    ): Observable<Storage> =>
-      poll({
-        path: `${context.uri}/realms/${realmLabel}`,
-        context: { pollTime: options && options.pollTime | 1000 },
-      }),
+      options?: GetRealmOptions & { pollIntervalMs: number },
+    ): Observable<Storage> => {
+      const { pollIntervalMs, ...getRealmOptions } = options;
+      return poll({
+        path: `${context.uri}/realms/${realmLabel}${buildQueryParams(
+          getRealmOptions,
+        )}`,
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
+      });
+    },
   };
 };
 

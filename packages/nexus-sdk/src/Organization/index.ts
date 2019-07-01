@@ -39,12 +39,16 @@ const Organization = (
       }),
     poll: (
       label: string,
-      options?: { pollTime: number },
-    ): Observable<Organization> =>
-      poll({
-        path: `${context.uri}/orgs/${label}`,
-        context: { pollTime: options && options.pollTime | 1000 },
-      }),
+      options?: GetOrgOptions & { pollIntervalMs: number },
+    ): Observable<Organization> => {
+      const { pollIntervalMs, ...getOrganizationOptions } = options;
+      return poll({
+        path: `${context.uri}/orgs/${label}${buildQueryParams(
+          getOrganizationOptions,
+        )}`,
+        context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
+      });
+    },
   };
 };
 

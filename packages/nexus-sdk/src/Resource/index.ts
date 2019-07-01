@@ -14,22 +14,22 @@ const Resource = (
   context: NexusContext,
 ) => {
   return {
-    get: (
+    get: <T = {}>(
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
       options?: GetResourceOptions,
-    ): Promise<Resource> =>
+    ): Promise<Resource & T> =>
       httpGet({
         path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${
           DEFAULTS.SCHEMA_ID
         }/${resourceId}${buildQueryParams(options)}`,
       }),
-    list: (
+    list: <T = {}>(
       orgLabel: string,
       projectLabel: string,
       options?: ResourceListOptions,
-    ): Promise<PaginatedResource> => {
+    ): Promise<PaginatedResource<Resource & T>> => {
       const opts = buildQueryParams(options);
       return httpGet({
         path: `${context.uri}/resources/${orgLabel}/${projectLabel}${opts}`,
@@ -86,12 +86,12 @@ const Resource = (
         }/resources/${orgLabel}/${projectLabel}/${schemaId ||
           DEFAULTS.SCHEMA_ID}/${resourceId}?rev=${rev}`,
       }),
-    poll: (
+    poll: <T = {}>(
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
       options?: GetResourceOptions & { pollTime: number },
-    ): Observable<Resource> => {
+    ): Observable<Resource & T> => {
       const { pollTime, ...getResourceOptions } = options;
       return poll({
         path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${

@@ -7,23 +7,25 @@ import {
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
-import { DEFAULTS } from '../constants';
+import { DEFAULT_SCHEMA_ID } from '../constants';
 
 const Resource = (
   { httpGet, httpPut, httpPost, httpDelete, poll }: Fetchers,
   context: NexusContext,
 ) => {
   return {
-    get: (
+    get: <T = {}>(
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
       options?: GetResourceOptions,
-    ): Promise<Resource> =>
+    ): Promise<Resource & T> =>
       httpGet({
-        path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${
-          DEFAULTS.SCHEMA_ID
-        }/${resourceId}${buildQueryParams(options)}`,
+        path: `${
+          context.uri
+        }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
+          options,
+        )}`,
       }),
     list: (
       orgLabel: string,
@@ -56,7 +58,7 @@ const Resource = (
         path: `${
           context.uri
         }/resources/${orgLabel}/${projectLabel}/${schemaId ||
-          DEFAULTS.SCHEMA_ID}/${resourceId}?rev=${rev}`,
+          DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     tag: (
@@ -84,7 +86,7 @@ const Resource = (
         path: `${
           context.uri
         }/resources/${orgLabel}/${projectLabel}/${schemaId ||
-          DEFAULTS.SCHEMA_ID}/${resourceId}?rev=${rev}`,
+          DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
       }),
     poll: (
       orgLabel: string,
@@ -94,9 +96,11 @@ const Resource = (
     ): Observable<Resource> => {
       const { pollTime, ...getResourceOptions } = options;
       return poll({
-        path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${
-          DEFAULTS.SCHEMA_ID
-        }/${resourceId}${buildQueryParams(getResourceOptions)}`,
+        path: `${
+          context.uri
+        }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
+          getResourceOptions,
+        )}`,
         context: { pollTime: pollTime || 1000 },
       });
     },

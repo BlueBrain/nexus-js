@@ -1,7 +1,5 @@
 import { Context, Resource, PaginatedResource } from '../types';
 
-export const DEFAULT_SCHEMA_ID = '_';
-
 export type ResourceListOptions = {
   q?: string; // full text search query
   from?: number;

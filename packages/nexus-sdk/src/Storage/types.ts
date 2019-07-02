@@ -51,7 +51,7 @@ export type StoragePayload =
 
 export type DiskStoragePayload = {
   '@id'?: string;
-  '@tpye': ['DiskStorage'];
+  '@type': ['DiskStorage'];
   volume: string;
   default?: boolean;
   readPermissions?: string[];

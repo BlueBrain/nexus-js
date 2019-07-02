@@ -90,7 +90,7 @@ const Resource = (
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
-      options?: GetResourceOptions & { pollTime: number },
+      options?: GetResourceOptions & { pollIntervalMs: number },
     ): Observable<Resource & T> => {
       const { pollTime, ...getResourceOptions } = options;
       return poll({

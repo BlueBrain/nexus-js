@@ -32,5 +32,14 @@ export const mockFetchers: Fetchers = {
       body: operation.body,
       method: 'DELETE',
     }),
-  poll: (operation: Operation) => new Observable(() => {}),
+  poll: (operation: Operation) =>
+    new Observable(observer => {
+      fetch(operation.path, {
+        headers: operation.headers,
+        body: operation.body,
+        method: 'GET',
+      }).then(value => {
+        observer.next(value);
+      });
+    }),
 };

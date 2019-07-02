@@ -33,27 +33,45 @@ export type View =
 export type ViewList = PaginatedResource<View>;
 
 export type ElasticSearchViewQueryResponse = {
-  _shards: {
-    failed: number;
-    skipped: number;
-    successful: number;
-    total: number;
+  aggregations: {
+    schemas: {
+      buckets: {
+        doc_count: number;
+        key: string;
+      }[];
+      doc_count_error_upper_bound: number;
+      sum_other_doc_count: number;
+    };
+    types: {
+      buckets: {
+        doc_count: number;
+        key: string;
+      }[];
+      doc_count_error_upper_bound: number;
+      sum_other_doc_count: number;
+    };
   };
   hits: {
     hits: {
       _score: number;
       _id: string;
       _index: string;
-      _source: string;
+      _source: Resource & {
+        _original_source: string;
+      };
       _type: string;
     }[];
     max_score: number;
-    total: Resource & {
-      _original_source: string;
-    };
+    total: number;
   };
   timed_out: boolean;
   took: number;
+  _shards: {
+    failed: number;
+    skipped: number;
+    successful: number;
+    total: number;
+  };
 };
 
 export type ElasticSearchViewPayload = {

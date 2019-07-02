@@ -4,6 +4,7 @@ import {
   ResourceListOptions,
   ResourcePayload,
   PaginatedResource,
+  ResourceList,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
@@ -14,7 +15,7 @@ const Resource = (
   context: NexusContext,
 ) => {
   return {
-    get: <T = {}>(
+    get: <T>(
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
@@ -25,11 +26,11 @@ const Resource = (
           DEFAULTS.SCHEMA_ID
         }/${resourceId}${buildQueryParams(options)}`,
       }),
-    list: <T = {}>(
+    list: <T>(
       orgLabel: string,
       projectLabel: string,
       options?: ResourceListOptions,
-    ): Promise<PaginatedResource<Resource & T>> => {
+    ): Promise<ResourceList<T>> => {
       const opts = buildQueryParams(options);
       return httpGet({
         path: `${context.uri}/resources/${orgLabel}/${projectLabel}${opts}`,
@@ -86,7 +87,7 @@ const Resource = (
         }/resources/${orgLabel}/${projectLabel}/${schemaId ||
           DEFAULTS.SCHEMA_ID}/${resourceId}?rev=${rev}`,
       }),
-    poll: <T = {}>(
+    poll: <T>(
       orgLabel: string,
       projectLabel: string,
       resourceId: string,

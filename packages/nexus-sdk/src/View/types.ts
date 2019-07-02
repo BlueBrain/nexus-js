@@ -32,37 +32,33 @@ export type View =
   | AggregatedSparqlView;
 export type ViewList = PaginatedResource<View>;
 
-export type ElasticSearchViewQueryResponse = {
-  aggregations: {
-    schemas: {
-      buckets: {
-        doc_count: number;
-        key: string;
-      }[];
-      doc_count_error_upper_bound: number;
-      sum_other_doc_count: number;
-    };
-    types: {
-      buckets: {
-        doc_count: number;
-        key: string;
-      }[];
-      doc_count_error_upper_bound: number;
-      sum_other_doc_count: number;
-    };
-  };
+export type ElasticSearchExplanation = {
+  value: number;
+  description: string;
+  details: ElasticSearchExplanation[];
+};
+
+export type ElasticSearchViewQueryResponse<T> = {
   hits: {
+    max_score: number;
+    total?: {
+      relation: 'eq' | 'gte';
+      value: number;
+    };
     hits: {
       _score: number;
       _id: string;
       _index: string;
-      _source: Resource & {
-        _original_source: string;
-      };
+      _source: T;
       _type: string;
+      _version?: number;
+      _explanation?: ElasticSearchExplanation[];
+      fields?: any;
+      highlight?: any;
+      inner_hits?: any;
+      matched_queries?: string[];
+      sort?: string[];
     }[];
-    max_score: number;
-    total: number;
   };
   timed_out: boolean;
   took: number;
@@ -72,6 +68,8 @@ export type ElasticSearchViewQueryResponse = {
     successful: number;
     total: number;
   };
+  aggregations?: any;
+  _scroll_id?: string;
 };
 
 export type ElasticSearchViewPayload = {

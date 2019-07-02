@@ -128,7 +128,7 @@ describe('Resource', () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       jest.useFakeTimers();
       const myPoll = resource
-        .poll('org', 'project', 'myViewId', { pollTime: 50 })
+        .poll('org', 'project', 'myViewId', { pollIntervalMs: 50 })
         .subscribe(val => {});
       jest.advanceTimersByTime(150);
       myPoll.unsubscribe();

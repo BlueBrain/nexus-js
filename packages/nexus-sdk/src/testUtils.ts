@@ -34,7 +34,7 @@ export const mockFetchers: Fetchers = {
     }),
   poll: (operation: Operation) =>
     new Observable(observer => {
-      const pollEvery = operation.context && operation.context.pollTime;
+      const pollEvery = operation.context && operation.context.pollIntervalMs;
       const interval = setInterval(async () => {
         const val = await fetch(operation.path, {
           headers: operation.headers,

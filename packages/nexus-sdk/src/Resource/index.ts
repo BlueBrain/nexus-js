@@ -88,16 +88,16 @@ const Resource = (
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
-      options?: GetResourceOptions & { pollTime: number },
+      options?: GetResourceOptions & { pollIntervalMs: number },
     ): Observable<Resource & T> => {
-      const { pollTime, ...getResourceOptions } = options;
+      const { pollIntervalMs, ...getResourceOptions } = options;
       return poll({
         path: `${
           context.uri
         }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
           getResourceOptions,
         )}`,
-        context: { pollTime: pollTime || 1000 },
+        context: { pollIntervalMs: pollIntervalMs || 1000 },
       });
     },
   };

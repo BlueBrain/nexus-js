@@ -1,11 +1,6 @@
 import { Observable } from '@bbp/nexus-link';
 import { Fetchers, GetResourceOptions, Resource } from '../types';
-import {
-  ResourceListOptions,
-  ResourcePayload,
-  PaginatedResource,
-  ResourceList,
-} from './types';
+import { ResourceListOptions, ResourcePayload, ResourceList } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
 import { DEFAULTS } from '../constants';

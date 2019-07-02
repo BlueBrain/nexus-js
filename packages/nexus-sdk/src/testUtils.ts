@@ -32,5 +32,18 @@ export const mockFetchers: Fetchers = {
       body: operation.body,
       method: 'DELETE',
     }),
-  poll: (operation: Operation) => new Observable(() => {}),
+  poll: (operation: Operation) =>
+    new Observable(observer => {
+      const pollEvery = operation.context && operation.context.pollTime;
+      const interval = setInterval(async () => {
+        const val = await fetch(operation.path, {
+          headers: operation.headers,
+          body: operation.body,
+          method: 'GET',
+        });
+        observer.next(val);
+      }, pollEvery);
+      // On un-subscription, stop polling
+      return () => clearInterval(interval);
+    }),
 };

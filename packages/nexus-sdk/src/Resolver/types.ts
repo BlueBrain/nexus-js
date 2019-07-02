@@ -35,13 +35,13 @@ export type ResolverPayload =
   | CrossProjectResolverPayload;
 
 export type InProjectResolverPayload = {
-  '@id': string;
+  '@id'?: string;
   '@type': ['InProject'];
   priority: number;
 };
 
 export type CrossProjectResolverPayload = {
-  '@id': string;
+  '@id'?: string;
   '@type': ['CrossProject'];
   resourceTypes: string[];
   projects: string[];

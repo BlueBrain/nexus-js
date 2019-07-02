@@ -50,7 +50,7 @@ export type StoragePayload =
   | S3StoragePayload;
 
 export type DiskStoragePayload = {
-  '@id': string;
+  '@id'?: string;
   '@tpye': ['DiskStorage'];
   volume: string;
   default?: boolean;
@@ -59,7 +59,7 @@ export type DiskStoragePayload = {
 };
 
 export type RemoteDiskStoragePayload = {
-  '@id': string;
+  '@id'?: string;
   '@type': ['RemoteDiskStorage'];
   folder: string;
   default?: boolean;
@@ -70,7 +70,7 @@ export type RemoteDiskStoragePayload = {
 };
 
 export type S3StoragePayload = {
-  '@id': string;
+  '@id'?: string;
   '@type': ['S3Storage'];
   bucket: string;
   default?: boolean;

@@ -37,6 +37,7 @@ export type ListSchemaOptions = {
 };
 
 export type SchemaPayload = {
+  '@id'?: string;
   '@context'?: Context;
   shapes: Shape[];
 };

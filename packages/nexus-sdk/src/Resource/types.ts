@@ -44,6 +44,8 @@ export type PaginatedResource<T = Resource> = {
   _next?: string;
 };
 
+export type ResourceList<T> = PaginatedResource<Resource & T>;
+
 export type GetResourceOptions = {
   rev?: number;
   tag?: string;

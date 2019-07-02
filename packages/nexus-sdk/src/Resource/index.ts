@@ -1,10 +1,6 @@
 import { Observable } from '@bbp/nexus-link';
 import { Fetchers, GetResourceOptions, Resource } from '../types';
-import {
-  ResourceListOptions,
-  ResourcePayload,
-  PaginatedResource,
-} from './types';
+import { ResourceListOptions, ResourcePayload, ResourceList } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
 import { DEFAULT_SCHEMA_ID } from '../constants';
@@ -14,12 +10,12 @@ const Resource = (
   context: NexusContext,
 ) => {
   return {
-    get: (
+    get: <T>(
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
       options?: GetResourceOptions,
-    ): Promise<Resource> =>
+    ): Promise<Resource & T> =>
       httpGet({
         path: `${
           context.uri
@@ -27,11 +23,11 @@ const Resource = (
           options,
         )}`,
       }),
-    list: (
+    list: <T>(
       orgLabel: string,
       projectLabel: string,
       options?: ResourceListOptions,
-    ): Promise<PaginatedResource> => {
+    ): Promise<ResourceList<T>> => {
       const opts = buildQueryParams(options);
       return httpGet({
         path: `${context.uri}/resources/${orgLabel}/${projectLabel}${opts}`,
@@ -88,12 +84,12 @@ const Resource = (
         }/resources/${orgLabel}/${projectLabel}/${schemaId ||
           DEFAULT_SCHEMA_ID}/${resourceId}?rev=${rev}`,
       }),
-    poll: (
+    poll: <T>(
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
       options?: GetResourceOptions & { pollTime: number },
-    ): Observable<Resource> => {
+    ): Observable<Resource & T> => {
       const { pollTime, ...getResourceOptions } = options;
       return poll({
         path: `${

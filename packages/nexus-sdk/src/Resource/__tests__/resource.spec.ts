@@ -124,13 +124,17 @@ describe('Resource', () => {
   });
 
   describe('poll', () => {
-    xit('should make httpGet call to the resources api', async () => {
+    it('should make httpGet call to the resources api', () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
-      await resource.poll('org', 'project', 'myViewId', { pollTime: 50 });
-      console.log(fetchMock.mock.calls[0]);
-      expect(fetchMock.mock.calls.length).toEqual(1);
+      jest.useFakeTimers();
+      const myPoll = resource
+        .poll('org', 'project', 'myViewId', { pollIntervalMs: 50 })
+        .subscribe(val => {});
+      jest.advanceTimersByTime(150);
+      myPoll.unsubscribe();
+      expect(fetchMock.mock.calls.length).toEqual(3);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resources/org/project/myViewId',
+        'http://api.url/v1/resources/org/project/_/myViewId',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });

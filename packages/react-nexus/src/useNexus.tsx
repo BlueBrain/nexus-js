@@ -1,19 +1,13 @@
 import * as React from 'react';
-import invariant from 'ts-invariant';
 import { NexusClient } from '@bbp/nexus-sdk';
-import nexusContext from './nexusContext';
+import useNexusContext from './useNexusContext';
 import { Observable } from '@bbp/nexus-link';
-
-const warningMessage =
-  'No Nexus client found. ' +
-  'To use react-nexus components, make sure you wrap your React app with the NexusProvider component' +
-  ' like: <NexusProvider nexusClient={myClient)><App /></NexusProvider>. ';
 
 export default function useNexus<T = any, S = any>(
   apiCall: (nexus: NexusClient) => Promise<any> | Observable<any>,
   inputs: any[] = [],
 ) {
-  const nexus = React.useContext<NexusClient>(nexusContext);
+  const nexus = useNexusContext();
   const [state, setState] = React.useState<{
     loading: boolean;
     error: S;
@@ -23,7 +17,6 @@ export default function useNexus<T = any, S = any>(
     error: null,
     data: null,
   });
-  invariant(nexus, warningMessage);
   React.useEffect(() => {
     setState({ ...state, loading: true });
     const res = apiCall(nexus);
@@ -42,7 +35,7 @@ export default function useNexus<T = any, S = any>(
       },
       complete: () => {
         subscription.unsubscribe();
-      }
+      },
     });
     return () => subscription.unsubscribe();
   }, inputs);

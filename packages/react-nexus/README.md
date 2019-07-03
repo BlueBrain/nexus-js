@@ -93,6 +93,20 @@ const App = () => {
 }
 ```
 
+You can also directly get the instance of the nexus client from the context:
+
+```tsx
+import { useNexusContext } from '@bbp/react-nexus';
+
+const Component = () => {
+  const nexus = useNexusContext();
+
+  // use it the way you want here
+  // nexus.Organization.list().then().catch()....
+}
+
+```
+
 There are some very handy components too:
 
 ```tsx

@@ -15,14 +15,14 @@ export type ResourceListOptions = {
 
 export type ResourcePayload = {
   '@id'?: string;
-  '@context': Context;
+  '@context'?: Context;
   '@type'?: Resource['@type'];
   [key: string]: any;
 };
 
 export type Resource = {
-  '@context?': Context;
-  '@type': string | string[];
+  '@context'?: Context;
+  '@type'?: string | string[];
   '@id': string;
   _incoming: string;
   _outgoing: string;

@@ -6,6 +6,7 @@ export const RESOURCE_METADATA_KEYS = [
   '_deprecated',
   '_createdAt',
   '_createdBy',
+  '_updatedAt',
   '_updatedBy',
   '_constrainedBy',
   '_self',

@@ -1,3 +1,33 @@
 export const DEFAULT_ELASTIC_SEARCH_VIEW_ID = 'nxv:defaultElasticSearchIndex';
 export const DEFAULT_SPARQL_VIEW_ID = 'nxv:defaultSparqlIndex';
 export const DEFAULT_SCHEMA_ID = '_';
+export const RESOURCE_METADATA_KEYS = [
+  '_rev',
+  '_deprecated',
+  '_createdAt',
+  '_createdBy',
+  '_updatedBy',
+  '_constrainedBy',
+  '_self',
+  '_project',
+  '_total',
+  '_results',
+  '_maxScore',
+  '_score',
+  '_uuid',
+  '_instant',
+  '_subject',
+  '_resourceId',
+  '_organization',
+  '_projectUuid',
+  '_organizationUuid',
+  '_incoming',
+  '_outgoing',
+  '_filename',
+  '_digest',
+  '_algorithm',
+  '_value',
+  '_bytes',
+  '_mediaType',
+  '_storageId',
+];

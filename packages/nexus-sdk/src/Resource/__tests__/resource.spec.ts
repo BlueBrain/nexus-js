@@ -58,6 +58,41 @@ describe('Resource', () => {
     });
   });
 
+  describe('links', () => {
+    it('should make httpGet call to the resources api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await resource.links('org', 'project', 'myID', 'incoming');
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/org/project/_/myID/incoming',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('should make the right call with outgoing as well', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await resource.links('org', 'project', 'myID', 'outgoing');
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/org/project/_/myID/outgoing',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('should make httpGet with query params', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await resource.links('org', 'project', 'myID', 'incoming', {
+        from: 0,
+        size: 20,
+      });
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/org/project/_/myID/incoming?from=0&size=20',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+  });
+
   describe('create', () => {
     it('should make httpPost call to the resources api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));

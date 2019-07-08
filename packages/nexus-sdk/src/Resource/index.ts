@@ -33,6 +33,20 @@ const Resource = (
         path: `${context.uri}/resources/${orgLabel}/${projectLabel}${opts}`,
       });
     },
+    links: <T>(
+      orgLabel: string,
+      projectLabel: string,
+      resourceId: string,
+      direction: 'incoming' | 'outgoing',
+      options?: ResourceListOptions,
+    ): Promise<ResourceList<T>> =>
+      httpGet({
+        path: `${
+          context.uri
+        }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}/${direction}${buildQueryParams(
+          options,
+        )}`,
+      }),
     create: (
       orgLabel: string,
       projectLabel: string,

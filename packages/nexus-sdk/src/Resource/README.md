@@ -18,6 +18,14 @@ nexus.Resource.list('myOrg', 'myProject', { type: 'myType' })
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
 
+// list Incoming or Outgoing links
+nexus.Resource.links('myOrg', 'myProject', 'myID', 'incoming', {
+  from: 0,
+  size: 20,
+})
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+
 nexus.Resource.create('myOrg', 'myProject', {
   '@id': 'myId',
   '@context': 'myContext',

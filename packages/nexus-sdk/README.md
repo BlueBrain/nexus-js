@@ -161,21 +161,15 @@ nexus.Organization.list()
 
 ## API
 
-#### Management
-
-Set up restricted projects within organizations to contain your knowledge graph
+#### Admin
 
 [Orgs](./src/Organization#readme) | [Projects](./src/Project#readme)
 
-#### Data
-
-Interact with the knowledge graph
+#### Knowledge Graph
 
 [Resources](./src/Resource#readme) | [Schema](./src/Schema#readme) | [Files](./src/File#readme) | [Views](./src/View#readme) | [Storage](./src/Storage#readme) | [Resolver](./src/Resolver#readme)
 
-#### IAM
-
-Set up rules for authentication and authorization for your instance of Nexus
+#### Identity and Access Management
 
 [Realm](./src/Realm#readme) | [Permissions](./src/Permissions#readme) | [Identities](./src/Identity#readme) | [ACL](./src/ACL#readme)
 
@@ -191,18 +185,21 @@ The client also exposes bare http methods that can be use for operations on a re
  * - nexus.httpPut
  * - nexus.httpDelete
  * - nexus.poll
-*/
+ */
 
 // post something as text
-nexus.httpPost({ path: 'https://mySelfUrl.com', headers: { 'Content-type': 'text/plain' }, body: 'Some text' });
+nexus.httpPost({
+  path: 'https://mySelfUrl.com',
+  headers: { 'Content-type': 'text/plain' },
+  body: 'Some text',
+});
 
 // get something as blob
-nexus.get({ path: 'https://mySelfUrl.com', context: { as: 'blob' } })
+nexus.get({ path: 'https://mySelfUrl.com', context: { as: 'blob' } });
 
 // poll something
 nexus.poll({ path: 'https://mySelfUrl.com', context: { pollTime: 1000 } });
 ```
-
 
 ## Development
 

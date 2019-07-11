@@ -1,23 +1,41 @@
 import replace from 'rollup-plugin-replace';
-import typescript from 'rollup-plugin-typescript2';
+import typescript from 'typescript';
+import typescriptPlugin from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
+import node from 'rollup-plugin-node-resolve';
 
-// Grab the local package.json from where rollup is calling from
-const pkg = require(`${__dirname}/package.json`);
+export const globals = {
+  react: 'React',
+  'react-dom': 'ReactDOM',
+  '@bbp/react-nexus': 'reactNexus',
+  '@bbp/nexus-sdk': 'nexusSdk',
+  '@bbp/nexus-link': 'nexusLink',
+};
 
 export default name => [
   // Browser Development
   {
     input: 'src/index.ts',
-    external: Object.keys(pkg.peerDependencies || {}),
     output: {
       file: `dist/index.js`,
       format: 'umd',
       name: name,
+      globals,
       indent: false,
+      exports: 'named',
     },
+    external: Object.keys(globals),
     plugins: [
-      typescript(),
+      node(),
+      typescriptPlugin({
+        typescript,
+        tsconfig: './tsconfig.json',
+        tsconfigOverride: {
+          compilerOptions: {
+            module: 'es2015',
+          },
+        },
+      }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development'),
       }),
@@ -27,15 +45,16 @@ export default name => [
   // Browser Production
   {
     input: 'src/index.ts',
-    external: Object.keys(pkg.peerDependencies || {}),
     output: {
       file: `dist/index.min.js`,
       format: 'umd',
       name: name,
+      globals,
       indent: false,
     },
+    external: Object.keys(globals),
     plugins: [
-      typescript(),
+      typescriptPlugin(),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
       }),
@@ -53,14 +72,15 @@ export default name => [
   // es modules
   {
     input: 'src/index.ts',
-    external: Object.keys(pkg.peerDependencies || {}),
     output: {
       file: `es/index.js`,
       format: 'esm',
+      globals,
       sourcemap: true,
     },
+    external: Object.keys(globals),
     plugins: [
-      typescript(),
+      typescriptPlugin(),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
       }),
@@ -77,12 +97,13 @@ export default name => [
   // cjs
   {
     input: 'src/index.ts',
-    external: Object.keys(pkg.peerDependencies || {}),
     output: {
       file: `lib/index.js`,
       format: 'cjs',
+      globals,
       sourcemap: true,
     },
-    plugins: [typescript()],
+    external: Object.keys(globals),
+    plugins: [typescriptPlugin()],
   },
 ];

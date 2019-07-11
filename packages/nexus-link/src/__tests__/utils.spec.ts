@@ -1,9 +1,9 @@
 import * as utils from '../utils';
-import zenObservableTs from 'zen-observable-ts';
+import { Observable } from 'rxjs';
 
 describe('toPromise', () => {
-  it('should convery an Observable to a Promise', async () => {
-    const obs = new zenObservableTs(subscribe => {
+  it('should convert an Observable to a Promise', async () => {
+    const obs = new Observable(subscribe => {
       subscribe.next(1);
     });
     const value = await utils.toPromise(obs);

@@ -163,15 +163,15 @@ nexus.Organization.list()
 
 #### Admin
 
-[Orgs](./src/Organization#readme) | [Projects](./src/Project#readme)
+[Orgs](./src/Organization) | [Projects](./src/Project)
 
 #### Knowledge Graph
 
-[Resources](./src/Resource#readme) | [Schema](./src/Schema#readme) | [Files](./src/File#readme) | [Views](./src/View#readme) | [Storage](./src/Storage#readme) | [Resolver](./src/Resolver#readme)
+[Resources](./src/Resource) | [Schema](./src/Schema) | [Files](./src/File) | [Views](./src/View) | [Storage](./src/Storage) | [Resolver](./src/Resolver)
 
 #### Identity and Access Management
 
-[Realm](./src/Realm#readme) | [Permissions](./src/Permissions#readme) | [Identities](./src/Identity#readme) | [ACL](./src/ACL#readme)
+[Realm](./src/Realm) | [Permissions](./src/Permissions) | [Identities](./src/Identity) | [ACL](./src/ACL)
 
 #### Misc.
 
@@ -199,6 +199,14 @@ nexus.get({ path: 'https://mySelfUrl.com', context: { as: 'blob' } });
 
 // poll something
 nexus.poll({ path: 'https://mySelfUrl.com', context: { pollTime: 1000 } });
+```
+
+You can also import constants for defautl view IDs or default Schema IDs:
+
+```typescript
+import { DEFAULT_ELASTIC_SEARCH_VIEW_ID, DEFAULT_SPARQL_VIEW_ID, DEFAULT_SCHEMA_ID } from '@bbp/nexus-sdk';
+
+nexus.View.get('myorg', 'myproject', DEFAULT_ELASTIC_SEARCH_VIEW_ID).then(view => { // do something with my view});
 ```
 
 ## Development

@@ -9,23 +9,21 @@
     "typescript",
     "link"
   ],
-  "author": "Julien Machon <julienmachon@gmail.com>",
-  "homepage": "https://github.com/BlueBrain/nexus-webapp-commons#readme",
+  "author": "Julien Machon <julien.machon@epfl.ch>",
+  "homepage": "https://github.com/BlueBrain/nexus-js#readme",
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "module": "es/index.js",
   "unpkg": "dist/index.js",
   "typings": "lib/index.d.ts",
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "dist": "dist",
+    "es": "es",
+    "lib": "lib"
   },
-  "files": [
-    "lib"
-  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BlueBrain/nexus-webapp-commons.git"
+    "url": "git+https://github.com/BlueBrain/nexus-js.git"
   },
   "scripts": {
     "prebuild": "npm run clean",
@@ -34,7 +32,7 @@
     "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/"
   },
   "bugs": {
-    "url": "https://github.com/BlueBrain/nexus-webapp-commons/issues"
+    "url": "https://github.com/BlueBrain/nexus-js/issues"
   },
   "dependencies": {
     "rxjs": "^6.5.2"

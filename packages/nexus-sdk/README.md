@@ -201,12 +201,18 @@ nexus.get({ path: 'https://mySelfUrl.com', context: { as: 'blob' } });
 nexus.poll({ path: 'https://mySelfUrl.com', context: { pollTime: 1000 } });
 ```
 
-You can also import constants for defautl view IDs or default Schema IDs:
+You can also import constants for default view IDs or default Schema IDs:
 
 ```typescript
-import { DEFAULT_ELASTIC_SEARCH_VIEW_ID, DEFAULT_SPARQL_VIEW_ID, DEFAULT_SCHEMA_ID } from '@bbp/nexus-sdk';
+import {
+	DEFAULT_ELASTIC_SEARCH_VIEW_ID,
+	DEFAULT_SPARQL_VIEW_ID,
+	DEFAULT_SCHEMA_ID
+} from '@bbp/nexus-sdk';
 
-nexus.View.get('myorg', 'myproject', DEFAULT_ELASTIC_SEARCH_VIEW_ID).then(view => { // do something with my view});
+nexus.View.get('myorg', 'myproject', DEFAULT_ELASTIC_SEARCH_VIEW_ID)
+	.then(view => { // do something with my view})
+	.catch(err => console.error(err));
 ```
 
 ## Development

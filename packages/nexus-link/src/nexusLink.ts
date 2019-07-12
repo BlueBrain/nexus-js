@@ -1,5 +1,5 @@
 import { Link, Operation, NextLink } from './types';
-import Observable from 'zen-observable-ts';
+import { Observable } from 'rxjs';
 
 export class StatefulLink {
   constructor(link?: Link) {

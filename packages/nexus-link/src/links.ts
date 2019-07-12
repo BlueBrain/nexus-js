@@ -1,8 +1,7 @@
 /**
  * A set of useful links
  */
-
-import { Observable } from 'zen-observable-ts';
+import { Observable } from 'rxjs';
 import { Link, Operation, FetchAs } from './types';
 
 export const setMethod = (method: string): Link => (

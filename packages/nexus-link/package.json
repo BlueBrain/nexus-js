@@ -37,7 +37,7 @@
     "url": "https://github.com/BlueBrain/nexus-webapp-commons/issues"
   },
   "dependencies": {
-    "zen-observable-ts": "^0.8.18"
+    "rxjs": "^6.5.2"
   },
   "publishConfig": {
     "access": "public"

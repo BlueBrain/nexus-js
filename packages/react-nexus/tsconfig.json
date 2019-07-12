@@ -6,6 +6,6 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "react"
   },
-  "include": ["src/**/*.ts", "src/ACL.tsx"],
+  "include": ["src/**/*.ts"],
   "exclude": ["src/**/__tests__/*.ts"]
 }

@@ -1,6 +1,6 @@
 import { Link, Operation } from './types';
 import { StatefulLink } from './nexusLink';
-import zenObservableTs from 'zen-observable-ts';
+import { Observable } from 'rxjs';
 
 /**
  * Transforms a Link into a StatefulLink
@@ -37,7 +37,7 @@ export function pipe(links: (Link | StatefulLink)[]): Link {
   });
 }
 
-export function toPromise(observable: zenObservableTs<any>): Promise<any> {
+export function toPromise(observable: Observable<any>): Promise<any> {
   return new Promise((resolve, reject) => {
     observable.subscribe({
       next: resolve,

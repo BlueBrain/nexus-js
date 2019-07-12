@@ -1,4 +1,4 @@
-import Observable from 'zen-observable-ts';
+import { Observable } from 'rxjs';
 
 export type Operation = RequestInit & {
   path: string | RequestInfo;

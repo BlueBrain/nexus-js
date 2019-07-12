@@ -39,9 +39,6 @@
   "dependencies": {
     "rxjs": "^6.5.2"
   },
-  "devDependencies": {
-    "@types/zen-observable": "^0.8.0"
-  },
   "publishConfig": {
     "access": "public"
   }

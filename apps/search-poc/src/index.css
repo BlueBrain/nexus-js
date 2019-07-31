@@ -1,0 +1,41 @@
+/* @import "../node_modules/antd/dist/antd.css"; */
+
+.App {
+  font-family: sans-serif;
+  background-color: #ff6666;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.Header {
+  flex: 1 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+.Header_logo {
+  width: 3em;
+  height: 3em;
+  position: absolute;
+  left: 50%;
+}
+.Header_auth {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+  width: 3em;
+  height: 3em;
+}
+
+.Filters {
+  min-width: 200px;
+  min-height: 200px;
+  background-color: blue;
+}
+
+.Results {
+  min-width: 200px;
+  background-color: violet;
+  flex-grow: 1;
+}

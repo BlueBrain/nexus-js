@@ -7,8 +7,6 @@
     "importHelpers": true,
     "removeComments": true,
     "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
     "noImplicitAny": false,
     "noUnusedParameters": false,
     "noUnusedLocals": true,

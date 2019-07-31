@@ -1,0 +1,43 @@
+{
+  "name": "search-poc",
+  "version": "1.1.5",
+  "description": "Search App POC",
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "@bbp/nexus-link": "^1.1.5",
+    "@bbp/nexus-sdk": "^1.1.5",
+    "@bbp/react-nexus": "^1.1.5",
+    "@types/jest": "24.0.16",
+    "@types/node": "12.6.8",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.5",
+    "antd": "^3.20.7",
+    "oidc-client": "^1.8.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1",
+    "typescript": "3.5.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

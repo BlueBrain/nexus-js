@@ -14,7 +14,7 @@ export default (selfUrl:string) => {
       .then(setEntity)
       .catch(setError)
       .finally(() => { setLoading(false) });
-  }, [selfUrl]);
+  }, [nexus, selfUrl]);
 
   return { entity, loading, error};
 };

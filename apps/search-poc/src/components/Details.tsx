@@ -25,6 +25,7 @@ const Details: React.FunctionComponent<{
             Brain region: &nbsp;
             <a
               href={entity.brainLocation.brainRegion['@id']}
+              rel="noopener noreferrer"
               target="_blank"
             >
               {entity.brainLocation.brainRegion.label}

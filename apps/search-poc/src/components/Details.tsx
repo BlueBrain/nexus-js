@@ -31,6 +31,7 @@ const Details: React.FunctionComponent<{
             </a>
           </p>
           <p>Name: {entity.name}</p>
+          <p>Description: {entity.description}</p>
         </div>}
       </Spin>
     </div>

@@ -1,0 +1,45 @@
+{
+  "name": "@bbp/webcomponents-nexus",
+  "version": "1.1.5",
+  "description": "Web Components for Nexus",
+  "keywords": [
+    "web",
+    "components",
+    "nexus"
+  ],
+  "author": "Julien Machon <julienmachon@gmail.com>",
+  "homepage": "https://github.com/BlueBrain/nexus-sdk-js#readme",
+  "license": "Apache-2.0",
+  "main": "lib/webcomponents-nexus.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BlueBrain/nexus-sdk-js.git"
+  },
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w",
+    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr build/"
+  },
+  "bugs": {
+    "url": "https://github.com/BlueBrain/nexus-sdk-js/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@bbp/react-nexus": "^1.1.5",
+    "@bbp/nexus-sdk": "^1.1.5",
+    "react": "^16.8.3",
+    "react-dom": "16.8.3",
+    "@types/react": "^16.8.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

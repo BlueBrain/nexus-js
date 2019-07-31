@@ -150,23 +150,26 @@ export const makeDatasetQuery = (
   return `
   ${datasetQueryConfig.vocab}
 
-  SELECT ?total ?s
+  SELECT ?total ?self
      WITH {
-      SELECT DISTINCT ?s {
+      SELECT DISTINCT ?self {
         ${graphQueries}
+        Graph ?g {
+          ?s nxv:self ?self
+        }
       }
      } AS %resultSet
 
    WHERE {
         {
-           SELECT (COUNT(?s) AS ?total)
+           SELECT (COUNT(?self) AS ?total)
            WHERE { INCLUDE %resultSet }
         }
         UNION
        {
            SELECT *
            WHERE { INCLUDE %resultSet }
-           ORDER BY ?s
+           ORDER BY ?self
            LIMIT ${size}
            OFFSET ${from}
         }

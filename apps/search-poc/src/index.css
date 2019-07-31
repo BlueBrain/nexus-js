@@ -2,9 +2,13 @@
 
 .App {
   font-family: sans-serif;
-  background-color: #ff6666;
   display: flex;
   flex-flow: row wrap;
+  background-color: #fafbfc;
+}
+
+.Sparql {
+  display: flex;
 }
 
 .Header {
@@ -12,6 +16,7 @@
   display: flex;
   justify-content: space-between;
   margin: 5px 0;
+  background-color: white;
 }
 .Header_logo {
   width: 3em;
@@ -36,6 +41,10 @@
 
 .Results {
   min-width: 200px;
-  background-color: violet;
   flex-grow: 1;
+  padding: 2em;
+}
+
+.ant-table {
+  background-color: white;
 }

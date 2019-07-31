@@ -25,7 +25,7 @@ const Workspace: React.FunctionComponent<{
   };
 
   return (
-    <>
+    <div className="Sparql">
       <Filters {...{ ...sparqlFilterQuery, appliedFilters, updateFilters }} />
       <Results
         {...{
@@ -34,7 +34,7 @@ const Workspace: React.FunctionComponent<{
           appliedFilters,
         }}
       />
-    </>
+    </div>
   );
 };
 

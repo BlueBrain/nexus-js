@@ -7,7 +7,7 @@ import { NexusProvider } from '@bbp/react-nexus';
 import { setUpSession, setToken } from './utils/auth';
 import Header from './components/Header';
 import SparqlView from './views/Sparql';
-import DetailsView from './views/Details';
+import DetailsContainerView from './views/DetailsContainer';
 import { SETTINGS } from './config';
 
 import 'antd/dist/antd.css';
@@ -36,8 +36,8 @@ async function main() {
               />
             </Route>
             <Route
-              path="/details/:id"
-              render={props => <DetailsView id={props.match.params.id} />}
+              path="/details/:selfUrl"
+              render={props => <DetailsContainerView params={props.match.params} />}
             />
           </Switch>
         </Router>

@@ -1,31 +1,61 @@
 import * as React from "react";
 import { Spin } from 'antd';
+import get from 'lodash/get';
+
+
+export interface BrainRegion {
+  '@id': string;
+  label: string;
+}
+
+export interface BrainLocation {
+  brainRegion: BrainRegion;
+}
+
+export interface CommonResource {
+  '@id': string;
+  brainLocation: BrainLocation;
+  name: string;
+  description: string;
+}
 
 
 const DetailsComponent: React.FunctionComponent<{
-  data: any;
+  data: CommonResource;
   loading: boolean;
+  error: Error;
 }> = props => {
-  const { data, loading } = props;
+  const { data, loading, error } = props;
+
+  const id = get(data, '@id');
+  const name = get(data, 'name');
+  const description = get(data, 'description');
+
+  const brainRegion = get(data, 'brainLocation.brainRegion', {});
+  const brainRegionId = brainRegion['@id'];
+  const brainRegionLabel = brainRegion.label;
 
   return (
-    <div className="Details">
+    <div className={error ? 'details error' : 'details'}>
       <Spin tip="Loading..." spinning={loading}>
         <h1>Common entity details</h1>
+
+        {error && <p>{error.message}</p>}
+
         {data && <div>
-          <p>Id: {data['@id']}</p>
+          <p>Id: {id}</p>
           <p>
             Brain region: &nbsp;
             <a
-              href={data.brainLocation.brainRegion['@id']}
+              href={brainRegionId}
               rel="noopener noreferrer"
               target="_blank"
             >
-              {data.brainLocation.brainRegion.label}
+              {brainRegionLabel}
             </a>
           </p>
-          <p>Name: {data.name}</p>
-          <p>Description: {data.description}</p>
+          <p>Name: {name}</p>
+          <p>Description: {description}</p>
         </div>}
       </Spin>
     </div>

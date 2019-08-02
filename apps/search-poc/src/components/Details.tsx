@@ -1,38 +1,31 @@
 import * as React from "react";
-import { Spin, notification } from 'antd';
+import { Spin } from 'antd';
 
 
-const Details: React.FunctionComponent<{
-  entity: any;
+const DetailsComponent: React.FunctionComponent<{
+  data: any;
   loading: boolean;
-  error: Error | null;
 }> = props => {
-  const { entity, loading, error } = props;
-
-  if (error) {
-    notification.error({
-      message: error.message,
-    });
-  }
+  const { data, loading } = props;
 
   return (
     <div className="Details">
       <Spin tip="Loading..." spinning={loading}>
         <h1>Common entity details</h1>
-        {entity && <div>
-          <p>Id: {entity['@id']}</p>
+        {data && <div>
+          <p>Id: {data['@id']}</p>
           <p>
             Brain region: &nbsp;
             <a
-              href={entity.brainLocation.brainRegion['@id']}
+              href={data.brainLocation.brainRegion['@id']}
               rel="noopener noreferrer"
               target="_blank"
             >
-              {entity.brainLocation.brainRegion.label}
+              {data.brainLocation.brainRegion.label}
             </a>
           </p>
-          <p>Name: {entity.name}</p>
-          <p>Description: {entity.description}</p>
+          <p>Name: {data.name}</p>
+          <p>Description: {data.description}</p>
         </div>}
       </Spin>
     </div>
@@ -40,4 +33,4 @@ const Details: React.FunctionComponent<{
 };
 
 
-export default Details;
+export default DetailsComponent;

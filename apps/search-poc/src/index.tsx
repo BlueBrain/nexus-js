@@ -36,8 +36,8 @@ async function main() {
               />
             </Route>
             <Route
-              path="/details/:id"
-              render={props => <DetailsView id={props.match.params.id} />}
+              path="/details/:selfUrlEncoded"
+              component={DetailsView}
             />
           </Switch>
         </Router>

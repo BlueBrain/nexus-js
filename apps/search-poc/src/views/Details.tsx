@@ -1,13 +1,19 @@
 import * as React from 'react';
 
-const Details: React.FunctionComponent<{
-  id: string;
+import DetailsContainer from '../containers/Details';
+
+
+const DetailsView: React.FunctionComponent<{
+  match: {
+    params: {
+      selfUrlEncoded: string;
+    }
+  }
 }> = props => {
-  return (
-    <div className="Details">
-      <h1>Stuff!! {props.id}</h1>
-    </div>
-  );
+  const selfUrl = decodeURIComponent(props.match.params.selfUrlEncoded);
+
+  return <DetailsContainer selfUrl={selfUrl}/>
 };
 
-export default Details;
+
+export default DetailsView;

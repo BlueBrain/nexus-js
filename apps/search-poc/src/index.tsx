@@ -41,7 +41,7 @@ async function main() {
                 total={reconstructedNeuronMorphologies.length}
               />
             </Route>
-            <Route path="/resources/:selfUrlEncoded" component={DetailsView} />
+            <Route path="/resources" component={DetailsView} />
           </Switch>
         </Router>
       </div>

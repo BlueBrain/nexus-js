@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "@bbp/nexus-link": "^1.1.5",
+    "@bbp/nexus-link": "^1.1.6",
     "@bbp/nexus-sdk": "^1.1.5",
     "@bbp/react-nexus": "^1.1.5",
     "@types/jest": "24.0.16",

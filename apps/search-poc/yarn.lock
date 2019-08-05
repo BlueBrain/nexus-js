@@ -827,9 +827,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@bbp/nexus-link@^1.1.5", "@bbp/nexus-link@^1.1.6":
+"@bbp/nexus-link@^1.1.6":
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/@bbp/nexus-link/-/nexus-link-1.1.6.tgz#fac7369467c6575ef841ad9a2d944eadea973f02"
+  integrity sha512-keq2J9XrtGLtg6kvCQFXceD8CHiFLTG0TtnQpbhyy1dJJykpE+w8kyduLgAk895uv1isrNLImWsVZucold8Iew==
   dependencies:
     rxjs "^6.5.2"
 

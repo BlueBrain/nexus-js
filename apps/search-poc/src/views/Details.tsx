@@ -1,19 +1,17 @@
 import * as React from 'react';
 
-import DetailsContainer from '../containers/Details';
-
+import ResourceDetailsContainer from '../containers/ResourceDetails';
 
 const DetailsView: React.FunctionComponent<{
   match: {
     params: {
       selfUrlEncoded: string;
-    }
-  }
+    };
+  };
 }> = props => {
   const selfUrl = decodeURIComponent(props.match.params.selfUrlEncoded);
 
-  return <DetailsContainer selfUrl={selfUrl}/>
+  return <ResourceDetailsContainer selfUrl={selfUrl} />;
 };
-
 
 export default DetailsView;

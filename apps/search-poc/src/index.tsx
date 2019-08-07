@@ -6,12 +6,17 @@ import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
 import { setUpSession, setToken } from './utils/auth';
 import Header from './components/Header';
-import SparqlView from './views/Sparql';
+import Results from './components/Results';
 import DetailsView from './views/Details';
 import { SETTINGS } from './config';
 
 import 'antd/dist/antd.css';
 import './index.css';
+
+const reconstructedNeuronMorphologies = [
+  'https://staging.nexus.ocp.bbp.epfl.ch/v1/resources/bbp/nmc/datashapes:dataset/https%3A%2F%2Fbbp.epfl.ch%2Fneurosciencegraph%2Fdata%2Freconstructedcell%2Ffef76d7c-8175-4874-8566-8938928a030f',
+  'https://staging.nexus.ocp.bbp.epfl.ch/v1/resources/pgetta/testproj1/_/90d7b1ee-094f-43dc-9281-c12e09f0f3ed', // pgetta example
+];
 
 async function main() {
   const [userManager, user] = await setUpSession();
@@ -30,15 +35,13 @@ async function main() {
         <Router>
           <Switch>
             <Route path="/" exact>
-              <SparqlView
-                sparqlDatasetQueryConfig={SETTINGS.sparqlDatasetQueryConfig}
-                sparqlFilterQuery={SETTINGS.sparqlFilterQuery}
+              <h1>Reconstructed Neuron Morphologies</h1>
+              <Results
+                items={reconstructedNeuronMorphologies}
+                total={reconstructedNeuronMorphologies.length}
               />
             </Route>
-            <Route
-              path="/details/:selfUrlEncoded"
-              component={DetailsView}
-            />
+            <Route path="/resources" component={DetailsView} />
           </Switch>
         </Router>
       </div>

@@ -3,13 +3,11 @@ import * as React from 'react';
 import ResourceDetailsContainer from '../containers/ResourceDetails';
 
 const DetailsView: React.FunctionComponent<{
-  match: {
-    params: {
-      selfUrlEncoded: string;
-    };
+  location: {
+    search: string;
   };
 }> = props => {
-  const selfUrl = decodeURIComponent(props.match.params.selfUrlEncoded);
+  const selfUrl = (props.location.search || '').replace('?self=', '');
 
   return <ResourceDetailsContainer selfUrl={selfUrl} />;
 };

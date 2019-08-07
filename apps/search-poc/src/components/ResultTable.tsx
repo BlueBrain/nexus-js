@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Table } from 'antd';
-import './ResultTable.css';
 
 const ResultsTable: React.FunctionComponent<{
   headerProperties?: {
@@ -9,7 +8,7 @@ const ResultsTable: React.FunctionComponent<{
   }[];
   items: {
     id: string;
-    [key: string]: any;
+    [dataIndex: string]: any;
   }[];
   total: number;
 }> = ({ headerProperties, items, total }) => {
@@ -30,7 +29,7 @@ const ResultsTable: React.FunctionComponent<{
   ];
 
   return (
-    <div className="result-table">
+    <div className="ResultTable">
       <Table
         columns={columnList}
         dataSource={items}

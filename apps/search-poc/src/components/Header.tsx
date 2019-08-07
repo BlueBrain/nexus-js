@@ -5,7 +5,6 @@ import { useNexusContext } from '@bbp/react-nexus';
 import { Realm } from '@bbp/nexus-sdk';
 import { SETTINGS } from '../config';
 import { getConfig } from '../utils/auth';
-import { Link } from 'react-router-dom';
 
 const Login: React.FunctionComponent<{
   realms: Realm[];

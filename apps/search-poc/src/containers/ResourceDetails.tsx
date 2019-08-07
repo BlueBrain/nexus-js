@@ -5,6 +5,8 @@ import { Spin } from 'antd';
 
 import ResourceDetails from '../components/ResourceDetails';
 import { Resource } from '@bbp/nexus-sdk';
+import { SETTINGS } from '../config';
+import customComponentsDictionary from '../components/customComponents';
 
 export interface BrainRegion {
   '@id': string;
@@ -20,6 +22,24 @@ export interface MINDSResource {
   name: string;
   description: string;
 }
+
+const getCustomComponents = (typeList: string[]) => {
+  const componentListWithDuplicates = typeList.reduce(
+    (customComponentsList, currentTypeKey) => {
+      const configList = SETTINGS.customComponentsByType[currentTypeKey];
+      return configList
+        ? [...customComponentsList, ...configList]
+        : customComponentsList;
+    },
+    [],
+  );
+  const componentListWithoutDuplicates = Array.from(
+    new Set(componentListWithDuplicates),
+  );
+  return componentListWithoutDuplicates
+    .map(componentName => customComponentsDictionary[componentName])
+    .filter(Boolean);
+};
 
 const ResourceDetailsContainer: React.FunctionComponent<{
   selfUrl: string;
@@ -38,7 +58,7 @@ const ResourceDetailsContainer: React.FunctionComponent<{
     id: brainRegionId,
     label: brainRegionLabel,
   };
-
+  const typeList = get(data, '@type', []);
   if (loading) {
     return <Spin></Spin>;
   }
@@ -53,7 +73,10 @@ const ResourceDetailsContainer: React.FunctionComponent<{
       name={name}
       description={description}
       brainRegion={brainRegion}
-    />
+      types={typeList}
+    >
+      {getCustomComponents(typeList).map(Component => Component({ data }))}
+    </ResourceDetails>
   );
 };
 

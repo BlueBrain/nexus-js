@@ -5,6 +5,10 @@ export const SETTINGS = {
   clientId: 'nexus-web',
   redirectUrl: window.location.origin,
   environment: 'https://staging.nexus.ocp.bbp.epfl.ch/v1',
+  customComponentsByType: {
+    Entity: ['BrainRegion', 'Species', 'Strain'],
+    ReconstructedNeuronMorphology: ['Morphology'],
+  },
   sparqlFilterQuery: {
     orgLabel: 'bbp',
     projectLabel: 'nmc',
@@ -14,10 +18,10 @@ export const SETTINGS = {
     prefix prov: <http://www.w3.org/ns/prov#>
     prefix schema: <http://schema.org/>
     prefix nshapes: <https://neuroshapes.org/dash/>
-  
+
     SELECT DISTINCT ?typeID ?speciesLabel ?speciesID  ?brainRegionID ?brainRegionLabel ?projectID ?strainID ?strainLabel ?mTypeLabel ?agentID
     {
-      { 
+      {
         ?s nxs:contribution / prov:agent ?agentID
       } UNION {
         ?s nxs:annotation / nxs:hasBody ?noteBody .

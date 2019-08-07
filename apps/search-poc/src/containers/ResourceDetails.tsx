@@ -32,13 +32,6 @@ const ResourceDetailsContainer: React.FunctionComponent<{
   const name = get(data, 'name');
   const description = get(data, 'description');
 
-  const brainRegionId = get(data, 'brainLocation.brainRegion.@id');
-  const brainRegionLabel = get(data, 'brainLocation.brainRegion.label');
-  const brainRegion = {
-    id: brainRegionId,
-    label: brainRegionLabel,
-  };
-
   if (loading) {
     return <Spin></Spin>;
   }
@@ -47,14 +40,7 @@ const ResourceDetailsContainer: React.FunctionComponent<{
     return <p>{error.message}</p>;
   }
 
-  return (
-    <ResourceDetails
-      id={id}
-      name={name}
-      description={description}
-      brainRegion={brainRegion}
-    />
-  );
+  return <ResourceDetails id={id} name={name} description={description} />;
 };
 
 export default ResourceDetailsContainer;

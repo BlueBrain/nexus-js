@@ -5,10 +5,6 @@ const ResourceDetails: React.FunctionComponent<{
   id: string;
   name: string;
   description: string;
-  brainRegion: {
-    id: string;
-    label: string;
-  };
 }> = props => {
   return (
     <div className="resource-details">

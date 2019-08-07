@@ -95,7 +95,6 @@ const Header: React.FunctionComponent<{
       <h1 className="title">
         <a href="/">BBP Studio</a>
       </h1>
-      {/* <img className="Header_logo" src={logoSvg} alt="Nexus" /> */}
       <div className="Header_auth">
         {user ? (
           <Logout onLogout={handleLogout} userName={user.profile.name} />

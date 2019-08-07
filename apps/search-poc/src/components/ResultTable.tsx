@@ -19,8 +19,8 @@ const ResultsTable: React.FunctionComponent<{
       className: 'result-id',
       render: id => <span>{id}</span>,
     },
-    ...(headerProperties ||
-      [].map(({ title, dataIndex }) => ({
+    ...(headerProperties &&
+      headerProperties.map(({ title, dataIndex }) => ({
         title,
         dataIndex,
         className: `result-${dataIndex}`,

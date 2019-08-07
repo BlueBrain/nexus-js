@@ -58,11 +58,6 @@ async function main() {
         <Router>
           <Switch>
             <Route path="/" exact>
-              <ResultTable
-                headerProperties={reconstructedNeuronMorphologiesProps}
-                items={reconstructedNeuronMorphologies}
-                total={reconstructedNeuronMorphologies.length}
-              />
               <MainView />
             </Route>
             <Route path="/resources" component={DetailsView} />

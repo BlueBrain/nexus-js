@@ -68,7 +68,8 @@ export const SETTINGS = {
 
 export const emodelDataQuery = `
 prefix nxs: <https://neuroshapes.org/>
-prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>  
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix schema: <http://schema.org/>
 
 SELECT ?total ?self ?name ?speciesLabel
      WITH {
@@ -81,8 +82,8 @@ SELECT ?total ?self ?name ?speciesLabel
         }
         Graph ?g {
           ?s nxv:self ?self    .
-          OPTIONAL { ?s nxs:name ?name .
-          ?s nxs:species / nxs:label ?speciesLabel }
+          OPTIONAL { ?s schema:name ?name }
+          OPTIONAL { ?s nxs:species / rdf:label ?speciesLabel }
         }
       }
      } AS %resultSet
@@ -105,7 +106,8 @@ SELECT ?total ?self ?name ?speciesLabel
 
 export const morphologyDataQuery = `
 prefix nxs: <https://neuroshapes.org/>
-prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>  
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix schema: <http://schema.org/>
 
 SELECT ?total ?self ?name ?speciesLabel
      WITH {
@@ -118,8 +120,8 @@ SELECT ?total ?self ?name ?speciesLabel
         }
         Graph ?g {
           ?s nxv:self ?self    .
-          OPTIONAL { ?s nxs:name ?name .
-          ?s nxs:species / nxs:label ?speciesLabel }
+          OPTIONAL { ?s schema:name ?name }
+          OPTIONAL { ?s nxs:species / rdf:label ?speciesLabel }
         }
       }
      } AS %resultSet
@@ -137,7 +139,8 @@ SELECT ?total ?self ?name ?speciesLabel
            LIMIT 20
            OFFSET 0
         }
-     }`;
+     }
+`;
 
 // {
 //   "@context": {},

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useNexus } from '@bbp/react-nexus';
 import { Spin } from 'antd';
+import ResultTable from '../components/ResultTable';
+import { Binding } from '@babel/traverse';
 
 const ResultTableContainer: React.FunctionComponent<{
   dataQuery: string;
@@ -18,7 +20,7 @@ const ResultTableContainer: React.FunctionComponent<{
       ),
     [props.dataQuery],
   );
-  console.log(data);
+
   if (error) {
     return (
       <>
@@ -31,7 +33,31 @@ const ResultTableContainer: React.FunctionComponent<{
     return <Spin />;
   }
 
-  return <p>{JSON.stringify(data)}</p>;
+  // get total
+  const total = data.results.bindings.find(
+    (binding: any) => binding.total && binding.total.value !== '0',
+  ).total.value;
+
+  // build items
+  const items = data.results.bindings
+    .filter(binding => binding.self)
+    .map(binding => ({
+      id: binding.self.value,
+      name: binding.name.value,
+      self: binding.self.value,
+    }));
+
+  console.log(items);
+  return (
+    <ResultTable
+      headerProperties={[
+        { title: 'Name', dataIndex: 'name' },
+        { title: 'Self', dataIndex: 'self' },
+      ]}
+      items={items}
+      total={total}
+    />
+  );
 };
 
 export default ResultTableContainer;

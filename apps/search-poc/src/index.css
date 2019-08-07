@@ -33,6 +33,11 @@ body {
   height: 3em;
 }
 
+.ResultTable {
+  padding: 1em;
+  width: 100%;
+}
+
 .Filters {
   min-width: 200px;
   min-height: 200px;

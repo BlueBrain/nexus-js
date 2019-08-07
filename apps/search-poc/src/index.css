@@ -1,8 +1,9 @@
-/* @import "../node_modules/antd/dist/antd.css"; */
+body {
+  background-color: #f1f4f8;
+}
 
 .App {
   font-family: sans-serif;
-  background-color: #ff6666;
   display: flex;
   flex-flow: row wrap;
 }
@@ -11,7 +12,11 @@
   flex: 1 100%;
   display: flex;
   justify-content: space-between;
-  margin: 5px 0;
+  margin: 0.5em 1em;
+}
+
+.Header > .title {
+  font-weight: lighter;
 }
 .Header_logo {
   width: 3em;
@@ -31,11 +36,9 @@
 .Filters {
   min-width: 200px;
   min-height: 200px;
-  background-color: blue;
 }
 
 .Results {
   min-width: 200px;
-  background-color: violet;
   flex-grow: 1;
 }

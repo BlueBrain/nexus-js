@@ -6,8 +6,6 @@ import { Realm } from '@bbp/nexus-sdk';
 import { SETTINGS } from '../config';
 import { getConfig } from '../utils/auth';
 
-import logoSvg from '../logo.svg';
-
 const Login: React.FunctionComponent<{
   realms: Realm[];
   onRealmSelected(realm: Realm): void;
@@ -94,7 +92,9 @@ const Header: React.FunctionComponent<{
 
   return (
     <div className="Header">
-      <img className="Header_logo" src={logoSvg} alt="Nexus" />
+      <h1 className="title">
+        <a href="/">BBP Studio</a>
+      </h1>
       <div className="Header_auth">
         {user ? (
           <Logout onLogout={handleLogout} userName={user.profile.name} />

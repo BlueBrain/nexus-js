@@ -65,3 +65,121 @@ export const SETTINGS = {
     },
   },
 };
+
+export const emodelDataQuery = `
+prefix nxs: <https://neuroshapes.org/>
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>  
+
+SELECT ?total ?self ?name ?speciesLabel
+     WITH {
+      SELECT DISTINCT ?self ?name ?speciesLabel {
+        Graph ?g {
+            ?s rdf:type nxs:EModelCollection
+        }
+        Graph ?g {
+          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        }
+        Graph ?g {
+          ?s nxv:self ?self    .
+          OPTIONAL { ?s nxs:name ?name .
+          ?s nxs:species / nxs:label ?speciesLabel }
+        }
+      }
+     } AS %resultSet
+
+   WHERE {
+        {
+           SELECT (COUNT(?self) AS ?total)
+           WHERE { INCLUDE %resultSet }
+        }
+        UNION
+       {
+           SELECT *
+           WHERE { INCLUDE %resultSet }
+           ORDER BY ?self
+           LIMIT 20
+           OFFSET 0
+        }
+     }
+`;
+
+export const morphologyDataQuery = `
+prefix nxs: <https://neuroshapes.org/>
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>  
+
+SELECT ?total ?self ?name ?speciesLabel
+     WITH {
+      SELECT DISTINCT ?self ?name ?speciesLabel {
+        Graph ?g {
+            ?s rdf:type nxs:ReconstructedNeuronMorphologyCollection
+        }
+        Graph ?g {
+          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        }
+        Graph ?g {
+          ?s nxv:self ?self    .
+          OPTIONAL { ?s nxs:name ?name .
+          ?s nxs:species / nxs:label ?speciesLabel }
+        }
+      }
+     } AS %resultSet
+
+   WHERE {
+        {
+           SELECT (COUNT(?self) AS ?total)
+           WHERE { INCLUDE %resultSet }
+        }
+        UNION
+       {
+           SELECT *
+           WHERE { INCLUDE %resultSet }
+           ORDER BY ?self
+           LIMIT 20
+           OFFSET 0
+        }
+     }`;
+
+// {
+//   "@context": {},
+//   "@id": "",
+//   "@type": "AggregateSparqlView",
+//   "views": [
+//     {
+//       "project": "pgetta-data/proj1",
+//       "viewId": "nxv:defaultSparqlIndex"
+//     },
+//         {
+//       "project": "pgetta-data/proj32",
+//       "viewId": "nxv:defaultSparqlIndex"
+//     },
+//         {
+//       "project": "pgetta-data/proj38",
+//       "viewId": "nxv:defaultSparqlIndex"
+//     },
+//         {
+//       "project": "pgetta-data/proj42",
+//       "viewId": "nxv:defaultSparqlIndex"
+//     },
+//         {
+//       "project": "pgetta-data/proj55",
+//       "viewId": "nxv:defaultSparqlIndex"
+//     }
+//     ,
+//         {
+//       "project": "pgetta-data/proj59",
+//       "viewId": "nxv:defaultSparqlIndex"
+//     },
+//         {
+//       "project": "pgetta-data/proj64",
+//       "viewId": "nxv:defaultSparqlIndex"
+//     },
+//         {
+//       "project": "pgetta-data/proj66",
+//       "viewId": "nxv:defaultSparqlIndex"
+//     },
+//         {
+//       "project": "pgetta-data/proj68",
+//       "viewId": "nxv:defaultSparqlIndex"
+//     }
+//   ]
+// }

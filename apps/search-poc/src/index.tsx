@@ -8,6 +8,7 @@ import { setUpSession, setToken } from './utils/auth';
 import Header from './components/Header';
 import ResultTable from './components/ResultTable';
 import DetailsView from './views/Details';
+import MainView from './views/Main';
 import { SETTINGS } from './config';
 
 import 'antd/dist/antd.css';
@@ -62,6 +63,7 @@ async function main() {
                 items={reconstructedNeuronMorphologies}
                 total={reconstructedNeuronMorphologies.length}
               />
+              <MainView />
             </Route>
             <Route path="/resources" component={DetailsView} />
           </Switch>
@@ -73,7 +75,7 @@ async function main() {
 }
 main();
 
-// If you want your app to work offline and load faster, you can change
+// If you want your app to work offline and load faster, you can changeDashboards
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();

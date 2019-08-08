@@ -2,7 +2,6 @@ import * as React from 'react';
 import get from 'lodash/get';
 import { useNexus } from '@bbp/react-nexus';
 import { Spin } from 'antd';
-
 import ResourceDetails from '../components/ResourceDetails';
 import { Resource } from '@bbp/nexus-sdk';
 

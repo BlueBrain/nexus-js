@@ -8,9 +8,10 @@ export type DashboardItem = {
 const DashboardList: React.FunctionComponent<{
   items: DashboardItem[];
   onDashboardSelected: (id: string) => void;
+  defaultActiveId?: string;
 }> = props => {
   const [activeDashboardId, setActiveDashboardId] = React.useState<string>(
-    props.items[0].id,
+    props.defaultActiveId || props.items[0].id,
   );
 
   React.useEffect(() => {

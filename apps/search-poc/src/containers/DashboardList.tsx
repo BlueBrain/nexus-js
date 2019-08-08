@@ -1,10 +1,10 @@
 import * as React from 'react';
+import { withRouter, History } from 'react-router-dom';
+import queryString from 'query-string';
 import DashboardList from '../components/DashboardList';
-import { useNexus } from '@bbp/react-nexus';
 import { emodelDataQuery, morphologyDataQuery } from '../config';
-import { rejects } from 'assert';
 
-const dashboardConfig: { dashboard: DashboardContainer; view: View }[] = [
+const dashboardConfig: DashboardConfig[] = [
   {
     dashboard: {
       '@id': 'http://bbp.ch/emodels',
@@ -35,6 +35,15 @@ const dashboardConfig: { dashboard: DashboardContainer; view: View }[] = [
   },
 ];
 
+function getDashBoardConfig(
+  id: string,
+  configs: DashboardConfig[],
+): DashboardConfig {
+  return configs.find(config => config.dashboard['@id'] === id);
+}
+
+type DashboardConfig = { dashboard: DashboardContainer; view: View };
+
 type DashboardContainer = {
   '@id': string;
   '@type': string;
@@ -56,12 +65,22 @@ const DashboardListContainer: React.FunctionComponent<{
     viewId: string,
     dataQuery: string,
   ) => void;
+  history: History;
 }> = props => {
-  // default active dashboard is the first one
+  // they might be an active dashboard id setup as a query string
+  const defaultActiveDashboardId = queryString.parse(
+    props.history.location.search,
+  ).dashboard;
+
+  // default active dashboard is the first one if none is present in querystring
   const [activeDashboard, setActiveDashboard] = React.useState<{
     dashboard: DashboardContainer;
     view: View;
-  }>(dashboardConfig[0]);
+  }>(
+    defaultActiveDashboardId
+      ? getDashBoardConfig(defaultActiveDashboardId.toString(), dashboardConfig)
+      : dashboardConfig[0],
+  );
 
   // call callback prop when dashboard is selected
   React.useEffect(() => {
@@ -84,12 +103,12 @@ const DashboardListContainer: React.FunctionComponent<{
     <DashboardList
       items={dashboardConfigData}
       onDashboardSelected={id => {
-        setActiveDashboard(
-          dashboardConfig.find(config => config.dashboard['@id'] === id),
-        );
+        setActiveDashboard(getDashBoardConfig(id, dashboardConfig));
+        props.history.push({ search: `?dashboard=${id}` });
       }}
+      defaultActiveId={activeDashboard.dashboard['@id']}
     />
   );
 };
 
-export default DashboardListContainer;
+export default withRouter(DashboardListContainer);

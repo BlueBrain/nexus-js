@@ -26,7 +26,6 @@ export const setToken: Link = (operation: Operation, forward?: Link) => {
     ...operation,
     headers: nextHeaders,
   };
-  console.log(nextOperation);
 
   return forward ? forward(nextOperation) : new Observable();
 };

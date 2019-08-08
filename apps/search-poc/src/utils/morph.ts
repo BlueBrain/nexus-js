@@ -4,7 +4,7 @@ import swcParser from 'swcmorphologyparser';
 
 const CONVERTER_URL = 'http://morph-service.ocp.bbp.epfl.ch/converter/api';
 
-export function convertToSwc(blob: Blob): Promise<String> {
+export function convertToSwc(blob: any): Promise<string> {
   const formData = new FormData();
   formData.append('output_extension', '.swc');
   formData.append('isBlob', 'true');
@@ -14,7 +14,7 @@ export function convertToSwc(blob: Blob): Promise<String> {
     .then(res => res.text())
 }
 
-export function parseSwc(swcMorph: string): Object {
+export function parseSwc(swcMorph: string): object {
   const parser = new swcParser.SwcParser()
   parser.parse(swcMorph);
   return parser.getRawMorphology();

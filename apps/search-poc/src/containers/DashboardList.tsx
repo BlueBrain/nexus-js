@@ -67,11 +67,10 @@ const DashboardListContainer: React.FunctionComponent<{
     dataQuery: string,
   ) => void;
   history: History;
-}> = props => {
+}> = ({ onDashboardSelected, history }) => {
   // they might be an active dashboard id setup as a query string
-  const defaultActiveDashboardId = queryString.parse(
-    props.history.location.search,
-  ).dashboard;
+  const defaultActiveDashboardId = queryString.parse(history.location.search)
+    .dashboard;
 
   // default active dashboard is the first one if none is present in querystring
   const [activeDashboard, setActiveDashboard] = React.useState<{
@@ -85,13 +84,13 @@ const DashboardListContainer: React.FunctionComponent<{
 
   // call callback prop when dashboard is selected
   React.useEffect(() => {
-    props.onDashboardSelected(
+    onDashboardSelected(
       activeDashboard.view.orgLabel,
       activeDashboard.view.projectLabel,
       activeDashboard.view.viewId,
       activeDashboard.dashboard.dataQuery,
     );
-  }, [activeDashboard.dashboard['@id']]);
+  }, [activeDashboard, onDashboardSelected]);
 
   // format dashboard data for dashboard list component
   const dashboardConfigData = dashboardConfig.map(config => ({
@@ -105,7 +104,7 @@ const DashboardListContainer: React.FunctionComponent<{
       items={dashboardConfigData}
       onDashboardSelected={id => {
         setActiveDashboard(getDashBoardConfig(id, dashboardConfig));
-        props.history.push({ search: `?dashboard=${id}` });
+        history.push({ search: `?dashboard=${id}` });
       }}
       defaultActiveId={activeDashboard.dashboard['@id']}
     />

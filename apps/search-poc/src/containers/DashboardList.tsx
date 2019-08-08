@@ -4,6 +4,7 @@ import queryString from 'query-string';
 import DashboardList from '../components/DashboardList';
 import { emodelDataQuery, morphologyDataQuery } from '../config';
 
+// TODO: get that config from Nexus
 const dashboardConfig: DashboardConfig[] = [
   {
     dashboard: {

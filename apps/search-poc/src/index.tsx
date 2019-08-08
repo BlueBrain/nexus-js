@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
 import { setUpSession, setToken } from './utils/auth';
-import Header from './components/Header';
+import Header from './containers/Header';
 import DetailsView from './views/Details';
 import MainView from './views/Main';
 import { SETTINGS } from './config';

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './ResourceDetails.css';
 
 const ResourceDetails: React.FunctionComponent<{
   id: string;
@@ -7,7 +6,7 @@ const ResourceDetails: React.FunctionComponent<{
   description: string;
 }> = props => {
   return (
-    <div className="resource-details">
+    <div className="ResourceDetails">
       <div className="metadata-container">
         <h1 className="name">{props.name}</h1>
         <p className="descripion">{props.description}</p>

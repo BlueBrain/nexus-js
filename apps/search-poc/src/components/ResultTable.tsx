@@ -11,7 +11,8 @@ const ResultsTable: React.FunctionComponent<{
     [dataIndex: string]: any;
   }[];
   total: number;
-}> = ({ headerProperties, items, total }) => {
+  onRowClick?: (rowData: any, index: number) => void;
+}> = ({ headerProperties, items, total, onRowClick = () => {} }) => {
   const columnList = [
     {
       title: 'Identifier',
@@ -31,6 +32,9 @@ const ResultsTable: React.FunctionComponent<{
   return (
     <div className="ResultTable">
       <Table
+        onRow={(data, index) => ({
+          onClick: event => onRowClick(data, index),
+        })}
         columns={columnList}
         dataSource={items}
         bordered

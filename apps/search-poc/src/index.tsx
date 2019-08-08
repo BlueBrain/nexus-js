@@ -5,40 +5,13 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
 import { setUpSession, setToken } from './utils/auth';
-import Header from './components/Header';
-import ResultTable from './components/ResultTable';
+import Header from './containers/Header';
 import DetailsView from './views/Details';
+import MainView from './views/Main';
 import { SETTINGS } from './config';
 
 import 'antd/dist/antd.css';
 import './index.css';
-
-const reconstructedNeuronMorphologiesProps = [
-  { title: 'Brain Region', dataIndex: 'brainRegion' },
-];
-const reconstructedNeuronMorphologies = [
-  {
-    id: '1',
-    brainRegion: 'Dorsal Thalamus',
-    species: 'Rattus Norvegicus',
-    strain: 'Wister Han',
-    name: 'Morphology collection 2019',
-  },
-  {
-    id: '2',
-    brainRegion: 'Dorsal Thalamus',
-    species: 'Rattus Norvegicus',
-    strain: 'Wister Han',
-    name: 'Morphology collection 2018',
-  },
-  {
-    id: '3 ',
-    brainRegion: 'Dorsal Thalamus',
-    species: 'Rattus Norvegicus',
-    strain: 'Wister Han',
-    name: 'Morphology collection 2018 v2',
-  },
-];
 
 async function main() {
   const [userManager, user] = await setUpSession();
@@ -57,11 +30,7 @@ async function main() {
         <Router>
           <Switch>
             <Route path="/" exact>
-              <ResultTable
-                headerProperties={reconstructedNeuronMorphologiesProps}
-                items={reconstructedNeuronMorphologies}
-                total={reconstructedNeuronMorphologies.length}
-              />
+              <MainView />
             </Route>
             <Route path="/resources" component={DetailsView} />
           </Switch>
@@ -73,7 +42,7 @@ async function main() {
 }
 main();
 
-// If you want your app to work offline and load faster, you can change
+// If you want your app to work offline and load faster, you can changeDashboards
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();

@@ -47,3 +47,27 @@ body {
   min-width: 200px;
   flex-grow: 1;
 }
+
+.Dashboard-list > .item {
+  cursor: pointer;
+}
+
+.Dashboard-list > .item.active {
+  color: hotpink;
+}
+
+.ResourceDetails {
+  width: 980px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ResourceDetails > .metadata-container > ul {
+  padding: 0;
+  margin: 0;
+}
+.ResourceDetails > .metadata-container > .name {
+  font-size: 3em;
+  font-weight: lighter;
+}

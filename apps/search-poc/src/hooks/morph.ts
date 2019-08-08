@@ -19,7 +19,7 @@ export default ({ org, proj, id }: { org: string, proj: string, id: string }) =>
       .then(setMorphology)
       .catch(setError)
       .finally(() => { setLoading(false) });
-  }, [id]);
+  }, [org, proj, id, nexus.File]);
 
   return { morphology, loading, error};
 };

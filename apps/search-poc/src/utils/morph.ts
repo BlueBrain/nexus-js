@@ -1,8 +1,8 @@
 
 import swcParser from 'swcmorphologyparser';
 
+import { MORPH_CONVERTER_URL } from './../config';
 
-const CONVERTER_URL = 'http://morph-service.ocp.bbp.epfl.ch/converter/api';
 
 export function convertToSwc(blob: any): Promise<string> {
   const formData = new FormData();
@@ -10,7 +10,7 @@ export function convertToSwc(blob: any): Promise<string> {
   formData.append('isBlob', 'true');
   formData.append('file', new File([blob], 'file.asc'));
 
-  return fetch(CONVERTER_URL, { method: 'POST', body: formData })
+  return fetch(MORPH_CONVERTER_URL, { method: 'POST', body: formData })
     .then(res => res.text())
 }
 

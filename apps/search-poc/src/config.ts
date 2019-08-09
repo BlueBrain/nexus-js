@@ -83,6 +83,8 @@ SELECT ?total ?self ?name ?speciesLabel
      }
 `;
 
+export const MORPH_CONVERTER_URL = 'http://morph-service.ocp.bbp.epfl.ch/converter/api';
+
 // {
 //   "@context": {},
 //   "@id": "",

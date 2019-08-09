@@ -8,13 +8,24 @@ import './ReconstructedNeuronMorphologyDetails.css';
 
 class ReconstructedNeuronMorphologyDetails extends React.Component<{
   morphology: any;
+}, {
+  hasError: boolean;
 }> {
   private containerEl = React.createRef<HTMLDivElement>();
   private viewer: any = null;
 
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
   componentDidMount() {
     this.viewer = new MorphoViewer.MorphoViewer(this.containerEl.current);
     this.viewer.addMorphology(this.props.morphology, { asPolyline: false });
+  }
+
+  componentDidCatch() {
+    this.setState({ hasError: true });
   }
 
   componentWillUnmount() {
@@ -27,7 +38,9 @@ class ReconstructedNeuronMorphologyDetails extends React.Component<{
       hoverable
       bodyStyle={{padding: 0}}
     >
-      <div className='morphology' ref={this.containerEl}/>
+      <div className='morphology' ref={this.containerEl}>
+        {this.state.hasError && <p>Can't init the viewer due to error</p>}
+      </div>
     </Card>
   }
 }

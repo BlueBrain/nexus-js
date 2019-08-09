@@ -80,7 +80,6 @@ SELECT ?total ?self ?name ?speciesLabel
  */
 const generateStudioResource = workspaceIds => ({
   '@context': 'https://bluebrainnexus.io/studio/context',
-  // '@id': 'http://bbp.ch/bbpstudio',
   label: 'BBP Studio',
   '@type': 'Studio',
   workspaces: workspaceIds.map(id => ({ '@id': id })),
@@ -102,6 +101,7 @@ const generateWorkspaceResource = (label, dashboardViewIdPairs) => ({
 });
 
 /**
+ * TODO: add view ID as param if needed
  *
  * @param {[string, string][]} projectViewIdPairs
  */

@@ -10,12 +10,6 @@ const fetch = require('node-fetch');
 require('abort-controller/polyfill');
 
 const {
-  createOrg,
-  createProject,
-  createResource,
-  createSparqlView,
-} = require('./commands');
-const {
   generateStudioResource,
   generateStudioView,
   generateWorkspaceResource,
@@ -27,7 +21,7 @@ const {
 const config = {
   environment: 'https://dev.nexus.ocp.bbp.epfl.ch/v1',
   orgName: 'bbp', // MUST ALREADY EXIST
-  projectName: 'studio', // MUST ALREADY EXIST
+  projectName: 'studio2', // MUST ALREADY EXIST
   aggregateStudioProjects: [
     ['pgetta-data/proj1', 'nxv:defaultSparqlIndex'],
     ['pgetta-data/proj32', 'nxv:defaultSparqlIndex'],
@@ -41,42 +35,53 @@ const config = {
   ],
 };
 
+const logger = (operation, forward) => {
+  const { method = 'GET', path, body = {} } = operation;
+  const { ['@id']: id, label } = JSON.parse(body);
+  const type = path.split('/').reduce((prev, curr) => {
+    if (curr === 'v1') return curr;
+    if (prev === 'v1') return curr;
+    return prev;
+  });
+  console.log(`${method} ${id || label || ''} on ${type}`);
+  return forward(operation);
+};
+
 const nexus = createNexusClient({
   fetch,
   uri: config.environment,
   token: '', // PUT YOUR TOKEN HERE
+  links: [logger],
 });
 
 async function main() {
   try {
-    // await createOrg(nexus, config.orgName);
-    // await createProject(nexus, config.orgName, config.projectName); // that won't work. need to wait for views to be available
-    await createSparqlView(
-      nexus,
+    // await nexus.Organization.create(config.orgName);
+    // await nexus.Project.create(config.orgName, config.projectName);
+    // WARNING: If we create the project in that script,
+    // the stuff below won't work because we need to wait for views to be available
+    // and especially for the context resource to be indexed
+    await nexus.View.create(
       config.orgName,
       config.projectName,
       generateStudioView(config.aggregateStudioProjects),
     );
-    await createResource(
-      nexus,
+    await nexus.Resource.create(
       config.orgName,
       config.projectName,
       studioContext,
     );
-    const { ['@id']: emodelDashboardId } = await createResource(
-      nexus,
+    const { ['@id']: emodelDashboardId } = await nexus.Resource.create(
       config.orgName,
       config.projectName,
       emodelsCollectionDashboard,
     );
-    const { ['@id']: morphoDashboardId } = await createResource(
-      nexus,
+    const { ['@id']: morphoDashboardId } = await nexus.Resource.create(
       config.orgName,
       config.projectName,
       morphologyCollectionDashboard,
     );
-    const { ['@id']: thalamus2019WorkspaceId } = await createResource(
-      nexus,
+    const { ['@id']: thalamus2019WorkspaceId } = await nexus.Resource.create(
       config.orgName,
       config.projectName,
       generateWorkspaceResource('Thalamus2019 Workspace', [
@@ -84,8 +89,7 @@ async function main() {
         [morphoDashboardId, 'nxv:StudioSparqlView'],
       ]),
     );
-    await createResource(
-      nexus,
+    await nexus.Resource.create(
       config.orgName,
       config.projectName,
       generateStudioResource([thalamus2019WorkspaceId]),

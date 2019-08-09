@@ -26,8 +26,8 @@ const {
 
 const config = {
   environment: 'https://dev.nexus.ocp.bbp.epfl.ch/v1',
-  orgName: `bbp`,
-  projectName: 'studio',
+  orgName: 'bbp', // MUST ALREADY EXIST
+  projectName: 'studio', // MUST ALREADY EXIST
   aggregateStudioProjects: [
     ['pgetta-data/proj1', 'nxv:defaultSparqlIndex'],
     ['pgetta-data/proj32', 'nxv:defaultSparqlIndex'],
@@ -44,13 +44,13 @@ const config = {
 const nexus = createNexusClient({
   fetch,
   uri: config.environment,
-  token: '',
+  token: '', // PUT YOUR TOKEN HERE
 });
 
 async function main() {
   try {
     // await createOrg(nexus, config.orgName);
-    // await createProject(nexus, config.orgName, config.projectName);
+    // await createProject(nexus, config.orgName, config.projectName); // that won't work. need to wait for views to be available
     await createSparqlView(
       nexus,
       config.orgName,

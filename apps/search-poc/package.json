@@ -42,5 +42,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "abort-controller": "^3.0.0",
+    "node-fetch": "^2.6.0"
   }
 }

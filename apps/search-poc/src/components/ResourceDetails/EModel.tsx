@@ -98,7 +98,7 @@ const EModelDetails: React.FunctionComponent<{
             bordered
           />
         </Panel>
-        <Panel header="Params" key="params">
+        <Panel header="Optimized parameters" key="params">
           <Table
             className="small-table"
             dataSource={paramDS}

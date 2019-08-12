@@ -19,3 +19,14 @@ export interface MINDSResource {
   description: string;
   distribution: Distribution;
 }
+
+export interface EModelResource {
+  seed: number;
+  score: number;
+  fitness: {
+    [key: string]: number;
+  },
+  params: {
+    [key: string]: number;
+  }
+}

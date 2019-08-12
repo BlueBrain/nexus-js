@@ -1,15 +1,18 @@
 
-import React from 'react';
+import { lazy, LazyExoticComponent } from 'react';
 
 
-const MorphViewer = React.lazy(() => import('./ReconstructedNeuronMorphology'));
+const MorphViewer = lazy(() => import('./ReconstructedNeuronMorphology'));
+const EModelDetails = lazy(() => import('../../components/ResourceDetails/EModel'));
 
 const detailsComponents = {
   morphViewer: MorphViewer,
+  emodelDetails: EModelDetails,
 };
 
 const compNamesByType = {
   ReconstructedNeuronMorphology: ['morphViewer'],
+  EModel: ['emodelDetails'],
 }
 
 

@@ -83,6 +83,7 @@ SELECT ?total ?self ?name ?speciesLabel
      }
 `;
 
+
 export const getStudioConfig = (studioId: string) => `
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix studio: <https://bluebrainnexus.io/studio/vocabulary/>
@@ -96,3 +97,5 @@ SELECT ?studioLabel ?workspaceId ?workspaceLabel ?dashboardId ?dashboardLabel ?v
               studio:view ?viewId .
   ?dashboardId rdfs:label ?dashboardLabel
 }`;
+
+export const MORPH_CONVERTER_URL = 'http://morph-service.ocp.bbp.epfl.ch/converter/api';

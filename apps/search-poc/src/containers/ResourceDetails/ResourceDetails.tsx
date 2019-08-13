@@ -1,24 +1,14 @@
+
 import * as React from 'react';
 import get from 'lodash/get';
 import { useNexus } from '@bbp/react-nexus';
 import { Spin } from 'antd';
-import ResourceDetails from '../components/ResourceDetails';
+
+import ResourceDetails from '../../components/ResourceDetails';
+import ReconstructedNeuronMorphology from './ReconstructedNeuronMorphology';
 import { Resource } from '@bbp/nexus-sdk';
+import { MINDSResource } from './types';
 
-export interface BrainRegion {
-  '@id': string;
-  label: string;
-}
-
-export interface BrainLocation {
-  brainRegion: BrainRegion;
-}
-
-export interface MINDSResource {
-  brainLocation: BrainLocation;
-  name: string;
-  description: string;
-}
 
 const ResourceDetailsContainer: React.FunctionComponent<{
   selfUrl: string;
@@ -39,7 +29,10 @@ const ResourceDetailsContainer: React.FunctionComponent<{
     return <p>{error.message}</p>;
   }
 
-  return <ResourceDetails id={id} name={name} description={description} />;
+  return <ResourceDetails id={id} name={name} description={description}>
+    {data.distribution && <ReconstructedNeuronMorphology resource={data}/>}
+  </ResourceDetails>;
 };
+
 
 export default ResourceDetailsContainer;

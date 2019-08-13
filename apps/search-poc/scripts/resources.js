@@ -118,19 +118,28 @@ const studioContext = {
   '@context': [
     {
       '@base': 'https://bluebrainnexus.io/studio/',
-      '@vocab': 'https://bluebrainnexus.io/studio/vocabs/',
+      '@vocab': 'https://bluebrainnexus.io/studio/vocabulary/',
+      label: {
+        '@id': 'http://www.w3.org/2000/01/rdf-schema#label',
+      },
+      name: {
+        '@id': 'http://schema.org/name',
+      },
+      description: {
+        '@id': 'http://schema.org/description',
+      },
       workspaces: {
-        '@id': 'https://bluebrainnexus.io/studio/vocabs/workspaces',
-        '@container': '@list',
+        '@id': 'https://bluebrainnexus.io/studio/vocabulary/workspaces',
+        '@container': '@set',
         '@type': '@id',
       },
-      dashboards: { '@container': '@list' },
+      dashboards: { '@container': '@set' },
       dashboard: {
-        '@id': 'https://bluebrainnexus.io/studio/vocabs/dashboard',
+        '@id': 'https://bluebrainnexus.io/studio/vocabulary/dashboard',
         '@type': '@id',
       },
       view: {
-        '@id': 'https://bluebrainnexus.io/studio/vocabs/view',
+        '@id': 'https://bluebrainnexus.io/studio/vocabulary/view',
         '@type': '@id',
       },
     },

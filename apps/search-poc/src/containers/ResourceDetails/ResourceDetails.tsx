@@ -7,7 +7,7 @@ import { Spin } from 'antd';
 import ResourceDetails from '../../components/ResourceDetails';
 import { Resource } from '@bbp/nexus-sdk';
 import { MINDSResource } from './types';
-import { getComponentsByTypeList } from './index';
+import { getComponentsForTypes } from './index';
 
 
 const ResourceDetailsContainer: React.FunctionComponent<{
@@ -22,10 +22,10 @@ const ResourceDetailsContainer: React.FunctionComponent<{
   const description = get(data, 'description');
 
   const types = get(data, '@type', []);
-  const components = getComponentsByTypeList(types);
+  const components = getComponentsForTypes(types);
 
   if (loading) {
-    return <Spin></Spin>;
+    return <Spin/>;
   }
 
   if (error) {
@@ -37,14 +37,12 @@ const ResourceDetailsContainer: React.FunctionComponent<{
     name={name}
     description={description}
   >
-    {components.map(comp =>
-      <Suspense
-        key={comp.name}
-        fallback={<p>Loading...</p>}
-      >
-        <comp.Component resource={data}/>
-      </Suspense>
-    )}
+    <Suspense fallback={<Spin/>}>
+      {Object.keys(components).map(compName => {
+        const Component = components[compName];
+        return <Component key={compName} resource={data}/>
+      })}
+    </Suspense>
   </ResourceDetails>;
 };
 

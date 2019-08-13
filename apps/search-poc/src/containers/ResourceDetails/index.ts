@@ -4,7 +4,7 @@ import React from 'react';
 
 const MorphViewer = React.lazy(() => import('./ReconstructedNeuronMorphology'));
 
-const compByName = {
+const detailsComponents = {
   morphViewer: MorphViewer,
 };
 
@@ -13,17 +13,15 @@ const compNamesByType = {
 }
 
 
-export function getComponentsByTypeList(resourceTypes: string[]): {
-  name: string;
-  Component: React.LazyExoticComponent<any>,
+// Get matching components by a list of resource types.
+// Returns an object with component names as keys and components as their values.
+export function getComponentsForTypes(resourceTypes: string[]): {
+  [componentName: string]: React.LazyExoticComponent<any>
 }[] {
-  const compNames = resourceTypes.reduce((compNames, type) => {
-    const currTypeComps = compNamesByType[type];
-    return currTypeComps ? compNames.concat(currTypeComps) : compNames;
-  }, []);
-
-  const uniqCompNames = Array.from(new Set(compNames));
-  return uniqCompNames.map(name => ({ name, Component: compByName[name] }));
+  return resourceTypes
+    .map(type => compNamesByType[type] || [])
+    .flat()
+    .reduce((comps, name) => ({ ...comps, ...{[name]: detailsComponents[name]} }), {});
 }
 
 export { default } from './ResourceDetails';

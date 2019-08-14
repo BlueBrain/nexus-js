@@ -19,8 +19,7 @@ export function getComponentsForTypes(resourceTypes: string[]): {
   [componentName: string]: React.LazyExoticComponent<any>
 }[] {
   return resourceTypes
-    .map(type => compNamesByType[type] || [])
-    .flat()
+    .flatMap(type => compNamesByType[type] || [])
     .reduce((comps, name) => ({ ...comps, ...{[name]: detailsComponents[name]} }), {});
 }
 

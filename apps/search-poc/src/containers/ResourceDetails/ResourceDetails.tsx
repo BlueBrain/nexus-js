@@ -5,6 +5,7 @@ import { useNexus } from '@bbp/react-nexus';
 import { Spin } from 'antd';
 
 import ResourceDetails from '../../components/ResourceDetails';
+import ErrorBoundary from '../../components/ErrorBoundary';
 import { Resource } from '@bbp/nexus-sdk';
 import { MINDSResource } from './types';
 import { getComponentsForTypes } from './index';
@@ -37,12 +38,14 @@ const ResourceDetailsContainer: React.FunctionComponent<{
     name={name}
     description={description}
   >
-    <Suspense fallback={<Spin/>}>
-      {Object.keys(components).map(compName => {
-        const Component = components[compName];
-        return <Component key={compName} resource={data}/>
-      })}
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={<Spin/>}>
+        {Object.keys(components).map(compName => {
+          const Component = components[compName];
+          return <Component key={compName} resource={data}/>
+        })}
+      </Suspense>
+    </ErrorBoundary>
   </ResourceDetails>;
 };
 

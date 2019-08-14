@@ -10,20 +10,30 @@ const Login: React.FunctionComponent<{
   realms: Realm[];
   onRealmSelected(realm: Realm): void;
 }> = ({ realms, onRealmSelected }) => {
+  const [selectedRealm, setSelectedRealm] = React.useState<Realm>(realms[0]);
+
+  React.useEffect(() => {
+    if (!selectedRealm) {
+      setSelectedRealm(realms[0]);
+    }
+  }, [realms, setSelectedRealm]);
+
   const menu = (
     <Menu>
       {realms.map(realm => (
-        <Menu.Item key={realm['@id']} onClick={() => onRealmSelected(realm)}>
+        <Menu.Item key={realm['@id']} onClick={() => setSelectedRealm(realm)}>
           {realm._label}
         </Menu.Item>
       ))}
     </Menu>
   );
-  return (
-    <Dropdown.Button overlay={menu} icon={<Icon type="login" />}>
-      Login
-    </Dropdown.Button>
-  );
+  return selectedRealm ? (
+    <Dropdown overlay={menu}>
+      <Button icon="login" onClick={() => onRealmSelected(selectedRealm)}>
+        Login with {selectedRealm._label} <Icon type="down" />
+      </Button>
+    </Dropdown>
+  ) : null;
 };
 const Logout: React.FunctionComponent<{
   userName: string;

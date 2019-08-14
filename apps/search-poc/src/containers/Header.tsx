@@ -28,11 +28,13 @@ const Login: React.FunctionComponent<{
     </Menu>
   );
   return selectedRealm ? (
-    <Dropdown overlay={menu}>
-      <Button icon="login" onClick={() => onRealmSelected(selectedRealm)}>
-        Login with {selectedRealm._label} <Icon type="down" />
-      </Button>
-    </Dropdown>
+    <Dropdown.Button
+      overlay={menu}
+      onClick={() => onRealmSelected(selectedRealm)}
+      icon={<Icon type="down" />}
+    >
+      Login with {selectedRealm._label} <Icon type="login" />
+    </Dropdown.Button>
   ) : null;
 };
 const Logout: React.FunctionComponent<{

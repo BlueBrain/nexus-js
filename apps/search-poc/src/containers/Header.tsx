@@ -16,7 +16,7 @@ const Login: React.FunctionComponent<{
     if (!selectedRealm) {
       setSelectedRealm(realms[0]);
     }
-  }, [realms, setSelectedRealm]);
+  }, [realms, setSelectedRealm, selectedRealm]);
 
   const menu = (
     <Menu>

@@ -83,49 +83,19 @@ SELECT ?total ?self ?name ?speciesLabel
      }
 `;
 
-export const MORPH_CONVERTER_URL = 'http://morph-service.ocp.bbp.epfl.ch/converter/api';
 
-// {
-//   "@context": {},
-//   "@id": "",
-//   "@type": "AggregateSparqlView",
-//   "views": [
-//     {
-//       "project": "pgetta-data/proj1",
-//       "viewId": "nxv:defaultSparqlIndex"
-//     },
-//         {
-//       "project": "pgetta-data/proj32",
-//       "viewId": "nxv:defaultSparqlIndex"
-//     },
-//         {
-//       "project": "pgetta-data/proj38",
-//       "viewId": "nxv:defaultSparqlIndex"
-//     },
-//         {
-//       "project": "pgetta-data/proj42",
-//       "viewId": "nxv:defaultSparqlIndex"
-//     },
-//         {
-//       "project": "pgetta-data/proj55",
-//       "viewId": "nxv:defaultSparqlIndex"
-//     }
-//     ,
-//         {
-//       "project": "pgetta-data/proj59",
-//       "viewId": "nxv:defaultSparqlIndex"
-//     },
-//         {
-//       "project": "pgetta-data/proj64",
-//       "viewId": "nxv:defaultSparqlIndex"
-//     },
-//         {
-//       "project": "pgetta-data/proj66",
-//       "viewId": "nxv:defaultSparqlIndex"
-//     },
-//         {
-//       "project": "pgetta-data/proj68",
-//       "viewId": "nxv:defaultSparqlIndex"
-//     }
-//   ]
-// }
+export const getStudioConfig = (studioId: string) => `
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix studio: <https://bluebrainnexus.io/studio/vocabulary/>
+  
+SELECT ?studioLabel ?workspaceId ?workspaceLabel ?dashboardId ?dashboardLabel ?viewId WHERE {
+  <${studioId}>   rdfs:label ?studioLabel ;
+                  studio:workspaces ?workspaceId .
+  ?workspaceId  rdfs:label ?workspaceLabel ;
+                studio:dashboards ?dashboards .
+  ?dashboards studio:dashboard ?dashboardId ;
+              studio:view ?viewId .
+  ?dashboardId rdfs:label ?dashboardLabel
+}`;
+
+export const MORPH_CONVERTER_URL = 'http://morph-service.ocp.bbp.epfl.ch/converter/api';

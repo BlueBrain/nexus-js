@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { withRouter, History } from 'react-router-dom';
-import queryString from 'query-string';
 import DashboardList from '../components/DashboardList';
 import { emodelDataQuery, morphologyDataQuery } from '../config';
 
@@ -65,33 +63,10 @@ const DashboardListContainer: React.FunctionComponent<{
     projectLabel: string,
     viewId: string,
     dataQuery: string,
+    dashboardId: string,
   ) => void;
-  history: History;
-}> = ({ onDashboardSelected, history }) => {
-  // they might be an active dashboard id setup as a query string
-  const defaultActiveDashboardId = queryString.parse(history.location.search)
-    .dashboard;
-
-  // default active dashboard is the first one if none is present in querystring
-  const [activeDashboard, setActiveDashboard] = React.useState<{
-    dashboard: DashboardContainer;
-    view: View;
-  }>(
-    defaultActiveDashboardId
-      ? getDashBoardConfig(defaultActiveDashboardId.toString(), dashboardConfig)
-      : dashboardConfig[0],
-  );
-
-  // call callback prop when dashboard is selected
-  React.useEffect(() => {
-    onDashboardSelected(
-      activeDashboard.view.orgLabel,
-      activeDashboard.view.projectLabel,
-      activeDashboard.view.viewId,
-      activeDashboard.dashboard.dataQuery,
-    );
-  }, [activeDashboard, onDashboardSelected]);
-
+  activeDashboardId?: string;
+}> = ({ onDashboardSelected, activeDashboardId }) => {
   // format dashboard data for dashboard list component
   const dashboardConfigData = dashboardConfig.map(config => ({
     id: config.dashboard['@id'],
@@ -102,13 +77,21 @@ const DashboardListContainer: React.FunctionComponent<{
   return (
     <DashboardList
       items={dashboardConfigData}
-      onDashboardSelected={id => {
-        setActiveDashboard(getDashBoardConfig(id, dashboardConfig));
-        history.push({ search: `?dashboard=${id}` });
+      onDashboardSelected={dashboardId => {
+        const activeDashboard = dashboardId
+          ? getDashBoardConfig(dashboardId.toString(), dashboardConfig)
+          : dashboardConfig[0];
+        onDashboardSelected(
+          activeDashboard.view.orgLabel,
+          activeDashboard.view.projectLabel,
+          activeDashboard.view.viewId,
+          activeDashboard.dashboard.dataQuery,
+          dashboardId,
+        );
       }}
-      defaultActiveId={activeDashboard.dashboard['@id']}
+      activeDashboardId={activeDashboardId}
     />
   );
 };
 
-export default withRouter(DashboardListContainer);
+export default DashboardListContainer;

@@ -18,7 +18,7 @@ const DashboardList: React.FunctionComponent<{
     if (activeDashboardId !== null) {
       onDashboardSelected(activeDashboardId);
     }
-  }, [activeDashboardId, onDashboardSelected]);
+  }, [JSON.stringify({ activeDashboardId, onDashboardSelected })]);
 
   return (
     <ul className="Dashboard-list">

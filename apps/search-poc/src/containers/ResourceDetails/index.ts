@@ -19,7 +19,7 @@ const compNamesByType = {
 // Get matching components by a list of resource types.
 // Returns an object with component names as keys and components as their values.
 export function getComponentsForTypes(resourceTypes: string[]): {
-  [componentName: string]: React.LazyExoticComponent<any>
+  [componentName: string]: LazyExoticComponent<any>
 }[] {
   return resourceTypes
     .flatMap(type => compNamesByType[type] || [])

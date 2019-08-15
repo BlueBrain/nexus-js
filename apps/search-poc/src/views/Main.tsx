@@ -2,7 +2,7 @@ import * as React from 'react';
 import Dashboards from '../containers/DashboardList';
 import ResultTable from '../containers/ResultTable';
 
-const MainView: React.FunctionComponent = () => {
+const MainView = () => {
   const [data, setData] = React.useState<{
     orgLabel: string;
     projectLabel: string;

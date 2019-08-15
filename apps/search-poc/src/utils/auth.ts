@@ -58,6 +58,7 @@ export async function setUpSession(): Promise<UserManager> {
   if (!user) {
     try {
       user = await userManager.getUser();
+      user && localStorage.setItem(SETTINGS.bearerTokenKey, user.id_token);
     } catch (error) {
       // if not, that's fine
     }

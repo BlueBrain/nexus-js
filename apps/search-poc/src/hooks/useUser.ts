@@ -7,8 +7,6 @@ const useUser = () => {
   const [user, setUser] = React.useState<User | null>(null);
   const [error, setError] = React.useState<Error | null>(null);
 
-  console.log({ userManager, user });
-
   React.useEffect(() => {
     const accessTokenExpired = () => {
       const accessTokenExpiredError = new Error(

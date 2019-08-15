@@ -3,8 +3,6 @@ import React, { ReactNode } from 'react';
 import sortBy from 'lodash/sortBy';
 import { Table, Collapse } from 'antd';
 
-import './EModel.css';
-
 import { Resource } from '@bbp/nexus-sdk';
 import { MINDSResource, EModelResource } from '../../containers/ResourceDetails/types';
 

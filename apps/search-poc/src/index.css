@@ -71,3 +71,7 @@ body {
   font-size: 3em;
   font-weight: lighter;
 }
+
+.small-table td {
+  padding: 4px 16px !important;
+}

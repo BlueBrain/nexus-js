@@ -40,6 +40,7 @@ export const setToken: Link = (operation: Operation, forward?: Link) => {
  */
 export async function setUpSession(): Promise<UserManager> {
   let userManager: UserManager | null = null;
+  let user: User | null = null;
   // Get preferred realm
   const preferredRealm: Realm = JSON.parse(
     localStorage.getItem(SETTINGS.preferredRealmKey) || '{}',
@@ -49,18 +50,18 @@ export async function setUpSession(): Promise<UserManager> {
   // or empty user manager if no preferred realm
   userManager = new UserManager(getConfig(preferredRealm));
 
-  // // maybe we're getting new user session after redirect
-  // try {
-  //   user = await userManager.signinRedirectCallback();
-  // } catch (error) {}
-  // // if not, check if we already had a running session
-  // if (!user) {
-  //   try {
-  //     user = await userManager.getUser();
-  //   } catch (error) {
-  //     // if not, that's fine
-  //   }
-  // }
+  // maybe we're getting new user session after redirect
+  try {
+    user = await userManager.signinRedirectCallback();
+  } catch (error) {}
+  // if not, check if we already had a running session
+  if (!user) {
+    try {
+      user = await userManager.getUser();
+    } catch (error) {
+      // if not, that's fine
+    }
+  }
 
   // Set events
   userManager.events.addUserLoaded((user: User) => {

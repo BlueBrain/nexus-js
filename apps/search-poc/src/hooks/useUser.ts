@@ -7,14 +7,24 @@ const useUser = () => {
   const [user, setUser] = React.useState<User | null>(null);
   const [error, setError] = React.useState<Error | null>(null);
 
+  console.log({ userManager, user });
+
   React.useEffect(() => {
     const accessTokenExpired = () => {
-      setError(new Error('Access token expired'));
+      const accessTokenExpiredError = new Error(
+        'Your login session has expired',
+      );
+      accessTokenExpiredError.name = 'Access Token Expired';
+      setError(accessTokenExpiredError);
       userManager && userManager.getUser().then(setUser);
     };
 
     const userUnloaded = () => {
-      setError(new Error('Access token expired'));
+      const userUnloadedError = new Error(
+        'You have been logged out automatically',
+      );
+      userUnloadedError.name = 'User Unloaded';
+      setError(userUnloadedError);
       userManager && userManager.getUser().then(setUser);
     };
 

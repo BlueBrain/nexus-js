@@ -93,7 +93,7 @@ const DashboardListContainer: React.FunctionComponent<{
         );
         history.push({ search: `?dashboard=${dashboardId}` });
       }}
-      activeDashboardId={activeDashboardId && activeDashboardId.toString()}
+      defaultActiveId={activeDashboardId && activeDashboardId.toString()}
     />
   );
 };

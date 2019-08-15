@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import sortBy from 'lodash/sortBy';
 import { Table, Collapse } from 'antd';
-import { ColumnProps } from 'antd/lib/table';
+
 import './EModel.css';
 
 import { Resource } from '@bbp/nexus-sdk';
@@ -10,7 +10,7 @@ import { MINDSResource, EModelResource } from '../../containers/ResourceDetails/
 
 
 const { Panel } = Collapse;
-const protocolR = /^(.*)\.(\w+)\.(\w+)$/;
+const protocolR = /^(?:_\.)(.*)\.(\w+)\.(\w+)\.(\w+)$/;
 
 const paramColumns = [{
   title: 'Parameter',
@@ -20,27 +20,13 @@ const paramColumns = [{
   title: 'Value',
   dataIndex: 'val',
   key: 'val',
-}] as ColumnProps<any>[];
+}];
 
-const fitnessColumns = [{
-  title: 'Protocol',
-  render: () => <></>,
-  key: 'protocol',
-}, {
-  title: 'Target',
-  render: () => <></>,
-  key: 'recTarget',
-}, {
-  title: 'Parameter',
-  dataIndex: 'param',
-  key: 'param',
-}, {
-  title: 'Value',
-  dataIndex: 'val',
-  key: 'val',
-}] as ColumnProps<any>[];
-
-function createUniqColumnRenderer(dataSource: object[], dataKey: string, colKey: string) {
+function createUniqColumnRenderer(
+  dataSource: object[],
+  dataKey: string,
+  colKey: string
+): (value: any, row: any, index: number) => ReactNode | undefined {
   return (value, row, index) => {
     const obj = { children: value[dataKey], props: { rowSpan: 1 } };
     const isRendered = dataSource
@@ -55,14 +41,14 @@ function createUniqColumnRenderer(dataSource: object[], dataKey: string, colKey:
   };
 };
 
-function createFitnessDSEntry([paramRaw, val]) {
-  const [, protocolRaw, recTarget, param ] = paramRaw
+function createFitnessDataSourceEntry([paramRaw, val]: [string, number]) {
+  const [, protocolRaw, recTarget, recType, param ] = paramRaw
     .match(protocolR) as string[];
 
   const protocol = protocolRaw.replace(/_/g, ' ');
   const key = paramRaw;
 
-  return { key, protocol, recTarget, param, val };
+  return { key, protocol, recTarget, recType, param, val };
 };
 
 const EModelDetails: React.FunctionComponent<{
@@ -71,15 +57,33 @@ const EModelDetails: React.FunctionComponent<{
   const { score, seed, fitness, params } = props.resource;
 
   const fitnessDSUnsorted = Object.entries(fitness)
-    .map(createFitnessDSEntry)
-    .filter(entry => entry);
+    .map(createFitnessDataSourceEntry);
 
-  const fitnessDS = sortBy(fitnessDSUnsorted, ['parameter', 'recTarget', 'protocol']);
+  const fitnessDataSource = sortBy(fitnessDSUnsorted, ['parameter', 'recTarget', 'protocol']);
 
-  fitnessColumns[0].render = createUniqColumnRenderer(fitnessDS, 'protocol', 'protocol');
-  fitnessColumns[1].render = createUniqColumnRenderer(fitnessDS, 'recTarget', 'protocol');
+  const fitnessColumns = [{
+    title: 'Protocol',
+    render: createUniqColumnRenderer(fitnessDataSource, 'protocol', 'protocol'),
+    key: 'protocol',
+  }, {
+    title: 'Target',
+    render: createUniqColumnRenderer(fitnessDataSource, 'recTarget', 'protocol'),
+    key: 'recTarget',
+  }, {
+    title: 'Type',
+    render: createUniqColumnRenderer(fitnessDataSource, 'recType', 'protocol'),
+    key: 'recType'
+  }, {
+    title: 'Parameter',
+    dataIndex: 'param',
+    key: 'param',
+  }, {
+    title: 'Value',
+    dataIndex: 'val',
+    key: 'val',
+  }];
 
-  const paramDS = Object.entries(params)
+  const paramDataSource = Object.entries(params)
     .map(([key, val]) => ({ key, param: key, val }));
 
   return (
@@ -91,7 +95,7 @@ const EModelDetails: React.FunctionComponent<{
         <Panel header="Fitness" key="fitness">
           <Table
             className="small-table"
-            dataSource={fitnessDS}
+            dataSource={fitnessDataSource}
             columns={fitnessColumns}
             pagination={false}
             size="middle"
@@ -101,7 +105,7 @@ const EModelDetails: React.FunctionComponent<{
         <Panel header="Optimized parameters" key="params">
           <Table
             className="small-table"
-            dataSource={paramDS}
+            dataSource={paramDataSource}
             columns={paramColumns}
             pagination={false}
             size="middle"

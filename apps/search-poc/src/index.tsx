@@ -9,12 +9,13 @@ import Header from './containers/Header';
 import DetailsView from './views/Details';
 import MainView from './views/Main';
 import { SETTINGS } from './config';
+import UserProvider from './providers/UserProvider';
 
 import 'antd/dist/antd.css';
 import './index.css';
 
 async function main() {
-  const [userManager, user] = await setUpSession();
+  const userManager = await setUpSession();
   // create nexus instance
   const nexus: NexusClient = createNexusClient({
     fetch,
@@ -24,19 +25,21 @@ async function main() {
 
   const rootElement = document.getElementById('root');
   render(
-    <NexusProvider nexusClient={nexus}>
-      <div className="App">
-        <Header user={user} userManager={userManager} />
-        <Router>
-          <Switch>
-            <Route path="/" exact>
-              <MainView />
-            </Route>
-            <Route path="/resources" component={DetailsView} />
-          </Switch>
-        </Router>
-      </div>
-    </NexusProvider>,
+    <UserProvider userManager={userManager}>
+      <NexusProvider nexusClient={nexus}>
+        <div className="App">
+          <Header />
+          <Router>
+            <Switch>
+              <Route path="/" exact>
+                <MainView />
+              </Route>
+              <Route path="/resources" component={DetailsView} />
+            </Switch>
+          </Router>
+        </div>
+      </NexusProvider>
+    </UserProvider>,
     rootElement,
   );
 }

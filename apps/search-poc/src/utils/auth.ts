@@ -38,8 +38,7 @@ export const setToken: Link = (operation: Operation, forward?: Link) => {
  * - load user info
  * - return a ref of user manager instance and the user
  */
-export async function setUpSession(): Promise<[UserManager, User | null]> {
-  let user: User | null = null;
+export async function setUpSession(): Promise<UserManager> {
   let userManager: UserManager | null = null;
   // Get preferred realm
   const preferredRealm: Realm = JSON.parse(
@@ -50,18 +49,18 @@ export async function setUpSession(): Promise<[UserManager, User | null]> {
   // or empty user manager if no preferred realm
   userManager = new UserManager(getConfig(preferredRealm));
 
-  // maybe we're getting new user session after redirect
-  try {
-    user = await userManager.signinRedirectCallback();
-  } catch (error) {}
-  // if not, check if we already had a running session
-  if (!user) {
-    try {
-      user = await userManager.getUser();
-    } catch (error) {
-      // if not, that's fine
-    }
-  }
+  // // maybe we're getting new user session after redirect
+  // try {
+  //   user = await userManager.signinRedirectCallback();
+  // } catch (error) {}
+  // // if not, check if we already had a running session
+  // if (!user) {
+  //   try {
+  //     user = await userManager.getUser();
+  //   } catch (error) {
+  //     // if not, that's fine
+  //   }
+  // }
 
   // Set events
   userManager.events.addUserLoaded((user: User) => {
@@ -72,5 +71,5 @@ export async function setUpSession(): Promise<[UserManager, User | null]> {
     localStorage.removeItem(SETTINGS.bearerTokenKey);
   });
 
-  return [userManager, user];
+  return userManager;
 }

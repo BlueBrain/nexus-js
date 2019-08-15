@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Menu, Icon, Dropdown, Button } from 'antd';
-import { UserManager, User } from 'oidc-client';
+import { Menu, Icon, Dropdown, Button, notification } from 'antd';
+import { UserManager } from 'oidc-client';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Realm } from '@bbp/nexus-sdk';
 import { SETTINGS } from '../config';
 import { getConfig } from '../utils/auth';
+import useUser from '../hooks/useUser';
 
 const Login: React.FunctionComponent<{
   realms: Realm[];
@@ -48,12 +49,9 @@ const Logout: React.FunctionComponent<{
   );
 };
 
-const Header: React.FunctionComponent<{
-  userManager: UserManager | null;
-  user: User | null;
-}> = ({ userManager, user }) => {
+const Header: React.FunctionComponent = () => {
   const nexus = useNexusContext();
-
+  const { userManager, user, error: userError } = useUser();
   // fetch list of available realms when application mounts
   const [realms, setRealms] = React.useState<Realm[]>([]);
   React.useEffect(() => {
@@ -101,6 +99,13 @@ const Header: React.FunctionComponent<{
       })
       .catch(e => console.log(e.message));
   };
+
+  if (userError) {
+    notification.error({
+      message: userError.name,
+      description: userError.message,
+    });
+  }
 
   return (
     <div className="Header">

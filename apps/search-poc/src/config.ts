@@ -83,6 +83,19 @@ SELECT ?total ?self ?name ?speciesLabel
      }
 `;
 
+export function getCollectionEModelsQuery(resourceId) {
+  return `
+    prefix nxv: <https://neuroshapes.org/>
+    prefix schema: <http://schema.org/>
+    prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
+    SELECT * WHERE {
+      <${resourceId}> nxv:emodels ?emodel .
+      ?emodel schema:name ?name .
+      ?emodel nexus:self ?self .
+      optional {?emodel schema:description  ?description}
+    } LIMIT 100`;
+}
+
 export const getStudioConfig = (studioId: string) => `
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix studio: <https://bluebrainnexus.io/studio/vocabulary/>

@@ -39,7 +39,7 @@ function createUniqColumnRenderer(
   };
 };
 
-function createFitnessDataSourceEntry([paramRaw, val]: [string, number]) {
+function createFitnessDataSourceEntry([paramRaw, val]) {
   const [, protocolRaw, recTarget, recType, param ] = paramRaw
     .match(protocolR) as string[];
 

@@ -30,7 +30,7 @@ export type SparqlMapperConfig = {
 export const mapSparqlResults = (
   queryResults: SparqlQueryResults,
   config: SparqlMapperConfig,
-) => {
+): { [target: string]: any }[] => {
   if (!queryResults || !queryResults.results.bindings) return [];
 
   return queryResults.results.bindings.map(binding => {
@@ -49,6 +49,8 @@ export const mapSparqlResults = (
   });
 };
 
+// Method returns the collection with properties:
+// { id: string, self: string, name: string, description: string }
 export const mapEmodelCollQueryResults = (queryResults: SparqlQueryResults) => {
   const config = {
     mappings: [

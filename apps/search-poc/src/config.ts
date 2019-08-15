@@ -4,7 +4,7 @@ export const SETTINGS = {
   serviceAccountName: 'serviceaccounts',
   clientId: 'nexus-web',
   redirectUrl: window.location.origin,
-  environment: 'https://staging.nexus.ocp.bbp.epfl.ch/v1',
+  environment: 'https://dev.nexus.ocp.bbp.epfl.ch/v1',
 };
 
 export const emodelDataQuery = `
@@ -83,11 +83,10 @@ SELECT ?total ?self ?name ?speciesLabel
      }
 `;
 
-
 export const getStudioConfig = (studioId: string) => `
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix studio: <https://bluebrainnexus.io/studio/vocabulary/>
-  
+
 SELECT ?studioLabel ?workspaceId ?workspaceLabel ?dashboardId ?dashboardLabel ?viewId WHERE {
   <${studioId}>   rdfs:label ?studioLabel ;
                   studio:workspaces ?workspaceId .
@@ -98,4 +97,5 @@ SELECT ?studioLabel ?workspaceId ?workspaceLabel ?dashboardId ?dashboardLabel ?v
   ?dashboardId rdfs:label ?dashboardLabel
 }`;
 
-export const MORPH_CONVERTER_URL = 'http://morph-service.ocp.bbp.epfl.ch/converter/api';
+export const MORPH_CONVERTER_URL =
+  'http://morph-service.ocp.bbp.epfl.ch/converter/api';

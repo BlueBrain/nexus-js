@@ -18,7 +18,8 @@ const DashboardList: React.FunctionComponent<{
     if (activeDashboardId !== null) {
       onDashboardSelected(activeDashboardId);
     }
-  }, [activeDashboardId, onDashboardSelected]);
+    // eslint-disable-next-line
+  }, [activeDashboardId]);
 
   return (
     <ul className="Dashboard-list">

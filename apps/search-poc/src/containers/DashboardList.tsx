@@ -1,6 +1,8 @@
 import * as React from 'react';
 import DashboardList from '../components/DashboardList';
 import { emodelDataQuery, morphologyDataQuery } from '../config';
+import { withRouter, History } from 'react-router-dom';
+import queryString from 'query-string';
 
 // TODO: get that config from Nexus
 const dashboardConfig: DashboardConfig[] = [
@@ -63,10 +65,12 @@ const DashboardListContainer: React.FunctionComponent<{
     projectLabel: string,
     viewId: string,
     dataQuery: string,
-    dashboardId: string,
   ) => void;
-  activeDashboardId?: string;
-}> = ({ onDashboardSelected, activeDashboardId }) => {
+  history: History;
+}> = ({ onDashboardSelected, history }) => {
+  const activeDashboardId = queryString.parse(history.location.search)
+    .dashboard;
+
   // format dashboard data for dashboard list component
   const dashboardConfigData = dashboardConfig.map(config => ({
     id: config.dashboard['@id'],
@@ -86,12 +90,12 @@ const DashboardListContainer: React.FunctionComponent<{
           activeDashboard.view.projectLabel,
           activeDashboard.view.viewId,
           activeDashboard.dashboard.dataQuery,
-          dashboardId,
         );
+        history.push({ search: `?dashboard=${dashboardId}` });
       }}
-      activeDashboardId={activeDashboardId}
+      activeDashboardId={activeDashboardId && activeDashboardId.toString()}
     />
   );
 };
 
-export default DashboardListContainer;
+export default withRouter(DashboardListContainer);

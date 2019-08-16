@@ -1,4 +1,4 @@
-.workspace-tab {
+.tab-item {
   display: flex;
   flex-direction: column;
   border-radius: 2px;
@@ -10,11 +10,11 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.workspace-tab > .title {
+.tab-item > .title {
   font-size: 1.2em;
 }
 
-.workspace-tab > .description {
+.tab-item > .description {
   white-space: normal;
   line-height: 1.2em;
   color: rgba(0, 0, 0, 0.5);

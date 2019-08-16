@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './WorkspaceList.css';
+import './TabList.css';
 import { Tabs } from 'antd';
 
 const { TabPane } = Tabs;
@@ -10,13 +10,13 @@ type WorkspaceItem = {
   description: string;
 };
 
-const WorkspaceList: React.FunctionComponent<{
+const TabList: React.FunctionComponent<{
   items: WorkspaceItem[];
   onSelected: (id: string) => void;
   defaultActiveId?: string;
 }> = ({ items, onSelected, defaultActiveId, children }) => {
   return (
-    <div className="workspace-list">
+    <div className="tab-list">
       <Tabs
         defaultActiveKey={defaultActiveId}
         tabPosition={'left'}
@@ -25,7 +25,7 @@ const WorkspaceList: React.FunctionComponent<{
         {items.map(({ label, description, id }) => (
           <TabPane
             tab={
-              <div className="workspace-tab">
+              <div className="tab-item">
                 <span className="title ellipsis">{label}</span>
                 <p className="description fade">{description}</p>
               </div>
@@ -40,4 +40,4 @@ const WorkspaceList: React.FunctionComponent<{
   );
 };
 
-export default WorkspaceList;
+export default TabList;

@@ -12,15 +12,15 @@ type WorkspaceItem = {
 
 const WorkspaceList: React.FunctionComponent<{
   items: WorkspaceItem[];
-  onWorkspaceSelected: (id: string) => void;
+  onSelected: (id: string) => void;
   defaultActiveId?: string;
-}> = ({ items, onWorkspaceSelected, defaultActiveId, children }) => {
+}> = ({ items, onSelected, defaultActiveId, children }) => {
   return (
     <div className="workspace-list">
       <Tabs
         defaultActiveKey={defaultActiveId}
         tabPosition={'left'}
-        onChange={onWorkspaceSelected}
+        onChange={onSelected}
       >
         {items.map(({ label, description, id }) => (
           <TabPane

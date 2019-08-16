@@ -46,22 +46,20 @@ const Workspaces: React.FunctionComponent<{
   return (
     <div className="workspaces-container">
       <Tabs defaultActiveKey="1" tabPosition={'left'}>
-        {workspaces &&
-          workspaces.length &&
-          workspaces.map(({ label, description, children }, i) => (
-            <TabPane
-              tab={
-                <div className="workspace-tab">
-                  <span className="title ellipsis">{label}</span>
-                  <p className="description fade">{description}</p>
-                </div>
-              }
-              key={i.toString()}
-            >
-              <>{childComponents}</>
-              <Workspaces workspaces={children} />
-            </TabPane>
-          ))}
+        {workspaces.map(({ label, description, children }, i) => (
+          <TabPane
+            tab={
+              <div className="workspace-tab">
+                <span className="title ellipsis">{label}</span>
+                <p className="description fade">{description}</p>
+              </div>
+            }
+            key={i.toString()}
+          >
+            <>{childComponents}</>
+            {children && <Workspaces workspaces={children} />}
+          </TabPane>
+        ))}
       </Tabs>
     </div>
   );

@@ -1,7 +1,6 @@
 /**
  * This script is used to bootstrap a new studio
  * It will:
- *  - create the org/project that will host the necessary config files
  *  - create a aggregated sparql view of the required project
  *  - create default workspaces and dashboards
  */
@@ -20,18 +19,18 @@ const {
 
 const config = {
   environment: 'https://staging.nexus.ocp.bbp.epfl.ch/v1',
-  orgName: 'bbp', // MUST ALREADY EXIST
+  orgName: 'bbp_test', // MUST ALREADY EXIST
   projectName: 'studio', // MUST ALREADY EXIST
   aggregateStudioProjects: [
-    ['pgetta-data/testproj1', 'nxv:defaultSparqlIndex'],
-    ['pgetta-data/testproj32', 'nxv:defaultSparqlIndex'],
-    ['pgetta-data/testproj38', 'nxv:defaultSparqlIndex'],
-    ['pgetta-data/testproj42', 'nxv:defaultSparqlIndex'],
-    ['pgetta-data/testproj55', 'nxv:defaultSparqlIndex'],
-    ['pgetta-data/testproj59', 'nxv:defaultSparqlIndex'],
-    ['pgetta-data/testproj64', 'nxv:defaultSparqlIndex'],
-    ['pgetta-data/testproj66', 'nxv:defaultSparqlIndex'],
-    ['pgetta-data/testproj68', 'nxv:defaultSparqlIndex'],
+    ['bbp_test/proj1', 'nxv:defaultSparqlIndex'],
+    ['bbp_test/proj32', 'nxv:defaultSparqlIndex'],
+    ['bbp_test/proj38', 'nxv:defaultSparqlIndex'],
+    ['bbp_test/proj42', 'nxv:defaultSparqlIndex'],
+    ['bbp_test/proj55', 'nxv:defaultSparqlIndex'],
+    ['bbp_test/proj59', 'nxv:defaultSparqlIndex'],
+    ['bbp_test/proj64', 'nxv:defaultSparqlIndex'],
+    ['bbp_test/proj66', 'nxv:defaultSparqlIndex'],
+    ['bbp_test/proj68', 'nxv:defaultSparqlIndex'],
   ],
 };
 

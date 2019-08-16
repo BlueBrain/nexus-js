@@ -1,46 +1,13 @@
 import * as React from 'react';
 import DashboardList from '../components/DashboardList';
-import { emodelDataQuery, morphologyDataQuery } from '../config';
 import { withRouter, History } from 'react-router-dom';
 import queryString from 'query-string';
-
-// TODO: get that config from Nexus
-const dashboardConfig: DashboardConfig[] = [
-  {
-    dashboard: {
-      '@id': 'http://bbp.ch/emodels',
-      '@type': 'nxv:StudioDashboard',
-      label: 'E-models Collection',
-      description: 'Emodels curation dashboard',
-      dataQuery: emodelDataQuery,
-    },
-    view: {
-      orgLabel: 'bbp',
-      projectLabel: 'studio',
-      viewId: 'nxv:bbpStudioView',
-    },
-  },
-  {
-    dashboard: {
-      '@id': 'http://bbp.ch/morphy',
-      '@type': 'nxv:StudioDashboard',
-      label: 'Morphologies collections',
-      description: 'Morpho curation dashboard',
-      dataQuery: morphologyDataQuery,
-    },
-    view: {
-      orgLabel: 'bbp',
-      projectLabel: 'studio',
-      viewId: 'nxv:bbpStudioView',
-    },
-  },
-];
 
 function getDashBoardConfig(
   id: string,
   configs: DashboardConfig[],
 ): DashboardConfig {
-  return configs.find(config => config.dashboard['@id'] === id);
+  return configs.find(config => config.dashboard['@id'] === id) || configs[0];
 }
 
 type DashboardConfig = { dashboard: DashboardContainer; view: View };
@@ -54,12 +21,13 @@ type DashboardContainer = {
 };
 
 type View = {
-  orgLabel: string;
-  projectLabel: string;
-  viewId: string;
+  '@id': string;
+  org: string;
+  project: string;
 };
 
 const DashboardListContainer: React.FunctionComponent<{
+  dashboardConfig: DashboardConfig[];
   onDashboardSelected: (
     orgLabel: string,
     projectLabel: string,
@@ -67,9 +35,11 @@ const DashboardListContainer: React.FunctionComponent<{
     dataQuery: string,
   ) => void;
   history: History;
-}> = ({ onDashboardSelected, history }) => {
-  const activeDashboardId = queryString.parse(history.location.search)
-    .dashboard;
+}> = ({ dashboardConfig, onDashboardSelected, history }) => {
+  const activeDashboardId = getDashBoardConfig(
+    queryString.parse(history.location.search).dashboard.toString(),
+    dashboardConfig,
+  ).dashboard['@id'];
 
   // format dashboard data for dashboard list component
   const dashboardConfigData = dashboardConfig.map(config => ({
@@ -86,14 +56,14 @@ const DashboardListContainer: React.FunctionComponent<{
           ? getDashBoardConfig(dashboardId.toString(), dashboardConfig)
           : dashboardConfig[0];
         onDashboardSelected(
-          activeDashboard.view.orgLabel,
-          activeDashboard.view.projectLabel,
-          activeDashboard.view.viewId,
+          activeDashboard.view.org,
+          activeDashboard.view.project,
+          activeDashboard.view['@id'],
           activeDashboard.dashboard.dataQuery,
         );
         history.push({ search: `?dashboard=${dashboardId}` });
       }}
-      defaultActiveId={activeDashboardId && activeDashboardId.toString()}
+      defaultActiveId={activeDashboardId}
     />
   );
 };

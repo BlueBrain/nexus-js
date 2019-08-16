@@ -4,84 +4,16 @@ export const SETTINGS = {
   serviceAccountName: 'serviceaccounts',
   clientId: 'nexus-web',
   redirectUrl: window.location.origin,
-  environment: 'https://dev.nexus.ocp.bbp.epfl.ch/v1',
+  environment: 'https://staging.nexus.ocp.bbp.epfl.ch/v1',
+  studioOrg: 'bbp_test',
+  studioProject: 'studio',
+  studioViewId: 'nxv:defaultSparqlIndex',
+  studioId:
+    'https://staging.nexus.ocp.bbp.epfl.ch/v1/resources/bbp_test/studio/_/3cb3997c-2a3b-4160-bccb-00de904aa566',
 };
 
-export const emodelDataQuery = `
-prefix nxs: <https://neuroshapes.org/>
-prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
-prefix schema: <http://schema.org/>
-
-SELECT ?total ?self ?name ?speciesLabel
-     WITH {
-      SELECT DISTINCT ?self ?name ?speciesLabel {
-        Graph ?g {
-            ?s rdf:type nxs:EModelCollection
-        }
-        Graph ?g {
-          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
-        }
-        Graph ?g {
-          ?s nxv:self ?self    .
-          OPTIONAL { ?s schema:name ?name }
-          OPTIONAL { ?s nxs:species / rdf:label ?speciesLabel }
-        }
-      }
-     } AS %resultSet
-
-   WHERE {
-        {
-           SELECT (COUNT(?self) AS ?total)
-           WHERE { INCLUDE %resultSet }
-        }
-        UNION
-       {
-           SELECT *
-           WHERE { INCLUDE %resultSet }
-           ORDER BY ?self
-           LIMIT 20
-           OFFSET 0
-        }
-     }
-`;
-
-export const morphologyDataQuery = `
-prefix nxs: <https://neuroshapes.org/>
-prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
-prefix schema: <http://schema.org/>
-
-SELECT ?total ?self ?name ?speciesLabel
-     WITH {
-      SELECT DISTINCT ?self ?name ?speciesLabel {
-        Graph ?g {
-            ?s rdf:type nxs:ReconstructedNeuronMorphologyCollection
-        }
-        Graph ?g {
-          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
-        }
-        Graph ?g {
-          ?s nxv:self ?self    .
-          OPTIONAL { ?s schema:name ?name }
-          OPTIONAL { ?s nxs:species / rdf:label ?speciesLabel }
-        }
-      }
-     } AS %resultSet
-
-   WHERE {
-        {
-           SELECT (COUNT(?self) AS ?total)
-           WHERE { INCLUDE %resultSet }
-        }
-        UNION
-       {
-           SELECT *
-           WHERE { INCLUDE %resultSet }
-           ORDER BY ?self
-           LIMIT 20
-           OFFSET 0
-        }
-     }
-`;
+export const MORPH_CONVERTER_URL =
+  'http://morph-service.ocp.bbp.epfl.ch/converter/api';
 
 export function getCollectionEModelsQuery(resourceId) {
   return `
@@ -100,15 +32,57 @@ export const getStudioConfig = (studioId: string) => `
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix studio: <https://bluebrainnexus.io/studio/vocabulary/>
 
-SELECT ?studioLabel ?workspaceId ?workspaceLabel ?dashboardId ?dashboardLabel ?viewId WHERE {
+CONSTRUCT {  
+	<${studioId}> rdfs:label ?studioLabel ;
+                studio:workspaces ?workspaceId .
+  	?workspaceId rdfs:label ?workspaceLabel ;
+  	             studio:dashboards ?dashboards .
+    ?dashboards studio:view ?viewId ;
+                studio:dashboard ?dashboardId .
+    ?dashboardId rdfs:label ?dashboardLabel ;
+                 studio:dataQuery ?dashboardQuery .
+    ?viewId studio:project ?viewProject
+} WHERE {
   <${studioId}>   rdfs:label ?studioLabel ;
                   studio:workspaces ?workspaceId .
   ?workspaceId  rdfs:label ?workspaceLabel ;
                 studio:dashboards ?dashboards .
   ?dashboards studio:dashboard ?dashboardId ;
               studio:view ?viewId .
-  ?dashboardId rdfs:label ?dashboardLabel
+  ?dashboardId rdfs:label ?dashboardLabel ;
+               studio:dataQuery ?dashboardQuery .
+  ?viewId nxv:project ?viewProject
 }`;
 
-export const MORPH_CONVERTER_URL =
-  'http://morph-service.ocp.bbp.epfl.ch/converter/api';
+export const studioContext = {
+  '@base': 'https://bluebrainnexus.io/studio/',
+  '@vocab': 'https://bluebrainnexus.io/studio/vocabulary/',
+  label: {
+    '@id': 'http://www.w3.org/2000/01/rdf-schema#label',
+  },
+  name: {
+    '@id': 'http://schema.org/name',
+  },
+  description: {
+    '@id': 'http://schema.org/description',
+  },
+  workspaces: {
+    '@id': 'https://bluebrainnexus.io/studio/vocabulary/workspaces',
+    '@container': '@set',
+    '@type': '@id',
+  },
+  dashboards: { '@container': '@set' },
+  dashboard: {
+    '@id': 'https://bluebrainnexus.io/studio/vocabulary/dashboard',
+    '@type': '@id',
+  },
+  view: {
+    '@id': 'https://bluebrainnexus.io/studio/vocabulary/view',
+    '@type': '@id',
+  },
+};
+
+export const studioFrame = {
+  '@id': SETTINGS.studioId,
+  '@context': studioContext,
+};

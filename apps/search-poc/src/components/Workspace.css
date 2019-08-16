@@ -20,12 +20,6 @@
   color: rgba(0, 0, 0, 0.5);
 }
 
-.ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .fade {
   position: relative;
   overflow: hidden;

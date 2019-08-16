@@ -28,6 +28,19 @@ export function getCollectionEModelsQuery(resourceId) {
     } LIMIT 100`;
 }
 
+export function getCollectionReconstructedCellsQuery(resourceId) {
+  return `
+  prefix nxv: <https://neuroshapes.org/>
+  prefix schema: <http://schema.org/>
+  prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
+  SELECT * WHERE {
+    <${resourceId}> nxv:reconstructedcells ?reconstructedcell .
+    ?reconstructedcell schema:name ?name .
+    ?reconstructedcell nexus:self ?self .
+    optional {?reconstructedcell schema:description  ?description}
+  } LIMIT 2000`;
+}
+
 export const getStudioConfig = (studioId: string) => `
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix studio: <https://bluebrainnexus.io/studio/vocabulary/>

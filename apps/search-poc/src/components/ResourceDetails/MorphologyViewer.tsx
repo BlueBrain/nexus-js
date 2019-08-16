@@ -3,10 +3,10 @@ import * as React from 'react';
 import MorphoViewer from 'morphoviewer/es/morphoviewer';
 import { Card } from 'antd';
 
-import './ReconstructedNeuronMorphologyDetails.css';
+import './MorphologyViewer.css';
 
 
-class ReconstructedNeuronMorphologyDetails extends React.Component<{
+class MorphologyViewer extends React.Component<{
   morphology: any;
 }, {
   hasError: boolean;
@@ -46,4 +46,4 @@ class ReconstructedNeuronMorphologyDetails extends React.Component<{
 }
 
 
-export default ReconstructedNeuronMorphologyDetails;
+export default MorphologyViewer;

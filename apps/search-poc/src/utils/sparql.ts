@@ -1,5 +1,6 @@
 import { Filter } from '../components/Filters';
 import { labelOf } from '../utils';
+import get from 'lodash/get';
 
 export interface Binding {
   [filterName: string]: { type: string; value: string };
@@ -12,6 +13,68 @@ export type SparqlQueryResults = {
   results: {
     bindings: Binding[];
   };
+};
+
+export type SparqlMapping = {
+  source: string;
+  target: string;
+  defaultVal?: any;
+};
+
+export type SparqlMapperConfig = {
+  mappings: SparqlMapping[];
+};
+
+// Transform Sparql results into a collection with properties from mapping config
+// and optional default values.
+export const mapSparqlResults = (
+  queryResults: SparqlQueryResults,
+  config: SparqlMapperConfig,
+): { [target: string]: any }[] => {
+  if (!queryResults || !queryResults.results.bindings) return [];
+
+  return queryResults.results.bindings.map(binding => {
+    const reduceFn = (acc, mapping) => ({
+      ...acc,
+      ...{
+        [mapping.target]: get(
+          binding,
+          `${mapping.source}.value`,
+          mapping.defaultVal,
+        ),
+      },
+    });
+
+    return config.mappings.reduce(reduceFn, {});
+  });
+};
+
+// Method returns the collection with properties:
+// { id: string, self: string, name: string, description: string }
+export const mapEmodelCollQueryResults = (queryResults: SparqlQueryResults) => {
+  const config = {
+    mappings: [
+      {
+        source: 'id',
+        target: 'emodel',
+      },
+      {
+        source: 'self',
+        target: 'self',
+      },
+      {
+        source: 'name',
+        target: 'name',
+      },
+      {
+        source: 'description',
+        target: 'description',
+        defaultVal: 'NA',
+      },
+    ],
+  };
+
+  return mapSparqlResults(queryResults, config);
 };
 
 export const mapQueryResultsToFilters = (queryResults: SparqlQueryResults) => {

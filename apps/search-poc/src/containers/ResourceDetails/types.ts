@@ -1,11 +1,16 @@
-
 export interface BrainRegion {
+  '@id': string;
+  label: string;
+}
+
+export interface Layer {
   '@id': string;
   label: string;
 }
 
 export interface BrainLocation {
   brainRegion: BrainRegion;
+  layer: Layer[] | undefined;
 }
 
 export interface Distribution {
@@ -25,8 +30,8 @@ export interface EModelResource {
   score: number;
   fitness: {
     [key: string]: number;
-  },
+  };
   params: {
     [key: string]: number;
-  }
+  };
 }

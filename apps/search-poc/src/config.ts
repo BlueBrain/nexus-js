@@ -38,7 +38,7 @@ export function getCollectionReconstructedCellsQuery(resourceId) {
     ?reconstructedcell schema:name ?name .
     ?reconstructedcell nexus:self ?self .
     optional {?reconstructedcell schema:description  ?description}
-  } LIMIT 2000`;
+  } LIMIT 20`;
 }
 
 export const getStudioConfig = (studioId: string) => `

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import DashboardList from '../components/DashboardList';
 import { withRouter, History } from 'react-router-dom';
 import queryString from 'query-string';
+import TabList from '../components/TabList';
 
 function getDashBoardConfig(
   id: string,
@@ -49,9 +49,9 @@ const DashboardListContainer: React.FunctionComponent<{
   }));
 
   return (
-    <DashboardList
+    <TabList
       items={dashboardConfigData}
-      onDashboardSelected={dashboardId => {
+      onSelected={dashboardId => {
         const activeDashboard = dashboardId
           ? getDashBoardConfig(dashboardId.toString(), dashboardConfig)
           : dashboardConfig[0];

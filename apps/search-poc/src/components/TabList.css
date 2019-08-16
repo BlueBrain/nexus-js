@@ -1,0 +1,42 @@
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  border-radius: 2px;
+  background-color: white;
+  padding: 1em;
+  justify-content: flex-start;
+  text-align: left;
+  max-width: 250px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tab-item > .title {
+  font-size: 1.2em;
+}
+
+.tab-item > .description {
+  white-space: normal;
+  line-height: 1.2em;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.fade {
+  position: relative;
+  overflow: hidden;
+  max-height: 3.6em; /* exactly three lines */
+}
+
+.fade:after {
+  content: '';
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 70%;
+  height: 1.2em;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1) 50%
+  );
+}

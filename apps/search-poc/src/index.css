@@ -75,3 +75,9 @@ body {
 .small-table td {
   padding: 4px 16px !important;
 }
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,14 +1,15 @@
 import * as React from 'react';
 import * as serviceWorker from './serviceWorker';
 import { render } from 'react-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
 import { setUpSession, setToken } from './utils/auth';
 import Header from './containers/Header';
 import DetailsView from './views/Details';
 import MainView from './views/Main';
-import { SETTINGS } from './config';
+import { SETTINGS, getStudioConfig } from './config';
 
 import 'antd/dist/antd.css';
 import './index.css';
@@ -30,7 +31,12 @@ async function main() {
         <Router>
           <Switch>
             <Route path="/" exact>
-              <MainView />
+              <MainView
+                studioOrg={SETTINGS.studioOrg}
+                studioProject={SETTINGS.studioProject}
+                studioViewId={SETTINGS.studioViewId}
+                studioQuery={getStudioConfig(SETTINGS.studioId)}
+              />
             </Route>
             <Route path="/resources" component={DetailsView} />
           </Switch>

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useNexus } from '@bbp/react-nexus';
-import { Spin } from 'antd';
+import { Spin, Alert } from 'antd';
 import { withRouter, History } from 'react-router-dom';
 import ResultTable from '../components/ResultTable';
-import { labelOf } from '../utils';
+import { getLabel } from '../utils';
 
 const ResultTableContainer: React.FunctionComponent<{
   dataQuery: string;
@@ -12,12 +12,13 @@ const ResultTableContainer: React.FunctionComponent<{
   viewId: string;
   history: History;
 }> = props => {
+  console.log(props);
   const { loading, data, error } = useNexus<any>(
     nexus =>
       nexus.View.sparqlQuery(
         props.orgLabel,
         props.projectLabel,
-        props.viewId,
+        encodeURIComponent(props.viewId),
         props.dataQuery,
       ),
     [props.dataQuery],
@@ -29,10 +30,11 @@ const ResultTableContainer: React.FunctionComponent<{
 
   if (error) {
     return (
-      <>
-        <p>Something went wrong</p>
-        <p>{error.message}</p>
-      </>
+      <Alert
+        message="Error loading dashboard"
+        description={`Something went wrong: ${error.message || error}`}
+        type="error"
+      />
     );
   }
   if (loading) {
@@ -77,7 +79,7 @@ const ResultTableContainer: React.FunctionComponent<{
       // return item data
       return {
         ...properties, // our properties
-        id: labelOf(decodeURIComponent(binding.self.value)), // id is used by antd component
+        id: getLabel(decodeURIComponent(binding.self.value)), // id is used by antd component
         self: binding.self.value, // used in order to load details or resource once selected
         key: binding.self.value, // used by react component (unique key)
       };

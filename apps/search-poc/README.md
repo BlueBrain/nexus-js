@@ -1,3 +1,83 @@
+## Example queries:
+
+Emodels collection;
+```sparql
+prefix nxs: <https://neuroshapes.org/>
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix schema: <http://schema.org/>
+
+SELECT ?total ?self ?name ?speciesLabel
+     WITH {
+      SELECT DISTINCT ?self ?name ?speciesLabel {
+        Graph ?g {
+            ?s rdf:type nxs:EModelCollection
+        }
+        Graph ?g {
+          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        }
+        Graph ?g {
+          ?s nxv:self ?self    .
+          OPTIONAL { ?s schema:name ?name }
+          OPTIONAL { ?s nxs:species / rdf:label ?speciesLabel }
+        }
+      }
+     } AS %resultSet
+
+   WHERE {
+        {
+           SELECT (COUNT(?self) AS ?total)
+           WHERE { INCLUDE %resultSet }
+        }
+        UNION
+       {
+           SELECT *
+           WHERE { INCLUDE %resultSet }
+           ORDER BY ?self
+           LIMIT 20
+           OFFSET 0
+        }
+     }
+```
+
+Morphology Collections
+```sparql
+prefix nxs: <https://neuroshapes.org/>
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix schema: <http://schema.org/>
+
+SELECT ?total ?self ?name ?speciesLabel
+     WITH {
+      SELECT DISTINCT ?self ?name ?speciesLabel {
+        Graph ?g {
+            ?s rdf:type nxs:ReconstructedNeuronMorphologyCollection
+        }
+        Graph ?g {
+          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        }
+        Graph ?g {
+          ?s nxv:self ?self    .
+          OPTIONAL { ?s schema:name ?name }
+          OPTIONAL { ?s nxs:species / rdf:label ?speciesLabel }
+        }
+      }
+     } AS %resultSet
+
+   WHERE {
+        {
+           SELECT (COUNT(?self) AS ?total)
+           WHERE { INCLUDE %resultSet }
+        }
+        UNION
+       {
+           SELECT *
+           WHERE { INCLUDE %resultSet }
+           ORDER BY ?self
+           LIMIT 20
+           OFFSET 0
+        }
+     }
+```
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

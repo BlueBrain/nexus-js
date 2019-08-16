@@ -1177,6 +1177,10 @@
   dependencies:
     "@types/jest-diff" "*"
 
+"@types/jsonld@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@types/jsonld/-/jsonld-1.5.0.tgz#cd5cb660dcbeffd391290f820efebab571af65d9"
+
 "@types/node@*":
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.0.tgz#d11813b9c0ff8aaca29f04cbc12817f4c7d656e5"
@@ -2351,7 +2355,6 @@ code-point-at@^1.0.0:
 codecutils@^0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/codecutils/-/codecutils-0.1.3.tgz#16b9233a4532629f2dc3250a3dadcbf5fde7a91f"
-  integrity sha512-RUCY9dJDz0sDEkmmSTC/x1bqDoe/Ezeg5FSZ/gIybu546cHso9gLKXMSD9tXsnDrawiYrha1WOZnHuGups2VAw==
   dependencies:
     traverse "^0.6.6"
 
@@ -5277,6 +5280,15 @@ jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
+jsonld@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/jsonld/-/jsonld-1.6.2.tgz#d81620dccf75fd7bc7501709eeec5da77ecc45e9"
+  dependencies:
+    rdf-canonize "^1.0.2"
+    request "^2.88.0"
+    semver "^5.6.0"
+    xmldom "0.1.19"
+
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -5757,12 +5769,10 @@ moment@2.x, moment@^2.24.0:
 morphologycorejs@^0.1.10:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/morphologycorejs/-/morphologycorejs-0.1.10.tgz#abce3835258e324a2d449639e2bea70f2bc513ed"
-  integrity sha512-0ITVXg69s3xJXmVh7BisHutwmp514NG/aztBphndTwLQusaul3aGeuO3am1tHvUA/CkRW1UawNSBVqFatFHUKQ==
 
 morphoviewer@^0.1.15:
   version "0.1.15"
   resolved "https://registry.yarnpkg.com/morphoviewer/-/morphoviewer-0.1.15.tgz#c816fa91b1eecd36dc6e5d9f35f638c5bec33a6c"
-  integrity sha512-KvcjS1oIjkTRhDNdfpzmwq+M/HY48MgDM109zi11ol/GnPok3rdzII4biKpjPLhngjHzvv8Upo6xb1Ud2tqkLw==
   dependencies:
     codecutils "^0.1.3"
     morphologycorejs "^0.1.10"
@@ -5872,6 +5882,10 @@ node-fetch@^2.6.0:
 node-forge@0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.5.tgz#6c152c345ce11c52f465c2abd957e8639cd674df"
+
+node-forge@^0.8.1:
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.8.5.tgz#57906f07614dc72762c84cef442f427c0e1b86ee"
 
 node-int64@^0.4.0:
   version "0.4.0"
@@ -6305,7 +6319,6 @@ parse-json@^4.0.0:
 parse-wavefront-obj@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/parse-wavefront-obj/-/parse-wavefront-obj-1.0.3.tgz#51be3702e6cd2c387490d95640eb4afbab21724f"
-  integrity sha1-Ub43AubNLDh0kNlWQOtK+6shck8=
 
 parse5@4.0.0:
   version "4.0.0"
@@ -7646,6 +7659,13 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+rdf-canonize@^1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/rdf-canonize/-/rdf-canonize-1.0.3.tgz#71dc56bb808a39d12e3ca17674c15f881cad648a"
+  dependencies:
+    node-forge "^0.8.1"
+    semver "^5.6.0"
+
 react-app-polyfill@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-app-polyfill/-/react-app-polyfill-1.0.1.tgz#809a858e44f9564c7f4205e173076f90048274f1"
@@ -8774,7 +8794,6 @@ svgo@^1.0.0, svgo@^1.2.1:
 swcmorphologyparser@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/swcmorphologyparser/-/swcmorphologyparser-0.1.4.tgz#da50e12fa412efdd9d4de9affaeacbff20f6d27a"
-  integrity sha512-20aMhHNJZ4FyKLxf2np9F4tqcukdRPcPi954pJQrAUt8lsvHzj/mw/BQX+xZQKXjghcu7bQmIk9GjJtgxj6OMQ==
   dependencies:
     morphologycorejs "^0.1.10"
 
@@ -8844,7 +8863,6 @@ text-table@0.2.0, text-table@^0.2.0:
 three@^0.96.0:
   version "0.96.0"
   resolved "https://registry.yarnpkg.com/three/-/three-0.96.0.tgz#6f48bb9e321506906ae4708bda69b0ffa808ee7f"
-  integrity sha512-tS+A5kelQgBblElc/E1G5zR3m6wNjbqmrf6OAjijuNJM7yoYQjOktPoa+Lglx73OTiTOJ3+Ff+pgWdOFt7cOhQ==
 
 throat@^4.0.0:
   version "4.1.0"
@@ -8954,7 +8972,6 @@ tr46@^1.0.1:
 traverse@^0.6.6:
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/traverse/-/traverse-0.6.6.tgz#cbdf560fd7b9af632502fed40f918c157ea97137"
-  integrity sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc=
 
 trim-right@^1.0.1:
   version "1.0.1"
@@ -9668,6 +9685,10 @@ xml-name-validator@^3.0.0:
 xmlchars@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-1.3.1.tgz#1dda035f833dbb4f86a0c28eaa6ca769214793cf"
+
+xmldom@0.1.19:
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.19.tgz#631fc07776efd84118bf25171b37ed4d075a0abc"
 
 xregexp@4.0.0:
   version "4.0.0"

@@ -23,9 +23,7 @@ export const parseProjectUrl = (projectUrl: string) => {
 export const getOrgAndProjectLabel = (
   selfUrl: string,
 ): { org: string; project: string } | undefined => {
-  const matches = selfUrl.match(
-    /^.*\/v[0-9]\/(?:\w+)\/([^\/]+)\/([^\/?#]+).*$/,
-  );
+  const matches = selfUrl.match(/^.*\/v[0-9]\/(?:\w+)\/([^/]+)\/([^/?#]+).*$/);
   if (!matches || matches.length !== 3) {
     return;
   }

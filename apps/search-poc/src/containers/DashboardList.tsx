@@ -36,12 +36,14 @@ const DashboardListContainer: React.FunctionComponent<{
   ) => void;
   history: History;
 }> = ({ dashboardConfig, onDashboardSelected, history }) => {
+  const queryStringDashboardId =
+    queryString.parse(history.location.search).dashboard || '';
   const activeDashboardId = getDashBoardConfig(
-    queryString.parse(history.location.search).dashboard.toString(),
+    queryStringDashboardId.toString(),
     dashboardConfig,
   ).dashboard['@id'];
 
-  // format dashboard data for dashboard list component
+  // format dashboard data for TabList component
   const dashboardConfigData = dashboardConfig.map(config => ({
     id: config.dashboard['@id'],
     label: config.dashboard.label,

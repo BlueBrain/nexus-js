@@ -7,6 +7,7 @@ import jsonld from 'jsonld';
 import { SparqlQueryResults, makeNQuad } from '../utils/sparql';
 import { studioFrame } from '../config';
 import { getOrgAndProjectLabel } from '../utils';
+import WorkspaceList from '../containers/WorkspaceList';
 
 const MainView: React.FunctionComponent<{
   studioOrg: string;
@@ -35,15 +36,16 @@ const MainView: React.FunctionComponent<{
         .then(frame => frame['@graph'][0])
         .then(json => ({
           ...json,
-          workspaces: json.workspaces.map(w =>
-            w.dashboards.map(d => ({
+          workspaces: json.workspaces.map(w => ({
+            ...w,
+            dashboards: w.dashboards.map(d => ({
               ...d,
               view: {
                 ...d.view,
                 ...getOrgAndProjectLabel(d.view.project['@id']),
               },
             })),
-          ),
+          })),
         })),
     [props.studioQuery],
   );
@@ -65,17 +67,23 @@ const MainView: React.FunctionComponent<{
       />
     );
   }
-
+  console.log(studioData);
   return (
-    <>
+    <div className="main-view">
+      <WorkspaceList
+        workspaceConfig={studioData.workspaces}
+        onWorkspaceSelected={workspaceId => {
+          console.log('selected', workspaceId);
+        }}
+      />
       <Dashboards
-        dashboardConfig={studioData.workspaces[0]}
+        dashboardConfig={studioData.workspaces[0].dashboards}
         onDashboardSelected={(orgLabel, projectLabel, viewId, dataQuery) => {
           setData({ orgLabel, projectLabel, viewId, dataQuery });
         }}
       />
       {data && <ResultTable {...data} />}
-    </>
+    </div>
   );
 };
 

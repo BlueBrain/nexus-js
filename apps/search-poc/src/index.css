@@ -34,7 +34,7 @@ body {
 }
 
 .ResultTable {
-  padding: 1em;
+  padding: 0 1em;
   width: 100%;
 }
 
@@ -80,4 +80,9 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.main-view {
+  display: flex;
+  width: 100%;
 }

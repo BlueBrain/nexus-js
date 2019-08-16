@@ -44,16 +44,19 @@ export function getCollectionReconstructedCellsQuery(resourceId) {
 export const getStudioConfig = (studioId: string) => `
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix studio: <https://bluebrainnexus.io/studio/vocabulary/>
+prefix schema: <http://schema.org/>
 
 CONSTRUCT {  
 	<${studioId}> rdfs:label ?studioLabel ;
                 studio:workspaces ?workspaceId .
-  	?workspaceId rdfs:label ?workspaceLabel ;
+    ?workspaceId rdfs:label ?workspaceLabel ;
+                 schema:description ?workspaceDescription ;
   	             studio:dashboards ?dashboards .
     ?dashboards studio:view ?viewId ;
                 studio:dashboard ?dashboardId .
     ?dashboardId rdfs:label ?dashboardLabel ;
-                 studio:dataQuery ?dashboardQuery .
+                 studio:dataQuery ?dashboardQuery ;
+                 schema:description ?dashboardDescription .
     ?viewId studio:project ?viewProject
 } WHERE {
   <${studioId}>   rdfs:label ?studioLabel ;
@@ -64,7 +67,9 @@ CONSTRUCT {
               studio:view ?viewId .
   ?dashboardId rdfs:label ?dashboardLabel ;
                studio:dataQuery ?dashboardQuery .
-  ?viewId nxv:project ?viewProject
+  ?viewId nxv:project ?viewProject .
+  OPTIONAL { ?workspaceId schema:description ?workspaceDescription } .
+  OPTIONAL { ?dashboardId schema:description ?dashboardDescription } .
 }`;
 
 export const studioContext = {

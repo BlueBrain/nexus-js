@@ -12,7 +12,6 @@ const ResultTableContainer: React.FunctionComponent<{
   viewId: string;
   history: History;
 }> = props => {
-  console.log(props);
   const { loading, data, error } = useNexus<any>(
     nexus =>
       nexus.View.sparqlQuery(

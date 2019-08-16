@@ -48,7 +48,6 @@ const DashboardListContainer: React.FunctionComponent<{
     description: config.dashboard.description,
   }));
 
-  console.log(dashboardConfig);
   return (
     <DashboardList
       items={dashboardConfigData}

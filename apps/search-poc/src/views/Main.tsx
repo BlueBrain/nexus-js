@@ -66,8 +66,6 @@ const MainView: React.FunctionComponent<{
     );
   }
 
-  console.log(data);
-
   return (
     <>
       <Dashboards

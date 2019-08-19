@@ -14,12 +14,6 @@ const ResultsTable: React.FunctionComponent<{
   onRowClick?: (rowData: any, index: number) => void;
 }> = ({ headerProperties, items, total, onRowClick = () => {} }) => {
   const columnList = [
-    {
-      title: 'Identifier',
-      dataIndex: 'id',
-      className: 'result-id',
-      render: id => <span>{id}</span>,
-    },
     ...(headerProperties &&
       headerProperties.map(({ title, dataIndex }) => ({
         title,

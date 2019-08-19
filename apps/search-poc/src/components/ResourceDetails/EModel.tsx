@@ -8,7 +8,7 @@ import { MINDSResource, EModelResource } from '../../containers/ResourceDetails/
 
 
 const { Panel } = Collapse;
-const protocolR = /^(?:_\.)(.*)\.(\w+)\.(\w+)\.(\w+)$/;
+const protocolR = /^(?:_?\.)(.*)\.(\w+)\.(\w+)\.(\w+)$/;
 
 const paramColumns = [{
   title: 'Parameter',

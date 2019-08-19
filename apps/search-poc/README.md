@@ -99,9 +99,9 @@ prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix schema: <http://schema.org/>
 
-SELECT ?total ?self ?name ?speciesLabel
+SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLabel ?project ?createdAt
      WITH {
-      SELECT DISTINCT ?self ?name ?speciesLabel {
+      SELECT DISTINCT ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLabel ?project ?createdAt{
         Graph ?g {
             ?s rdf:type nxs:detailedcircuit
         }
@@ -112,6 +112,11 @@ SELECT ?total ?self ?name ?speciesLabel
           ?s nxv:self ?self    .
           OPTIONAL { ?s schema:name ?name }
           OPTIONAL { ?s nxs:species / rdfs:label ?speciesLabel }
+          OPTIONAL { ?s nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }
+		      OPTIONAL { ?s schema:description ?description  }
+          OPTIONAL { ?s nxs:strain / rdfs:label ?strainLabel }
+          OPTIONAL { ?s nxv:project ?project }
+          OPTIONAL { ?s nxv:createdAt ?createdAt }
         }
       }
      } AS %resultSet
@@ -139,9 +144,9 @@ prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix schema: <http://schema.org/>
 
-SELECT ?total ?self ?name ?speciesLabel
+SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLabel ?project ?createdAt
      WITH {
-      SELECT DISTINCT ?self ?name ?speciesLabel {
+      SELECT DISTINCT ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLabel ?project ?createdAt{
         Graph ?g {
             ?s rdf:type nxs:simulation_campaign
         }
@@ -152,6 +157,11 @@ SELECT ?total ?self ?name ?speciesLabel
           ?s nxv:self ?self    .
           OPTIONAL { ?s schema:name ?name }
           OPTIONAL { ?s nxs:species / rdfs:label ?speciesLabel }
+          OPTIONAL { ?s nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }
+		      OPTIONAL { ?s schema:description ?description  }
+          OPTIONAL { ?s nxs:strain / rdfs:label ?strainLabel }
+          OPTIONAL { ?s nxv:project ?project }
+          OPTIONAL { ?s nxv:createdAt ?createdAt }
         }
       }
      } AS %resultSet
@@ -179,9 +189,9 @@ prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix schema: <http://schema.org/>
 
-SELECT ?total ?self ?name ?speciesLabel
+SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLabel ?project ?createdAt
      WITH {
-      SELECT DISTINCT ?self ?name ?speciesLabel {
+      SELECT DISTINCT ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLabel ?project ?createdAt{
         Graph ?g {
             ?s rdf:type nxs:ModelCellCollection
         }
@@ -189,9 +199,14 @@ SELECT ?total ?self ?name ?speciesLabel
           ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
         }
         Graph ?g {
-          ?s nxv:self ?self .
+          ?s nxv:self ?self    .
           OPTIONAL { ?s schema:name ?name }
           OPTIONAL { ?s nxs:species / rdfs:label ?speciesLabel }
+          OPTIONAL { ?s nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }
+		      OPTIONAL { ?s schema:description ?description  }
+          OPTIONAL { ?s nxs:strain / rdfs:label ?strainLabel }
+          OPTIONAL { ?s nxv:project ?project }
+          OPTIONAL { ?s nxv:createdAt ?createdAt }
         }
       }
      } AS %resultSet

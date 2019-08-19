@@ -36,8 +36,11 @@ const DashboardListContainer: React.FunctionComponent<{
   ) => void;
   history: History;
 }> = ({ dashboardConfig, onDashboardSelected, history }) => {
+  const dashboardIdFromQueryString =
+    queryString.parse(history.location.search).dashboard || '';
+
   const activeDashboardId = getDashBoardConfig(
-    queryString.parse(history.location.search).dashboard.toString(),
+    dashboardIdFromQueryString.toString(),
     dashboardConfig,
   ).dashboard['@id'];
 

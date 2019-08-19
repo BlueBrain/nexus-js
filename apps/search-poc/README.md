@@ -1,6 +1,9 @@
 ## Example queries:
 
-Emodels collection;
+### Thalamus Project
+
+#### Emodels collection
+
 ```sparql
 prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
@@ -39,7 +42,8 @@ SELECT ?total ?self ?name ?speciesLabel
      }
 ```
 
-Morphology Collections
+#### Morphology Collections
+
 ```sparql
 prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
@@ -58,6 +62,126 @@ SELECT ?total ?self ?name ?speciesLabel
           ?s nxv:self ?self    .
           OPTIONAL { ?s schema:name ?name }
           OPTIONAL { ?s nxs:species / rdf:label ?speciesLabel }
+        }
+      }
+     } AS %resultSet
+
+   WHERE {
+        {
+           SELECT (COUNT(?self) AS ?total)
+           WHERE { INCLUDE %resultSet }
+        }
+        UNION
+       {
+           SELECT *
+           WHERE { INCLUDE %resultSet }
+           ORDER BY ?self
+           LIMIT 20
+           OFFSET 0
+        }
+     }
+```
+
+#### Circuits
+
+```sparql
+prefix nxs: <https://neuroshapes.org/>
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix schema: <http://schema.org/>
+
+SELECT ?total ?self ?name ?speciesLabel
+     WITH {
+      SELECT DISTINCT ?self ?name ?speciesLabel {
+        Graph ?g {
+            ?s rdf:type nxs:detailedcircuit
+        }
+        Graph ?g {
+          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        }
+        Graph ?g {
+          ?s nxv:self ?self    .
+          OPTIONAL { ?s schema:name ?name }
+          OPTIONAL { ?s nxs:species / rdfs:label ?speciesLabel }
+        }
+      }
+     } AS %resultSet
+
+   WHERE {
+        {
+           SELECT (COUNT(?self) AS ?total)
+           WHERE { INCLUDE %resultSet }
+        }
+        UNION
+       {
+           SELECT *
+           WHERE { INCLUDE %resultSet }
+           ORDER BY ?self
+           LIMIT 20
+           OFFSET 0
+        }
+     }
+```
+
+#### Simulations
+
+```sparql
+prefix nxs: <https://neuroshapes.org/>
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix schema: <http://schema.org/>
+
+SELECT ?total ?self ?name ?speciesLabel
+     WITH {
+      SELECT DISTINCT ?self ?name ?speciesLabel {
+        Graph ?g {
+            ?s rdf:type nxs:simulation_campaign
+        }
+        Graph ?g {
+          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        }
+        Graph ?g {
+          ?s nxv:self ?self    .
+          OPTIONAL { ?s schema:name ?name }
+          OPTIONAL { ?s nxs:species / rdfs:label ?speciesLabel }
+        }
+      }
+     } AS %resultSet
+
+   WHERE {
+        {
+           SELECT (COUNT(?self) AS ?total)
+           WHERE { INCLUDE %resultSet }
+        }
+        UNION
+       {
+           SELECT *
+           WHERE { INCLUDE %resultSet }
+           ORDER BY ?self
+           LIMIT 20
+           OFFSET 0
+        }
+     }
+```
+
+#### Model Cell Collection
+
+```sparql
+prefix nxs: <https://neuroshapes.org/>
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix schema: <http://schema.org/>
+
+SELECT ?total ?self ?name ?speciesLabel
+     WITH {
+      SELECT DISTINCT ?self ?name ?speciesLabel {
+        Graph ?g {
+            ?s rdf:type nxs:ModelCellCollection
+        }
+        Graph ?g {
+          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        }
+        Graph ?g {
+          ?s nxv:self ?self .
+          OPTIONAL { ?s schema:name ?name }
+          OPTIONAL { ?s nxs:species / rdfs:label ?speciesLabel }
         }
       }
      } AS %resultSet

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Table } from 'antd';
+import './ResultTable.css';
 
 const ResultsTable: React.FunctionComponent<{
   headerProperties?: {
@@ -18,13 +19,13 @@ const ResultsTable: React.FunctionComponent<{
       headerProperties.map(({ title, dataIndex }) => ({
         title,
         dataIndex,
-        className: `result-${dataIndex}`,
+        className: `result-column ${dataIndex}`,
         render: value => <span>{value}</span>,
       }))),
   ];
 
   return (
-    <div className="ResultTable">
+    <div className="result-table">
       <Table
         onRow={(data, index) => ({
           onClick: event => onRowClick(data, index),

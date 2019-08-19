@@ -1,6 +1,15 @@
-import { getLabel, getOrgAndProjectLabel } from '../index';
+import {
+  getLabel,
+  getOrgAndProjectLabel,
+  camelCaseToLabelString,
+} from '../index';
 
 describe('utils', () => {
+  describe('camelCaseToLabelString', () => {
+    it('should convert camel cased string to capitalized words', () => {
+      expect(camelCaseToLabelString('camelCase')).toEqual('Camel Case');
+    });
+  });
   describe('getLabel()', () => {
     it('should return a string representing the name', () => {
       expect(

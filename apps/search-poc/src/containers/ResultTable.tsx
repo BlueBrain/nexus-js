@@ -3,7 +3,7 @@ import { useNexus } from '@bbp/react-nexus';
 import { Spin, Alert } from 'antd';
 import { withRouter, History } from 'react-router-dom';
 import ResultTable from '../components/ResultTable';
-import { getLabel } from '../utils';
+import { getLabel, camelCaseToLabelString } from '../utils';
 
 const ResultTableContainer: React.FunctionComponent<{
   dataQuery: string;
@@ -56,7 +56,7 @@ const ResultTableContainer: React.FunctionComponent<{
         headVar => !(headVar === 'total' || headVar === 'self'),
       )
       .map(headVar => ({
-        title: headVar, // TODO: get the matching title from somewhere?
+        title: camelCaseToLabelString(headVar), // TODO: get the matching title from somewhere?
         dataIndex: headVar,
       }));
 

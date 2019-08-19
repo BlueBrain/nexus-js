@@ -20,6 +20,39 @@ const paramColumns = [{
   key: 'val',
 }];
 
+
+/**
+ * Parses fitness raw parameter name into:
+ * * protocol (formatted by replacing underscores with spaces)
+ * * recTarget
+ * * recType
+ * * param
+ *
+ * @param rawParamName [string] Fitness raw parameter name
+ *
+ * @example
+ * parseFitnessRawParamName('_.APWaveform_300.soma.v.AHP_depth_abs');
+ * {
+ *   protocol: 'APWaveform_300',
+ *   recTarget: 'soma',
+ *   recType: 'v',
+ *   param: 'AHP_depth_abs'
+ * }
+ */
+export function parseFitnessRawParamName(rawParamName: string): {
+  protocol: string;
+  recTarget: string;
+  recType: string;
+  param: string;
+} {
+  const [, rawProtocolName, recTarget, recType, param] = rawParamName
+    .match(protocolR) as string[];
+
+  const protocol = rawProtocolName.replace(/_/g, ' ');
+
+  return { protocol, recTarget, recType, param };
+}
+
 function createUniqColumnRenderer(
   dataSource: object[],
   dataKey: string,
@@ -40,10 +73,13 @@ function createUniqColumnRenderer(
 };
 
 function createFitnessDataSourceEntry([paramRaw, val]) {
-  const [, protocolRaw, recTarget, recType, param ] = paramRaw
-    .match(protocolR) as string[];
+  const {
+    protocol,
+    recTarget,
+    recType,
+    param
+  } = parseFitnessRawParamName(paramRaw);
 
-  const protocol = protocolRaw.replace(/_/g, ' ');
   const key = paramRaw;
 
   return { key, protocol, recTarget, recType, param, val };

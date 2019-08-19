@@ -21,8 +21,10 @@ const WorkspaceListContainer: React.FunctionComponent<{
   onWorkspaceSelected: (workspaceId: string) => void;
   history: History;
 }> = ({ workspaceConfig, onWorkspaceSelected, history }) => {
+  // get active id from query string on mount (if any)
   const queryStringWorkspaceId =
     queryString.parse(history.location.search).workspace || '';
+  // find out if we have a matching workspace with that id
   const activeId = getWorkspaceConfig(
     queryStringWorkspaceId.toString(),
     workspaceConfig,
@@ -35,7 +37,11 @@ const WorkspaceListContainer: React.FunctionComponent<{
     description: config.description,
   }));
 
-  console.log(workspaceConfig);
+  const [id, setId] = React.useState<string>(activeId);
+  React.useEffect(() => {
+    onWorkspaceSelected(id);
+  }, [id]);
+
   return (
     <TabList
       items={configData}
@@ -43,8 +49,13 @@ const WorkspaceListContainer: React.FunctionComponent<{
         const activeWorkspace = workspaceId
           ? getWorkspaceConfig(workspaceId.toString(), workspaceConfig)
           : workspaceConfig[0];
-        onWorkspaceSelected(activeWorkspace['@id']);
-        history.push({ search: `?workspace=${workspaceId}` });
+        setId(activeWorkspace['@id']);
+        history.push({
+          search: queryString.stringify({
+            ...queryString.parse(history.location.search),
+            workspace: workspaceId,
+          }),
+        });
       }}
       defaultActiveId={activeId}
     />

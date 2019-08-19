@@ -38,10 +38,6 @@ const DashboardListContainer: React.FunctionComponent<{
 }> = ({ dashboardConfig, onDashboardSelected, history }) => {
   const queryStringDashboardId =
     queryString.parse(history.location.search).dashboard || '';
-  const activeDashboardId = getDashBoardConfig(
-    queryStringDashboardId.toString(),
-    dashboardConfig,
-  ).dashboard['@id'];
 
   // format dashboard data for TabList component
   const dashboardConfigData = dashboardConfig.map(config => ({
@@ -50,6 +46,24 @@ const DashboardListContainer: React.FunctionComponent<{
     description: config.dashboard.description,
   }));
 
+  const [activeDashboard, setActiveDashboard] = React.useState<DashboardConfig>(
+    getDashBoardConfig(queryStringDashboardId.toString(), dashboardConfig),
+  );
+  console.log('dashy', activeDashboard, dashboardConfig);
+  React.useEffect(() => {
+    const db = getDashBoardConfig(
+      queryStringDashboardId.toString(),
+      dashboardConfig,
+    );
+    onDashboardSelected(
+      db.view.org,
+      db.view.project,
+      db.view['@id'],
+      db.dashboard.dataQuery,
+    );
+    setActiveDashboard(db);
+  }, [dashboardConfig, queryStringDashboardId]); // watch any config changes
+
   return (
     <TabList
       items={dashboardConfigData}
@@ -57,15 +71,16 @@ const DashboardListContainer: React.FunctionComponent<{
         const activeDashboard = dashboardId
           ? getDashBoardConfig(dashboardId.toString(), dashboardConfig)
           : dashboardConfig[0];
-        onDashboardSelected(
-          activeDashboard.view.org,
-          activeDashboard.view.project,
-          activeDashboard.view['@id'],
-          activeDashboard.dashboard.dataQuery,
-        );
-        history.push({ search: `?dashboard=${dashboardId}` });
+        console.log('on select', activeDashboard);
+        setActiveDashboard(activeDashboard);
+        history.push({
+          search: queryString.stringify({
+            ...queryString.parse(history.location.search),
+            dashboard: dashboardId,
+          }),
+        });
       }}
-      defaultActiveId={activeDashboardId}
+      defaultActiveId={activeDashboard.dashboard['@id']}
     />
   );
 };

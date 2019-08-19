@@ -4,15 +4,16 @@ import { Spin } from 'antd';
 import { Resource } from '@bbp/nexus-sdk';
 
 import useMorphology from '../../hooks/morph';
+import { parseProjectUrl } from '../../utils'
 import { MINDSResource } from './types';
-import ReconstructedNeuronMorphologyDetails from '../../components/ResourceDetails/ReconstructedNeuronMorphologyDetails';
+import MorphologyViewer from '../../components/ResourceDetails/MorphologyViewer';
 
 
-const ReconstructedNeuronMorphologyDetailsContainer: React.FunctionComponent<{
+const MorpologyViewerContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource;
 }> = props => {
   const id = props.resource.distribution.contentUrl;
-  const [, org, proj] = props.resource._project.match(/projects\/([\w-]+)\/([\w-]+)\/?$/) as string[];
+  const [org, proj] = parseProjectUrl(props.resource._project);
 
   const { morphology, loading, error } = useMorphology({ org, proj, id });
 
@@ -24,8 +25,8 @@ const ReconstructedNeuronMorphologyDetailsContainer: React.FunctionComponent<{
     return <p>{error.message}</p>;
   }
 
-  return <ReconstructedNeuronMorphologyDetails morphology={morphology}/>;
+  return <MorphologyViewer morphology={morphology}/>;
 };
 
 
-export default ReconstructedNeuronMorphologyDetailsContainer;
+export default MorpologyViewerContainer;

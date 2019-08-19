@@ -80,6 +80,7 @@ const MainView: React.FunctionComponent<{
       />
       {activeWorkspaceId && (
         <Dashboards
+          workspaceId={activeWorkspaceId}
           dashboardConfig={
             (
               studioData.workspaces.find(w => w['@id'] === activeWorkspaceId) ||

@@ -5,9 +5,14 @@ import TabList from '../components/TabList';
 
 function getDashBoardConfig(
   id: string,
+  workspaceId: string,
   configs: DashboardConfig[],
 ): DashboardConfig {
-  return configs.find(config => config.dashboard['@id'] === id) || configs[0];
+  return (
+    configs.find(
+      config => id === config.dashboard['@id'] + '_' + workspaceId,
+    ) || configs[0]
+  );
 }
 
 type DashboardConfig = { dashboard: DashboardContainer; view: View };
@@ -27,6 +32,7 @@ type View = {
 };
 
 const DashboardListContainer: React.FunctionComponent<{
+  workspaceId: string;
   dashboardConfig: DashboardConfig[];
   onDashboardSelected: (
     orgLabel: string,
@@ -35,44 +41,50 @@ const DashboardListContainer: React.FunctionComponent<{
     dataQuery: string,
   ) => void;
   history: History;
-}> = ({ dashboardConfig, onDashboardSelected, history }) => {
+}> = ({ workspaceId, dashboardConfig, onDashboardSelected, history }) => {
+  // get active id from query string on mount (if any)
   const queryStringDashboardId =
     queryString.parse(history.location.search).dashboard || '';
 
+  // find out if we have a matching dashboard config with that id
+  const activeDb = getDashBoardConfig(
+    queryStringDashboardId.toString(),
+    workspaceId,
+    dashboardConfig,
+  );
+
   // format dashboard data for TabList component
   const dashboardConfigData = dashboardConfig.map(config => ({
-    id: config.dashboard['@id'],
+    id: config.dashboard['@id'] + '_' + workspaceId,
     label: config.dashboard.label,
     description: config.dashboard.description,
   }));
 
-  const [activeDashboard, setActiveDashboard] = React.useState<DashboardConfig>(
-    getDashBoardConfig(queryStringDashboardId.toString(), dashboardConfig),
-  );
-  console.log('dashy', activeDashboard, dashboardConfig);
+  // trigger parent on mount with the active id
   React.useEffect(() => {
-    const db = getDashBoardConfig(
-      queryStringDashboardId.toString(),
-      dashboardConfig,
-    );
     onDashboardSelected(
-      db.view.org,
-      db.view.project,
-      db.view['@id'],
-      db.dashboard.dataQuery,
+      activeDb.view.org,
+      activeDb.view.project,
+      activeDb.view['@id'],
+      activeDb.dashboard.dataQuery,
     );
-    setActiveDashboard(db);
-  }, [dashboardConfig, queryStringDashboardId]); // watch any config changes
+  }, [dashboardConfig]); // watch config and trigger callback parent when it changes
 
   return (
     <TabList
       items={dashboardConfigData}
       onSelected={dashboardId => {
-        const activeDashboard = dashboardId
-          ? getDashBoardConfig(dashboardId.toString(), dashboardConfig)
-          : dashboardConfig[0];
-        console.log('on select', activeDashboard);
-        setActiveDashboard(activeDashboard);
+        const activeDashboard = getDashBoardConfig(
+          dashboardId,
+          workspaceId,
+          dashboardConfig,
+        );
+        onDashboardSelected(
+          activeDashboard.view.org,
+          activeDashboard.view.project,
+          activeDashboard.view['@id'],
+          activeDashboard.dashboard.dataQuery,
+        );
         history.push({
           search: queryString.stringify({
             ...queryString.parse(history.location.search),
@@ -80,7 +92,7 @@ const DashboardListContainer: React.FunctionComponent<{
           }),
         });
       }}
-      defaultActiveId={activeDashboard.dashboard['@id']}
+      defaultActiveId={activeDb.dashboard['@id'] + '_' + workspaceId}
     />
   );
 };

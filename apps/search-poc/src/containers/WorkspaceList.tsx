@@ -24,6 +24,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
   // get active id from query string on mount (if any)
   const queryStringWorkspaceId =
     queryString.parse(history.location.search).workspace || '';
+
   // find out if we have a matching workspace with that id
   const activeId = getWorkspaceConfig(
     queryStringWorkspaceId.toString(),
@@ -37,10 +38,10 @@ const WorkspaceListContainer: React.FunctionComponent<{
     description: config.description,
   }));
 
-  const [id, setId] = React.useState<string>(activeId);
+  // trigger parent on mount with the active id
   React.useEffect(() => {
-    onWorkspaceSelected(id);
-  }, [id]);
+    onWorkspaceSelected(activeId);
+  }, []);
 
   return (
     <TabList
@@ -49,13 +50,16 @@ const WorkspaceListContainer: React.FunctionComponent<{
         const activeWorkspace = workspaceId
           ? getWorkspaceConfig(workspaceId.toString(), workspaceConfig)
           : workspaceConfig[0];
-        setId(activeWorkspace['@id']);
+        // we need to remove the active dashboard as we are changing workspaces
+        const keys = queryString.parse(history.location.search);
+        delete keys.dashboard;
         history.push({
           search: queryString.stringify({
-            ...queryString.parse(history.location.search),
+            ...keys,
             workspace: workspaceId,
           }),
         });
+        onWorkspaceSelected(activeWorkspace['@id']);
       }}
       defaultActiveId={activeId}
     />

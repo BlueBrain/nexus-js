@@ -1,32 +1,33 @@
-
 import React from 'react';
 import { Table } from 'antd';
 
+export type Emodel = {
+  id: string;
+  self: string;
+  name: string;
+  description: string;
+};
 
-const emodelTableColumns = [{
-  title: 'Name',
-  render: (text, emodel) =>
-    <a
-      key={emodel.id}
-      href={`/resources?self=${emodel.self}`}
-    >
-      {emodel.name}
-    </a>,
-  key: 'name',
-}, {
-  title: 'Description',
-  dataIndex: 'description',
-  key: 'description',
-}];
+const emodelTableColumns = [
+  {
+    title: 'Name',
+    render: (_: any, emodel: Emodel) => (
+      <a key={emodel.id} href={`/resources?self=${emodel.self}`}>
+        {emodel.name}
+      </a>
+    ),
+    key: 'name',
+  },
+  {
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
+  },
+];
 
 const EModelCollectionDetails: React.FunctionComponent<{
   resource: {
-    emodels: {
-      id: string;
-      self: string;
-      name: string;
-      description: string;
-    }[]
+    emodels: Emodel[];
   };
 }> = props => {
   return (
@@ -44,6 +45,5 @@ const EModelCollectionDetails: React.FunctionComponent<{
     </div>
   );
 };
-
 
 export default EModelCollectionDetails;

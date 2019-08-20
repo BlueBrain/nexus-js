@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "lib",
@@ -10,7 +9,13 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node"
   },
   "files": ["src/react-app-env.d.ts"],
   "include": ["src/**/*.ts"],

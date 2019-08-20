@@ -32,7 +32,7 @@ export const mapSparqlResults = (
   if (!queryResults || !queryResults.results.bindings) return [];
 
   return queryResults.results.bindings.map(binding => {
-    const reduceFn = (acc, mapping) => ({
+    const reduceFn = (acc: {}, mapping: SparqlMapping) => ({
       ...acc,
       ...{
         [mapping.target]: get(
@@ -81,18 +81,24 @@ export const mapEmodelCollQueryResults = (queryResults: SparqlQueryResults) => {
  * @param response A Sparql Construct response
  */
 export const makeNQuad = (response: SparqlQueryResults): string => {
-  const processors = {
-    uri: (value: string) => `<${value}>`,
-    literal: (value: string) => `"${value.replace(/\r?\n|\r/g, '')}"`, // remove line breaks
-    bnode: (value: string) => `_:${value}`,
+  const processor = ({ type, value }: { type: string; value: string }) => {
+    switch (type) {
+      case 'uri':
+        return `<${value}>`;
+      case 'bnode':
+        return `_:${value}`;
+      // case literal
+      default:
+        return `"${value.replace(/\r?\n|\r/g, '')}"`; // remove line breaks
+    }
   };
-  const triples = response.results.bindings.map(binding => {
-    return `${processors[binding.subject.type](
-      binding.subject.value,
-    )} ${processors[binding.predicate.type](
-      binding.predicate.value,
-    )} ${processors[binding.object.type](binding.object.value)}`;
+
+  const triples = response.results.bindings.map((binding: Binding) => {
+    return `${processor(binding.subject)} ${processor(
+      binding.predicate,
+    )} ${processor(binding.object)}`;
   });
+
   return triples.join(' . \n') + ' .';
 };
 

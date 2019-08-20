@@ -15,7 +15,7 @@ export const SETTINGS = {
 export const MORPH_CONVERTER_URL =
   'http://morph-service.ocp.bbp.epfl.ch/converter/api';
 
-export function getCollectionEModelsQuery(resourceId) {
+export function getCollectionEModelsQuery(resourceId: string) {
   return `
     prefix nxv: <https://neuroshapes.org/>
     prefix schema: <http://schema.org/>
@@ -28,7 +28,7 @@ export function getCollectionEModelsQuery(resourceId) {
     } LIMIT 100`;
 }
 
-export function getCollectionReconstructedCellsQuery(resourceId) {
+export function getCollectionReconstructedCellsQuery(resourceId: string) {
   return `
   prefix nxv: <https://neuroshapes.org/>
   prefix schema: <http://schema.org/>

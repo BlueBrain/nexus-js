@@ -1181,6 +1181,10 @@
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@types/jsonld/-/jsonld-1.5.0.tgz#cd5cb660dcbeffd391290f820efebab571af65d9"
 
+"@types/lodash@^4.14.137":
+  version "4.14.137"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.137.tgz#8a4804937dc6462274ffcc088df8f14fc1b368e2"
+
 "@types/node@*":
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.0.tgz#d11813b9c0ff8aaca29f04cbc12817f4c7d656e5"

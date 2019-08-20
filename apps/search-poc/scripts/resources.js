@@ -1,4 +1,14 @@
-const emodelDataQuery = `
+export type Filters = {
+  brainRegion?: string,
+  [filterKey: string]: string,
+};
+
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const emodelDataQuery = filters => `
 prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix schema: <http://schema.org/>
@@ -9,8 +19,12 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
         Graph ?g {
             ?s rdf:type nxs:EModelCollection
         }
-        Graph ?g {
-          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        ${
+          filters.brainRegion
+            ? `Graph ?g {
+            ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
+          }`
+            : ''
         }
         Graph ?g {
           ?s nxv:self ?self    .
@@ -41,7 +55,12 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
      }
 `;
 
-const morphologyDataQuery = `
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const morphologyDataQuery = filters => `
 prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix schema: <http://schema.org/>
@@ -53,8 +72,12 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
         Graph ?g {
             ?s rdf:type nxs:ReconstructedNeuronMorphologyCollection
         }
-        Graph ?g {
-          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        ${
+          filters.brainRegion
+            ? `Graph ?g {
+            ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
+          }`
+            : ''
         }
           ?s nxv:self ?self    .
           OPTIONAL { ?s schema:name ?name }
@@ -84,7 +107,12 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
      }
 `;
 
-const circuitsDataQuery = `
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const circuitsDataQuery = filters => `
 prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix schema: <http://schema.org/>
@@ -95,8 +123,12 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
         Graph ?g {
             ?s rdf:type nxs:detailedcircuit
         }
-        Graph ?g {
-          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        ${
+          filters.brainRegion
+            ? `Graph ?g {
+            ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
+          }`
+            : ''
         }
         Graph ?g {
           ?s nxv:self ?self    .
@@ -127,7 +159,12 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
      }
 `;
 
-const simulationsDataQuery = `
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const simulationsDataQuery = filters => `
 prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix schema: <http://schema.org/>
@@ -138,8 +175,12 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
         Graph ?g {
             ?s rdf:type nxs:simulation_campaign
         }
-        Graph ?g {
-          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        ${
+          filters.brainRegion
+            ? `Graph ?g {
+            ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
+          }`
+            : ''
         }
         Graph ?g {
           ?s nxv:self ?self    .
@@ -170,7 +211,12 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
      }
 `;
 
-const modelCellCollectionsDataQuery = `
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const modelCellCollectionsDataQuery = filters => `
 prefix nxs: <https://neuroshapes.org/>
 prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix schema: <http://schema.org/>
@@ -181,8 +227,12 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
         Graph ?g {
             ?s rdf:type nxs:ModelCellCollection
         }
-        Graph ?g {
-          ?s nxs:brainLocation / nxs:brainRegion <http://purl.obolibrary.org/obo/UBERON_0004703>
+        ${
+          filters.brainRegion
+            ? `Graph ?g {
+            ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
+          }`
+            : ''
         }
         Graph ?g {
           ?s nxv:self ?self    .
@@ -286,45 +336,70 @@ const studioContext = {
   '@id': 'https://bluebrainnexus.io/studio/context',
 };
 
-const emodelsCollectionDashboard = {
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const emodelsCollectionDashboard = filters => ({
   '@context': 'https://bluebrainnexus.io/studio/context',
   '@type': 'StudioDashboard',
   label: 'E-models Dashboard',
   description: 'e-models curation',
-  dataQuery: emodelDataQuery,
-};
+  dataQuery: emodelDataQuery(filters),
+});
 
-const morphologyCollectionDashboard = {
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const morphologyCollectionDashboard = filters => ({
   '@context': 'https://bluebrainnexus.io/studio/context',
   '@type': 'StudioDashboard',
   label: 'Morphology Dashboard',
   description: 'Morphology curation',
-  dataQuery: morphologyDataQuery,
-};
+  dataQuery: morphologyDataQuery(filters),
+});
 
-const circuitsDashboard = {
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const circuitsDashboard = filters => ({
   '@context': 'https://bluebrainnexus.io/studio/context',
   '@type': 'StudioDashboard',
   label: 'Circuits Dashboard',
   description: 'Circuits curation',
-  dataQuery: circuitsDataQuery,
-};
+  dataQuery: circuitsDataQuery(filters),
+});
 
-const simulationsCampaignDashboard = {
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const simulationsCampaignDashboard = filters => ({
   '@context': 'https://bluebrainnexus.io/studio/context',
   '@type': 'StudioDashboard',
   label: 'Simulation Campaigns Dashboard',
   description: 'Collections of simulations rolled into a campaign',
-  dataQuery: simulationsDataQuery,
-};
+  dataQuery: simulationsDataQuery(filters),
+});
 
-const modelCellCollectionDashboard = {
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+const modelCellCollectionDashboard = filters => ({
   '@context': 'https://bluebrainnexus.io/studio/context',
   '@type': 'StudioDashboard',
   label: 'ME-Model Curation Dashboard',
   description: 'ME model cell collections',
-  dataQuery: modelCellCollectionsDataQuery,
-};
+  dataQuery: modelCellCollectionsDataQuery(filters),
+});
 
 module.exports = {
   generateStudioResource,

@@ -51,11 +51,11 @@ const WorkspaceListContainer: React.FunctionComponent<{
           ? getWorkspaceConfig(workspaceId.toString(), workspaceConfig)
           : workspaceConfig[0];
         // we need to remove the active dashboard as we are changing workspaces
-        const keys = queryString.parse(history.location.search);
-        delete keys.dashboard;
+        const queryStrings = queryString.parse(history.location.search);
+        const { ['dashboard']: value, ...withoutDashboard } = queryStrings;
         history.push({
           search: queryString.stringify({
-            ...keys,
+            ...withoutDashboard,
             workspace: workspaceId,
           }),
         });

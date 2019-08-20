@@ -32,3 +32,20 @@ export const getOrgAndProjectLabel = (
     project: matches[2],
   };
 };
+
+/**
+ * this function changes cameCasedString to Camel Cased String
+ * @author https://stackoverflow.com/questions/4149276/how-to-convert-camelcase-to-camel-case
+ * @param labelString String in camelCase
+ */
+export const camelCaseToLabelString = (labelString: string): string => {
+  return (
+    labelString
+      // insert a space before all caps
+      .replace(/([A-Z])/g, ' $1')
+      // uppercase the first character
+      .replace(/^./, function(str) {
+        return str.toUpperCase();
+      })
+  );
+};

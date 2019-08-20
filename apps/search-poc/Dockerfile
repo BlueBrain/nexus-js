@@ -6,4 +6,4 @@ RUN yarn && yarn build
 FROM abiosoft/caddy:1.0.3-no-stats
 WORKDIR /etc
 COPY --from=builder /tmp/studio/build /etc/www/studio
-EXPOSE 2015
+COPY Caddyfile /etc/Caddyfile

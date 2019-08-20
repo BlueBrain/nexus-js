@@ -41,6 +41,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
   // trigger parent on mount with the active id
   React.useEffect(() => {
     onWorkspaceSelected(activeId);
+    // @ts-ignore
   }, []);
 
   return (
@@ -52,6 +53,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
           : workspaceConfig[0];
         // we need to remove the active dashboard as we are changing workspaces
         const queryStrings = queryString.parse(history.location.search);
+        // @ts-ignore
         const { ['dashboard']: value, ...withoutDashboard } = queryStrings;
         history.push({
           search: queryString.stringify({

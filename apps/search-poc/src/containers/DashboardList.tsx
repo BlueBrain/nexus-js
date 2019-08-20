@@ -68,6 +68,7 @@ const DashboardListContainer: React.FunctionComponent<{
       activeDb.view['@id'],
       activeDb.dashboard.dataQuery,
     );
+    // @ts-ignore
   }, [dashboardConfig]); // watch config and trigger callback parent when it changes
 
   return (

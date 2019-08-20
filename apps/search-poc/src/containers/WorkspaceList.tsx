@@ -53,7 +53,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
           : workspaceConfig[0];
         // we need to remove the active dashboard as we are changing workspaces
         const queryStrings = queryString.parse(history.location.search);
-        // @ts-ignore
+        // eslint-disable-next-line
         const { ['dashboard']: value, ...withoutDashboard } = queryStrings;
         history.push({
           search: queryString.stringify({

@@ -5,9 +5,14 @@ import TabList from '../components/TabList';
 
 function getDashBoardConfig(
   id: string,
+  workspaceId: string,
   configs: DashboardConfig[],
 ): DashboardConfig {
-  return configs.find(config => config.dashboard['@id'] === id) || configs[0];
+  return (
+    configs.find(
+      config => id === config.dashboard['@id'] + '_' + workspaceId,
+    ) || configs[0]
+  );
 }
 
 type DashboardConfig = { dashboard: DashboardContainer; view: View };
@@ -27,6 +32,7 @@ type View = {
 };
 
 const DashboardListContainer: React.FunctionComponent<{
+  workspaceId: string;
   dashboardConfig: DashboardConfig[];
   onDashboardSelected: (
     orgLabel: string,
@@ -35,35 +41,59 @@ const DashboardListContainer: React.FunctionComponent<{
     dataQuery: string,
   ) => void;
   history: History;
-}> = ({ dashboardConfig, onDashboardSelected, history }) => {
-  const activeDashboardId = getDashBoardConfig(
-    queryString.parse(history.location.search).dashboard.toString(),
-    dashboardConfig,
-  ).dashboard['@id'];
+}> = ({ workspaceId, dashboardConfig, onDashboardSelected, history }) => {
+  // get active id from query string on mount (if any)
+  const queryStringDashboardId =
+    queryString.parse(history.location.search).dashboard || '';
 
-  // format dashboard data for dashboard list component
+  // find out if we have a matching dashboard config with that id
+  const activeDb = getDashBoardConfig(
+    queryStringDashboardId.toString(),
+    workspaceId,
+    dashboardConfig,
+  );
+
+  // format dashboard data for TabList component
   const dashboardConfigData = dashboardConfig.map(config => ({
-    id: config.dashboard['@id'],
+    id: config.dashboard['@id'] + '_' + workspaceId,
     label: config.dashboard.label,
     description: config.dashboard.description,
   }));
+
+  // trigger parent on mount with the active id
+  React.useEffect(() => {
+    onDashboardSelected(
+      activeDb.view.org,
+      activeDb.view.project,
+      activeDb.view['@id'],
+      activeDb.dashboard.dataQuery,
+    );
+    // eslint-disable-next-line
+  }, [dashboardConfig]); // watch config and trigger callback parent when it changes
 
   return (
     <TabList
       items={dashboardConfigData}
       onSelected={dashboardId => {
-        const activeDashboard = dashboardId
-          ? getDashBoardConfig(dashboardId.toString(), dashboardConfig)
-          : dashboardConfig[0];
+        const activeDashboard = getDashBoardConfig(
+          dashboardId,
+          workspaceId,
+          dashboardConfig,
+        );
         onDashboardSelected(
           activeDashboard.view.org,
           activeDashboard.view.project,
           activeDashboard.view['@id'],
           activeDashboard.dashboard.dataQuery,
         );
-        history.push({ search: `?dashboard=${dashboardId}` });
+        history.push({
+          search: queryString.stringify({
+            ...queryString.parse(history.location.search),
+            dashboard: dashboardId,
+          }),
+        });
       }}
-      defaultActiveId={activeDashboardId}
+      defaultActiveId={activeDb.dashboard['@id'] + '_' + workspaceId}
     />
   );
 };

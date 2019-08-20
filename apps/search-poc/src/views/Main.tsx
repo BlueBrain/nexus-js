@@ -7,6 +7,7 @@ import jsonld from 'jsonld';
 import { SparqlQueryResults, makeNQuad } from '../utils/sparql';
 import { studioFrame } from '../config';
 import { getOrgAndProjectLabel } from '../utils';
+import WorkspaceList from '../containers/WorkspaceList';
 
 const MainView: React.FunctionComponent<{
   studioOrg: string;
@@ -14,7 +15,11 @@ const MainView: React.FunctionComponent<{
   studioViewId: string;
   studioQuery: string;
 }> = props => {
-  const [data, setData] = React.useState<{
+  const [activeWorkspaceId, setActiveWorkspaceId] = React.useState<string>(
+    null,
+  );
+
+  const [resultTableData, setResultTableData] = React.useState<{
     orgLabel: string;
     projectLabel: string;
     viewId: string;
@@ -35,15 +40,18 @@ const MainView: React.FunctionComponent<{
         .then(frame => frame['@graph'][0])
         .then(json => ({
           ...json,
-          workspaces: json.workspaces.map(w =>
-            w.dashboards.map(d => ({
+          workspaces: json.workspaces.map(w => ({
+            ...w,
+            dashboards: w.dashboards.map(d => ({
               ...d,
               view: {
                 ...d.view,
+                // the only reason we're doing all of this it to extract the org/project labels
+                // out of the view id
                 ...getOrgAndProjectLabel(d.view.project['@id']),
               },
             })),
-          ),
+          })),
         })),
     [props.studioQuery],
   );
@@ -53,13 +61,11 @@ const MainView: React.FunctionComponent<{
   }
 
   if (error) {
+    console.error(error);
     return (
       <Alert
         message="Error loading studio"
-        description={
-          'There was an error loading the Studio configuration: ' +
-            error.message || error
-        }
+        description={'There was an error loading the Studio configuration'}
         type="error"
         showIcon
       />
@@ -67,15 +73,27 @@ const MainView: React.FunctionComponent<{
   }
 
   return (
-    <>
-      <Dashboards
-        dashboardConfig={studioData.workspaces[0]}
-        onDashboardSelected={(orgLabel, projectLabel, viewId, dataQuery) => {
-          setData({ orgLabel, projectLabel, viewId, dataQuery });
-        }}
+    <div className="main-view">
+      <WorkspaceList
+        workspaceConfig={studioData.workspaces}
+        onWorkspaceSelected={setActiveWorkspaceId}
       />
-      {data && <ResultTable {...data} />}
-    </>
+      {activeWorkspaceId && (
+        <Dashboards
+          workspaceId={activeWorkspaceId}
+          dashboardConfig={
+            (
+              studioData.workspaces.find(w => w['@id'] === activeWorkspaceId) ||
+              studioData.workspaces[0]
+            ).dashboards
+          }
+          onDashboardSelected={(orgLabel, projectLabel, viewId, dataQuery) => {
+            setResultTableData({ orgLabel, projectLabel, viewId, dataQuery });
+          }}
+        />
+      )}
+      {resultTableData && <ResultTable {...resultTableData} />}
+    </div>
   );
 };
 

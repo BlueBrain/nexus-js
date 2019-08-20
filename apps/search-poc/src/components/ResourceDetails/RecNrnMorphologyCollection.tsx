@@ -1,32 +1,33 @@
-
 import React from 'react';
 import { Table } from 'antd';
 
+export type Morph = {
+  id: string;
+  self: string;
+  name: string;
+  description: string;
+};
 
-const morphTableColumns = [{
-  title: 'Name',
-  render: (text, morph) =>
-    <a
-      key={morph.id}
-      href={`/resources?self=${morph.self}`}
-    >
-      {morph.name}
-    </a>,
-  key: 'name',
-}, {
-  title: 'Description',
-  dataIndex: 'description',
-  key: 'description',
-}];
+const morphTableColumns = [
+  {
+    title: 'Name',
+    render: (_: any, morph: Morph) => (
+      <a key={morph.id} href={`/resources?self=${morph.self}`}>
+        {morph.name}
+      </a>
+    ),
+    key: 'name',
+  },
+  {
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
+  },
+];
 
 const RecNrnMorphologyCollection: React.FunctionComponent<{
   resource: {
-    reconstructedcells: {
-      id: string;
-      self: string;
-      name: string;
-      description: string;
-    }[]
+    reconstructedcells: Morph[];
   };
 }> = props => {
   return (
@@ -43,6 +44,5 @@ const RecNrnMorphologyCollection: React.FunctionComponent<{
     </div>
   );
 };
-
 
 export default RecNrnMorphologyCollection;

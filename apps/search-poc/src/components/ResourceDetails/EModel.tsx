@@ -1,25 +1,28 @@
-
 import React, { ReactNode } from 'react';
 import sortBy from 'lodash/sortBy';
 import { Table, Collapse } from 'antd';
 
 import { Resource } from '@bbp/nexus-sdk';
-import { MINDSResource, EModelResource } from '../../containers/ResourceDetails/types';
-
+import {
+  MINDSResource,
+  EModelResource,
+} from '../../containers/ResourceDetails/types';
 
 const { Panel } = Collapse;
 const protocolR = /^(?:_?\.)(.*)\.(\w+)\.(\w+)\.(\w+)$/;
 
-const paramColumns = [{
-  title: 'Parameter',
-  dataIndex: 'param',
-  key: 'param',
-}, {
-  title: 'Value',
-  dataIndex: 'val',
-  key: 'val',
-}];
-
+const paramColumns = [
+  {
+    title: 'Parameter',
+    dataIndex: 'param',
+    key: 'param',
+  },
+  {
+    title: 'Value',
+    dataIndex: 'val',
+    key: 'val',
+  },
+];
 
 /**
  * Parses fitness raw parameter name into:
@@ -39,14 +42,17 @@ const paramColumns = [{
  *   param: 'AHP_depth_abs'
  * }
  */
-export function parseFitnessRawParamName(rawParamName: string): {
+export function parseFitnessRawParamName(
+  rawParamName: string,
+): {
   protocol: string;
   recTarget: string;
   recType: string;
   param: string;
 } {
-  const [, rawProtocolName, recTarget, recType, param] = rawParamName
-    .match(protocolR) as string[];
+  const [, rawProtocolName, recTarget, recType, param] = rawParamName.match(
+    protocolR,
+  ) as string[];
 
   const protocol = rawProtocolName.replace(/_/g, ' ');
 
@@ -54,9 +60,9 @@ export function parseFitnessRawParamName(rawParamName: string): {
 }
 
 function createUniqColumnRenderer(
-  dataSource: object[],
+  dataSource: Array<any>,
   dataKey: string,
-  colKey: string
+  colKey: string,
 ): (value: any, row: any, index: number) => ReactNode | undefined {
   return (value, row, index) => {
     const obj = { children: value[dataKey], props: { rowSpan: 1 } };
@@ -70,55 +76,78 @@ function createUniqColumnRenderer(
 
     return obj;
   };
-};
+}
 
-function createFitnessDataSourceEntry([paramRaw, val]) {
-  const {
-    protocol,
-    recTarget,
-    recType,
-    param
-  } = parseFitnessRawParamName(paramRaw);
+function createFitnessDataSourceEntry([paramRaw, val]: [string, number]) {
+  const { protocol, recTarget, recType, param } = parseFitnessRawParamName(
+    paramRaw,
+  );
 
   const key = paramRaw;
 
   return { key, protocol, recTarget, recType, param, val };
-};
+}
 
 const EModelDetails: React.FunctionComponent<{
   resource: Resource & MINDSResource & EModelResource;
 }> = props => {
   const { score, seed, fitness, params } = props.resource;
 
-  const fitnessDSUnsorted = Object.entries(fitness)
-    .map(createFitnessDataSourceEntry);
+  const fitnessDSUnsorted = Object.entries(fitness).map(
+    createFitnessDataSourceEntry,
+  );
 
-  const fitnessDataSource = sortBy(fitnessDSUnsorted, ['parameter', 'recTarget', 'protocol']);
+  const fitnessDataSource = sortBy(fitnessDSUnsorted, [
+    'parameter',
+    'recTarget',
+    'protocol',
+  ]);
 
-  const fitnessColumns = [{
-    title: 'Protocol',
-    render: createUniqColumnRenderer(fitnessDataSource, 'protocol', 'protocol'),
-    key: 'protocol',
-  }, {
-    title: 'Target',
-    render: createUniqColumnRenderer(fitnessDataSource, 'recTarget', 'protocol'),
-    key: 'recTarget',
-  }, {
-    title: 'Type',
-    render: createUniqColumnRenderer(fitnessDataSource, 'recType', 'protocol'),
-    key: 'recType'
-  }, {
-    title: 'Parameter',
-    dataIndex: 'param',
-    key: 'param',
-  }, {
-    title: 'Value',
-    dataIndex: 'val',
-    key: 'val',
-  }];
+  const fitnessColumns = [
+    {
+      title: 'Protocol',
+      render: createUniqColumnRenderer(
+        fitnessDataSource,
+        'protocol',
+        'protocol',
+      ),
+      key: 'protocol',
+    },
+    {
+      title: 'Target',
+      render: createUniqColumnRenderer(
+        fitnessDataSource,
+        'recTarget',
+        'protocol',
+      ),
+      key: 'recTarget',
+    },
+    {
+      title: 'Type',
+      render: createUniqColumnRenderer(
+        fitnessDataSource,
+        'recType',
+        'protocol',
+      ),
+      key: 'recType',
+    },
+    {
+      title: 'Parameter',
+      dataIndex: 'param',
+      key: 'param',
+    },
+    {
+      title: 'Value',
+      dataIndex: 'val',
+      key: 'val',
+    },
+  ];
 
-  const paramDataSource = Object.entries(params)
-    .map(([key, val]) => ({ key, param: key, val }));
+  const paramDataSource = Object.entries(params).map(([key, val]) => ({
+    key,
+    param: key,
+    val,
+  }));
 
   return (
     <div className="emodel-details">

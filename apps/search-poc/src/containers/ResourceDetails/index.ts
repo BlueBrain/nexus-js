@@ -9,14 +9,16 @@ const RecNrnMorphologyCollectionDetails = lazy(() =>
   import('./RecNrnMorphologyCollection'),
 );
 
-const detailsComponents = {
+const detailsComponents: {
+  [componentName: string]: LazyExoticComponent<any>;
+} = {
   morphViewer: MorphViewer,
   morphCollection: RecNrnMorphologyCollectionDetails,
   emodelDetails: EModelDetails,
   emodelCollectionDetails: EModelCollectionDetails,
 };
 
-const compNamesByType = {
+const compNamesByType: { [componentType: string]: string[] } = {
   ReconstructedNeuronMorphology: ['morphViewer'],
   ReconstructedNeuronMorphologyCollection: ['morphCollection'],
   EModel: ['emodelDetails'],
@@ -30,6 +32,8 @@ export function getComponentsForTypes(
 ): {
   [componentName: string]: LazyExoticComponent<any>;
 }[] {
+  // TODO: FIX
+  // @ts-ignore
   return resourceTypes
     .flatMap(type => compNamesByType[type] || [])
     .reduce(

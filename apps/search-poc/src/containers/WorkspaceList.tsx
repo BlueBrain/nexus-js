@@ -41,7 +41,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
   // trigger parent on mount with the active id
   React.useEffect(() => {
     onWorkspaceSelected(activeId);
-    // @ts-ignore
+    // eslint-disable-next-line
   }, []);
 
   return (

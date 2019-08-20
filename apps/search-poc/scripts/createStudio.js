@@ -15,6 +15,9 @@ const {
   studioContext,
   emodelsCollectionDashboard,
   morphologyCollectionDashboard,
+  circuitsDashboard,
+  simulationsCampaignDashboard,
+  modelCellCollectionDashboard,
 } = require('./resources');
 
 const config = {
@@ -36,7 +39,7 @@ const config = {
 
 const logger = (operation, forward) => {
   const { method = 'GET', path, body = '{}' } = operation;
-  const { ['@id']: id = null, label = null } = JSON.parse(body);
+  const { '@id': id = null, label = null } = JSON.parse(body);
   const type = path.split('/').reduce((prev, curr) => {
     if (curr === 'v1') return curr;
     if (prev === 'v1') return curr;
@@ -70,22 +73,44 @@ async function main() {
       studioContext,
     );
     // WARNING: We need to wait for the context resource to be indexed
-    const { ['@id']: emodelDashboardId } = await nexus.Resource.create(
+    const { '@id': emodelDashboardId } = await nexus.Resource.create(
       config.orgName,
       config.projectName,
       emodelsCollectionDashboard,
     );
-    const { ['@id']: morphoDashboardId } = await nexus.Resource.create(
+    const { '@id': morphoDashboardId } = await nexus.Resource.create(
       config.orgName,
       config.projectName,
       morphologyCollectionDashboard,
     );
-    const { ['@id']: thalamus2019WorkspaceId } = await nexus.Resource.create(
+    const { '@id': circuitsDashboardId } = await nexus.Resource.create(
+      config.orgName,
+      config.projectName,
+      circuitsDashboard,
+    );
+    const {
+      '@id': simulationsCampaignDashboardId,
+    } = await nexus.Resource.create(
+      config.orgName,
+      config.projectName,
+      simulationsCampaignDashboard,
+    );
+    const {
+      '@id': modelCellCollectionDashboardId,
+    } = await nexus.Resource.create(
+      config.orgName,
+      config.projectName,
+      modelCellCollectionDashboard,
+    );
+    const { '@id': thalamus2019WorkspaceId } = await nexus.Resource.create(
       config.orgName,
       config.projectName,
       generateWorkspaceResource('Thalamus2019 Workspace', [
         [emodelDashboardId, 'nxv:StudioSparqlView'],
         [morphoDashboardId, 'nxv:StudioSparqlView'],
+        [circuitsDashboardId, 'nxv:StudioSparqlView'],
+        [simulationsCampaignDashboardId, 'nxv:StudioSparqlView'],
+        [modelCellCollectionDashboardId, 'nxv:StudioSparqlView'],
       ]),
     );
     await nexus.Resource.create(

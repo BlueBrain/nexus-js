@@ -20,7 +20,7 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
             ?s rdf:type nxs:EModelCollection
         }
         ${
-          filters.brainRegion
+          filters && filters.brainRegion
             ? `Graph ?g {
             ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
           }`
@@ -73,7 +73,7 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
             ?s rdf:type nxs:ReconstructedNeuronMorphologyCollection
         }
         ${
-          filters.brainRegion
+          filters && filters.brainRegion
             ? `Graph ?g {
             ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
           }`
@@ -124,7 +124,7 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
             ?s rdf:type nxs:detailedcircuit
         }
         ${
-          filters.brainRegion
+          filters && filters.brainRegion
             ? `Graph ?g {
             ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
           }`
@@ -176,7 +176,7 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
             ?s rdf:type nxs:simulation_campaign
         }
         ${
-          filters.brainRegion
+          filters && filters.brainRegion
             ? `Graph ?g {
             ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
           }`
@@ -228,7 +228,7 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
             ?s rdf:type nxs:ModelCellCollection
         }
         ${
-          filters.brainRegion
+          filters && filters.brainRegion
             ? `Graph ?g {
             ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
           }`

@@ -227,6 +227,15 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
      }
 ```
 
+## Build a docker image
+
+Build with:
+`docker build . -tag=bbp-studio`
+
+Run with:
+`docker run -p 4000:4000 bbp-studio`
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

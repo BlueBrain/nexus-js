@@ -11,7 +11,8 @@
     "noUnusedParameters": false,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "declaration": true
   },
   "exclude": [
     "node_modules",

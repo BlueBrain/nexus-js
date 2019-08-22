@@ -37,7 +37,7 @@ class MorphologyViewer extends React.Component<
   render() {
     return (
       <Card title="Morphology viewer" hoverable bodyStyle={{ padding: 0 }}>
-        <div className="morphology" ref={this.containerEl}>
+        <div className="morphology-viewer" ref={this.containerEl}>
           {this.state.hasError && <p>Can't init the viewer due to error</p>}
         </div>
       </Card>

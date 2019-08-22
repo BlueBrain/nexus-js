@@ -7,8 +7,8 @@ import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
 import { setUpSession, setToken } from './utils/auth';
 import Header from './containers/Header';
-import DetailsView from './views/Details';
-import MainView from './views/Main';
+import DetailsView from './views/DetailsView';
+import MainView from './views/MainView';
 import { SETTINGS, getStudioConfig } from './config';
 
 import 'antd/dist/antd.css';
@@ -26,22 +26,20 @@ async function main() {
   const rootElement = document.getElementById('root');
   render(
     <NexusProvider nexusClient={nexus}>
-      <div className="App">
-        <Header user={user} userManager={userManager} />
-        <Router>
-          <Switch>
-            <Route path="/" exact>
-              <MainView
-                studioOrg={SETTINGS.studioOrg}
-                studioProject={SETTINGS.studioProject}
-                studioViewId={SETTINGS.studioViewId}
-                studioQuery={getStudioConfig(SETTINGS.studioId)}
-              />
-            </Route>
-            <Route path="/resources" component={DetailsView} />
-          </Switch>
-        </Router>
-      </div>
+      <Header user={user} userManager={userManager} />
+      <Router>
+        <Switch>
+          <Route path="/" exact>
+            <MainView
+              studioOrg={SETTINGS.studioOrg}
+              studioProject={SETTINGS.studioProject}
+              studioViewId={SETTINGS.studioViewId}
+              studioQuery={getStudioConfig(SETTINGS.studioId)}
+            />
+          </Route>
+          <Route path="/resources" component={DetailsView} />
+        </Switch>
+      </Router>
     </NexusProvider>,
     rootElement,
   );

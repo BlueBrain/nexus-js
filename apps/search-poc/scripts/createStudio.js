@@ -58,6 +58,22 @@ const nexus = createNexusClient({
 
 async function main() {
   try {
+    const ThalamusWorkspaceConfig = {
+      name: 'Thalamus2019 Workspace',
+      filters: {
+        brainRegion: 'http://purl.obolibrary.org/obo/UBERON_0004703',
+      },
+    };
+    const NeocortexWorkspaceConfig = {
+      name: 'SSCx 2019 Workspace',
+      filters: {
+        brainRegion: 'http://purl.obolibrary.org/obo/UBERON_0008933',
+      },
+    };
+    const BBPOverviewConfig = {
+      name: 'BBP Overview Workspace',
+    };
+
     // await nexus.Organization.create(config.orgName);
     // await nexus.Project.create(config.orgName, config.projectName, {
     //   description: 'a nice studio',
@@ -72,52 +88,61 @@ async function main() {
       config.projectName,
       studioContext,
     );
-    // WARNING: We need to wait for the context resource to be indexed
-    const { '@id': emodelDashboardId } = await nexus.Resource.create(
-      config.orgName,
-      config.projectName,
-      emodelsCollectionDashboard,
-    );
-    const { '@id': morphoDashboardId } = await nexus.Resource.create(
-      config.orgName,
-      config.projectName,
-      morphologyCollectionDashboard,
-    );
-    const { '@id': circuitsDashboardId } = await nexus.Resource.create(
-      config.orgName,
-      config.projectName,
-      circuitsDashboard,
-    );
-    const {
-      '@id': simulationsCampaignDashboardId,
-    } = await nexus.Resource.create(
-      config.orgName,
-      config.projectName,
-      simulationsCampaignDashboard,
-    );
-    const {
-      '@id': modelCellCollectionDashboardId,
-    } = await nexus.Resource.create(
-      config.orgName,
-      config.projectName,
-      modelCellCollectionDashboard,
-    );
-    const { '@id': thalamus2019WorkspaceId } = await nexus.Resource.create(
-      config.orgName,
-      config.projectName,
-      generateWorkspaceResource('Thalamus2019 Workspace', [
-        [emodelDashboardId, 'nxv:StudioSparqlView'],
-        [morphoDashboardId, 'nxv:StudioSparqlView'],
-        [circuitsDashboardId, 'nxv:StudioSparqlView'],
-        [simulationsCampaignDashboardId, 'nxv:StudioSparqlView'],
-        [modelCellCollectionDashboardId, 'nxv:StudioSparqlView'],
-      ]),
-    );
-    await nexus.Resource.create(
-      config.orgName,
-      config.projectName,
-      generateStudioResource([thalamus2019WorkspaceId]),
-    );
+
+    // Generate each workspace!
+    [
+      ThalamusWorkspaceConfig,
+      BBPOverviewConfig,
+      NeocortexWorkspaceConfig,
+    ].forEach(async workspaceConfig => {
+      // WARNING: We need to wait for the context resource to be indexed
+      const { '@id': emodelDashboardId } = await nexus.Resource.create(
+        config.orgName,
+        config.projectName,
+        emodelsCollectionDashboard(workspaceConfig.filters),
+      );
+      const { '@id': morphoDashboardId } = await nexus.Resource.create(
+        config.orgName,
+        config.projectName,
+        morphologyCollectionDashboard(workspaceConfig.filters),
+      );
+      const { '@id': circuitsDashboardId } = await nexus.Resource.create(
+        config.orgName,
+        config.projectName,
+        circuitsDashboard(workspaceConfig.filters),
+      );
+      const {
+        '@id': simulationsCampaignDashboardId,
+      } = await nexus.Resource.create(
+        config.orgName,
+        config.projectName,
+        simulationsCampaignDashboard(workspaceConfig.filters),
+      );
+      const {
+        '@id': modelCellCollectionDashboardId,
+      } = await nexus.Resource.create(
+        config.orgName,
+        config.projectName,
+        modelCellCollectionDashboard(workspaceConfig.filters),
+      );
+      const { '@id': workspaceId } = await nexus.Resource.create(
+        config.orgName,
+        config.projectName,
+        generateWorkspaceResource(workspaceConfig.name, [
+          [emodelDashboardId, 'nxv:StudioSparqlView'],
+          [morphoDashboardId, 'nxv:StudioSparqlView'],
+          [circuitsDashboardId, 'nxv:StudioSparqlView'],
+          [simulationsCampaignDashboardId, 'nxv:StudioSparqlView'],
+          [modelCellCollectionDashboardId, 'nxv:StudioSparqlView'],
+        ]),
+      );
+      await nexus.Resource.create(
+        config.orgName,
+        config.projectName,
+        generateStudioResource([workspaceId]),
+      );
+    });
+
     console.log('Success!');
   } catch (e) {
     console.error('Script has crashed... \n', e);

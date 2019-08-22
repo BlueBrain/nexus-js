@@ -1,32 +1,34 @@
-
 import * as React from 'react';
-import { Spin } from 'antd';
 import { Resource } from '@bbp/nexus-sdk';
 
-import useMorphology from '../../hooks/morph';
-import { parseProjectUrl } from '../../utils'
+import useMorphology from '../../hooks/useMorphology';
+import { parseProjectUrl } from '../../utils';
 import { MINDSResource } from './types';
 import MorphologyViewer from '../../components/ResourceDetails/MorphologyViewer';
-
+import { get } from 'lodash';
 
 const MorpologyViewerContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource;
 }> = props => {
-  const id = props.resource.distribution.contentUrl;
+  const id = get(props, 'resource.distribution.contentUrl');
+  const ref = React.useRef<HTMLDivElement>(null);
   const [org, proj] = parseProjectUrl(props.resource._project);
+  const { morphology, loading, stage, error } = useMorphology(
+    {
+      org,
+      proj,
+      id,
+    },
+    ref,
+  );
 
-  const { morphology, loading, error } = useMorphology({ org, proj, id });
-
-  if (loading) {
-    return <Spin></Spin>;
-  }
-
-  if (error) {
-    return <p>{error.message}</p>;
-  }
-
-  return <MorphologyViewer morphology={morphology}/>;
+  return MorphologyViewer({
+    morphology,
+    loading,
+    stage,
+    error,
+    ref,
+  });
 };
-
 
 export default MorpologyViewerContainer;

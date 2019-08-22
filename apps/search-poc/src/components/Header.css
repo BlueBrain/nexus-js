@@ -1,0 +1,19 @@
+.header-container {
+  flex: 1 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5em 1em;
+}
+
+.header-container > .title {
+  font-weight: lighter;
+}
+
+.header-container > .auth {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+  width: 3em;
+  height: 3em;
+}

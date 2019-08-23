@@ -4,12 +4,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://unpkg.com/antd@3.22.0/dist/antd.css">
   <title>Resource details</title>
+
+  <style>
+    body { padding: 24px; }
+    .container { padding: 12px; border: 1px solid #aaa; }
+    .ctrl { background-color: #fafafa; margin-bottom: 24px; }
+    .ctrl > div { margin-bottom: 12px; }
+    .ctrl > div:last-child { margin-bottom: 0; }
+    .input { width: calc(100% - 104px); }
+    .input-label { width: 100px; display: inline-block; }
+  </style>
+
 </head>
 <body>
-  <resource-details
-    access-token=""
-    self-url=""
-  />
+
+  <div class="ctrl container">
+    <div>
+      <span class="input-label">Access Token:</span>
+      <input class="input" id="access-token"/>
+    </div>
+    <div>
+      <span class="input-label">Self Url: </span>
+      <input class="input" id="self-url"/>
+    </div>
+  </div>
+
+  <div class="container">
+    <resource-details
+      id="component"
+      access-token=""
+      self-url=""
+    />
+  </div>
+
+  <script>
+    const input = {
+      accessToken: { el: document.getElementById('access-token'), attr: 'access-token' },
+      selfUrl: { el: document.getElementById('self-url'), attr: 'self-url' },
+    };
+
+    const componentEl = document.getElementById('component');
+
+    function initValue(type) {
+      const value = localStorage.getItem(type);
+      input[type].el.value = value;
+      componentEl.setAttribute(input[type].attr, value);
+    }
+
+    function reloadComponent() {
+      componentEl.destroy();
+      componentEl.connectedCallback();
+    }
+
+    function updateValue(type) {
+      const value = input[type].el.value;
+      localStorage.setItem(type, value);
+      componentEl.setAttribute(input[type].attr, value);
+      reloadComponent();
+    }
+
+    Object.keys(input).forEach(type => {
+      initValue(type);
+      input[type].el.addEventListener('input', () => updateValue(type));
+    });
+  </script>
 </body>
 </html>

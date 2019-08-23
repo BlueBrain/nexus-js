@@ -5,6 +5,9 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
     "@bbp/nexus-link": "^1.1.6",
     "@bbp/nexus-sdk": "^1.1.5",
     "@bbp/react-nexus": "^1.1.5",
@@ -47,9 +50,17 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@types/jsonld": "^1.5.0",
     "@types/lodash": "^4.14.137",
     "abort-controller": "^3.0.0",
-    "node-fetch": "^2.6.0"
+    "babel-loader": "^8.0.6",
+    "babel-plugin-dynamic-import-webpack": "^1.1.0",
+    "babel-plugin-import": "^1.12.0",
+    "html-webpack-plugin": "^3.2.0",
+    "node-fetch": "^2.6.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "style-loader": "^1.0.0",
+    "terser-webpack-plugin": "^1.4.1"
   }
 }

@@ -15,21 +15,75 @@ export const parseProjectUrl = (projectUrl: string) => {
   return [org, proj];
 };
 
+export type ParsedNexusUrl = {
+  deployment: string;
+  entityType: string;
+  org: string;
+  project: string;
+  schema: string;
+  id: string;
+};
+
+const nexusEntities = [
+  'orgs',
+  'projects',
+  'acls',
+  'views',
+  'resources',
+  'files',
+];
+
+const nexusUrlR = new RegExp(
+  [
+    '^',
+    '(https?://.+)', // nexus deployment
+    '/',
+    `(${nexusEntities.join('|')})`, // entity type
+    '/',
+    '([^/]+)', // org
+    '/',
+    '([^/]+)', // proj
+    '/?',
+    '([^/]+)?', // schema [optional]
+    '/?',
+    '([^/]+)?', // id [optional]
+    '/?',
+    '$',
+  ].join(''),
+);
+
 /**
- * Give a resource Self URL, return it's org label and project label
+ * With given Nexus URL (might be self/project/id url), return it's:
+ * * deployment URL
+ * * entity type
+ * * org label
+ * * project label
+ * * id
  *
- * @param selfUrl the resource Self URL
+ * @param selfUrl
  */
-export const getOrgAndProjectLabel = (
-  selfUrl: string,
-): { org: string; project: string } | undefined => {
-  const matches = selfUrl.match(/^.*\/v[0-9]\/(?:\w+)\/([^/]+)\/([^/?#]+).*$/);
-  if (!matches || matches.length !== 3) {
-    return;
+export const parseNexusUrl = (selfUrl: string): ParsedNexusUrl => {
+  if (!selfUrl) throw new Error('selfUrl should be defined');
+
+  const mulEntityTypeR = new RegExp(`(${nexusEntities.join('|')})`, 'g');
+  const mulEntityTypeMatch = selfUrl.match(mulEntityTypeR);
+  if (mulEntityTypeMatch && mulEntityTypeMatch.length > 1) {
+    throw new Error(
+      'Url contains multiple entity types which is not supported',
+    );
   }
+
+  const matches = selfUrl.match(nexusUrlR);
+  if (!matches || matches.length <= 5)
+    throw new Error('Error while parsing selfUrl');
+
   return {
-    org: matches[1],
-    project: matches[2],
+    deployment: matches[1],
+    entityType: matches[2].slice(0, -1),
+    org: matches[3],
+    project: matches[4],
+    schema: matches[5],
+    id: matches[6],
   };
 };
 

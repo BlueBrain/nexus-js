@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import Dashboards from '../containers/DashboardList';
 import ResultTable from '../containers/ResultTable';
@@ -6,9 +7,10 @@ import { Spin, Alert } from 'antd';
 import jsonld from 'jsonld';
 import { SparqlQueryResults, makeNQuad } from '../utils/sparql';
 import { studioFrame } from '../config';
-import { getOrgAndProjectLabel } from '../utils';
+import { parseNexusUrl } from '../utils';
 import WorkspaceList from '../containers/WorkspaceList';
 import './MainView.css';
+
 
 const MainView: React.FunctionComponent<{
   studioOrg: string;
@@ -49,7 +51,7 @@ const MainView: React.FunctionComponent<{
                 ...d.view,
                 // the only reason we're doing all of this it to extract the org/project labels
                 // out of the view id
-                ...getOrgAndProjectLabel(d.view.project['@id']),
+                ...parseNexusUrl(d.view.project['@id']),
               },
             })),
           })),

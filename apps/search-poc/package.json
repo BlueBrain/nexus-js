@@ -31,6 +31,7 @@
     "@bbp/react-nexus": "^1.1.5",
     "antd": "^3.20.7",
     "jsonld": "^1.6.2",
+    "moment": "^2.24.0",
     "morphoviewer": "^0.1.15",
     "oidc-client": "^1.8.2",
     "query-string": "^6.8.2",

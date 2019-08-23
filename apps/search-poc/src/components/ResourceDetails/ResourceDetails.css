@@ -2,7 +2,20 @@
   width: 980px;
   margin: 0 auto;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+  position: relative;
+}
+
+.resource-details.-emodel-collection-details > .module-container {
+  width: 100%;
+}
+.resource-details.-emodel-details > .module-container {
+  width: 100%;
+}
+
+.metadata-container {
+  padding: 0 1em;
 }
 
 .metadata-container > ul {
@@ -12,6 +25,9 @@
 .metadata-container > .name {
   font-size: 3em;
   font-weight: lighter;
+}
+.module-container {
+  flex-grow: 1;
 }
 
 .layers-container {

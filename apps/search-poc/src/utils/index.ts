@@ -103,3 +103,14 @@ export const camelCaseToLabelString = (labelString: string): string => {
       })
   );
 };
+
+/**
+ * this function changes camelCaseString to KebabCase
+ * @author https://gist.github.com/nblackburn/875e6ff75bc8ce171c758bf75f304707
+ * @param camelCaseString String in camelCase
+ */
+export const camelToKebab = (camelCaseString: string): string => {
+  return camelCaseString
+    .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2')
+    .toLowerCase();
+};

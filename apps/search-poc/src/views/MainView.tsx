@@ -8,6 +8,7 @@ import { SparqlQueryResults, makeNQuad } from '../utils/sparql';
 import { studioFrame } from '../config';
 import { getOrgAndProjectLabel } from '../utils';
 import WorkspaceList from '../containers/WorkspaceList';
+import './MainView.css';
 
 const MainView: React.FunctionComponent<{
   studioOrg: string;

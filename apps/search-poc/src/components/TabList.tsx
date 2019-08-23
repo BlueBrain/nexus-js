@@ -10,11 +10,15 @@ type WorkspaceItem = {
   description: string;
 };
 
-const TabList: React.FunctionComponent<{
+type TabListProps = {
   items: WorkspaceItem[];
-  onSelected: (id: string) => void;
+  onSelected: Function;
   defaultActiveId?: string;
-}> = ({ items, onSelected, defaultActiveId, children }) => {
+};
+
+
+
+const TabList: React.FunctionComponent<TabListProps> = ({ items, onSelected, defaultActiveId, children }) => {
   return (
     <div className="tab-list">
       <Tabs

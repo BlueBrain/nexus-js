@@ -8,10 +8,12 @@
     "@bbp/nexus-link": "^1.1.6",
     "@bbp/nexus-sdk": "^1.1.5",
     "@bbp/react-nexus": "^1.1.5",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/jest": "24.0.16",
     "@types/node": "12.6.8",
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.5",
+    "@types/react-test-renderer": "^16.9.0",
     "antd": "^3.20.7",
     "jsonld": "^1.6.2",
     "morphoviewer": "^0.1.15",
@@ -47,9 +49,20 @@
     ]
   },
   "devDependencies": {
+    "@types/enzyme": "^3.10.3",
     "@types/jsonld": "^1.5.0",
     "@types/lodash": "^4.14.137",
     "abort-controller": "^3.0.0",
-    "node-fetch": "^2.6.0"
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.0",
+    "node-fetch": "^2.6.0",
+    "react-test-renderer": "^16.9.0",
+    "react-testing-library": "^8.0.1"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   }
 }

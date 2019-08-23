@@ -5,6 +5,7 @@ import { useNexusContext } from '@bbp/react-nexus';
 import { Realm } from '@bbp/nexus-sdk';
 import { SETTINGS } from '../config';
 import { getConfig } from '../utils/auth';
+import HeaderComponent from '../components/Header';
 
 const Login: React.FunctionComponent<{
   realms: Realm[];
@@ -102,20 +103,14 @@ const Header: React.FunctionComponent<{
       .catch(e => console.log(e.message));
   };
 
-  return (
-    <div className="Header">
-      <h1 className="title">
-        <a href="/">BBP Studio</a>
-      </h1>
-      <div className="Header_auth">
-        {user ? (
-          <Logout onLogout={handleLogout} userName={user.profile.name} />
-        ) : (
-          <Login realms={realms} onRealmSelected={handleLogin} />
-        )}
-      </div>
-    </div>
-  );
+  return HeaderComponent({
+    handleLogout,
+    handleLogin,
+    userName: user && user.profile.name,
+    Logout,
+    Login,
+    realms,
+  });
 };
 
 export default Header;

@@ -34,12 +34,25 @@ export default class WebComponent extends HTMLElement {
 
     this.attachShadow({ mode: 'open' }).appendChild(containerEl);
 
-    const styleElClone = (window[
-      'getResourceDetailsStyleEl'
-    ]() as Node).cloneNode(true);
+    const styleElClone = ((<any>(
+      window
+    )).getResourceDetailsStyleEl() as Node).cloneNode(true);
+
     containerEl.appendChild(styleElClone);
   }
 
+  /**
+   * Initialize component with an instance of nexusClient.
+   *
+   * Web component attributes are undefined in constructor,
+   * coming one by one with attributeChangedCallback
+   * and all become available only when connectedCallback is being called.
+   *
+   * If component needs to be rerendered on particular observedAttribute change -
+   * it will skip render calls while it's not initiaziled
+   *
+   * This method also allows async logic for providing nexusDeployment
+   */
   init() {
     if (!this.nexusDeployment)
       throw new Error('nexusDeployment should be defined');
@@ -72,7 +85,7 @@ export default class WebComponent extends HTMLElement {
     ReactDOM.unmountComponentAtNode(this.mountPoint);
   }
 
-  dispatchCustomEvent(name, eventData) {
+  dispatchCustomEvent(name: string, eventData: any) {
     const event = new CustomEvent(name, eventData);
     this.dispatchEvent(event);
   }

@@ -11,7 +11,7 @@ module.exports = {
   mode: 'production',
   entry: './src/web-components/resource-details',
   output: {
-      path: path.resolve(__dirname, '../../dist-wc/'),
+      path: path.resolve(__dirname, '../../../dist-wc/'),
       filename: 'resource-details.bundle.min.js'
   },
   resolve: {

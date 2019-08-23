@@ -10,7 +10,7 @@ import '../../index.css';
 
 // workaround to import styles from components imported using React.lazy
 // TODO: refactor
-import '../../components/ResourceDetails/ReconstructedNeuronMorphologyDetails.css';
+import '../../components/ResourceDetails/MorphologyViewer.css';
 import '../../components/ResourceDetails/ResourceDetails.css';
 
 class ResourceDetails extends WebComponent {
@@ -38,7 +38,7 @@ class ResourceDetails extends WebComponent {
   static get observedAttributes() {
     return ['self-url', 'access-token'];
   }
-  attributeChangedCallback(name, oldVal, newVal) {
+  attributeChangedCallback(name: string, oldVal: string, newVal: string) {
     if (name === 'access-token') {
       saveAccessToken(newVal);
     } else if (name === 'self-url') {

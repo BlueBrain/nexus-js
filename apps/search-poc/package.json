@@ -1,41 +1,14 @@
 {
   "name": "search-poc",
   "version": "1.1.5",
+  "private": true,
   "description": "Search App POC",
   "license": "Apache-2.0",
-  "private": true,
-  "dependencies": {
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/preset-typescript": "^7.3.3",
-    "@bbp/nexus-link": "^1.1.6",
-    "@bbp/nexus-sdk": "^1.1.5",
-    "@bbp/react-nexus": "^1.1.5",
-    "@types/jest": "24.0.16",
-    "@types/node": "12.6.8",
-    "@types/react": "16.8.23",
-    "@types/react-dom": "16.8.5",
-    "antd": "^3.20.7",
-    "jsonld": "^1.6.2",
-    "morphoviewer": "^0.1.15",
-    "oidc-client": "^1.8.2",
-    "query-string": "^6.8.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-router": "^5.0.1",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
-    "swcmorphologyparser": "^0.1.4",
-    "typescript": "3.5.3"
-  },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
   },
   "browserslist": {
     "production": [
@@ -49,10 +22,36 @@
       "last 1 safari version"
     ]
   },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "dependencies": {
+    "@bbp/nexus-link": "^1.1.6",
+    "@bbp/nexus-sdk": "^1.1.5",
+    "@bbp/react-nexus": "^1.1.5",
+    "antd": "^3.20.7",
+    "jsonld": "^1.6.2",
+    "morphoviewer": "^0.1.15",
+    "oidc-client": "^1.8.2",
+    "query-string": "^6.8.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.1",
+    "swcmorphologyparser": "^0.1.4"
+  },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/jest": "24.0.16",
     "@types/jsonld": "^1.5.0",
     "@types/lodash": "^4.14.137",
+    "@types/node": "12.6.8",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.5",
     "abort-controller": "^3.0.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-dynamic-import-webpack": "^1.1.0",
@@ -61,6 +60,7 @@
     "node-fetch": "^2.6.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "style-loader": "^1.0.0",
-    "terser-webpack-plugin": "^1.4.1"
+    "terser-webpack-plugin": "^1.4.1",
+    "typescript": "3.5.3"
   }
 }

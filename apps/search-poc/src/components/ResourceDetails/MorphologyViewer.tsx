@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Spin, Empty, Switch } from 'antd';
+import { Card, Spin, Empty } from 'antd';
 import './MorphologyViewer.css';
 
 const MorphologyViewer: React.FunctionComponent<{

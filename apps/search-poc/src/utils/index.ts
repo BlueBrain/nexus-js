@@ -60,20 +60,20 @@ const nexusUrlR = new RegExp(
  * * project label
  * * id
  *
- * @param selfUrl
+ * @param nexusUrl
  */
-export const parseNexusUrl = (selfUrl: string): ParsedNexusUrl => {
-  if (!selfUrl) throw new Error('selfUrl should be defined');
+export const parseNexusUrl = (nexusUrl: string): ParsedNexusUrl => {
+  if (!nexusUrl) throw new Error('selfUrl should be defined');
 
   const mulEntityTypeR = new RegExp(`(${nexusEntities.join('|')})`, 'g');
-  const mulEntityTypeMatch = selfUrl.match(mulEntityTypeR);
+  const mulEntityTypeMatch = nexusUrl.match(mulEntityTypeR);
   if (mulEntityTypeMatch && mulEntityTypeMatch.length > 1) {
     throw new Error(
       'Url contains multiple entity types which is not supported',
     );
   }
 
-  const matches = selfUrl.match(nexusUrlR);
+  const matches = nexusUrl.match(nexusUrlR);
   if (!matches || matches.length <= 5)
     throw new Error('Error while parsing selfUrl');
 

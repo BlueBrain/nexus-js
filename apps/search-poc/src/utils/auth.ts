@@ -18,7 +18,7 @@ export function getConfig(realm?: Realm) {
   };
 }
 
-function saveAccessToken(token: string) {
+export function saveAccessToken(token: string) {
   localStorage.setItem(SETTINGS.bearerTokenKey, token);
 }
 

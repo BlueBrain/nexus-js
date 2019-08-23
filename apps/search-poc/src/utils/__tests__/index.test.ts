@@ -1,8 +1,4 @@
-import {
-  getLabel,
-  getOrgAndProjectLabel,
-  camelCaseToLabelString,
-} from '../index';
+import { getLabel, parseNexusUrl, camelCaseToLabelString } from '../index';
 
 describe('utils', () => {
   describe('camelCaseToLabelString', () => {
@@ -24,44 +20,121 @@ describe('utils', () => {
       ).toEqual('gpfs');
     });
   });
-  describe('getOrgAndProjectLabel()', () => {
-    it('should return undefined', () => {
-      expect(getOrgAndProjectLabel('')).toEqual(undefined);
-      expect(
-        getOrgAndProjectLabel('http://nexuys.com/v1/resources/org'),
-      ).toEqual(undefined);
+  describe('parseNexusUrl()', () => {
+    it('should throw an error if url is not defined', () => {
+      expect(() => parseNexusUrl('')).toThrow('selfUrl should be defined');
     });
-    it('should return an org and project', () => {
-      expect(
-        getOrgAndProjectLabel('http://nexus.com/v1/resources/myorg/myproject'),
-      ).toEqual({
-        org: 'myorg',
-        project: 'myproject',
+
+    it('should throw an error if url is not valid', () => {
+      expect(() =>
+        parseNexusUrl('http://nexuys.com/v1/resources/org'),
+      ).toThrowError('Error while parsing selfUrl');
+    });
+
+    it('should parse trivial project url', () => {
+      expect(parseNexusUrl('https://nexus.com/v1/resources/org/proj')).toEqual({
+        deployment: 'https://nexus.com/v1',
+        entityType: 'resource',
+        org: 'org',
+        project: 'proj',
+        schema: undefined,
+        id: undefined,
       });
+    });
+
+    it('should parse project url with non-word symbols in org and proj labels', () => {
       expect(
-        getOrgAndProjectLabel(
-          'http://nexus.com/v1/views/myorg/myproject/_/viewid',
+        parseNexusUrl('https://nexus.com/v1/resources/o-r_g:1/p-r_o:j2'),
+      ).toEqual({
+        deployment: 'https://nexus.com/v1',
+        entityType: 'resource',
+        org: 'o-r_g:1',
+        project: 'p-r_o:j2',
+        schema: undefined,
+        id: undefined,
+      });
+    });
+
+    it('should parse self url with non-word symbols in capturing groups', () => {
+      expect(
+        parseNexusUrl(
+          'https://nexus.com/v1/resources/o-r_g:1/p-r_o:j2/sch:ema/id-1_2',
         ),
       ).toEqual({
-        org: 'myorg',
-        project: 'myproject',
+        deployment: 'https://nexus.com/v1',
+        entityType: 'resource',
+        org: 'o-r_g:1',
+        project: 'p-r_o:j2',
+        schema: 'sch:ema',
+        id: 'id-1_2',
       });
+    });
+
+    it('should parse valid self url', () => {
       expect(
-        getOrgAndProjectLabel(
-          'http://nexus.com/v1/views/my$org/my_project/_/viewid',
-        ),
+        parseNexusUrl('https://nexus.com/v1/resources/org/proj/_/id'),
       ).toEqual({
-        org: 'my$org',
-        project: 'my_project',
+        deployment: 'https://nexus.com/v1',
+        entityType: 'resource',
+        org: 'org',
+        project: 'proj',
+        schema: '_',
+        id: 'id',
       });
+    });
+
+    it('should parse url with http protocol', () => {
+      expect(parseNexusUrl('http://nexus.com/v1/resources/org/proj')).toEqual({
+        deployment: 'http://nexus.com/v1',
+        entityType: 'resource',
+        org: 'org',
+        project: 'proj',
+        schema: undefined,
+        id: undefined,
+      });
+    });
+
+    it('should parse a project url with non default deployment base', () => {
       expect(
-        getOrgAndProjectLabel(
-          'http://nexus.com/v1/views/my-org/my:project/_/viewid',
-        ),
+        parseNexusUrl('http://nexus.com/custom-base/resources/org/proj'),
       ).toEqual({
-        org: 'my-org',
-        project: 'my:project',
+        deployment: 'http://nexus.com/custom-base',
+        entityType: 'resource',
+        org: 'org',
+        project: 'proj',
+        schema: undefined,
+        id: undefined,
       });
+    });
+
+    it('should parse a self url with non default deployment base', () => {
+      expect(
+        parseNexusUrl('http://nexus.com/custom-base/resources/org/proj/_/id'),
+      ).toEqual({
+        deployment: 'http://nexus.com/custom-base',
+        entityType: 'resource',
+        org: 'org',
+        project: 'proj',
+        schema: '_',
+        id: 'id',
+      });
+    });
+
+    it('should parse a self url of different entity types', () => {
+      expect([
+        parseNexusUrl('http://nexus.com/v1/views/org/proj/_/id').entityType,
+        parseNexusUrl('http://nexus.com/v1/projects/org/proj/_/id').entityType,
+        parseNexusUrl('http://nexus.com/v1/resources/org/proj/_/id').entityType,
+        parseNexusUrl('http://nexus.com/v1/files/org/proj/_/id').entityType,
+        parseNexusUrl('http://nexus.com/v1/acls/org/proj/_/id').entityType,
+        parseNexusUrl('http://nexus.com/v1/orgs/org/proj/_/id').entityType,
+      ]).toEqual(['view', 'project', 'resource', 'file', 'acl', 'org']);
+    });
+
+    it('should throw if deployment uri contains multiple entity types', () => {
+      expect(() =>
+        parseNexusUrl('http://n.com/acls/v1/orgs/project/schema/id'),
+      ).toThrow('Url contains multiple entity types which is not supported');
     });
   });
 });

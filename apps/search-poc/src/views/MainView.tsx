@@ -1,5 +1,5 @@
-
 import * as React from 'react';
+import { withRouter, History } from 'react-router-dom';
 import Dashboards from '../containers/DashboardList';
 import ResultTable from '../containers/ResultTable';
 import { useNexus } from '@bbp/react-nexus';
@@ -16,6 +16,7 @@ const MainView: React.FunctionComponent<{
   studioProject: string;
   studioViewId: string;
   studioQuery: string;
+  history: History;
 }> = props => {
   const [activeWorkspaceId, setActiveWorkspaceId] = React.useState<string>(
     null,
@@ -94,9 +95,16 @@ const MainView: React.FunctionComponent<{
           }}
         />
       )}
-      {resultTableData && <ResultTable {...resultTableData} />}
+      {resultTableData && (
+        <ResultTable
+          {...resultTableData}
+          handleRowClick={(index, items) => {
+            props.history.push(`/resources/?self=${items[index].self}`);
+          }}
+        />
+      )}
     </div>
   );
 };
 
-export default MainView;
+export default withRouter(MainView);

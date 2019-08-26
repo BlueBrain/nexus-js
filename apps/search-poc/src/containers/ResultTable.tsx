@@ -9,7 +9,7 @@ const ResultTableContainer: React.FunctionComponent<{
   orgLabel: string;
   projectLabel: string;
   viewId: string;
-  handleRowClick?: (index, items) => void;
+  handleRowClick?: (index: number, items: any[]) => void;
 }> = props => {
   const { loading, data, error } = useNexus<any>(
     nexus =>
@@ -37,7 +37,7 @@ const ResultTableContainer: React.FunctionComponent<{
     data &&
     data.results.bindings
       .filter((binding: any) => binding.total && binding.total.value !== '0')
-      .reduce((total, binding) => total + parseInt(binding.total.value, 10), 0);
+      .reduce((total: number, binding: any) => total + parseInt(binding.total.value, 10), 0);
 
   // build header properties
   const headerProperties: {
@@ -48,9 +48,9 @@ const ResultTableContainer: React.FunctionComponent<{
     data.head.vars
       .filter(
         // we don't want to display total or self url in result table
-        headVar => !(headVar === 'total' || headVar === 'self'),
+        (headVar: any) => !(headVar === 'total' || headVar === 'self'),
       )
-      .map(headVar => ({
+      .map((headVar: any) => ({
         title: camelCaseToLabelString(headVar), // TODO: get the matching title from somewhere?
         dataIndex: headVar,
       }));
@@ -60,8 +60,8 @@ const ResultTableContainer: React.FunctionComponent<{
     data &&
     data.results.bindings
       // we only want resources
-      .filter(binding => binding.self)
-      .map(binding => {
+      .filter((binding: any) => binding.self)
+      .map((binding: any) => {
         // let's get the value for each headerProperties
         const properties = headerProperties.reduce(
           (prev, curr) => ({
@@ -89,7 +89,7 @@ const ResultTableContainer: React.FunctionComponent<{
           headerProperties={headerProperties}
           items={items}
           total={total}
-          onRowClick={(_, index) => props.handleRowClick(index, items)}
+          onRowClick={(_, index) => props.handleRowClick && props.handleRowClick(index, items)}
         />
       )}
     </Spin>

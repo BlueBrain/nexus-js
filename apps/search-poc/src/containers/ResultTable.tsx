@@ -37,7 +37,7 @@ const ResultTableContainer: React.FunctionComponent<{
     data &&
     data.results.bindings
       .filter((binding: any) => binding.total && binding.total.value !== '0')
-      .reduce((total, binding) => total + parseInt(binding.total.value), 0);
+      .reduce((total, binding) => total + parseInt(binding.total.value, 10), 0);
 
   // build header properties
   const headerProperties: {

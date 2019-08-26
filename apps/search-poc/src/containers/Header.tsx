@@ -106,10 +106,10 @@ const Header: React.FunctionComponent<{
   return HeaderComponent({
     handleLogout,
     handleLogin,
-    userName: user && user.profile.name,
     Logout,
     Login,
     realms,
+    userName: user && user.profile.name,
   });
 };
 

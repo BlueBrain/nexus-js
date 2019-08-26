@@ -74,8 +74,9 @@ export const parseNexusUrl = (nexusUrl: string): ParsedNexusUrl => {
   }
 
   const matches = nexusUrl.match(nexusUrlR);
-  if (!matches || matches.length <= 5)
+  if (!matches || matches.length <= 5) {
     throw new Error('Error while parsing selfUrl');
+  }
 
   return {
     deployment: matches[1],
@@ -98,9 +99,7 @@ export const camelCaseToLabelString = (labelString: string): string => {
       // insert a space before all caps
       .replace(/([A-Z])/g, ' $1')
       // uppercase the first character
-      .replace(/^./, function(str) {
-        return str.toUpperCase();
-      })
+      .replace(/^./, str => str.toUpperCase())
   );
 };
 

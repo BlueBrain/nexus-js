@@ -99,7 +99,7 @@ export const makeNQuad = (response: SparqlQueryResults): string => {
     )} ${processor(binding.object)}`;
   });
 
-  return triples.join(' . \n') + ' .';
+  return `${triples.join(' . \n')} .`;
 };
 
 export const mapMorphCollQueryResults = (queryResults: SparqlQueryResults) => {

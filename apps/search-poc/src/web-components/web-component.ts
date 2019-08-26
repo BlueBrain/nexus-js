@@ -54,12 +54,13 @@ export default class WebComponent extends HTMLElement {
    * This method also allows async logic for providing nexusDeployment
    */
   init() {
-    if (!this.nexusDeployment)
+    if (!this.nexusDeployment) {
       throw new Error('nexusDeployment should be defined');
+    }
 
     this.nexusClient = createNexusClient({
-      uri: this.nexusDeployment,
       fetch,
+      uri: this.nexusDeployment,
       links: [setToken],
     });
 

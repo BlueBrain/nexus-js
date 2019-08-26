@@ -17,7 +17,6 @@ it('EModelCollectionDetails renders correctly', () => {
     };
 
 
-    // const result = shallow(<EModelDetails {...props} />);
     const result = shallow(<EModelCollectionDetails {...props} />);
     expect(result).toMatchSnapshot();
 });

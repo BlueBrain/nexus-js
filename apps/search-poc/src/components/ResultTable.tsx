@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Table } from 'antd';
 import './ResultTable.css';
 
-
 type ResultTableProps = {
   headerProperties?: {
     title: string;
@@ -12,21 +11,25 @@ type ResultTableProps = {
     id: string;
     [dataIndex: string]: any;
   }[];
-  total: number;
+  total?: number;
   onRowClick?: (rowData: any, index: number) => void;
 };
 
-const ResultsTable: React.FunctionComponent<ResultTableProps> =
-  ({ headerProperties, items, total, onRowClick = () => {} }) => {
-    const columnList = [
-      ...(headerProperties
-        ? headerProperties.map(({ title, dataIndex }) => ({
+const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
+  headerProperties,
+  items,
+  total,
+  onRowClick = () => {},
+}) => {
+  const columnList = [
+    ...(headerProperties
+      ? headerProperties.map(({ title, dataIndex }) => ({
           title,
           dataIndex,
           className: `result-column ${dataIndex}`,
           render: (value: any) => <span>{value}</span>,
         }))
-        : []),
+      : []),
   ];
 
   return (
@@ -39,11 +42,15 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> =
         dataSource={items}
         bordered
         pagination={false}
-        title={() => (
-          <h3>
-            {total} {`Result${total > 1 ? 's' : ''}`}
-          </h3>
-        )}
+        title={
+          total
+            ? () => (
+                <h3>
+                  {total} {`Result${total > 1 ? 's' : ''}`}
+                </h3>
+              )
+            : undefined
+        }
       />
     </div>
   );

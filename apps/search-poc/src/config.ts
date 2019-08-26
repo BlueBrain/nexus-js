@@ -17,14 +17,24 @@ export const MORPH_CONVERTER_URL =
 
 export function getCollectionEModelsQuery(resourceId: string) {
   return `
-    prefix nxv: <https://neuroshapes.org/>
+    prefix nxs: <https://neuroshapes.org/>
+    prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
     prefix schema: <http://schema.org/>
     prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
-    SELECT * WHERE {
-      <${resourceId}> nxv:emodels ?emodel .
+    prefix prov: <http://www.w3.org/ns/prov#>
+    SELECT ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
+      <${resourceId}> nxs:emodels ?emodel .
       ?emodel schema:name ?name .
       ?emodel nexus:self ?self .
       optional {?emodel schema:description  ?description}
+      OPTIONAL { ?s schema:name ?name }
+      OPTIONAL { ?emodel nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }
+      OPTIONAL { ?emodel schema:description ?description  }
+      OPTIONAL { ?emodel nxs:subject / nxs:species / rdfs:label ?speciesLabel }
+      OPTIONAL { ?emodel nxs:subject / nxs:strain / rdfs:label ?strainLabel }
+      #OPTIONAL { ?emodel nxs:subject / nxs:age / schema:value ?age }
+      OPTIONAL { ?emodel nxv:project ?project }
+      OPTIONAL { ?emodel nxv:createdAt ?createdAt }
     } LIMIT 100`;
 }
 
@@ -46,7 +56,7 @@ prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix studio: <https://bluebrainnexus.io/studio/vocabulary/>
 prefix schema: <http://schema.org/>
 
-CONSTRUCT {  
+CONSTRUCT {
 	<${studioId}> rdfs:label ?studioLabel ;
                 studio:workspaces ?workspaceId .
     ?workspaceId rdfs:label ?workspaceLabel ;

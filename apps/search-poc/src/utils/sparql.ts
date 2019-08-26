@@ -69,6 +69,14 @@ export const mapEmodelCollQueryResults = (queryResults: SparqlQueryResults) => {
         target: 'description',
         defaultVal: 'NA',
       },
+      {
+        source: 'project',
+        target: 'project',
+      },
+      {
+        source: 'createdAt',
+        target: 'createdAt',
+      },
     ],
   };
 

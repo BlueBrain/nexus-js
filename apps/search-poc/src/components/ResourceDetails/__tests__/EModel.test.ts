@@ -1,4 +1,8 @@
 import { parseFitnessRawParamName } from '../EModel';
+import { ResourceDetails } from '../ResourceDetails';
+import * as renderer from 'react-test-renderer';
+import React from 'react';
+import { shallow } from 'enzyme';
 
 describe('parseFitnessRawParamName', () => {
   it('should parse a string with leading underscore', () => {

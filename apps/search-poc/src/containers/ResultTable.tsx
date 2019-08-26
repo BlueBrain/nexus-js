@@ -21,9 +21,6 @@ const ResultTableContainer: React.FunctionComponent<{
       ),
     [props.dataQuery, props.viewId], // only trigger new call if we have a new query and a new view
   );
-  // const handleRowClick = (index, items) => {
-  //   props.history.push(`/resources/?self=${items[index].self}`);
-  // };
 
   if (error) {
     return (

@@ -4,12 +4,27 @@ import { Spin, Alert } from 'antd';
 import ResultTable from '../components/ResultTable';
 import { getLabel, camelCaseToLabelString } from '../utils';
 
+export type Binding = {
+  [key: string]: {
+    dataType?: string;
+    type: string;
+    value: string;
+  }
+}
+
+type Item = {
+  id: string;
+  self: string;
+  key: string;
+  [key: string]: any;
+}
+
 const ResultTableContainer: React.FunctionComponent<{
   dataQuery: string;
   orgLabel: string;
   projectLabel: string;
   viewId: string;
-  handleRowClick?: (index: number, items: any[]) => void;
+  handleRowClick?: (index: number, items: Item[]) => void;
 }> = props => {
   const { loading, data, error } = useNexus<any>(
     nexus =>
@@ -36,8 +51,8 @@ const ResultTableContainer: React.FunctionComponent<{
   const total =
     data &&
     data.results.bindings
-      .filter((binding: any) => binding.total && binding.total.value !== '0')
-      .reduce((total: number, binding: any) => total + parseInt(binding.total.value, 10), 0);
+      .filter((binding: Binding) => binding.total && binding.total.value !== '0')
+      .reduce((total: number, binding: Binding) => total + parseInt(binding.total.value, 10), 0);
 
   // build header properties
   const headerProperties: {
@@ -48,9 +63,9 @@ const ResultTableContainer: React.FunctionComponent<{
     data.head.vars
       .filter(
         // we don't want to display total or self url in result table
-        (headVar: any) => !(headVar === 'total' || headVar === 'self'),
+        (headVar: string) => !(headVar === 'total' || headVar === 'self'),
       )
-      .map((headVar: any) => ({
+      .map((headVar: string) => ({
         title: camelCaseToLabelString(headVar), // TODO: get the matching title from somewhere?
         dataIndex: headVar,
       }));
@@ -60,8 +75,8 @@ const ResultTableContainer: React.FunctionComponent<{
     data &&
     data.results.bindings
       // we only want resources
-      .filter((binding: any) => binding.self)
-      .map((binding: any) => {
+      .filter((binding: Binding) => binding.self)
+      .map((binding: Binding) => {
         // let's get the value for each headerProperties
         const properties = headerProperties.reduce(
           (prev, curr) => ({

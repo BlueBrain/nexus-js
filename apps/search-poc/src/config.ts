@@ -39,16 +39,25 @@ export function getCollectionEModelsQuery(resourceId: string) {
 }
 
 export function getCollectionReconstructedCellsQuery(resourceId: string) {
-  return `
-  prefix nxv: <https://neuroshapes.org/>
+  return `prefix nxs: <https://neuroshapes.org/>
+  prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
   prefix schema: <http://schema.org/>
   prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
-  SELECT * WHERE {
-    <${resourceId}> nxv:reconstructedcells ?reconstructedcell .
-    ?reconstructedcell schema:name ?name .
-    ?reconstructedcell nexus:self ?self .
-    optional {?reconstructedcell schema:description  ?description}
-  } LIMIT 20`;
+  prefix prov: <http://www.w3.org/ns/prov#>
+  SELECT ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
+    <${resourceId}> nxs:reconstructedcells ?reconstructedcells .
+    ?reconstructedcells schema:name ?name .
+    ?reconstructedcells nexus:self ?self .
+    optional {?reconstructedcells schema:description  ?description}
+    OPTIONAL { ?s schema:name ?name }
+    OPTIONAL { ?reconstructedcells nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }
+    OPTIONAL { ?reconstructedcells schema:description ?description  }
+    OPTIONAL { ?reconstructedcells nxs:subject / nxs:species / rdfs:label ?speciesLabel }
+    OPTIONAL { ?reconstructedcells nxs:subject / nxs:strain / rdfs:label ?strainLabel }
+    #OPTIONAL { ?reconstructedcells nxs:subject / nxs:age / schema:value ?age }
+    OPTIONAL { ?reconstructedcells nxv:project ?project }
+    OPTIONAL { ?reconstructedcells nxv:createdAt ?createdAt }
+  } LIMIT 100`;
 }
 
 export const getStudioConfig = (studioId: string) => `

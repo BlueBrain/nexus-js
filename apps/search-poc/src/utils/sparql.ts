@@ -73,29 +73,3 @@ export const makeNQuad = (response: SparqlQueryResults): string => {
 
   return `${triples.join(' . \n')} .`;
 };
-
-export const mapMorphCollQueryResults = (queryResults: SparqlQueryResults) => {
-  const config = {
-    mappings: [
-      {
-        source: 'reconstructedcell',
-        target: 'id',
-      },
-      {
-        source: 'self',
-        target: 'self',
-      },
-      {
-        source: 'name',
-        target: 'name',
-      },
-      {
-        source: 'description',
-        target: 'description',
-        defaultVal: 'NA',
-      },
-    ],
-  };
-
-  return mapSparqlResults(queryResults, config);
-};

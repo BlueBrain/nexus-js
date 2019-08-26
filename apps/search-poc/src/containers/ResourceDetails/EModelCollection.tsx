@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin } from 'antd';
+import { Spin, Empty } from 'antd';
 
 import { Resource, DEFAULT_SPARQL_VIEW_ID } from '@bbp/nexus-sdk';
 import { useNexus } from '@bbp/react-nexus';
@@ -41,7 +41,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
     data.results.bindings
       // we only want resources
       .filter((binding: any) => binding.self)
-      .map((binding: any) => {
+      .map((binding: any, index: number) => {
         // let's get the value for each headerProperties
         const properties = headerProperties.reduce(
           (prev, curr) => ({
@@ -58,19 +58,19 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
           ...properties, // our properties
           id: getLabel(decodeURIComponent(binding.self.value)), // id is used by antd component
           self: binding.self.value, // used in order to load details or resource once selected
-          key: binding.self.value, // used by react component (unique key)
+          key: `${binding.self.value}-${index}`, // used by react component (unique key)
         };
       });
 
   return (
     <Spin spinning={loading}>
+      {error && !data && <Empty>{error.message}</Empty>}
       {data && (
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          onRowClick={(emodel, index) => {
-            console.log(emodel);
-            props.goToResource && props.goToResource(emodel.self);
+          onRowClick={resource => {
+            props.goToResource && props.goToResource(resource.self);
           }}
         />
       )}

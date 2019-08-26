@@ -28,7 +28,7 @@ class ResourceDetails extends WebComponent {
     if (accessToken) saveAccessToken(accessToken);
 
     const parsedUrl = parseNexusUrl(selfUrl);
-    this.nexusDeployment = parsedUrl.deployment;
+    this.createNexusClient(parsedUrl.deployment);
 
     this.reactComponentProps = { selfUrl };
 

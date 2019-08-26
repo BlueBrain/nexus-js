@@ -10,6 +10,7 @@ import ResultTable from '../../components/ResultTable';
 
 const EModelCollectionDetailsContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource & EModelResource;
+  goToResource?: Function;
 }> = props => {
   const query = getCollectionEModelsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
@@ -68,7 +69,8 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
           headerProperties={headerProperties}
           items={items}
           onRowClick={(emodel, index) => {
-            console.log('emodel clicked', { emodel });
+            console.log(emodel);
+            props.goToResource && props.goToResource(emodel.self);
           }}
         />
       )}

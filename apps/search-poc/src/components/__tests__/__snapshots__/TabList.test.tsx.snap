@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TabList renders correctly with work items 1`] = `
+<div
+  className="tab-list"
+>
+  <Tabs
+    hideAdd={false}
+    onChange={[Function]}
+    tabPosition="left"
+  >
+    <TabPane
+      key="id"
+      placeholder={null}
+      tab={
+        <div
+          className="tab-item"
+        >
+          <span
+            className="title ellipsis"
+          />
+          <p
+            className="description fade"
+          />
+        </div>
+      }
+    />
+  </Tabs>
+</div>
+`;

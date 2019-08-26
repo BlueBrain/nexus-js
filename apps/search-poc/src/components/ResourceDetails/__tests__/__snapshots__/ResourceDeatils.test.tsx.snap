@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResourceDetails renders correctly 1`] = `
+<div
+  className="ResourceDetails"
+>
+  <div
+    className="metadata-container"
+  >
+    <h1
+      className="name"
+    />
+    <h3>
+      Type:  
+      <Tag
+        closable={false}
+        key="EModel"
+      >
+        EModel
+      </Tag>
+      <Tag
+        closable={false}
+        key="Entity"
+      >
+        Entity
+      </Tag>
+    </h3>
+    <p>
+      Brain region:  
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        primary somatosensory cortex
+      </a>
+    </p>
+    <p>
+      Species:  
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Rattus norvegicus
+      </a>
+    </p>
+    <p>
+      Strain:  
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Wistar Han
+      </a>
+    </p>
+    <div
+      className="layers-container"
+    >
+      Layers:  
+      <Tag
+        closable={false}
+        color="blue"
+      >
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          cortical layer I
+        </a>
+      </Tag>
+      <Tag
+        closable={false}
+        color="blue"
+      >
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          cortical layer III
+        </a>
+      </Tag>
+      <Tag
+        closable={false}
+        color="blue"
+      >
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          cortical layer V
+        </a>
+      </Tag>
+      <Tag
+        closable={false}
+        color="blue"
+      >
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          cortical layer VI
+        </a>
+      </Tag>
+      <Tag
+        closable={false}
+        color="blue"
+      >
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          cortical layer II
+        </a>
+      </Tag>
+      <Tag
+        closable={false}
+        color="blue"
+      >
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          cortical layer IV
+        </a>
+      </Tag>
+    </div>
+    <p
+      className="descripion"
+    >
+      Description: 
+    </p>
+  </div>
+  <div
+    className="module-container"
+  />
+</div>
+`;

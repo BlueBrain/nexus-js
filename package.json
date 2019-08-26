@@ -15,7 +15,7 @@
   "scripts": {
     "test": "jest",
     "codecov": "codecov",
-    "lint": "tslint packages/**/src/**/* -e **/*.md",
+    "lint": "tslint packages/**/src/**/* apps/**/src/**/* -e **/*.md",
     "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr documentation/",
     "prepublishOnly": "npm run test && npm run lint"
   },
@@ -74,7 +74,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm test",
+      "pre-push": "yarn lint && yarn test",
       "pre-commit": "lint-staged"
     }
   },

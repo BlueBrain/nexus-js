@@ -16,16 +16,17 @@ type ResultTableProps = {
   onRowClick?: (rowData: any, index: number) => void;
 };
 
-const ResultsTable: React.FunctionComponent<ResultTableProps> = 
+const ResultsTable: React.FunctionComponent<ResultTableProps> =
   ({ headerProperties, items, total, onRowClick = () => {} }) => {
     const columnList = [
-      ...(headerProperties &&
-        headerProperties.map(({ title, dataIndex }) => ({
+      ...(headerProperties
+        ? headerProperties.map(({ title, dataIndex }) => ({
           title,
           dataIndex,
           className: `result-column ${dataIndex}`,
-          render: value => <span>{value}</span>,
-        }))),
+          render: (value: any) => <span>{value}</span>,
+        }))
+        : []),
   ];
 
   return (

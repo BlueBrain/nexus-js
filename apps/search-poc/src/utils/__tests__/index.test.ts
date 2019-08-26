@@ -1,9 +1,19 @@
-import { getLabel, parseNexusUrl, camelCaseToLabelString } from '../index';
+import {
+  getLabel,
+  parseNexusUrl,
+  camelCaseToLabelString,
+  camelToKebab,
+} from '../index';
 
 describe('utils', () => {
   describe('camelCaseToLabelString', () => {
     it('should convert camel cased string to capitalized words', () => {
       expect(camelCaseToLabelString('camelCase')).toEqual('Camel Case');
+    });
+  });
+  describe('camelToKebab', () => {
+    it('should convert camel cased string to kebab case', () => {
+      expect(camelToKebab('camelCase')).toEqual('camel-case');
     });
   });
   describe('getLabel()', () => {

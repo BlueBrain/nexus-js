@@ -2,12 +2,14 @@ import React, { Suspense } from 'react';
 import get from 'lodash/get';
 import { useNexus } from '@bbp/react-nexus';
 import { Spin } from 'antd';
+import moment from 'moment';
 
 import ResourceDetails from '../../components/ResourceDetails';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import { Resource } from '@bbp/nexus-sdk';
 import { getComponentsForTypes } from './index';
 import { MINDSResource, Layer } from './types';
+import { getLabel, camelToKebab } from '../../utils';
 
 const ResourceDetailsContainer: React.FunctionComponent<{
   selfUrl: string;
@@ -28,6 +30,9 @@ const ResourceDetailsContainer: React.FunctionComponent<{
     id: get(data, 'brainLocation.brainRegion.@id'),
     label: get(data, 'brainLocation.brainRegion.label'),
   };
+
+  const uploadedAt = moment(get(data, '_createdAt')).fromNow();
+  const uploadedBy = getLabel(get(data, '_createdBy', ''));
 
   const species = {
     id: get(data, 'species.@id'),
@@ -54,6 +59,9 @@ const ResourceDetailsContainer: React.FunctionComponent<{
   return (
     <ResourceDetails
       id={id}
+      className={Object.keys(components)
+        .map(componentName => `-${camelToKebab(componentName)}`)
+        .join(' ')}
       types={visibleTypes}
       name={name}
       description={description}
@@ -61,6 +69,8 @@ const ResourceDetailsContainer: React.FunctionComponent<{
       layers={layers}
       species={species}
       strain={strain}
+      uploadedAt={uploadedAt}
+      uploadedBy={uploadedBy}
     >
       <ErrorBoundary>
         <Suspense fallback={<Spin />}>

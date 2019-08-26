@@ -1,9 +1,8 @@
-
 import * as React from 'react';
-import { Tag } from 'antd';
+import { Tag, Icon } from 'antd';
 
 import './ResourceDetails.css';
-
+import { camelCaseToLabelString } from '../../utils';
 
 const ResourceDetails: React.FunctionComponent<{
   id: string;
@@ -25,79 +24,90 @@ const ResourceDetails: React.FunctionComponent<{
   strain: {
     id: string;
     label: string;
-  }
+  };
+  uploadedAt: string;
+  uploadedBy: string;
+  className: string;
 }> = props => {
+  const NotFound = ({ label }: { label: string }) => {
+    return (
+      <p>
+        <Icon type="warning" />
+        This dataset does not have <b>{label}</b> information
+      </p>
+    );
+  };
   return (
-    <div className="ResourceDetails">
+    <div className={`resource-details ${props.className}`}>
       <div className="metadata-container">
         <h1 className="name">{props.name}</h1>
 
-        <h3>
-          Type: &nbsp;
-          {props.types.map(type =>
-            <Tag key={type}>{type}</Tag>
-          )}
-        </h3>
+        <h2>
+          {props.types.map(type => (
+            <em>{camelCaseToLabelString(type)}</em>
+          ))}
+        </h2>
 
         <p>
-          Brain region: &nbsp;
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={props.brainRegion.id}
-          >
-            {props.brainRegion.label}
-          </a>
+          uploaded {props.uploadedAt} by <b>{props.uploadedBy}</b>
         </p>
 
+        <div className="brain-region">
+          {props.brainRegion.label ? (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={props.brainRegion.id}
+            >
+              {props.brainRegion.label}
+            </a>
+          ) : (
+            <NotFound label="Brain Region" />
+          )}
+        </div>
+
+        {props.layers.length ? (
+          <div className="layers-container">
+            {props.layers.map(layer => (
+              <Tag key={layer.id} color="blue">
+                <a target="_blank" rel="noopener noreferrer" href={layer.id}>
+                  {layer.label}
+                </a>
+              </Tag>
+            ))}
+          </div>
+        ) : null}
+
         <p>
-          Species: &nbsp;
-          {props.species.label
-            ? <a
+          {props.species.label ? (
+            <a
               target="_blank"
               rel="noopener noreferrer"
               href={props.species.id}
             >
               {props.species.label}
             </a>
-            : 'NA'
-          }
+          ) : (
+            <NotFound label="Species" />
+          )}
         </p>
 
         <p>
-          Strain: &nbsp;
-          {props.strain.label
-            ? <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={props.strain.id}
-            >
+          {props.strain.label ? (
+            <a target="_blank" rel="noopener noreferrer" href={props.strain.id}>
               {props.strain.label}
             </a>
-            : 'NA'
-          }
+          ) : (
+            <NotFound label="Strain" />
+          )}
         </p>
 
-        {props.layers.length
-          ? <div className="layers-container">
-            Layers: &nbsp;
-            {props.layers.map(layer =>
-              <Tag key={layer.id} color="blue">
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={layer.id}
-                >
-                  {layer.label}
-                </a>
-              </Tag>
-            )}
-          </div>
-          : null
-        }
-
         <p className="descripion">
-          Description: {props.description}
+          {props.description ? (
+            props.description
+          ) : (
+            <NotFound label="description" />
+          )}
         </p>
       </div>
       <div className="module-container">{props.children}</div>

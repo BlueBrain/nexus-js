@@ -7,10 +7,6 @@ import { MINDSResource, EModelResource } from './types';
 import { getCollectionEModelsQuery } from '../../config';
 import { parseProjectUrl, camelCaseToLabelString, getLabel } from '../../utils';
 import ResultTable from '../../components/ResultTable';
-import { mapEmodelCollQueryResults } from '../../utils/sparql';
-import EModelCollectionDetails, {
-  Emodel,
-} from '../../components/ResourceDetails/EModelCollection';
 
 const EModelCollectionDetailsContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource & EModelResource;

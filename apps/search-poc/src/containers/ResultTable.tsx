@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useNexus } from '@bbp/react-nexus';
 import { Spin, Alert } from 'antd';
-import { withRouter, History } from 'react-router-dom';
 import ResultTable from '../components/ResultTable';
 import { getLabel, camelCaseToLabelString } from '../utils';
 
@@ -10,7 +9,7 @@ const ResultTableContainer: React.FunctionComponent<{
   orgLabel: string;
   projectLabel: string;
   viewId: string;
-  history: History;
+  handleRowClick?: (index, items) => void;
 }> = props => {
   const { loading, data, error } = useNexus<any>(
     nexus =>
@@ -22,10 +21,6 @@ const ResultTableContainer: React.FunctionComponent<{
       ),
     [props.dataQuery, props.viewId], // only trigger new call if we have a new query and a new view
   );
-
-  const handleRowClick = (index, items) => {
-    props.history.push(`/resources/?self=${items[index].self}`);
-  };
 
   if (error) {
     return (
@@ -94,11 +89,11 @@ const ResultTableContainer: React.FunctionComponent<{
           headerProperties={headerProperties}
           items={items}
           total={total}
-          onRowClick={(_, index) => handleRowClick(index, items)}
+          onRowClick={(_, index) => props.handleRowClick(index, items)}
         />
       )}
     </Spin>
   );
 };
 
-export default withRouter(ResultTableContainer);
+export default ResultTableContainer;

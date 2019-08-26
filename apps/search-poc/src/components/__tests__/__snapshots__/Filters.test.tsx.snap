@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`filter renders correctly 1`] = `
+<div
+  className="filter-list"
+>
+  <Collapse
+    bordered={false}
+    expandIconPosition="left"
+    openAnimation={
+      Object {
+        "appear": [Function],
+        "enter": [Function],
+        "leave": [Function],
+      }
+    }
+  >
+    <CollapsePanel
+      header={
+        <div
+          style={
+            Object {
+              "display": "flex",
+              "justifyContent": "space-between",
+            }
+          }
+        >
+          <div
+            style={
+              Object {
+                "width": "60%",
+              }
+            }
+          >
+            filterName
+          </div>
+          <div
+            style={
+              Object {
+                "width": "20%",
+              }
+            }
+          >
+            <Badge
+              count={0}
+              dot={false}
+              overflowCount={99}
+              showZero={false}
+              style={
+                Object {
+                  "backgroundColor": "#44c7f4",
+                }
+              }
+            />
+          </div>
+          <div>
+            1
+          </div>
+        </div>
+      }
+      key="$0"
+    >
+      <CheckboxGroup
+        onChange={[Function]}
+        options={Array []}
+        style={
+          Object {
+            "width": "100%",
+          }
+        }
+      >
+        <ul
+          className="checkbox-list"
+        >
+          <li
+            key="filterId"
+          >
+            <Checkbox
+              indeterminate={false}
+              value="filterId"
+            >
+              filterLabel
+            </Checkbox>
+          </li>
+        </ul>
+      </CheckboxGroup>
+    </CollapsePanel>
+  </Collapse>
+</div>
+`;

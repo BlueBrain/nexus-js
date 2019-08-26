@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Table } from 'antd';
 import './ResultTable.css';
 
-const ResultsTable: React.FunctionComponent<{
+
+type ResultTableProps = {
   headerProperties?: {
     title: string;
     dataIndex: string;
@@ -13,15 +14,18 @@ const ResultsTable: React.FunctionComponent<{
   }[];
   total: number;
   onRowClick?: (rowData: any, index: number) => void;
-}> = ({ headerProperties, items, total, onRowClick = () => {} }) => {
-  const columnList = [
-    ...(headerProperties &&
-      headerProperties.map(({ title, dataIndex }) => ({
-        title,
-        dataIndex,
-        className: `result-column ${dataIndex}`,
-        render: value => <span>{value}</span>,
-      }))),
+};
+
+const ResultsTable: React.FunctionComponent<ResultTableProps> = 
+  ({ headerProperties, items, total, onRowClick = () => {} }) => {
+    const columnList = [
+      ...(headerProperties &&
+        headerProperties.map(({ title, dataIndex }) => ({
+          title,
+          dataIndex,
+          className: `result-column ${dataIndex}`,
+          render: value => <span>{value}</span>,
+        }))),
   ];
 
   return (

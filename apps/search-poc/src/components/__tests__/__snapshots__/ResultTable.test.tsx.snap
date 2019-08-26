@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResultsTable renders correctly with header properties 1`] = `
+<div
+  className="result-table"
+>
+  <Table
+    bordered={true}
+    childrenColumnName="children"
+    className=""
+    columns={
+      Array [
+        Object {
+          "className": "result-column 1",
+          "dataIndex": 1,
+          "render": [Function],
+          "title": "header title",
+        },
+      ]
+    }
+    dataSource={
+      Array [
+        Object {
+          "id": "id",
+        },
+      ]
+    }
+    indentSize={20}
+    loading={false}
+    locale={Object {}}
+    onRow={[Function]}
+    pagination={false}
+    rowKey="key"
+    showHeader={true}
+    size="default"
+    sortDirections={
+      Array [
+        "ascend",
+        "descend",
+      ]
+    }
+    title={[Function]}
+    useFixedHeader={false}
+  />
+</div>
+`;

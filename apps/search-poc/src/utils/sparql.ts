@@ -47,34 +47,6 @@ export const mapSparqlResults = (
   });
 };
 
-// Method returns the collection with properties:
-// { id: string, self: string, name: string, description: string }
-export const mapEmodelCollQueryResults = (queryResults: SparqlQueryResults) => {
-  const config = {
-    mappings: [
-      {
-        source: 'id',
-        target: 'emodel',
-      },
-      {
-        source: 'self',
-        target: 'self',
-      },
-      {
-        source: 'name',
-        target: 'name',
-      },
-      {
-        source: 'description',
-        target: 'description',
-        defaultVal: 'NA',
-      },
-    ],
-  };
-
-  return mapSparqlResults(queryResults, config);
-};
-
 /**
  * Build a string of NQuads (triples with .)
  *
@@ -100,30 +72,4 @@ export const makeNQuad = (response: SparqlQueryResults): string => {
   });
 
   return `${triples.join(' . \n')} .`;
-};
-
-export const mapMorphCollQueryResults = (queryResults: SparqlQueryResults) => {
-  const config = {
-    mappings: [
-      {
-        source: 'reconstructedcell',
-        target: 'id',
-      },
-      {
-        source: 'self',
-        target: 'self',
-      },
-      {
-        source: 'name',
-        target: 'name',
-      },
-      {
-        source: 'description',
-        target: 'description',
-        defaultVal: 'NA',
-      },
-    ],
-  };
-
-  return mapSparqlResults(queryResults, config);
 };

@@ -13,9 +13,11 @@ import { getLabel, camelToKebab } from '../../utils';
 
 const ResourceDetailsContainer: React.FunctionComponent<{
   selfUrl: string;
+  goToResource?: Function;
 }> = props => {
-  const { data, loading, error } = useNexus<Resource & MINDSResource>(nexus =>
-    nexus.httpGet({ path: props.selfUrl }),
+  const { data, loading, error } = useNexus<Resource & MINDSResource>(
+    nexus => nexus.httpGet({ path: props.selfUrl }),
+    [props.selfUrl],
   );
 
   const id = get(data, '@id');
@@ -78,7 +80,13 @@ const ResourceDetailsContainer: React.FunctionComponent<{
             // TODO: FIX
             // @ts-ignore
             const Component = components[compName];
-            return <Component key={compName} resource={data} />;
+            return (
+              <Component
+                key={compName}
+                resource={data}
+                goToResource={props.goToResource}
+              />
+            );
           })}
         </Suspense>
       </ErrorBoundary>

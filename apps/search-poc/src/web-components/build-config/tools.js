@@ -15,7 +15,7 @@ const buildMode = {
 }
 
 function validateComponentName(name) {
-  if (name === camelCase(name)) {
+  if (name !== camelCase(name)) {
     throw new Error(`Component name ${name} should be in camel case`);
   }
 }

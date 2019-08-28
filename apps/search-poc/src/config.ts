@@ -1,3 +1,5 @@
+export const PAGE_SIZE = 20;
+
 export const SETTINGS = {
   preferredRealmKey: 'preferredRealm',
   bearerTokenKey: 'nexusToken',
@@ -22,7 +24,7 @@ export function getCollectionEModelsQuery(resourceId: string) {
     prefix schema: <http://schema.org/>
     prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
     prefix prov: <http://www.w3.org/ns/prov#>
-    SELECT ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
+    SELECT distinct ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
       <${resourceId}> nxs:emodels ?emodel .
       ?emodel schema:name ?name .
       ?emodel nexus:self ?self .
@@ -35,7 +37,7 @@ export function getCollectionEModelsQuery(resourceId: string) {
       #OPTIONAL { ?emodel nxs:subject / nxs:age / schema:value ?age }
       OPTIONAL { ?emodel nxv:project ?project }
       OPTIONAL { ?emodel nxv:createdAt ?createdAt }
-    } LIMIT 100`;
+    }`;
 }
 
 export function getCollectionReconstructedCellsQuery(resourceId: string) {
@@ -44,10 +46,10 @@ export function getCollectionReconstructedCellsQuery(resourceId: string) {
   prefix schema: <http://schema.org/>
   prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
   prefix prov: <http://www.w3.org/ns/prov#>
-  SELECT ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
+  SELECT distinct ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
     <${resourceId}> nxs:reconstructedcells ?reconstructedcells .
-    ?reconstructedcells schema:name ?name .
     ?reconstructedcells nexus:self ?self .
+    ?reconstructedcells schema:name ?name .
     optional {?reconstructedcells schema:description  ?description}
     OPTIONAL { ?s schema:name ?name }
     OPTIONAL { ?reconstructedcells nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }
@@ -57,7 +59,7 @@ export function getCollectionReconstructedCellsQuery(resourceId: string) {
     #OPTIONAL { ?reconstructedcells nxs:subject / nxs:age / schema:value ?age }
     OPTIONAL { ?reconstructedcells nxv:project ?project }
     OPTIONAL { ?reconstructedcells nxv:createdAt ?createdAt }
-  } LIMIT 100`;
+  }`;
 }
 
 export const getStudioConfig = (studioId: string) => `

@@ -14,11 +14,15 @@ type ResultTableProps = {
     [dataIndex: string]: any;
   }[];
   total?: number;
+  paginationSettings?: {
+    pageSize: number;
+  };
   onRowClick?: (rowData: any, index: number) => void;
 };
 
 const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   headerProperties,
+  paginationSettings,
   items,
   total,
   onRowClick = () => {},
@@ -66,7 +70,13 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
         columns={columnList}
         dataSource={items}
         bordered
-        pagination={false}
+        pagination={
+          !!total &&
+          !!paginationSettings && {
+            total,
+            pageSize: paginationSettings.pageSize,
+          }
+        }
         title={
           total
             ? () => (

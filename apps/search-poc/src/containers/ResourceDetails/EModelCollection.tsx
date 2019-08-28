@@ -69,7 +69,6 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          total={items.length}
           onRowClick={resource => {
             props.goToResource && props.goToResource(resource.self);
           }}

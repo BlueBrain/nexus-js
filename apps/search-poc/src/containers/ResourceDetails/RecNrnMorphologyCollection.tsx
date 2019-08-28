@@ -69,7 +69,6 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          total={items.length}
           onRowClick={(resource, index) => {
             props.goToResource && props.goToResource(resource.self);
           }}

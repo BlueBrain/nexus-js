@@ -4,6 +4,7 @@ import './ResultTable.css';
 import moment from 'moment';
 import { parseProjectUrl } from '../utils';
 import { PAGE_SIZE } from '../config';
+import Search from 'antd/lib/input/Search';
 
 type ResultTableProps = {
   headerProperties?: {
@@ -14,16 +15,18 @@ type ResultTableProps = {
     id: string;
     [dataIndex: string]: any;
   }[];
-  total?: number;
+  pageSize?: number;
   onRowClick?: (rowData: any, index: number) => void;
 };
 
 const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   headerProperties,
   items,
-  total,
+  pageSize = PAGE_SIZE,
   onRowClick = () => {},
 }) => {
+  const [searchValue, setSearchValue] = React.useState();
+
   const columnList = [
     ...(headerProperties
       ? headerProperties.map(({ title, dataIndex }) => {
@@ -58,6 +61,18 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
       : []),
   ];
 
+  const filteredItems = items.filter(item => {
+    return (
+      Object.values(item)
+        .join(' ')
+        .toLowerCase()
+        .search((searchValue || '').toLowerCase()) >= 0
+    );
+  });
+
+  const tableItems = searchValue ? filteredItems : items;
+  const total = tableItems.length;
+  const showPagination = total > pageSize;
   return (
     <div className="result-table">
       <Table
@@ -65,24 +80,30 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
           onClick: event => onRowClick(data, index),
         })}
         columns={columnList}
-        dataSource={items}
+        dataSource={tableItems}
         bordered
         pagination={
-          !!total &&
-          total > PAGE_SIZE && {
+          showPagination && {
             total,
-            pageSize: PAGE_SIZE,
+            pageSize,
           }
         }
-        title={
-          total
-            ? () => (
-                <h3>
-                  {total} {`Result${total > 1 ? 's' : ''}`}
-                </h3>
-              )
-            : undefined
-        }
+        title={() => (
+          <div className="header">
+            {(showPagination || !!searchValue) && (
+              <Search
+                className="search"
+                value={searchValue}
+                onChange={(e: React.FormEvent<HTMLInputElement>) => {
+                  setSearchValue(e.currentTarget.value);
+                }}
+              />
+            )}
+            <div className="total">
+              {total} {`Result${total > 1 ? 's' : ''}`}
+            </div>
+          </div>
+        )}
       />
     </div>
   );

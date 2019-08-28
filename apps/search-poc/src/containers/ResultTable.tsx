@@ -9,15 +9,15 @@ export type Binding = {
     dataType?: string;
     type: string;
     value: string;
-  }
-}
+  };
+};
 
 type Item = {
   id: string;
   self: string;
   key: string;
   [key: string]: any;
-}
+};
 
 const ResultTableContainer: React.FunctionComponent<{
   dataQuery: string;
@@ -46,13 +46,6 @@ const ResultTableContainer: React.FunctionComponent<{
       />
     );
   }
-
-  // get total
-  const total =
-    data &&
-    data.results.bindings
-      .filter((binding: Binding) => binding.total && binding.total.value !== '0')
-      .reduce((total: number, binding: Binding) => total + parseInt(binding.total.value, 10), 0);
 
   // build header properties
   const headerProperties: {
@@ -103,8 +96,9 @@ const ResultTableContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          total={total}
-          onRowClick={(_, index) => props.handleRowClick && props.handleRowClick(index, items)}
+          onRowClick={(_, index) =>
+            props.handleRowClick && props.handleRowClick(index, items)
+          }
         />
       )}
     </Spin>

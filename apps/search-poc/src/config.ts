@@ -24,7 +24,7 @@ export function getCollectionEModelsQuery(resourceId: string) {
     prefix schema: <http://schema.org/>
     prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
     prefix prov: <http://www.w3.org/ns/prov#>
-    SELECT distinct ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
+    SELECT DISTINCT ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
       <${resourceId}> nxs:emodels ?emodel .
       ?emodel schema:name ?name .
       ?emodel nexus:self ?self .
@@ -46,7 +46,7 @@ export function getCollectionReconstructedCellsQuery(resourceId: string) {
   prefix schema: <http://schema.org/>
   prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
   prefix prov: <http://www.w3.org/ns/prov#>
-  SELECT distinct ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
+  SELECT DISTINCT ?name ?brainRegionLabel ?self ?project ?createdAt WHERE {
     <${resourceId}> nxs:reconstructedcells ?reconstructedcells .
     ?reconstructedcells nexus:self ?self .
     ?reconstructedcells schema:name ?name .

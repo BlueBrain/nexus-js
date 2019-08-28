@@ -4,7 +4,7 @@ import { Spin, Empty } from 'antd';
 import { Resource, DEFAULT_SPARQL_VIEW_ID } from '@bbp/nexus-sdk';
 import { useNexus } from '@bbp/react-nexus';
 import { MINDSResource } from './types';
-import { getCollectionReconstructedCellsQuery, PAGE_SIZE } from '../../config';
+import { getCollectionReconstructedCellsQuery } from '../../config';
 import { parseProjectUrl, getLabel, camelCaseToLabelString } from '../../utils';
 import ResultTable from '../../components/ResultTable';
 
@@ -62,10 +62,6 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
         };
       });
 
-  const paginationSettings = {
-    pageSize: PAGE_SIZE,
-  };
-
   return (
     <Spin spinning={loading}>
       {error && !data && <Empty>{error.message}</Empty>}
@@ -73,7 +69,6 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          paginationSettings={paginationSettings}
           total={items.length}
           onRowClick={(resource, index) => {
             props.goToResource && props.goToResource(resource.self);

@@ -3,6 +3,7 @@ import { Table } from 'antd';
 import './ResultTable.css';
 import moment from 'moment';
 import { parseProjectUrl } from '../utils';
+import { PAGE_SIZE } from '../config';
 
 type ResultTableProps = {
   headerProperties?: {
@@ -72,9 +73,9 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
         bordered
         pagination={
           !!total &&
-          !!paginationSettings && {
+          total > PAGE_SIZE && {
             total,
-            pageSize: paginationSettings.pageSize,
+            pageSize: PAGE_SIZE,
           }
         }
         title={

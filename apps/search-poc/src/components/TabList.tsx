@@ -4,21 +4,24 @@ import { Tabs } from 'antd';
 
 const { TabPane } = Tabs;
 
-type WorkspaceItem = {
+export type WorkspaceItem = {
   id: string;
   label: string;
   description: string;
 };
 
-type TabListProps = {
+export type TabListProps = {
   items: WorkspaceItem[];
   onSelected: Function;
   defaultActiveId?: string;
 };
 
-
-
-const TabList: React.FunctionComponent<TabListProps> = ({ items, onSelected, defaultActiveId, children }) => {
+const TabList: React.FunctionComponent<TabListProps> = ({
+  items,
+  onSelected,
+  defaultActiveId,
+  children,
+}) => {
   return (
     <div className="tab-list">
       <Tabs

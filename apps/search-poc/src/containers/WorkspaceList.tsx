@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { withRouter, History } from 'react-router-dom';
 import queryString from 'query-string';
-import TabList from '../components/TabList';
+import { TabListProps } from '../components/TabList';
 
 function getWorkspaceConfig(
   id: string,
@@ -20,7 +20,8 @@ const WorkspaceListContainer: React.FunctionComponent<{
   workspaceConfig: WorkspaceConfig[];
   onWorkspaceSelected: (workspaceId: string) => void;
   history: History;
-}> = ({ workspaceConfig, onWorkspaceSelected, history }) => {
+  children(props: TabListProps): JSX.Element;
+}> = ({ workspaceConfig, onWorkspaceSelected, history, children }) => {
   // get active id from query string on mount (if any)
   const queryStringWorkspaceId =
     queryString.parse(history.location.search).workspace || '';
@@ -44,28 +45,26 @@ const WorkspaceListContainer: React.FunctionComponent<{
     // eslint-disable-next-line
   }, []);
 
-  return (
-    <TabList
-      items={configData}
-      onSelected={workspaceId => {
-        const activeWorkspace = workspaceId
-          ? getWorkspaceConfig(workspaceId.toString(), workspaceConfig)
-          : workspaceConfig[0];
-        // we need to remove the active dashboard as we are changing workspaces
-        const queryStrings = queryString.parse(history.location.search);
-        // eslint-disable-next-line
-        const { ['dashboard']: value, ...withoutDashboard } = queryStrings;
-        history.push({
-          search: queryString.stringify({
-            ...withoutDashboard,
-            workspace: workspaceId,
-          }),
-        });
-        onWorkspaceSelected(activeWorkspace['@id']);
-      }}
-      defaultActiveId={activeId}
-    />
-  );
+  return children({
+    items: configData,
+    onSelected: workspaceId => {
+      const activeWorkspace = workspaceId
+        ? getWorkspaceConfig(workspaceId.toString(), workspaceConfig)
+        : workspaceConfig[0];
+      // we need to remove the active dashboard as we are changing workspaces
+      const queryStrings = queryString.parse(history.location.search);
+      // eslint-disable-next-line
+      const { ['dashboard']: value, ...withoutDashboard } = queryStrings;
+      history.push({
+        search: queryString.stringify({
+          ...withoutDashboard,
+          workspace: workspaceId,
+        }),
+      });
+      onWorkspaceSelected(activeWorkspace['@id']);
+    },
+    defaultActiveId: activeId,
+  });
 };
 
 export default withRouter(WorkspaceListContainer);

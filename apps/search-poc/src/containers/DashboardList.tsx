@@ -1,9 +1,7 @@
 import * as React from 'react';
+import { withRouter, History } from 'react-router-dom';
 import queryString from 'query-string';
-import { history } from '../history';
-
 import TabList from '../components/TabList';
-import { LinkContext } from '../context/link';
 
 function getDashBoardConfig(
   id: string,
@@ -41,9 +39,8 @@ const DashboardListContainer: React.FunctionComponent<{
     viewId: string,
     dataQuery: string,
   ) => void;
-}> = ({ workspaceId, dashboardConfig, onDashboardSelected }) => {
-  const linkContext = React.useContext(LinkContext);
-
+  history: History;
+}> = ({ workspaceId, dashboardConfig, onDashboardSelected, history }) => {
   // get active id from query string on mount (if any)
   const queryStringDashboardId =
     queryString.parse(history.location.search).dashboard || '';
@@ -59,7 +56,7 @@ const DashboardListContainer: React.FunctionComponent<{
   const dashboardConfigData = dashboardConfig.map(config => ({
     id: `${config.dashboard['@id']}_{workspaceId}`,
     label: config.dashboard.label,
-    description: config.dashboard.description || '',
+    description: config.dashboard.description,
   }));
 
   // trigger parent on mount with the active id
@@ -88,16 +85,16 @@ const DashboardListContainer: React.FunctionComponent<{
           activeDashboard.view['@id'],
           activeDashboard.dashboard.dataQuery,
         );
-        const search = queryString.stringify({
-          ...queryString.parse(history.location.search),
-          dashboard: dashboardId,
-        })
-        linkContext.onLinkClick({ search, type: 'dashboard' });
+        history.push({
+          search: queryString.stringify({
+            ...queryString.parse(history.location.search),
+            dashboard: dashboardId,
+          }),
+        });
       }}
       defaultActiveId={`${activeDb.dashboard['@id']}_${workspaceId}`}
     />
   );
 };
 
-
-export default DashboardListContainer;
+export default withRouter(DashboardListContainer);

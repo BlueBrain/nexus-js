@@ -1,20 +1,17 @@
-
 import React from 'react';
 import { Spin, Empty } from 'antd';
+
 import { Resource, DEFAULT_SPARQL_VIEW_ID } from '@bbp/nexus-sdk';
 import { useNexus } from '@bbp/react-nexus';
-
 import { MINDSResource } from './types';
 import { getCollectionReconstructedCellsQuery } from '../../config';
 import { parseProjectUrl, getLabel, camelCaseToLabelString } from '../../utils';
 import ResultTable from '../../components/ResultTable';
-import { LinkContext } from '../../context/link';
 
 const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource;
+  goToResource?: Function;
 }> = props => {
-  const linkContext = React.useContext(LinkContext);
-
   const query = getCollectionReconstructedCellsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
 
@@ -72,14 +69,13 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          onRowClick={(resource) => {
-            linkContext.onLinkClick({ type: 'resource', selfUrl: resource.self });
+          onRowClick={(resource, index) => {
+            props.goToResource && props.goToResource(resource.self);
           }}
         />
       )}
     </Spin>
   );
 };
-
 
 export default RecNrnMorphologyCollectionContainer;

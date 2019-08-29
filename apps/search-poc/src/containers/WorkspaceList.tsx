@@ -1,9 +1,7 @@
 import * as React from 'react';
+import { withRouter, History } from 'react-router-dom';
 import queryString from 'query-string';
-import { history } from '../history'
-
 import TabList from '../components/TabList';
-import { LinkContext } from '../context/link';
 
 function getWorkspaceConfig(
   id: string,
@@ -21,9 +19,8 @@ type WorkspaceConfig = {
 const WorkspaceListContainer: React.FunctionComponent<{
   workspaceConfig: WorkspaceConfig[];
   onWorkspaceSelected: (workspaceId: string) => void;
-}> = ({ workspaceConfig, onWorkspaceSelected }) => {
-  const linkContext = React.useContext(LinkContext);
-
+  history: History;
+}> = ({ workspaceConfig, onWorkspaceSelected, history }) => {
   // get active id from query string on mount (if any)
   const queryStringWorkspaceId =
     queryString.parse(history.location.search).workspace || '';
@@ -38,7 +35,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
   const configData = workspaceConfig.map(config => ({
     id: config['@id'],
     label: config.label,
-    description: config.description || '',
+    description: config.description,
   }));
 
   // trigger parent on mount with the active id
@@ -58,12 +55,12 @@ const WorkspaceListContainer: React.FunctionComponent<{
         const queryStrings = queryString.parse(history.location.search);
         // eslint-disable-next-line
         const { ['dashboard']: value, ...withoutDashboard } = queryStrings;
-        const search = queryString.stringify({
-          ...withoutDashboard,
-          workspace: workspaceId,
-        })
-
-        linkContext.onLinkClick({ search, type: 'dashboard' });
+        history.push({
+          search: queryString.stringify({
+            ...withoutDashboard,
+            workspace: workspaceId,
+          }),
+        });
         onWorkspaceSelected(activeWorkspace['@id']);
       }}
       defaultActiveId={activeId}
@@ -71,4 +68,4 @@ const WorkspaceListContainer: React.FunctionComponent<{
   );
 };
 
-export default WorkspaceListContainer;
+export default withRouter(WorkspaceListContainer);

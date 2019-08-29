@@ -31,9 +31,6 @@ class StudioDashboard extends WebComponent {
       projectLabel: SETTINGS.studioProject,
       // TODO: query viewId by dashboard's selfUrl
       viewId: 'nxv:StudioSparqlView',
-      handleRowClick: (index: number, items: object[]) => {
-        this.onLinkClick({ ...items[index], type: 'resource' });
-      },
     };
   }
 

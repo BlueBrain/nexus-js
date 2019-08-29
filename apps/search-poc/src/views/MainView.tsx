@@ -10,7 +10,7 @@ import { studioFrame } from '../config';
 import { parseNexusUrl } from '../utils';
 import WorkspaceList from '../containers/WorkspaceList';
 import './MainView.css';
-import { LinkContext } from '../context/link';
+import history from '../history';
 
 
 const MainView: React.FunctionComponent<{
@@ -19,8 +19,6 @@ const MainView: React.FunctionComponent<{
   studioViewId: string;
   studioQuery: string;
 }> = props => {
-  const linkContext = React.useContext(LinkContext);
-
   const [activeWorkspaceId, setActiveWorkspaceId] = React.useState<string>();
 
   const [resultTableData, setResultTableData] = React.useState<{
@@ -81,6 +79,7 @@ const MainView: React.FunctionComponent<{
       <WorkspaceList
         workspaceConfig={studioData.workspaces}
         onWorkspaceSelected={setActiveWorkspaceId}
+        handleClick={params => history.push({ search: params.search })}
       >
         <div className="workspace">
           {activeWorkspaceId && (
@@ -106,14 +105,13 @@ const MainView: React.FunctionComponent<{
                   dataQuery,
                 });
               }}
+              handleClick={params => history.push({ search: params.search })}
             />
           )}
           {resultTableData && (
             <ResultTable
               {...resultTableData}
-              handleRowClick={(index, items) => {
-                props.history.push(`/resources/?self=${items[index].self}`);
-              }}
+              handleClick={params => history.push(`/resources?self=${params.self}`)}
             />
           )}
         </div>

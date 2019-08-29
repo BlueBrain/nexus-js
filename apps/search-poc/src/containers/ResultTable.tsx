@@ -3,6 +3,7 @@ import { useNexus } from '@bbp/react-nexus';
 import { Spin, Alert } from 'antd';
 import ResultTable from '../components/ResultTable';
 import { getLabel, camelCaseToLabelString } from '../utils';
+import { HandleClickParams } from '../types';
 
 export type Binding = {
   [key: string]: {
@@ -24,7 +25,7 @@ const ResultTableContainer: React.FunctionComponent<{
   orgLabel: string;
   projectLabel: string;
   viewId: string;
-  handleRowClick?: (index: number, items: Item[]) => void;
+  handleClick: (params: HandleClickParams) => void;
 }> = props => {
   const { loading, data, error } = useNexus<any>(
     nexus =>
@@ -96,9 +97,7 @@ const ResultTableContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          onRowClick={(_, index) =>
-            props.handleRowClick && props.handleRowClick(index, items)
-          }
+          handleClick={params => props.handleClick(params)}
         />
       )}
     </Spin>

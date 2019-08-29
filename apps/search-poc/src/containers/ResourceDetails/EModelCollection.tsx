@@ -7,13 +7,13 @@ import { MINDSResource, EModelResource } from './types';
 import { getCollectionEModelsQuery } from '../../config';
 import { parseProjectUrl, camelCaseToLabelString, getLabel } from '../../utils';
 import ResultTable from '../../components/ResultTable';
-import { LinkContext } from '../../context/link';
+import { HandleClickParams } from '../../types';
+
 
 const EModelCollectionDetailsContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource & EModelResource;
+  handleClick: (params: HandleClickParams) => void;
 }> = props => {
-  const linkContext = React.useContext(LinkContext);
-
   const query = getCollectionEModelsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
 
@@ -71,9 +71,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          onRowClick={resource => {
-            linkContext.onLinkClick({ type: 'resource', selfUrl: resource.self });
-          }}
+          handleClick={params => props.handleClick(params)}
         />
       )}
     </Spin>

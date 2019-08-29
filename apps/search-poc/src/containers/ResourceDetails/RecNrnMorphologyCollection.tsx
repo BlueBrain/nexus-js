@@ -8,13 +8,13 @@ import { MINDSResource } from './types';
 import { getCollectionReconstructedCellsQuery } from '../../config';
 import { parseProjectUrl, getLabel, camelCaseToLabelString } from '../../utils';
 import ResultTable from '../../components/ResultTable';
-import { LinkContext } from '../../context/link';
+import { HandleClickParams } from '../../types';
+
 
 const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource;
+  handleClick: (params: HandleClickParams) => void;
 }> = props => {
-  const linkContext = React.useContext(LinkContext);
-
   const query = getCollectionReconstructedCellsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
 
@@ -72,9 +72,7 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          onRowClick={(resource) => {
-            linkContext.onLinkClick({ type: 'resource', selfUrl: resource.self });
-          }}
+          handleClick={params => props.handleClick(params)}
         />
       )}
     </Spin>

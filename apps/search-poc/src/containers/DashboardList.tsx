@@ -1,9 +1,9 @@
 import * as React from 'react';
 import queryString from 'query-string';
-import { history } from '../history';
+import history from '../history';
 
 import TabList from '../components/TabList';
-import { LinkContext } from '../context/link';
+import { HandleClickParams } from '../types';
 
 function getDashBoardConfig(
   id: string,
@@ -41,9 +41,8 @@ const DashboardListContainer: React.FunctionComponent<{
     viewId: string,
     dataQuery: string,
   ) => void;
-}> = ({ workspaceId, dashboardConfig, onDashboardSelected }) => {
-  const linkContext = React.useContext(LinkContext);
-
+  handleClick: (params: HandleClickParams) => void,
+}> = ({ workspaceId, dashboardConfig, onDashboardSelected, handleClick }) => {
   // get active id from query string on mount (if any)
   const queryStringDashboardId =
     queryString.parse(history.location.search).dashboard || '';
@@ -92,7 +91,7 @@ const DashboardListContainer: React.FunctionComponent<{
           ...queryString.parse(history.location.search),
           dashboard: dashboardId,
         })
-        linkContext.onLinkClick({ search, type: 'dashboard' });
+        handleClick({ search, type: 'dashboard' });
       }}
       defaultActiveId={`${activeDb.dashboard['@id']}_${workspaceId}`}
     />

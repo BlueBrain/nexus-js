@@ -7,7 +7,7 @@ import { NexusProvider } from '@bbp/react-nexus';
 
 import { createShadowDomRootTree } from './shadow-dom-tools';
 import { setToken } from '../utils/auth';
-import { HrefBuilderParams, LinkContext } from '../context/link';
+import { HandleClickParams } from '../types';
 
 /**
  * Generic web component class
@@ -41,7 +41,7 @@ export default class WebComponent extends HTMLElement {
     this.attachShadow({ mode: 'open' }).appendChild(this.containerEl);
   }
 
-  onLinkClick(params: HrefBuilderParams) {
+  handleClick(params: HandleClickParams) {
     this.dispatchCustomEvent('link-click', params);
   }
 
@@ -87,21 +87,10 @@ export default class WebComponent extends HTMLElement {
   render() {
     if (!this.initialized) return;
 
-    const NexusProviderEl = React.createElement(
+    const appEl = React.createElement(
       NexusProvider,
       { nexusClient: this.nexusClient },
       React.createElement(this.ReactComponent, this.reactComponentProps),
-    );
-
-    const appEl = React.createElement(
-      LinkContext.Provider,
-      {
-        value: {
-          onLinkClick: this.onLinkClick.bind(this),
-          buildHref: () => '',
-        },
-      },
-      NexusProviderEl,
     );
 
     ReactDOM.render(appEl, this.mountPoint);

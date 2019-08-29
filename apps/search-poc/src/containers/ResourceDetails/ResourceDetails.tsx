@@ -10,10 +10,12 @@ import { Resource } from '@bbp/nexus-sdk';
 import { getComponentsForTypes } from './index';
 import { MINDSResource, Layer } from './types';
 import { getLabel, camelToKebab } from '../../utils';
+import { HandleClickParams } from '../../types';
 
 
 const ResourceDetailsContainer: React.FunctionComponent<{
   selfUrl: string;
+  handleClick: (params: HandleClickParams) => void;
 }> = props => {
   const { data, loading, error } = useNexus<Resource & MINDSResource>(
     nexus => nexus.httpGet({ path: props.selfUrl }),
@@ -84,6 +86,7 @@ const ResourceDetailsContainer: React.FunctionComponent<{
               <Component
                 key={compName}
                 resource={data}
+                handleClick={props.handleClick}
               />
             );
           })}

@@ -1,9 +1,10 @@
 import * as React from 'react';
 import queryString from 'query-string';
-import { history } from '../history'
 
 import TabList from '../components/TabList';
-import { LinkContext } from '../context/link';
+import { HandleClickParams } from '../types';
+import history from '../history';
+
 
 function getWorkspaceConfig(
   id: string,
@@ -21,8 +22,9 @@ type WorkspaceConfig = {
 const WorkspaceListContainer: React.FunctionComponent<{
   workspaceConfig: WorkspaceConfig[];
   onWorkspaceSelected: (workspaceId: string) => void;
-  history: History;
-}> = ({ workspaceConfig, onWorkspaceSelected, history, children }) => {
+  handleClick: (params: HandleClickParams) => void;
+}> = ({ workspaceConfig, onWorkspaceSelected, handleClick }) => {
+
   // get active id from query string on mount (if any)
   const queryStringWorkspaceId =
     queryString.parse(history.location.search).workspace || '';
@@ -63,7 +65,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
           workspace: workspaceId,
         })
 
-        linkContext.onLinkClick({ search, type: 'dashboard' });
+        handleClick({ search, type: 'dashboard' });
         onWorkspaceSelected(activeWorkspace['@id']);
       }}
       defaultActiveId={activeId}

@@ -11,11 +11,11 @@ import Header from './containers/Header';
 import DetailsView from './views/DetailsView';
 import MainView from './views/MainView';
 import { SETTINGS, getStudioConfig } from './config';
-import { history } from './history';
-import { defaultLinkProviderContext, LinkContext } from './context/link';
+import history from './history';
 
 import 'antd/dist/antd.css';
 import './index.css';
+
 
 async function main() {
   const [userManager, user] = await setUpSession();
@@ -28,24 +28,22 @@ async function main() {
 
   const rootElement = document.getElementById('root');
   render(
-    <LinkContext.Provider value={defaultLinkProviderContext}>
-      <NexusProvider nexusClient={nexus}>
-        <Header user={user} userManager={userManager} />
-        <Router history={history}>
-          <Switch>
-            <Route path="/" exact>
-              <MainView
-                studioOrg={SETTINGS.studioOrg}
-                studioProject={SETTINGS.studioProject}
-                studioViewId={SETTINGS.studioViewId}
-                studioQuery={getStudioConfig(SETTINGS.studioId)}
-              />
-            </Route>
-            <Route path="/resources" component={DetailsView} />
-          </Switch>
-        </Router>
-      </NexusProvider>
-    </LinkContext.Provider>,
+    <NexusProvider nexusClient={nexus}>
+      <Header user={user} userManager={userManager} />
+      <Router history={history}>
+        <Switch>
+          <Route path="/" exact>
+            <MainView
+              studioOrg={SETTINGS.studioOrg}
+              studioProject={SETTINGS.studioProject}
+              studioViewId={SETTINGS.studioViewId}
+              studioQuery={getStudioConfig(SETTINGS.studioId)}
+            />
+          </Route>
+          <Route path="/resources" component={DetailsView} />
+        </Switch>
+      </Router>
+    </NexusProvider>,
     rootElement,
   );
 }

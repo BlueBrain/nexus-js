@@ -1,26 +1,27 @@
 import * as React from 'react';
-import { withRouter, History } from 'react-router-dom';
 import Dashboards from '../containers/DashboardList';
 import ResultTable from '../containers/ResultTable';
 import { useNexus } from '@bbp/react-nexus';
 import { Spin, Alert } from 'antd';
 import jsonld from 'jsonld';
+
 import { SparqlQueryResults, makeNQuad } from '../utils/sparql';
 import { studioFrame } from '../config';
 import { parseNexusUrl } from '../utils';
 import WorkspaceList from '../containers/WorkspaceList';
 import './MainView.css';
+import { LinkContext } from '../context/link';
+
 
 const MainView: React.FunctionComponent<{
   studioOrg: string;
   studioProject: string;
   studioViewId: string;
   studioQuery: string;
-  history: History;
 }> = props => {
-  const [activeWorkspaceId, setActiveWorkspaceId] = React.useState<string>(
-    null,
-  );
+  const linkContext = React.useContext(LinkContext);
+
+  const [activeWorkspaceId, setActiveWorkspaceId] = React.useState<string>();
 
   const [resultTableData, setResultTableData] = React.useState<{
     orgLabel: string;
@@ -121,4 +122,5 @@ const MainView: React.FunctionComponent<{
   );
 };
 
-export default withRouter(MainView);
+
+export default MainView;

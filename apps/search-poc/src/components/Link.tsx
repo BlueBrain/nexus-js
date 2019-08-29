@@ -1,14 +1,17 @@
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { MouseEvent } from 'react';
+import propTypes from 'prop-types';
 
-import { HrefBuilderParams } from '../index';
+import { HrefBuilderParams } from '../context/link';
 
 
 const Link: React.FunctionComponent<{
   params: HrefBuilderParams
-}> = ({ params, children }, { onResourceClick, buildHref }) => {
-  const handleClick = () => onResourceClick(params);
+}> = ({ params, children }, { onLinkClick, buildHref }) => {
+  const handleClick = (event: MouseEvent) => {
+    event.preventDefault();
+    onLinkClick(params);
+  }
   const href = buildHref ? buildHref(params) : '#';
 
   return <a
@@ -20,8 +23,8 @@ const Link: React.FunctionComponent<{
 };
 
 Link.contextTypes = {
-  onResourceClick: PropTypes.func,
-  buildHref: PropTypes.func,
+  onLinkClick: propTypes.func,
+  buildHref: propTypes.func,
 }
 
 

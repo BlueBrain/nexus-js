@@ -113,3 +113,24 @@ export const camelToKebab = (camelCaseString: string): string => {
     .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2')
     .toLowerCase();
 };
+
+/**
+ * Build an href url by given template and properties,
+ *
+ * @example
+ * const pathTemplate = '/resources/:selfUrl';
+ * const selfUrl = '123'
+ * const href = buildHref(pathTemplate, { selfUrl }) // /resources/123
+ *
+ * @param template [string]
+ * @param props [object]
+ */
+export function buildHref(
+  template: string,
+  props: { [key: string]: string } = {},
+) {
+  return Object.keys(props).reduce((prev, key) => {
+    const regExp = new RegExp(`:${key}`, 'g');
+    return prev.replace(regExp, props[key]);
+  }, template);
+}

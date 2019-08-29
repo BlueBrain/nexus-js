@@ -3,6 +3,7 @@ import {
   parseNexusUrl,
   camelCaseToLabelString,
   camelToKebab,
+  buildHref,
 } from '../index';
 
 describe('utils', () => {
@@ -30,6 +31,17 @@ describe('utils', () => {
       ).toEqual('gpfs');
     });
   });
+
+  describe('buildHref', () => {
+    it('should build href with given template and props', () => {
+      const tmpl = '/resources?self=:selfUrl&id=:id';
+      const props = { selfUrl: 'self-url', id: '123' };
+      const href = buildHref(tmpl, props);
+
+      expect(href).toBe('/resources?self=self-url&id=123');
+    });
+  });
+
   describe('parseNexusUrl()', () => {
     it('should throw an error if url is not defined', () => {
       expect(() => parseNexusUrl('')).toThrow('selfUrl should be defined');

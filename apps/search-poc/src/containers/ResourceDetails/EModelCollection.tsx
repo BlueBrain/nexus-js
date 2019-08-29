@@ -71,7 +71,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          handleClick={params => props.handleClick(params)}
+          handleClick={props.handleClick}
         />
       )}
     </Spin>

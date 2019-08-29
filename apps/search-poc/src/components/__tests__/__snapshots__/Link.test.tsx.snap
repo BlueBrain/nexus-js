@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Link component Renders correctly with props 1`] = `
+<a
+  onClick={[Function]}
+>
+  Link
+</a>
+`;

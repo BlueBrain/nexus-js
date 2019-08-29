@@ -36,9 +36,21 @@ describe('utils', () => {
     it('should build href with given template and props', () => {
       const tmpl = '/resources?self=:selfUrl&id=:id';
       const props = { selfUrl: 'self-url', id: '123' };
-      const href = buildHref(tmpl, props);
 
-      expect(href).toBe('/resources?self=self-url&id=123');
+      expect(buildHref(tmpl, props)).toBe('/resources?self=self-url&id=123');
+    });
+
+    it('should build href with multiple occurences of replace patterns', () => {
+      const tmpl = ':id-:id';
+      const props = { id: '123' };
+
+      expect(buildHref(tmpl, props)).toBe('123-123');
+    });
+
+    it('should return template if no props has been provided', () => {
+      const tmpl = ':id-:id';
+
+      expect(buildHref(tmpl)).toBe(tmpl);
     });
   });
 

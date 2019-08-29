@@ -125,7 +125,10 @@ export const camelToKebab = (camelCaseString: string): string => {
  * @param template [string]
  * @param props [object]
  */
-export function buildHref(template: string, props: { [key: string]: string }) {
+export function buildHref(
+  template: string,
+  props: { [key: string]: string } = {},
+) {
   return Object.keys(props).reduce((prev, key) => {
     const regExp = new RegExp(`:${key}`, 'g');
     return prev.replace(regExp, props[key]);

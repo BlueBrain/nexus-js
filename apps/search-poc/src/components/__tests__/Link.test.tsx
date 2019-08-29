@@ -13,7 +13,7 @@ describe('Link component', () => {
 
     const contextProps = {
       buildHref: jest.fn(),
-      onResourceClick: jest.fn()
+      onLinkClick: jest.fn()
     };
 
     const result = shallow(<Link {...props}>Link</Link>, { context: contextProps });
@@ -27,7 +27,7 @@ describe('Link component', () => {
     }
 
     const contextProps = {
-      onResourceClick: jest.fn(),
+      onLinkClick: jest.fn(),
     };
 
     const linkNode = shallow(<Link {...props}>Link</Link>, { context: contextProps });
@@ -43,26 +43,29 @@ describe('Link component', () => {
 
     const contextProps = {
       buildHref,
-      onResourceClick: jest.fn(),
+      onLinkClick: jest.fn(),
     };
 
     const linkNode = shallow(<Link {...props}>Link</Link>, { context: contextProps });
     expect(linkNode.find('a').prop('href')).toBe(buildHref(props.params));
   });
 
-  it('Calls onResourceClick function on click', () => {
+  it('Prevents event default and calls onLinkClick function on click', () => {
     const props = {
       params: { selfUrl: '123', type: 'resource' },
     };
 
     const contextProps = {
-      onResourceClick: jest.fn(),
+      onLinkClick: jest.fn(),
     };
 
-    const linkNode = shallow(<Link {...props}>Link</Link>, { context: contextProps });
-    linkNode.find('a').simulate('click');
+    const preventDefault = jest.fn();
 
-    expect(contextProps.onResourceClick.mock.calls.length).toBe(1);
-    expect(contextProps.onResourceClick.mock.calls[0][0]).toBe(props.params);
+    const linkNode = shallow(<Link {...props}>Link</Link>, { context: contextProps });
+    linkNode.find('a').simulate('click', { preventDefault });
+
+    expect(preventDefault.mock.calls.length).toBe(1);
+    expect(contextProps.onLinkClick.mock.calls.length).toBe(1);
+    expect(contextProps.onLinkClick.mock.calls[0][0]).toBe(props.params);
   });
 });

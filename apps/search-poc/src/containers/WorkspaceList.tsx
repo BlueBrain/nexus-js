@@ -20,7 +20,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
   workspaceConfig: WorkspaceConfig[];
   onWorkspaceSelected: (workspaceId: string) => void;
   history: History;
-}> = ({ workspaceConfig, onWorkspaceSelected, history }) => {
+}> = ({ workspaceConfig, onWorkspaceSelected, history, children }) => {
   // get active id from query string on mount (if any)
   const queryStringWorkspaceId =
     queryString.parse(history.location.search).workspace || '';
@@ -46,6 +46,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
 
   return (
     <TabList
+      position={'top'}
       items={configData}
       onSelected={workspaceId => {
         const activeWorkspace = workspaceId
@@ -64,7 +65,9 @@ const WorkspaceListContainer: React.FunctionComponent<{
         onWorkspaceSelected(activeWorkspace['@id']);
       }}
       defaultActiveId={activeId}
-    />
+    >
+      {children}
+    </TabList>
   );
 };
 

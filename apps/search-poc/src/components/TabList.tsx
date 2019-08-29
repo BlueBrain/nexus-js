@@ -14,16 +14,21 @@ type TabListProps = {
   items: WorkspaceItem[];
   onSelected: Function;
   defaultActiveId?: string;
+  position?: string;
 };
 
-
-
-const TabList: React.FunctionComponent<TabListProps> = ({ items, onSelected, defaultActiveId, children }) => {
+const TabList: React.FunctionComponent<TabListProps> = ({
+  items,
+  onSelected,
+  defaultActiveId,
+  position = 'left',
+  children,
+}) => {
   return (
     <div className="tab-list">
       <Tabs
         defaultActiveKey={defaultActiveId}
-        tabPosition={'left'}
+        tabPosition={position}
         onChange={onSelected}
       >
         {items.map(({ label, description, id }) => (

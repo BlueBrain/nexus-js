@@ -80,29 +80,43 @@ const MainView: React.FunctionComponent<{
       <WorkspaceList
         workspaceConfig={studioData.workspaces}
         onWorkspaceSelected={setActiveWorkspaceId}
-      />
-      {activeWorkspaceId && (
-        <Dashboards
-          workspaceId={activeWorkspaceId}
-          dashboardConfig={
-            (
-              studioData.workspaces.find(w => w['@id'] === activeWorkspaceId) ||
-              studioData.workspaces[0]
-            ).dashboards
-          }
-          onDashboardSelected={(orgLabel, projectLabel, viewId, dataQuery) => {
-            setResultTableData({ orgLabel, projectLabel, viewId, dataQuery });
-          }}
-        />
-      )}
-      {resultTableData && (
-        <ResultTable
-          {...resultTableData}
-          handleRowClick={(index, items) => {
-            props.history.push(`/resources/?self=${items[index].self}`);
-          }}
-        />
-      )}
+      >
+        <div className="workspace">
+          {activeWorkspaceId && (
+            <Dashboards
+              workspaceId={activeWorkspaceId}
+              dashboardConfig={
+                (
+                  studioData.workspaces.find(
+                    w => w['@id'] === activeWorkspaceId,
+                  ) || studioData.workspaces[0]
+                ).dashboards
+              }
+              onDashboardSelected={(
+                orgLabel,
+                projectLabel,
+                viewId,
+                dataQuery,
+              ) => {
+                setResultTableData({
+                  orgLabel,
+                  projectLabel,
+                  viewId,
+                  dataQuery,
+                });
+              }}
+            />
+          )}
+          {resultTableData && (
+            <ResultTable
+              {...resultTableData}
+              handleRowClick={(index, items) => {
+                props.history.push(`/resources/?self=${items[index].self}`);
+              }}
+            />
+          )}
+        </div>
+      </WorkspaceList>
     </div>
   );
 };

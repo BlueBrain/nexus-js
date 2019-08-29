@@ -3,7 +3,6 @@ import {
   parseNexusUrl,
   camelCaseToLabelString,
   camelToKebab,
-  buildHref,
 } from '../index';
 
 describe('utils', () => {
@@ -31,7 +30,6 @@ describe('utils', () => {
       ).toEqual('gpfs');
     });
   });
-
   describe('parseNexusUrl()', () => {
     it('should throw an error if url is not defined', () => {
       expect(() => parseNexusUrl('')).toThrow('selfUrl should be defined');

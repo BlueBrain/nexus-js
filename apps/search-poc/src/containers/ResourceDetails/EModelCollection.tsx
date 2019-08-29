@@ -1,19 +1,17 @@
 import React from 'react';
 import { Spin, Empty } from 'antd';
+
 import { Resource, DEFAULT_SPARQL_VIEW_ID } from '@bbp/nexus-sdk';
 import { useNexus } from '@bbp/react-nexus';
-
 import { MINDSResource, EModelResource } from './types';
 import { getCollectionEModelsQuery } from '../../config';
 import { parseProjectUrl, camelCaseToLabelString, getLabel } from '../../utils';
 import ResultTable from '../../components/ResultTable';
-import { LinkContext } from '../../context/link';
 
 const EModelCollectionDetailsContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource & EModelResource;
+  goToResource?: Function;
 }> = props => {
-  const linkContext = React.useContext(LinkContext);
-
   const query = getCollectionEModelsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
 
@@ -72,13 +70,12 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
           headerProperties={headerProperties}
           items={items}
           onRowClick={resource => {
-            linkContext.onLinkClick({ type: 'resource', selfUrl: resource.self });
+            props.goToResource && props.goToResource(resource.self);
           }}
         />
       )}
     </Spin>
   );
 };
-
 
 export default EModelCollectionDetailsContainer;

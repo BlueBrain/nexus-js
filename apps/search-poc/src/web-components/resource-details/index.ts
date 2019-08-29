@@ -14,8 +14,6 @@ import '../../components/ResourceDetails/MorphologyViewer.css';
 import '../../components/ResourceDetails/ResourceDetails.css';
 
 class ResourceDetails extends WebComponent {
-  getStyleElFuncName = 'getResourceDetailsStyleEl';
-
   constructor() {
     super();
 

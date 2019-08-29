@@ -12,7 +12,7 @@ type WorkspaceItem = {
 
 type TabListProps = {
   items: WorkspaceItem[];
-  onSelected: (activeKey: string) => void;
+  onSelected: Function;
   defaultActiveId?: string;
 };
 

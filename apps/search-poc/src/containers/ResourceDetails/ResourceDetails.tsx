@@ -11,9 +11,9 @@ import { getComponentsForTypes } from './index';
 import { MINDSResource, Layer } from './types';
 import { getLabel, camelToKebab } from '../../utils';
 
-
 const ResourceDetailsContainer: React.FunctionComponent<{
   selfUrl: string;
+  goToResource?: Function;
 }> = props => {
   const { data, loading, error } = useNexus<Resource & MINDSResource>(
     nexus => nexus.httpGet({ path: props.selfUrl }),
@@ -84,6 +84,7 @@ const ResourceDetailsContainer: React.FunctionComponent<{
               <Component
                 key={compName}
                 resource={data}
+                goToResource={props.goToResource}
               />
             );
           })}

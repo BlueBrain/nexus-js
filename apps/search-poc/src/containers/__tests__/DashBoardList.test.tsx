@@ -29,31 +29,3 @@ describe('dashboardList', () => {
     });
 
 });
-
-const studioData = {
-    id: 'id',
-    description: 'A description',
-    label: 'A label',
-    workspaces: [{
-        id: 'id',
-        description: 'A description',
-        label: 'A label',
-        dashboards: [{
-            dashboard: {
-                id: 'id',
-                dataQuery: 'A valid query',
-                description:'Some description',
-                label: 'Morphology curation pipeline'
-            },
-            view: {
-                id: "https://bluebrain.github.io/nexus/vocabulary/StudioSparqlView",
-                deployment: "https://staging.nexus.ocp.bbp.epfl.ch/v1",
-                entityType: "project",
-                id: undefined,
-                org: "bbp_test",
-                project: "studio",
-                schema: undefined
-            }
-        }]
-    }]
-}

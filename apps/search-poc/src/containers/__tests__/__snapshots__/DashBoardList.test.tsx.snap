@@ -111,7 +111,7 @@ exports[`dashboardList DashboardList renders correctly 1`] = `
             Array [
               Object {
                 "description": "description",
-                "id": "id_id",
+                "id": "id_{workspaceId}",
                 "label": "label",
               },
             ]
@@ -554,9 +554,9 @@ exports[`dashboardList DashboardList renders correctly 1`] = `
                                         <div>
                                           <div
                                             aria-disabled="false"
-                                            aria-selected="true"
-                                            className="ant-tabs-tab-active ant-tabs-tab"
-                                            key="id_id"
+                                            aria-selected="false"
+                                            className=" ant-tabs-tab"
+                                            key="id_{workspaceId}"
                                             onClick={[Function]}
                                             role="tab"
                                             style={
@@ -694,14 +694,14 @@ exports[`dashboardList DashboardList renders correctly 1`] = `
                       className="ant-tabs-content ant-tabs-content-animated ant-tabs-left-content"
                       style={
                         Object {
-                          "marginTop": "0%",
+                          "display": "none",
                         }
                       }
                     >
                       <TabPane
-                        active={true}
+                        active={false}
                         destroyInactiveTabPane={false}
-                        key="id_id"
+                        key="id_{workspaceId}"
                         placeholder={null}
                         rootPrefixCls="ant-tabs"
                         tab={
@@ -722,45 +722,10 @@ exports[`dashboardList DashboardList renders correctly 1`] = `
                         }
                       >
                         <div
-                          aria-hidden="false"
-                          className="ant-tabs-tabpane ant-tabs-tabpane-active"
+                          aria-hidden="true"
+                          className="ant-tabs-tabpane ant-tabs-tabpane-inactive"
                           role="tabpanel"
-                        >
-                          <Sentinel
-                            setRef={[Function]}
-                          >
-                            <div
-                              onKeyDown={[Function]}
-                              role="presentation"
-                              style={
-                                Object {
-                                  "height": 0,
-                                  "overflow": "hidden",
-                                  "position": "absolute",
-                                  "width": 0,
-                                }
-                              }
-                              tabIndex={0}
-                            />
-                          </Sentinel>
-                          <Sentinel
-                            setRef={[Function]}
-                          >
-                            <div
-                              onKeyDown={[Function]}
-                              role="presentation"
-                              style={
-                                Object {
-                                  "height": 0,
-                                  "overflow": "hidden",
-                                  "position": "absolute",
-                                  "width": 0,
-                                }
-                              }
-                              tabIndex={0}
-                            />
-                          </Sentinel>
-                        </div>
+                        />
                       </TabPane>
                     </div>
                   </TabContent>

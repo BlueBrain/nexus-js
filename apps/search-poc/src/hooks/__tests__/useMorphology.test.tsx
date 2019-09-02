@@ -51,19 +51,8 @@ const TestHook:React.FunctionComponent< { hook: () => void; }> = ({hook}) => {
 };
 
 
-
-
-
-
-
-
-it('should throw no errors',  () => {
-    const result = mount(<TestHook  hook={useMorphology} />);
-    expect(result.exists()).toBeTruthy();
-});
-
-
 it('should render stage',  () => {
     const result =  mount(<TestHook  hook={useMorphology} />);
+    expect(result.exists()).toBeTruthy();
     expect(result).toMatchSnapshot();
 });

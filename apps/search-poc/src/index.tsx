@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as serviceWorker from './serviceWorker';
 import { render } from 'react-dom';
 import { Switch, Route } from 'react-router';
-import { Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
 
@@ -11,7 +11,6 @@ import Header from './containers/Header';
 import DetailsView from './views/DetailsView';
 import MainView from './views/MainView';
 import { SETTINGS, getStudioConfig } from './config';
-import history from './history';
 
 import 'antd/dist/antd.css';
 import './index.css';
@@ -30,7 +29,7 @@ async function main() {
   render(
     <NexusProvider nexusClient={nexus}>
       <Header user={user} userManager={userManager} />
-      <Router history={history}>
+      <Router>
         <Switch>
           <Route path="/" exact>
             <MainView

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import queryString from 'query-string';
-import history from '../history';
 
 import TabList from '../components/TabList';
 import { HandleClickParams } from '../types';
+
 
 function getDashBoardConfig(
   id: string,
@@ -42,10 +42,11 @@ const DashboardListContainer: React.FunctionComponent<{
     dataQuery: string,
   ) => void;
   handleClick: (params: HandleClickParams) => void,
-}> = ({ workspaceId, dashboardConfig, onDashboardSelected, handleClick }) => {
+  query: string,
+}> = ({ workspaceId, dashboardConfig, onDashboardSelected, handleClick, query }) => {
   // get active id from query string on mount (if any)
   const queryStringDashboardId =
-    queryString.parse(history.location.search).dashboard || '';
+    queryString.parse(query).dashboard || '';
 
   // find out if we have a matching dashboard config with that id
   const activeDb = getDashBoardConfig(
@@ -88,7 +89,7 @@ const DashboardListContainer: React.FunctionComponent<{
           activeDashboard.dashboard.dataQuery,
         );
         const search = queryString.stringify({
-          ...queryString.parse(history.location.search),
+          ...queryString.parse(query),
           dashboard: dashboardId,
         })
         handleClick({ search, type: 'dashboard' });

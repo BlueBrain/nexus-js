@@ -1,20 +1,16 @@
 
 import * as React from 'react';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import ResourceDetailsContainer from '../containers/ResourceDetails';
-import history from '../history';
 import { HandleClickParams } from '../types';
 
 
-const DetailsView: React.FunctionComponent<{
-  location: {
-    search: string;
-  };
-}> = props => {
+const DetailsView: React.FunctionComponent<RouteComponentProps> = props => {
   const selfUrl = (props.location.search || '').replace('?self=', '');
 
   const handleClick = (params: HandleClickParams) => {
-    history.push(`/resources?self=${params.self}`);
+    props.history.push(`/resources?self=${params.self}`);
   }
 
   return (
@@ -26,4 +22,4 @@ const DetailsView: React.FunctionComponent<{
 };
 
 
-export default DetailsView;
+export default withRouter(DetailsView);

@@ -3,7 +3,6 @@ import queryString from 'query-string';
 
 import TabList from '../components/TabList';
 import { HandleClickParams } from '../types';
-import history from '../history';
 
 
 function getWorkspaceConfig(
@@ -23,11 +22,12 @@ const WorkspaceListContainer: React.FunctionComponent<{
   workspaceConfig: WorkspaceConfig[];
   onWorkspaceSelected: (workspaceId: string) => void;
   handleClick: (params: HandleClickParams) => void;
-}> = ({ workspaceConfig, onWorkspaceSelected, handleClick, children }) => {
+  query: string;
+}> = ({ workspaceConfig, onWorkspaceSelected, handleClick, query, children }) => {
 
   // get active id from query string on mount (if any)
   const queryStringWorkspaceId =
-    queryString.parse(history.location.search).workspace || '';
+    queryString.parse(query).workspace || '';
 
   // find out if we have a matching workspace with that id
   const activeId = getWorkspaceConfig(
@@ -57,7 +57,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
           ? getWorkspaceConfig(workspaceId.toString(), workspaceConfig)
           : workspaceConfig[0];
         // we need to remove the active dashboard as we are changing workspaces
-        const queryStrings = queryString.parse(history.location.search);
+        const queryStrings = queryString.parse(query);
         // eslint-disable-next-line
         const { ['dashboard']: value, ...withoutDashboard } = queryStrings;
         const search = queryString.stringify({

@@ -4,16 +4,16 @@ import ResultTable from '../containers/ResultTable';
 import { useNexus } from '@bbp/react-nexus';
 import { Spin, Alert } from 'antd';
 import jsonld from 'jsonld';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import { SparqlQueryResults, makeNQuad } from '../utils/sparql';
 import { studioFrame } from '../config';
 import { parseNexusUrl } from '../utils';
 import WorkspaceList from '../containers/WorkspaceList';
 import './MainView.css';
-import history from '../history';
 
 
-const MainView: React.FunctionComponent<{
+const MainView: React.FunctionComponent<RouteComponentProps & {
   studioOrg: string;
   studioProject: string;
   studioViewId: string;
@@ -79,7 +79,8 @@ const MainView: React.FunctionComponent<{
       <WorkspaceList
         workspaceConfig={studioData.workspaces}
         onWorkspaceSelected={setActiveWorkspaceId}
-        handleClick={params => history.push({ search: params.search })}
+        handleClick={params => props.history.push({ search: params.search })}
+        query={props.location.search}
       >
         <div className="workspace">
           {activeWorkspaceId && (
@@ -105,13 +106,14 @@ const MainView: React.FunctionComponent<{
                   dataQuery,
                 });
               }}
-              handleClick={params => history.push({ search: params.search })}
+              handleClick={params => props.history.push({ search: params.search })}
+              query={props.location.search}
             />
           )}
           {resultTableData && (
             <ResultTable
               {...resultTableData}
-              handleClick={params => history.push(`/resources?self=${params.self}`)}
+              handleClick={params => props.history.push(`/resources?self=${params.self}`)}
             />
           )}
         </div>
@@ -121,4 +123,4 @@ const MainView: React.FunctionComponent<{
 };
 
 
-export default MainView;
+export default withRouter(MainView);

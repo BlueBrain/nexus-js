@@ -23,7 +23,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
   workspaceConfig: WorkspaceConfig[];
   onWorkspaceSelected: (workspaceId: string) => void;
   handleClick: (params: HandleClickParams) => void;
-}> = ({ workspaceConfig, onWorkspaceSelected, handleClick }) => {
+}> = ({ workspaceConfig, onWorkspaceSelected, handleClick, children }) => {
 
   // get active id from query string on mount (if any)
   const queryStringWorkspaceId =

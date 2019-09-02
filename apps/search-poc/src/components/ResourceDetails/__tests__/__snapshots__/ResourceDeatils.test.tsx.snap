@@ -2,7 +2,7 @@
 
 exports[`ResourceDetails renders correctly 1`] = `
 <div
-  className="ResourceDetails"
+  className="resource-details undefined"
 >
   <div
     className="metadata-container"
@@ -10,52 +10,32 @@ exports[`ResourceDetails renders correctly 1`] = `
     <h1
       className="name"
     />
-    <h3>
-      Type:  
-      <Tag
-        closable={false}
-        key="EModel"
-      >
-        EModel
-      </Tag>
-      <Tag
-        closable={false}
-        key="Entity"
-      >
-        Entity
-      </Tag>
-    </h3>
+    <h2>
+      <em>
+         E Model
+      </em>
+      <em>
+         Entity
+      </em>
+    </h2>
     <p>
-      Brain region:  
+      uploaded 
+       by 
+      <b />
+    </p>
+    <div
+      className="brain-region"
+    >
       <a
         rel="noopener noreferrer"
         target="_blank"
       >
         primary somatosensory cortex
       </a>
-    </p>
-    <p>
-      Species:  
-      <a
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        Rattus norvegicus
-      </a>
-    </p>
-    <p>
-      Strain:  
-      <a
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        Wistar Han
-      </a>
-    </p>
+    </div>
     <div
       className="layers-container"
     >
-      Layers:  
       <Tag
         closable={false}
         color="blue"
@@ -123,10 +103,28 @@ exports[`ResourceDetails renders correctly 1`] = `
         </a>
       </Tag>
     </div>
+    <p>
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Rattus norvegicus
+      </a>
+    </p>
+    <p>
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Wistar Han
+      </a>
+    </p>
     <p
       className="descripion"
     >
-      Description: 
+      <NotFound
+        label="description"
+      />
     </p>
   </div>
   <div

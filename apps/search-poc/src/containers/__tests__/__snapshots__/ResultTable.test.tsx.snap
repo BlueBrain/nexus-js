@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResultTableContainer ResultTableContainer renders correctly 1`] = `
+<NexusProvider
+  nexusClient={
+    Object {
+      "ACL": Object {
+        "append": [Function],
+        "create": [Function],
+        "delete": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "replace": [Function],
+        "subtract": [Function],
+      },
+      "File": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "link": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Identity": Object {
+        "list": [Function],
+        "poll": [Function],
+      },
+      "Organization": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "update": [Function],
+      },
+      "Permissions": Object {
+        "append": [Function],
+        "delete": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "replace": [Function],
+        "subtract": [Function],
+      },
+      "Project": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "update": [Function],
+      },
+      "Realm": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "update": [Function],
+      },
+      "Resolver": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Resource": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "links": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Schema": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Storage": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "View": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "elasticSearchQuery": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "pollStatistics": [Function],
+        "sparqlQuery": [Function],
+        "statistics": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "httpDelete": [Function],
+      "httpGet": [Function],
+      "httpPatch": [Function],
+      "httpPost": [Function],
+      "httpPut": [Function],
+      "poll": [Function],
+    }
+  }
+>
+  <BrowserRouter>
+    <Router
+      history={
+        Object {
+          "action": "POP",
+          "block": [Function],
+          "createHref": [Function],
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "length": 1,
+          "listen": [Function],
+          "location": Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+          "push": [Function],
+          "replace": [Function],
+        }
+      }
+    >
+      <ResultTableContainer
+        dataQuery="a query"
+        handleRowClick={[Function]}
+        orgLabel="org"
+        projectLabel="project Label"
+        viewId="viewId"
+      >
+        <Spin
+          size="default"
+          spinning={true}
+          wrapperClassName=""
+        >
+          <div
+            className="ant-spin ant-spin-spinning"
+          >
+            <span
+              className="ant-spin-dot ant-spin-dot-spin"
+            >
+              <i
+                className="ant-spin-dot-item"
+              />
+              <i
+                className="ant-spin-dot-item"
+              />
+              <i
+                className="ant-spin-dot-item"
+              />
+              <i
+                className="ant-spin-dot-item"
+              />
+            </span>
+          </div>
+        </Spin>
+      </ResultTableContainer>
+    </Router>
+  </BrowserRouter>
+</NexusProvider>
+`;

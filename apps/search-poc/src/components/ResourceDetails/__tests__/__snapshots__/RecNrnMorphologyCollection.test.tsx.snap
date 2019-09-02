@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecNrnMorphologyCollection renders correctly 1`] = `
+<div
+  className="emodel-collection-details"
+>
+  <Table
+    bordered={true}
+    childrenColumnName="children"
+    className="small-table"
+    columns={
+      Array [
+        Object {
+          "key": "name",
+          "render": [Function],
+          "title": "Name",
+        },
+        Object {
+          "dataIndex": "description",
+          "key": "description",
+          "title": "Description",
+        },
+      ]
+    }
+    dataSource={
+      Array [
+        Object {
+          "description": "description",
+          "id": "id",
+          "name": "name",
+          "self": "self",
+        },
+      ]
+    }
+    indentSize={20}
+    loading={false}
+    locale={Object {}}
+    rowKey="id"
+    showHeader={true}
+    size="middle"
+    sortDirections={
+      Array [
+        "ascend",
+        "descend",
+      ]
+    }
+    title={[Function]}
+    useFixedHeader={false}
+  />
+</div>
+`;

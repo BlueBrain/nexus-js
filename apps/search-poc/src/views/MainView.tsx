@@ -59,6 +59,7 @@ const MainView: React.FunctionComponent<{
     [props.studioQuery],
   );
 
+
   if (loading) {
     return <Spin></Spin>;
   }

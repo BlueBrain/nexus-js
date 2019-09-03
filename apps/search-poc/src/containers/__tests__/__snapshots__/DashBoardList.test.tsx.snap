@@ -1,0 +1,759 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboardList DashboardList renders correctly 1`] = `
+<BrowserRouter>
+  <Router
+    history={
+      Object {
+        "action": "POP",
+        "block": [Function],
+        "createHref": [Function],
+        "go": [Function],
+        "goBack": [Function],
+        "goForward": [Function],
+        "length": 1,
+        "listen": [Function],
+        "location": Object {
+          "hash": "",
+          "pathname": "/",
+          "search": "",
+          "state": undefined,
+        },
+        "push": [Function],
+        "replace": [Function],
+      }
+    }
+  >
+    <withRouter(DashboardListContainer)
+      dashboardConfig={
+        Array [
+          Object {
+            "dashboard": Object {
+              "@id": "id",
+              "@type": "type",
+              "dataQuery": "query",
+              "description": "description",
+              "label": "label",
+            },
+            "view": Object {
+              "@id": "id",
+              "org": "org",
+              "project": "project",
+            },
+          },
+        ]
+      }
+      history={[Function]}
+      onDashboardSelected={[Function]}
+      workspaceId="id"
+    >
+      <DashboardListContainer
+        dashboardConfig={
+          Array [
+            Object {
+              "dashboard": Object {
+                "@id": "id",
+                "@type": "type",
+                "dataQuery": "query",
+                "description": "description",
+                "label": "label",
+              },
+              "view": Object {
+                "@id": "id",
+                "org": "org",
+                "project": "project",
+              },
+            },
+          ]
+        }
+        history={
+          Object {
+            "action": "POP",
+            "block": [Function],
+            "createHref": [Function],
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "length": 1,
+            "listen": [Function],
+            "location": Object {
+              "hash": "",
+              "pathname": "/",
+              "search": "",
+              "state": undefined,
+            },
+            "push": [Function],
+            "replace": [Function],
+          }
+        }
+        location={
+          Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          }
+        }
+        match={
+          Object {
+            "isExact": true,
+            "params": Object {},
+            "path": "/",
+            "url": "/",
+          }
+        }
+        onDashboardSelected={[Function]}
+        workspaceId="id"
+      >
+        <TabList
+          defaultActiveId="id_id"
+          items={
+            Array [
+              Object {
+                "description": "description",
+                "id": "id_{workspaceId}",
+                "label": "label",
+              },
+            ]
+          }
+          onSelected={[Function]}
+        >
+          <div
+            className="tab-list"
+          >
+            <Tabs
+              defaultActiveKey="id_id"
+              hideAdd={false}
+              onChange={[Function]}
+              tabPosition="left"
+            >
+              <Tabs
+                className="ant-tabs-vertical ant-tabs-line"
+                defaultActiveKey="id_id"
+                destroyInactiveTabPane={false}
+                hideAdd={false}
+                navWrapper={[Function]}
+                onChange={[Function]}
+                prefixCls="ant-tabs"
+                renderTabBar={[Function]}
+                renderTabContent={[Function]}
+                style={Object {}}
+                tabBarPosition="left"
+                tabPosition="left"
+              >
+                <div
+                  className="ant-tabs ant-tabs-left ant-tabs-vertical ant-tabs-line"
+                  onScroll={[Function]}
+                  style={Object {}}
+                >
+                  <TabBar
+                    activeKey="id_id"
+                    animated={true}
+                    defaultActiveKey="id_id"
+                    hideAdd={false}
+                    key="tabBar"
+                    navWrapper={[Function]}
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    onTabClick={[Function]}
+                    panels={
+                      Array [
+                        <TabPane
+                          placeholder={null}
+                          tab={
+                            <div
+                              className="tab-item"
+                            >
+                              <span
+                                className="title ellipsis"
+                              >
+                                label
+                              </span>
+                              <p
+                                className="description fade"
+                              >
+                                description
+                              </p>
+                            </div>
+                          }
+                        />,
+                      ]
+                    }
+                    prefixCls="ant-tabs"
+                    tabBarExtraContent={null}
+                    tabBarPosition="left"
+                    tabPosition="left"
+                    type="line"
+                  >
+                    <ScrollableInkTabBar
+                      activeKey="id_id"
+                      animated={true}
+                      className="ant-tabs-left-bar"
+                      defaultActiveKey="id_id"
+                      extraContent={null}
+                      hideAdd={false}
+                      inkBarAnimated={true}
+                      navWrapper={[Function]}
+                      nextIcon={
+                        <span
+                          className="ant-tabs-tab-next-icon"
+                        >
+                          <Icon
+                            className="ant-tabs-tab-next-icon-target"
+                            type="down"
+                          />
+                        </span>
+                      }
+                      onChange={[Function]}
+                      onKeyDown={[Function]}
+                      onTabClick={[Function]}
+                      panels={
+                        Array [
+                          <TabPane
+                            placeholder={null}
+                            tab={
+                              <div
+                                className="tab-item"
+                              >
+                                <span
+                                  className="title ellipsis"
+                                >
+                                  label
+                                </span>
+                                <p
+                                  className="description fade"
+                                >
+                                  description
+                                </p>
+                              </div>
+                            }
+                          />,
+                        ]
+                      }
+                      prefixCls="ant-tabs"
+                      prevIcon={
+                        <span
+                          className="ant-tabs-tab-prev-icon"
+                        >
+                          <Icon
+                            className="ant-tabs-tab-prev-icon-target"
+                            type="up"
+                          />
+                        </span>
+                      }
+                      tabBarExtraContent={null}
+                      tabBarPosition="left"
+                      tabPosition="left"
+                      type="line"
+                    >
+                      <SaveRef>
+                        <TabBarRootNode
+                          activeKey="id_id"
+                          animated={true}
+                          className="ant-tabs-left-bar"
+                          defaultActiveKey="id_id"
+                          extraContent={null}
+                          hideAdd={false}
+                          inkBarAnimated={true}
+                          navWrapper={[Function]}
+                          nextIcon={
+                            <span
+                              className="ant-tabs-tab-next-icon"
+                            >
+                              <Icon
+                                className="ant-tabs-tab-next-icon-target"
+                                type="down"
+                              />
+                            </span>
+                          }
+                          onChange={[Function]}
+                          onKeyDown={[Function]}
+                          onTabClick={[Function]}
+                          panels={
+                            Array [
+                              <TabPane
+                                placeholder={null}
+                                tab={
+                                  <div
+                                    className="tab-item"
+                                  >
+                                    <span
+                                      className="title ellipsis"
+                                    >
+                                      label
+                                    </span>
+                                    <p
+                                      className="description fade"
+                                    >
+                                      description
+                                    </p>
+                                  </div>
+                                }
+                              />,
+                            ]
+                          }
+                          prefixCls="ant-tabs"
+                          prevIcon={
+                            <span
+                              className="ant-tabs-tab-prev-icon"
+                            >
+                              <Icon
+                                className="ant-tabs-tab-prev-icon-target"
+                                type="up"
+                              />
+                            </span>
+                          }
+                          saveRef={[Function]}
+                          style={Object {}}
+                          tabBarExtraContent={null}
+                          tabBarPosition="left"
+                          tabPosition="left"
+                          type="line"
+                        >
+                          <div
+                            className="ant-tabs-bar ant-tabs-left-bar"
+                            onKeyDown={[Function]}
+                            role="tablist"
+                            style={Object {}}
+                            tabIndex="0"
+                          >
+                            <ScrollableTabBarNode
+                              activeKey="id_id"
+                              animated={true}
+                              className="ant-tabs-left-bar"
+                              defaultActiveKey="id_id"
+                              extraContent={null}
+                              getRef={[Function]}
+                              hideAdd={false}
+                              inkBarAnimated={true}
+                              navWrapper={[Function]}
+                              nextIcon={
+                                <span
+                                  className="ant-tabs-tab-next-icon"
+                                >
+                                  <Icon
+                                    className="ant-tabs-tab-next-icon-target"
+                                    type="down"
+                                  />
+                                </span>
+                              }
+                              onChange={[Function]}
+                              onKeyDown={[Function]}
+                              onNextClick={[Function]}
+                              onPrevClick={[Function]}
+                              onTabClick={[Function]}
+                              panels={
+                                Array [
+                                  <TabPane
+                                    placeholder={null}
+                                    tab={
+                                      <div
+                                        className="tab-item"
+                                      >
+                                        <span
+                                          className="title ellipsis"
+                                        >
+                                          label
+                                        </span>
+                                        <p
+                                          className="description fade"
+                                        >
+                                          description
+                                        </p>
+                                      </div>
+                                    }
+                                  />,
+                                ]
+                              }
+                              prefixCls="ant-tabs"
+                              prevIcon={
+                                <span
+                                  className="ant-tabs-tab-prev-icon"
+                                >
+                                  <Icon
+                                    className="ant-tabs-tab-prev-icon-target"
+                                    type="up"
+                                  />
+                                </span>
+                              }
+                              saveRef={[Function]}
+                              scrollAnimated={true}
+                              tabBarExtraContent={null}
+                              tabBarPosition="left"
+                              tabPosition="left"
+                              type="line"
+                            >
+                              <div
+                                className="ant-tabs-nav-container"
+                                key="container"
+                              >
+                                <span
+                                  className="ant-tabs-tab-prev ant-tabs-tab-btn-disabled"
+                                  onClick={null}
+                                  onTransitionEnd={[Function]}
+                                  unselectable="unselectable"
+                                >
+                                  <span
+                                    className="ant-tabs-tab-prev-icon"
+                                  >
+                                    <Icon
+                                      className="ant-tabs-tab-prev-icon-target"
+                                      type="up"
+                                    >
+                                      <LocaleReceiver
+                                        componentName="Icon"
+                                      >
+                                        <i
+                                          aria-label="icon: up"
+                                          className="anticon anticon-up ant-tabs-tab-prev-icon-target"
+                                        >
+                                          <IconReact
+                                            className=""
+                                            type="up-o"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              className=""
+                                              data-icon="up"
+                                              fill="currentColor"
+                                              focusable="false"
+                                              height="1em"
+                                              key="svg-up"
+                                              viewBox="64 64 896 896"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M890.5 755.3L537.9 269.2c-12.8-17.6-39-17.6-51.7 0L133.5 755.3A8 8 0 0 0 140 768h75c5.1 0 9.9-2.5 12.9-6.6L512 369.8l284.1 391.6c3 4.1 7.8 6.6 12.9 6.6h75c6.5 0 10.3-7.4 6.5-12.7z"
+                                                key="svg-up-svg-0"
+                                              />
+                                            </svg>
+                                          </IconReact>
+                                        </i>
+                                      </LocaleReceiver>
+                                    </Icon>
+                                  </span>
+                                </span>
+                                <span
+                                  className="ant-tabs-tab-next ant-tabs-tab-btn-disabled"
+                                  onClick={null}
+                                  unselectable="unselectable"
+                                >
+                                  <span
+                                    className="ant-tabs-tab-next-icon"
+                                  >
+                                    <Icon
+                                      className="ant-tabs-tab-next-icon-target"
+                                      type="down"
+                                    >
+                                      <LocaleReceiver
+                                        componentName="Icon"
+                                      >
+                                        <i
+                                          aria-label="icon: down"
+                                          className="anticon anticon-down ant-tabs-tab-next-icon-target"
+                                        >
+                                          <IconReact
+                                            className=""
+                                            type="down-o"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              className=""
+                                              data-icon="down"
+                                              fill="currentColor"
+                                              focusable="false"
+                                              height="1em"
+                                              key="svg-down"
+                                              viewBox="64 64 896 896"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                                                key="svg-down-svg-0"
+                                              />
+                                            </svg>
+                                          </IconReact>
+                                        </i>
+                                      </LocaleReceiver>
+                                    </Icon>
+                                  </span>
+                                </span>
+                                <div
+                                  className="ant-tabs-nav-wrap"
+                                >
+                                  <div
+                                    className="ant-tabs-nav-scroll"
+                                  >
+                                    <div
+                                      className="ant-tabs-nav ant-tabs-nav-animated"
+                                    >
+                                      <TabBarTabsNode
+                                        activeKey="id_id"
+                                        animated={true}
+                                        className="ant-tabs-left-bar"
+                                        defaultActiveKey="id_id"
+                                        extraContent={null}
+                                        hideAdd={false}
+                                        inkBarAnimated={true}
+                                        navWrapper={[Function]}
+                                        nextIcon={
+                                          <span
+                                            className="ant-tabs-tab-next-icon"
+                                          >
+                                            <Icon
+                                              className="ant-tabs-tab-next-icon-target"
+                                              type="down"
+                                            />
+                                          </span>
+                                        }
+                                        onChange={[Function]}
+                                        onKeyDown={[Function]}
+                                        onTabClick={[Function]}
+                                        panels={
+                                          Array [
+                                            <TabPane
+                                              placeholder={null}
+                                              tab={
+                                                <div
+                                                  className="tab-item"
+                                                >
+                                                  <span
+                                                    className="title ellipsis"
+                                                  >
+                                                    label
+                                                  </span>
+                                                  <p
+                                                    className="description fade"
+                                                  >
+                                                    description
+                                                  </p>
+                                                </div>
+                                              }
+                                            />,
+                                          ]
+                                        }
+                                        prefixCls="ant-tabs"
+                                        prevIcon={
+                                          <span
+                                            className="ant-tabs-tab-prev-icon"
+                                          >
+                                            <Icon
+                                              className="ant-tabs-tab-prev-icon-target"
+                                              type="up"
+                                            />
+                                          </span>
+                                        }
+                                        renderTabBarNode={null}
+                                        saveRef={[Function]}
+                                        tabBarExtraContent={null}
+                                        tabBarGutter={null}
+                                        tabBarPosition="left"
+                                        tabPosition="left"
+                                        type="line"
+                                      >
+                                        <div>
+                                          <div
+                                            aria-disabled="false"
+                                            aria-selected="false"
+                                            className=" ant-tabs-tab"
+                                            key="id_{workspaceId}"
+                                            onClick={[Function]}
+                                            role="tab"
+                                            style={
+                                              Object {
+                                                "marginBottom": null,
+                                              }
+                                            }
+                                          >
+                                            <div
+                                              className="tab-item"
+                                            >
+                                              <span
+                                                className="title ellipsis"
+                                              >
+                                                label
+                                              </span>
+                                              <p
+                                                className="description fade"
+                                              >
+                                                description
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </TabBarTabsNode>
+                                      <InkTabBarNode
+                                        activeKey="id_id"
+                                        animated={true}
+                                        className="ant-tabs-left-bar"
+                                        defaultActiveKey="id_id"
+                                        extraContent={null}
+                                        getRef={[Function]}
+                                        hideAdd={false}
+                                        inkBarAnimated={true}
+                                        navWrapper={[Function]}
+                                        nextIcon={
+                                          <span
+                                            className="ant-tabs-tab-next-icon"
+                                          >
+                                            <Icon
+                                              className="ant-tabs-tab-next-icon-target"
+                                              type="down"
+                                            />
+                                          </span>
+                                        }
+                                        onChange={[Function]}
+                                        onKeyDown={[Function]}
+                                        onTabClick={[Function]}
+                                        panels={
+                                          Array [
+                                            <TabPane
+                                              placeholder={null}
+                                              tab={
+                                                <div
+                                                  className="tab-item"
+                                                >
+                                                  <span
+                                                    className="title ellipsis"
+                                                  >
+                                                    label
+                                                  </span>
+                                                  <p
+                                                    className="description fade"
+                                                  >
+                                                    description
+                                                  </p>
+                                                </div>
+                                              }
+                                            />,
+                                          ]
+                                        }
+                                        prefixCls="ant-tabs"
+                                        prevIcon={
+                                          <span
+                                            className="ant-tabs-tab-prev-icon"
+                                          >
+                                            <Icon
+                                              className="ant-tabs-tab-prev-icon-target"
+                                              type="up"
+                                            />
+                                          </span>
+                                        }
+                                        saveRef={[Function]}
+                                        styles={Object {}}
+                                        tabBarExtraContent={null}
+                                        tabBarPosition="left"
+                                        tabPosition="left"
+                                        type="line"
+                                      >
+                                        <div
+                                          className="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
+                                          key="inkBar"
+                                        />
+                                      </InkTabBarNode>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </ScrollableTabBarNode>
+                          </div>
+                        </TabBarRootNode>
+                      </SaveRef>
+                    </ScrollableInkTabBar>
+                  </TabBar>
+                  <Sentinel
+                    key="sentinelStart"
+                    setRef={[Function]}
+                  >
+                    <div
+                      onKeyDown={[Function]}
+                      role="presentation"
+                      style={
+                        Object {
+                          "height": 0,
+                          "overflow": "hidden",
+                          "position": "absolute",
+                          "width": 0,
+                        }
+                      }
+                      tabIndex={0}
+                    />
+                  </Sentinel>
+                  <TabContent
+                    activeKey="id_id"
+                    animated={true}
+                    animatedWithMargin={true}
+                    className="ant-tabs-left-content"
+                    destroyInactiveTabPane={false}
+                    key="tabContent"
+                    onChange={[Function]}
+                    prefixCls="ant-tabs"
+                    tabBarPosition="left"
+                  >
+                    <div
+                      className="ant-tabs-content ant-tabs-content-animated ant-tabs-left-content"
+                      style={
+                        Object {
+                          "display": "none",
+                        }
+                      }
+                    >
+                      <TabPane
+                        active={false}
+                        destroyInactiveTabPane={false}
+                        key="id_{workspaceId}"
+                        placeholder={null}
+                        rootPrefixCls="ant-tabs"
+                        tab={
+                          <div
+                            className="tab-item"
+                          >
+                            <span
+                              className="title ellipsis"
+                            >
+                              label
+                            </span>
+                            <p
+                              className="description fade"
+                            >
+                              description
+                            </p>
+                          </div>
+                        }
+                      >
+                        <div
+                          aria-hidden="true"
+                          className="ant-tabs-tabpane ant-tabs-tabpane-inactive"
+                          role="tabpanel"
+                        />
+                      </TabPane>
+                    </div>
+                  </TabContent>
+                  <Sentinel
+                    key="sentinelEnd"
+                    setRef={[Function]}
+                  >
+                    <div
+                      onKeyDown={[Function]}
+                      role="presentation"
+                      style={
+                        Object {
+                          "height": 0,
+                          "overflow": "hidden",
+                          "position": "absolute",
+                          "width": 0,
+                        }
+                      }
+                      tabIndex={0}
+                    />
+                  </Sentinel>
+                </div>
+              </Tabs>
+            </Tabs>
+          </div>
+        </TabList>
+      </DashboardListContainer>
+    </withRouter(DashboardListContainer)>
+  </Router>
+</BrowserRouter>
+`;

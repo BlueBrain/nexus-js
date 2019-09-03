@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MorphologyViewer renders correctly 1`] = `
+<Spin
+  size="default"
+  spinning={true}
+  tip="stage"
+  wrapperClassName=""
+>
+  <Card
+    className="morphology-viewer"
+    hoverable={true}
+  >
+    <div
+      className="viewer false"
+    />
+  </Card>
+</Spin>
+`;

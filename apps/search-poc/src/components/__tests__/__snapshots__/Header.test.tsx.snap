@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correctly 1`] = `
+<div
+  className="header-container"
+>
+  <h1
+    className="title"
+  >
+    <a
+      href="/"
+    >
+      BBP Studio
+    </a>
+  </h1>
+  <div
+    className="auth"
+  >
+    <Logout
+      onLogout={[Function]}
+      userName="test"
+    />
+  </div>
+</div>
+`;

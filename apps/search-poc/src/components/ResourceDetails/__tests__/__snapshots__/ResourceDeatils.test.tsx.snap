@@ -2,7 +2,7 @@
 
 exports[`ResourceDetails renders correctly 1`] = `
 <div
-  className="resource-details undefined"
+  className="resource-details testClass"
 >
   <div
     className="metadata-container"

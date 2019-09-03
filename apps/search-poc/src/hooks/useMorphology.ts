@@ -56,13 +56,7 @@ export default (
         setStage('Building Render');
         viewer.addMorphology(morphology, { asPolyline: true });
         setLoading(false);
-        console.log('--------------no error-----------------');
-        console.log(viewer);
-        console.log('--------------no error-----------------');
       } catch (error) {
-        console.log('--------------error-----------------');
-        console.log(error);
-        console.log('--------------error-----------------');
         setError(error);
       }
     }

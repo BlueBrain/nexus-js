@@ -7,6 +7,7 @@ import { shallow } from "enzyme";
 
 it('ResourceDetails renders correctly', () => {
     const props = {
+        className: 'testClass',
         strain: {
             "@id": "http://purl.obolibrary.org/obo/RS_0001833",
             "label": "Wistar Han"

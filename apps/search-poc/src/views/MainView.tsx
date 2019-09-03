@@ -59,12 +59,10 @@ const MainView: React.FunctionComponent<{
     [props.studioQuery],
   );
 
-  console.log('----yo ---');
   if(studioData) {
     console.log(studioData.workspaces[0]);
   }
 
-  console.log('----yo ---');
 
   if (loading) {
     return <Spin></Spin>;

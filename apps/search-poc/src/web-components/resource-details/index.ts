@@ -2,8 +2,8 @@ import { saveAccessToken } from '../../utils/auth';
 import { parseNexusUrl } from '../../utils';
 
 import WebComponent from '../web-component';
-
 import DetailsContainerComponent from '../../containers/ResourceDetails/ResourceDetails';
+import { HandleClickParams } from '../../types';
 
 import 'antd/dist/antd.css';
 import '../../index.css';
@@ -14,6 +14,8 @@ import '../../components/ResourceDetails/MorphologyViewer.css';
 import '../../components/ResourceDetails/ResourceDetails.css';
 
 class ResourceDetails extends WebComponent {
+  getStyleElFuncName = 'getResourceDetailsStyleEl';
+
   constructor() {
     super();
 
@@ -30,7 +32,10 @@ class ResourceDetails extends WebComponent {
     const parsedUrl = parseNexusUrl(selfUrl);
     this.createNexusClient(parsedUrl.deployment);
 
-    this.reactComponentProps = { selfUrl };
+    this.reactComponentProps = {
+      selfUrl,
+      handleClick: (params: HandleClickParams) => this.handleClick(params),
+    };
 
     this.init();
   }

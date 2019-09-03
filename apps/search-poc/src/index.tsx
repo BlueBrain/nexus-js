@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
+
 import { setUpSession, setToken } from './utils/auth';
 import Header from './containers/Header';
 import DetailsView from './views/DetailsView';
@@ -13,6 +14,7 @@ import { SETTINGS, getStudioConfig } from './config';
 
 import 'antd/dist/antd.css';
 import './index.css';
+
 
 async function main() {
   const [userManager, user] = await setUpSession();

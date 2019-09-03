@@ -1,11 +1,13 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, Context } from 'react';
 import ReactDOM from 'react-dom';
+import retargetEvents from 'react-shadow-dom-retarget-events';
 
 import { createNexusClient, NexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
 
 import { createShadowDomRootTree } from './shadow-dom-tools';
 import { setToken } from '../utils/auth';
+import { HandleClickParams } from '../types';
 
 /**
  * Generic web component class
@@ -37,6 +39,10 @@ export default class WebComponent extends HTMLElement {
     this.mountPoint = this.containerEl.querySelector('div') as HTMLElement;
 
     this.attachShadow({ mode: 'open' }).appendChild(this.containerEl);
+  }
+
+  handleClick(params: HandleClickParams) {
+    this.dispatchCustomEvent('link-click', params);
   }
 
   createNexusClient(deployment: string) {
@@ -81,14 +87,14 @@ export default class WebComponent extends HTMLElement {
   render() {
     if (!this.initialized) return;
 
-    ReactDOM.render(
-      React.createElement(
-        NexusProvider,
-        { nexusClient: this.nexusClient },
-        React.createElement(this.ReactComponent, this.reactComponentProps),
-      ),
-      this.mountPoint,
+    const appEl = React.createElement(
+      NexusProvider,
+      { nexusClient: this.nexusClient },
+      React.createElement(this.ReactComponent, this.reactComponentProps),
     );
+
+    ReactDOM.render(appEl, this.mountPoint);
+    retargetEvents(this.shadowRoot as ShadowRoot);
   }
 
   destroy() {
@@ -96,7 +102,7 @@ export default class WebComponent extends HTMLElement {
   }
 
   dispatchCustomEvent(name: string, eventData: any) {
-    const event = new CustomEvent(name, eventData);
+    const event = new CustomEvent(name, { detail: eventData });
     this.dispatchEvent(event);
   }
 

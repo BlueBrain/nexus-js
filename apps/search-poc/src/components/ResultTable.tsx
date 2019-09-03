@@ -5,6 +5,7 @@ import moment from 'moment';
 import { parseProjectUrl } from '../utils';
 import { PAGE_SIZE } from '../config';
 import Search from 'antd/lib/input/Search';
+import { HandleClickParams } from '../types';
 
 type ResultTableProps = {
   headerProperties?: {
@@ -16,14 +17,14 @@ type ResultTableProps = {
     [dataIndex: string]: any;
   }[];
   pageSize?: number;
-  onRowClick?: (rowData: any, index: number) => void;
+  handleClick: (params: HandleClickParams) => void;
 };
 
 const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   headerProperties,
   items,
   pageSize = PAGE_SIZE,
-  onRowClick = () => {},
+  handleClick,
 }) => {
   const [searchValue, setSearchValue] = React.useState();
 
@@ -76,8 +77,8 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   return (
     <div className="result-table">
       <Table
-        onRow={(data, index) => ({
-          onClick: event => onRowClick(data, index),
+        onRow={(data) => ({
+          onClick: event => handleClick({ ...data, type: 'resource' }),
         })}
         columns={columnList}
         dataSource={tableItems}

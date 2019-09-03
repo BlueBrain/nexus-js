@@ -3,9 +3,9 @@ import { NexusClient } from '@bbp/nexus-sdk';
 import { SETTINGS } from '../../config';
 import { saveAccessToken } from '../../utils/auth';
 import { parseNexusUrl } from '../../utils';
+import { HandleClickParams } from '../../types';
 
 import WebComponent from '../web-component';
-
 import DashboardComponent from '../../containers/ResultTable';
 
 import 'antd/dist/antd.css';
@@ -31,6 +31,7 @@ class StudioDashboard extends WebComponent {
       projectLabel: SETTINGS.studioProject,
       // TODO: query viewId by dashboard's selfUrl
       viewId: 'nxv:StudioSparqlView',
+      handleClick: (params: HandleClickParams) => this.handleClick(params),
     };
   }
 

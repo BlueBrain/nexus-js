@@ -1,21 +1,25 @@
+
 import * as React from 'react';
-import { withRouter, History } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import ResourceDetailsContainer from '../containers/ResourceDetails';
+import { HandleClickParams } from '../types';
 
-const DetailsView: React.FunctionComponent<{
-  location: {
-    search: string;
-  };
-  history: History;
-}> = props => {
+
+const DetailsView: React.FunctionComponent<RouteComponentProps> = props => {
   const selfUrl = (props.location.search || '').replace('?self=', '');
-  const goToResource = selfUrl =>
-    props.history.push(`/resources/?self=${selfUrl}`);
+
+  const handleClick = (params: HandleClickParams) => {
+    props.history.push(`/resources?self=${params.self}`);
+  }
 
   return (
-    <ResourceDetailsContainer selfUrl={selfUrl} goToResource={goToResource} />
+    <ResourceDetailsContainer
+      selfUrl={selfUrl}
+      handleClick={handleClick}
+    />
   );
 };
+
 
 export default withRouter(DetailsView);

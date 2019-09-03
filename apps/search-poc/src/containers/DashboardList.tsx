@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { withRouter, History } from 'react-router-dom';
 import queryString from 'query-string';
+
 import TabList from '../components/TabList';
+import { HandleClickParams } from '../types';
+
 
 function getDashBoardConfig(
   id: string,
@@ -39,11 +41,12 @@ const DashboardListContainer: React.FunctionComponent<{
     viewId: string,
     dataQuery: string,
   ) => void;
-  history: History;
-}> = ({ workspaceId, dashboardConfig, onDashboardSelected, history }) => {
+  handleClick: (params: HandleClickParams) => void,
+  query: string,
+}> = ({ workspaceId, dashboardConfig, onDashboardSelected, handleClick, query }) => {
   // get active id from query string on mount (if any)
   const queryStringDashboardId =
-    queryString.parse(history.location.search).dashboard || '';
+    queryString.parse(query).dashboard || '';
 
   // find out if we have a matching dashboard config with that id
   const activeDb = getDashBoardConfig(
@@ -56,7 +59,7 @@ const DashboardListContainer: React.FunctionComponent<{
   const dashboardConfigData = dashboardConfig.map(config => ({
     id: `${config.dashboard['@id']}_{workspaceId}`,
     label: config.dashboard.label,
-    description: config.dashboard.description,
+    description: config.dashboard.description || '',
   }));
 
   // trigger parent on mount with the active id
@@ -85,16 +88,16 @@ const DashboardListContainer: React.FunctionComponent<{
           activeDashboard.view['@id'],
           activeDashboard.dashboard.dataQuery,
         );
-        history.push({
-          search: queryString.stringify({
-            ...queryString.parse(history.location.search),
-            dashboard: dashboardId,
-          }),
-        });
+        const search = queryString.stringify({
+          ...queryString.parse(query),
+          dashboard: dashboardId,
+        })
+        handleClick({ search, type: 'dashboard' });
       }}
       defaultActiveId={`${activeDb.dashboard['@id']}_${workspaceId}`}
     />
   );
 };
 
-export default withRouter(DashboardListContainer);
+
+export default DashboardListContainer;

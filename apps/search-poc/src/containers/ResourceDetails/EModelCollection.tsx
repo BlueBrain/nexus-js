@@ -1,16 +1,18 @@
 import React from 'react';
 import { Spin, Empty } from 'antd';
-
 import { Resource, DEFAULT_SPARQL_VIEW_ID } from '@bbp/nexus-sdk';
 import { useNexus } from '@bbp/react-nexus';
+
 import { MINDSResource, EModelResource } from './types';
 import { getCollectionEModelsQuery } from '../../config';
 import { parseProjectUrl, camelCaseToLabelString, getLabel } from '../../utils';
 import ResultTable from '../../components/ResultTable';
+import { HandleClickParams } from '../../types';
+
 
 const EModelCollectionDetailsContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource & EModelResource;
-  goToResource?: Function;
+  handleClick: (params: HandleClickParams) => void;
 }> = props => {
   const query = getCollectionEModelsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
@@ -69,13 +71,12 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
         <ResultTable
           headerProperties={headerProperties}
           items={items}
-          onRowClick={resource => {
-            props.goToResource && props.goToResource(resource.self);
-          }}
+          handleClick={props.handleClick}
         />
       )}
     </Spin>
   );
 };
+
 
 export default EModelCollectionDetailsContainer;

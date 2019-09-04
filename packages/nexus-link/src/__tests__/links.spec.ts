@@ -21,13 +21,13 @@ describe('setToken', () => {
 
 describe('setMethod', () => {
   it('sets the  method  at the operation', () => {
-    const setTokenLink = Links.setMethod('get');
+    const setMethodLink = Links.setMethod('get');
     const testLink = (operation: Operation) =>
       new Observable(observer => {
         observer.next(operation.method);
         observer.complete();
       });
-    const obs = setTokenLink({ path: 'testpath' }, testLink);
+    const obs = setMethodLink({ path: 'testpath' }, testLink);
     let result;
     obs.subscribe(x => {
       result = x;

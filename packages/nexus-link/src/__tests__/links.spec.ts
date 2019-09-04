@@ -17,6 +17,10 @@ describe('setToken', () => {
     });
     expect(result).toBe('bearer mytoken');
   });
+  it('throws an error when no link is passed', () => {
+    const setTokenLink = Links.setToken('mytoken');
+    expect(() => setTokenLink({ path: 'testpath' })).toThrow();
+  });
 });
 
 describe('setMethod', () => {
@@ -33,5 +37,9 @@ describe('setMethod', () => {
       result = x;
     });
     expect(result).toBe('get');
+  });
+  it('throws an error when no link is passed', () => {
+    const setMethodLink = Links.setMethod('get');
+    expect(() => setMethodLink({ path: 'testpath' })).toThrow();
   });
 });

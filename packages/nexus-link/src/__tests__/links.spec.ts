@@ -1,5 +1,4 @@
 import * as Links from '../links';
-// Context, NextLink, Link
 import { Operation } from '../types';
 import { Observable } from 'rxjs';
 

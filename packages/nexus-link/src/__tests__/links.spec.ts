@@ -1,7 +1,7 @@
 import * as Links from '../links';
 import { Operation } from '../types';
 import { Observable } from 'rxjs';
-
+jest.useFakeTimers();
 describe('setToken', () => {
   it('sets the  token  at the operation headers/Authorization', () => {
     const setTokenLink = Links.setToken('mytoken');
@@ -41,5 +41,29 @@ describe('setMethod', () => {
   it('throws an error when no link is passed', () => {
     const setMethodLink = Links.setMethod('get');
     expect(() => setMethodLink({ path: 'testpath' })).toThrow();
+  });
+});
+
+describe('poll', () => {
+  it('throws an error when no link is passed', () => {
+    const pollLink = Links.poll(1000);
+    expect(() => pollLink({ path: 'testpath' })).toThrow();
+  });
+
+  it('polls the link every x seconds', () => {
+    const pollLink = Links.poll(1000);
+    const testLink = (operation: Operation) =>
+      new Observable(observer => {
+        observer.next(1);
+      });
+    const obs = pollLink({ path: 'testpath' }, testLink);
+    let result = 0;
+    obs.subscribe(x => {
+      result += x;
+    });
+    jest.advanceTimersByTime(1000);
+    expect(result).toBe(1);
+    jest.advanceTimersByTime(1000);
+    expect(result).toBe(2);
   });
 });

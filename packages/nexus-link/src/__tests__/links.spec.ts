@@ -1,7 +1,10 @@
 import * as Links from '../links';
 import { Operation } from '../types';
 import { Observable } from 'rxjs';
+
 jest.useFakeTimers();
+jest.setTimeout(1500);
+
 describe('setToken', () => {
   it('sets the  token  at the operation headers/Authorization', () => {
     const setTokenLink = Links.setToken('mytoken');
@@ -65,5 +68,28 @@ describe('poll', () => {
     expect(result).toBe(1);
     jest.advanceTimersByTime(1000);
     expect(result).toBe(2);
+  });
+});
+
+describe('triggerFetch', () => {
+  const testLink = Links.triggerFetch(fetch);
+  const data = { data: '12345' };
+  const obs = testLink({ path: 'testpath', context: { as: 'json' } });
+  let result;
+
+  beforeAll(() => {
+    fetchMock.mockResponseOnce(JSON.stringify(data));
+    obs.subscribe({
+      next(x) {
+        result = x;
+      },
+      complete() {
+        console.log('done');
+      },
+    });
+  });
+
+  test('fetch the data', () => {
+    expect(result).toMatchObject(data);
   });
 });

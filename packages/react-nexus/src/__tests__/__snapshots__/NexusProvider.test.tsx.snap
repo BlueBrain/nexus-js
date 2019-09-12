@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NexusProvider and useNexusContext useNexus access the NexusContext through useNexusContext 1`] = `
+<ContextProvider
+  value={
+    Object {
+      "Organization": Object {
+        "list": Array [
+          Object {
+            "name": "org1",
+          },
+        ],
+      },
+    }
+  }
+>
+  <AppNexus />
+</ContextProvider>
+`;
+
+exports[`NexusProvider and useNexusContext useNexusContext can access the value provided by NexusProvider 1`] = `
+<ContextProvider
+  value={
+    Object {
+      "aValue": "This is a value",
+    }
+  }
+>
+  <App />
+</ContextProvider>
+`;

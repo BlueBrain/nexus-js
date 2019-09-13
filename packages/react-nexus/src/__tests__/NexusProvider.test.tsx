@@ -1,11 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import NexusProvider from '../NexusProvider'; 
 import useNexusContext from '../useNexusContext';
 import  useNexus  from '../useNexus';
-
-
-
 
 const App = ()  => {
     const nexus = useNexusContext();
@@ -15,7 +12,6 @@ const App = ()  => {
         </div>
     );
 }
-
 
 const AppNexus: React.SFC<any> = () => {
     const org = useNexus(nexus => nexus.Organization.get('test'), ['test']);    

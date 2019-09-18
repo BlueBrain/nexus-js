@@ -9,6 +9,7 @@
     "@bbp/nexus-sdk": "^1.1.5",
     "@bbp/react-nexus": "^1.1.5",
     "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/react-shadow-dom-retarget-events": "^1.0.0",
     "antd": "^3.20.7",
     "jsonld": "^1.6.2",
     "moment": "^2.24.0",

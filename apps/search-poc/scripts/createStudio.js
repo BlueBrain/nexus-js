@@ -142,8 +142,6 @@ async function main() {
 
     const workspaceIds = await Promise.all(workspaceIdsPromises);
 
-    console.log(workspaceIds);
-
     await nexus.Resource.create(
       config.orgName,
       config.projectName,

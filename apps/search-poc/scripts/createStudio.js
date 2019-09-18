@@ -142,6 +142,7 @@ async function main() {
 
     const workspaceIds = await Promise.all(workspaceIdsPromises);
 
+    // Generate the "root" Studio!
     await nexus.Resource.create(
       config.orgName,
       config.projectName,

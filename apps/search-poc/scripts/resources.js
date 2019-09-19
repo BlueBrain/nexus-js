@@ -1,8 +1,3 @@
-export type Filters = {
-  brainRegion?: string,
-  [filterKey: string]: string,
-};
-
 /**
  *
  *

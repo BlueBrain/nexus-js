@@ -90,11 +90,11 @@ async function main() {
     );
 
     // Generate each workspace!
-    [
+    const workspaceIdsPromises = [
       ThalamusWorkspaceConfig,
       BBPOverviewConfig,
       NeocortexWorkspaceConfig,
-    ].forEach(async workspaceConfig => {
+    ].map(async workspaceConfig => {
       // WARNING: We need to wait for the context resource to be indexed
       const { '@id': emodelDashboardId } = await nexus.Resource.create(
         config.orgName,
@@ -136,12 +136,18 @@ async function main() {
           [modelCellCollectionDashboardId, 'nxv:StudioSparqlView'],
         ]),
       );
-      await nexus.Resource.create(
-        config.orgName,
-        config.projectName,
-        generateStudioResource([workspaceId]),
-      );
+
+      return workspaceId;
     });
+
+    const workspaceIds = await Promise.all(workspaceIdsPromises);
+
+    // Generate the "root" Studio!
+    await nexus.Resource.create(
+      config.orgName,
+      config.projectName,
+      generateStudioResource(workspaceIds),
+    );
 
     console.log('Success!');
   } catch (e) {

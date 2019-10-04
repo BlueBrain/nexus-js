@@ -1,0 +1,19 @@
+.file-download {
+    display: flex;
+    justify-content: space-between;
+    background-color:rgba(255, 255, 255, 0.5);
+    padding: 1em;
+    margin-bottom: 1em;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e8e8e8;
+}
+
+.file-download > .toggle {
+}
+.file-download > .download {
+}
+
+.file-download > .toggle > label{
+    padding: 0.5em;
+}

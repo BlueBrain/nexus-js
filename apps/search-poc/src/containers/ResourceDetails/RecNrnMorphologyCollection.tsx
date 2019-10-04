@@ -3,26 +3,30 @@ import React from 'react';
 import { Spin, Empty } from 'antd';
 import { Resource, DEFAULT_SPARQL_VIEW_ID } from '@bbp/nexus-sdk';
 import { useNexus } from '@bbp/react-nexus';
-
 import { MINDSResource } from './types';
-import { getCollectionReconstructedCellsQuery } from '../../config';
+import { getCollectionReconstructedCellsQuery, getCollectionReconstructedCellsFilesQuery } from '../../config';
 import { parseProjectUrl, getLabel, camelCaseToLabelString } from '../../utils';
 import ResultTable from '../../components/ResultTable';
 import { HandleClickParams } from '../../types';
 
-
 const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource;
   handleClick: (params: HandleClickParams) => void;
+  isDownload: boolean;
+  OnFileSelect: (fileId: string[]) => void;
+  selectedFileIds?: string[];
 }> = props => {
-  const query = getCollectionReconstructedCellsQuery(props.resource['@id']);
+  const query = props.isDownload ? getCollectionReconstructedCellsFilesQuery(props.resource['@id']) 
+    : getCollectionReconstructedCellsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
 
-  const { data, loading, error } = useNexus<any>(nexus =>
-    nexus.View.sparqlQuery(org, proj, DEFAULT_SPARQL_VIEW_ID, query),
-  );
 
-  // build header properties
+
+  
+  const { data, loading, error } = useNexus<any>(nexus =>
+    nexus.View.sparqlQuery(org, proj, DEFAULT_SPARQL_VIEW_ID, query), [props.isDownload]
+  );
+  
   const headerProperties: {
     title: string;
     dataIndex: string;
@@ -37,7 +41,7 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
         title: camelCaseToLabelString(headVar), // TODO: get the matching title from somewhere?
         dataIndex: headVar,
       }));
-
+       
   // build items
   const items =
     data &&
@@ -69,11 +73,15 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
     <Spin spinning={loading}>
       {error && !data && <Empty>{error.message}</Empty>}
       {data && (
-        <ResultTable
-          headerProperties={headerProperties}
-          items={items}
-          handleClick={props.handleClick}
-        />
+        <>
+          <ResultTable
+            headerProperties={headerProperties}
+            items={items}
+            handleClick={props.handleClick}
+            handleFileSelect={props.OnFileSelect}
+            selectedFileIds={props.selectedFileIds}
+          />
+        </>
       )}
     </Spin>
   );

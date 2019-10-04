@@ -50,6 +50,44 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
      }
 `;
 
+
+/**
+ *
+ *
+ * @param {{ brainRegion?: string }} Filters
+ */
+
+const morphologyDownLoadDataQuery = filters => `
+prefix nxs: <https://neuroshapes.org/>
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix schema: <http://schema.org/>
+prefix prov: <http://www.w3.org/ns/prov#>
+
+
+      SELECT DISTINCT ?self ?name ?fileId  ?filename ?size {
+        Graph ?g {
+            ?s rdf:type nxs:ReconstructedNeuronMorphologyCollection
+        }
+        ${
+          filters && filters.brainRegion
+            ? `Graph ?g {
+            ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
+          }`
+            : ''
+        }
+        ?s nxv:self ?self    .
+        ?s schema:name ?name .
+        ?s nxs:reconstructedcells ?reconstructedcells .
+        ?reconstructedcells schema:distribution / schema:contentUrl ?fileId .
+        ?fileId nxv:constrainedBy <https://bluebrain.github.io/nexus/schemas/file.json> .
+        ?fileId nxv:filename ?filename .
+        ?fileId nxv:bytes  ?size  
+      }
+     } 
+`;
+
+
+
 /**
  *
  *
@@ -355,6 +393,7 @@ const morphologyCollectionDashboard = filters => ({
   label: 'Morphology Dashboard',
   description: 'Morphology curation',
   dataQuery: morphologyDataQuery(filters),
+  downloadDataQuery: morphologyDownLoadDataQuery(filters)
 });
 
 /**

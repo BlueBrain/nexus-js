@@ -1,0 +1,573 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileDownload FileDownload renders correctly 1`] = `
+<NexusProvider
+  nexusClient={
+    Object {
+      "ACL": Object {
+        "append": [Function],
+        "create": [Function],
+        "delete": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "replace": [Function],
+        "subtract": [Function],
+      },
+      "Archive": Object {
+        "create": [Function],
+        "createWithId": [Function],
+        "get": [Function],
+      },
+      "File": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "link": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Identity": Object {
+        "list": [Function],
+        "poll": [Function],
+      },
+      "Organization": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "update": [Function],
+      },
+      "Permissions": Object {
+        "append": [Function],
+        "delete": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "replace": [Function],
+        "subtract": [Function],
+      },
+      "Project": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "update": [Function],
+      },
+      "Realm": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "update": [Function],
+      },
+      "Resolver": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Resource": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "links": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Schema": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Storage": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "View": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "elasticSearchQuery": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "pollStatistics": [Function],
+        "sparqlQuery": [Function],
+        "statistics": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "httpDelete": [Function],
+      "httpGet": [Function],
+      "httpPatch": [Function],
+      "httpPost": [Function],
+      "httpPut": [Function],
+      "poll": [Function],
+    }
+  }
+>
+  <BrowserRouter>
+    <Router
+      history={
+        Object {
+          "action": "POP",
+          "block": [Function],
+          "createHref": [Function],
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "length": 1,
+          "listen": [Function],
+          "location": Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+          "push": [Function],
+          "replace": [Function],
+        }
+      }
+    >
+      <FileDownloadContainer
+        OnShowFiles={[MockFunction]}
+        downloadFileName="test-download"
+        fileIds={
+          Array [
+            "path/org/project/test-id",
+          ]
+        }
+        isDownload={true}
+      >
+        <div
+          className="file-download"
+        >
+          <div
+            className="toggle"
+          >
+            <Switch
+              checked={true}
+              onChange={[Function]}
+              size="small"
+            >
+              <Wave
+                insertExtraNode={true}
+              >
+                <Switch
+                  checked={true}
+                  checkedChildren={null}
+                  className="ant-switch-small"
+                  defaultChecked={false}
+                  loadingIcon={null}
+                  onChange={[Function]}
+                  prefixCls="ant-switch"
+                  size="small"
+                  unCheckedChildren={null}
+                >
+                  <button
+                    aria-checked={true}
+                    checked={true}
+                    className="ant-switch-small ant-switch ant-switch-checked"
+                    defaultChecked={false}
+                    onChange={[Function]}
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    onMouseUp={[Function]}
+                    role="switch"
+                    size="small"
+                    type="button"
+                  >
+                    <span
+                      className="ant-switch-inner"
+                    />
+                  </button>
+                </Switch>
+              </Wave>
+            </Switch>
+            <label>
+              Files
+            </label>
+          </div>
+          <div
+            className="download"
+          >
+            <a
+              download="test-download.tar.gz"
+              href={null}
+              style={
+                Object {
+                  "display": "none",
+                }
+              }
+            >
+              download
+            </a>
+            <Button
+              block={false}
+              ghost={false}
+              htmlType="button"
+              icon="download"
+              loading={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              size="small"
+            >
+              <Wave>
+                <button
+                  className="ant-btn ant-btn-sm"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  type="button"
+                >
+                  <Icon
+                    type="download"
+                  >
+                    <LocaleReceiver
+                      componentName="Icon"
+                    >
+                      <i
+                        aria-label="icon: download"
+                        className="anticon anticon-download"
+                      >
+                        <IconReact
+                          className=""
+                          type="download-o"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            className=""
+                            data-icon="download"
+                            fill="currentColor"
+                            focusable="false"
+                            height="1em"
+                            key="svg-download"
+                            viewBox="64 64 896 896"
+                            width="1em"
+                          >
+                            <path
+                              d="M505.7 661a8 8 0 0 0 12.6 0l112-141.7c4.1-5.2.4-12.9-6.3-12.9h-74.1V168c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v338.3H400c-6.7 0-10.4 7.7-6.3 12.9l112 141.8zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"
+                              key="svg-download-svg-0"
+                            />
+                          </svg>
+                        </IconReact>
+                      </i>
+                    </LocaleReceiver>
+                  </Icon>
+                  <span
+                    key=".0"
+                  >
+                    Download 1 file(s)
+                  </span>
+                </button>
+              </Wave>
+            </Button>
+          </div>
+        </div>
+      </FileDownloadContainer>
+    </Router>
+  </BrowserRouter>
+</NexusProvider>
+`;
+
+exports[`FileDownload the download icon changes to loading when download button is clicked 1`] = `
+<NexusProvider
+  nexusClient={
+    Object {
+      "ACL": Object {
+        "append": [Function],
+        "create": [Function],
+        "delete": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "replace": [Function],
+        "subtract": [Function],
+      },
+      "Archive": Object {
+        "create": [Function],
+        "createWithId": [Function],
+        "get": [Function],
+      },
+      "File": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "link": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Identity": Object {
+        "list": [Function],
+        "poll": [Function],
+      },
+      "Organization": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "update": [Function],
+      },
+      "Permissions": Object {
+        "append": [Function],
+        "delete": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "replace": [Function],
+        "subtract": [Function],
+      },
+      "Project": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "update": [Function],
+      },
+      "Realm": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "update": [Function],
+      },
+      "Resolver": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Resource": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "links": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Schema": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "Storage": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "View": Object {
+        "create": [Function],
+        "deprecate": [Function],
+        "elasticSearchQuery": [Function],
+        "get": [Function],
+        "list": [Function],
+        "poll": [Function],
+        "pollStatistics": [Function],
+        "sparqlQuery": [Function],
+        "statistics": [Function],
+        "tag": [Function],
+        "update": [Function],
+      },
+      "httpDelete": [Function],
+      "httpGet": [Function],
+      "httpPatch": [Function],
+      "httpPost": [Function],
+      "httpPut": [Function],
+      "poll": [Function],
+    }
+  }
+>
+  <BrowserRouter>
+    <Router
+      history={
+        Object {
+          "action": "POP",
+          "block": [Function],
+          "createHref": [Function],
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "length": 1,
+          "listen": [Function],
+          "location": Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+          "push": [Function],
+          "replace": [Function],
+        }
+      }
+    >
+      <FileDownloadContainer
+        OnShowFiles={[MockFunction]}
+        downloadFileName="test-download"
+        fileIds={
+          Array [
+            "path/org/project/test-id",
+          ]
+        }
+        isDownload={true}
+      >
+        <div
+          className="file-download"
+        >
+          <div
+            className="toggle"
+          >
+            <Switch
+              checked={true}
+              onChange={[Function]}
+              size="small"
+            >
+              <Wave
+                insertExtraNode={true}
+              >
+                <Switch
+                  checked={true}
+                  checkedChildren={null}
+                  className="ant-switch-small"
+                  defaultChecked={false}
+                  loadingIcon={null}
+                  onChange={[Function]}
+                  prefixCls="ant-switch"
+                  size="small"
+                  unCheckedChildren={null}
+                >
+                  <button
+                    aria-checked={true}
+                    checked={true}
+                    className="ant-switch-small ant-switch ant-switch-checked"
+                    defaultChecked={false}
+                    onChange={[Function]}
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    onMouseUp={[Function]}
+                    role="switch"
+                    size="small"
+                    type="button"
+                  >
+                    <span
+                      className="ant-switch-inner"
+                    />
+                  </button>
+                </Switch>
+              </Wave>
+            </Switch>
+            <label>
+              Files
+            </label>
+          </div>
+          <div
+            className="download"
+          >
+            <a
+              download="test-download.tar.gz"
+              href={null}
+              style={
+                Object {
+                  "display": "none",
+                }
+              }
+            >
+              download
+            </a>
+            <Button
+              block={false}
+              ghost={false}
+              htmlType="button"
+              icon="loading"
+              loading={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              size="small"
+            >
+              <Wave>
+                <button
+                  className="ant-btn ant-btn-sm ant-btn-loading"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  type="button"
+                >
+                  <Icon
+                    type="loading"
+                  >
+                    <LocaleReceiver
+                      componentName="Icon"
+                    >
+                      <i
+                        aria-label="icon: loading"
+                        className="anticon anticon-loading"
+                      >
+                        <IconReact
+                          className="anticon-spin"
+                          type="loading-o"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            className="anticon-spin"
+                            data-icon="loading"
+                            fill="currentColor"
+                            focusable="false"
+                            height="1em"
+                            key="svg-loading"
+                            viewBox="0 0 1024 1024"
+                            width="1em"
+                          >
+                            <path
+                              d="M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 0 0-94.3-139.9 437.71 437.71 0 0 0-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z"
+                              key="svg-loading-svg-0"
+                            />
+                          </svg>
+                        </IconReact>
+                      </i>
+                    </LocaleReceiver>
+                  </Icon>
+                  <span
+                    key=".0"
+                  >
+                    Download 1 file(s)
+                  </span>
+                </button>
+              </Wave>
+            </Button>
+          </div>
+        </div>
+      </FileDownloadContainer>
+    </Router>
+  </BrowserRouter>
+</NexusProvider>
+`;

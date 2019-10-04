@@ -11,6 +11,7 @@ import { getComponentsForTypes } from './index';
 import { MINDSResource, Layer } from './types';
 import { getLabel, camelToKebab } from '../../utils';
 import { HandleClickParams } from '../../types';
+import FileDownloadContainer from '../FileDownLoad';
 
 
 const ResourceDetailsContainer: React.FunctionComponent<{
@@ -19,12 +20,20 @@ const ResourceDetailsContainer: React.FunctionComponent<{
 }> = props => {
   const { data, loading, error } = useNexus<Resource & MINDSResource>(
     nexus => nexus.httpGet({ path: props.selfUrl }),
-    [props.selfUrl],
+    [props.selfUrl]
   );
+
+  const [fileIds, setFIleIds] = React.useState<string[]>([]);
+
+  const fileSelectHandler = (fileIds: string[]) => {
+    setFIleIds(fileIds);
+  };
 
   const id = get(data, '@id');
   const name = get(data, 'name');
   const description = get(data, 'description');
+  const [isDownload, setIsDownload] = React.useState<boolean>(false);
+  
 
   const types = get(data, '@type', []) as string[];
   const components = getComponentsForTypes(types);
@@ -76,6 +85,7 @@ const ResourceDetailsContainer: React.FunctionComponent<{
       uploadedAt={uploadedAt}
       uploadedBy={uploadedBy}
     >
+      <FileDownloadContainer OnShowFiles={() => setIsDownload(!isDownload)} isDownload={isDownload} fileIds={fileIds} downloadFileName='nexus-download' />
       <ErrorBoundary>
         <Suspense fallback={<Spin />}>
           {Object.keys(components).map((compName: string) => {
@@ -86,7 +96,10 @@ const ResourceDetailsContainer: React.FunctionComponent<{
               <Component
                 key={compName}
                 resource={data}
+                isDownload={isDownload}
                 handleClick={props.handleClick}
+                OnFileSelect={fileSelectHandler}
+                selectedFileIds={fileIds}
               />
             );
           })}

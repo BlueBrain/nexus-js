@@ -40,6 +40,33 @@ export function getCollectionEModelsQuery(resourceId: string) {
     }`;
 }
 
+export function getCollectionEModelsFilesQuery(resourceId: string) {
+  return `
+    prefix nxs: <https://neuroshapes.org/>
+    prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+    prefix schema: <http://schema.org/>
+    prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
+    prefix prov: <http://www.w3.org/ns/prov#>
+    SELECT DISTINCT ?name ?brainRegionLabel ?self ?project ?createdAt ?filename ?size WHERE {
+      <${resourceId}> nxs:emodels ?emodel .
+      ?emodel schema:name ?name .
+      ?emodel nexus:self ?self .
+      ?emodel schema:distribution / schema:contentUrl ?fileId .        
+      ?fileId nxv:constrainedBy <https://bluebrain.github.io/nexus/schemas/file.json> .
+      ?fileId nxv:filename ?filename.
+      ?fileId nxv:bytes ?size .
+      optional {?emodel schema:description  ?description}
+      OPTIONAL { ?s schema:name ?name }
+      OPTIONAL { ?emodel nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }
+      OPTIONAL { ?emodel schema:description ?description  }
+      OPTIONAL { ?emodel nxs:subject / nxs:species / rdfs:label ?speciesLabel }
+      OPTIONAL { ?emodel nxs:subject / nxs:strain / rdfs:label ?strainLabel }
+      #OPTIONAL { ?emodel nxs:subject / nxs:age / schema:value ?age }
+      OPTIONAL { ?emodel nxv:project ?project }
+      OPTIONAL { ?emodel nxv:createdAt ?createdAt }
+    }`;
+}
+
 export function getCollectionReconstructedCellsQuery(resourceId: string) {
   return `prefix nxs: <https://neuroshapes.org/>
   prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
@@ -50,6 +77,32 @@ export function getCollectionReconstructedCellsQuery(resourceId: string) {
     <${resourceId}> nxs:reconstructedcells ?reconstructedcells .
     ?reconstructedcells nexus:self ?self .
     ?reconstructedcells schema:name ?name .
+    optional {?reconstructedcells schema:description  ?description}
+    OPTIONAL { ?s schema:name ?name }
+    OPTIONAL { ?reconstructedcells nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }
+    OPTIONAL { ?reconstructedcells schema:description ?description  }
+    OPTIONAL { ?reconstructedcells nxs:subject / nxs:species / rdfs:label ?speciesLabel }
+    OPTIONAL { ?reconstructedcells nxs:subject / nxs:strain / rdfs:label ?strainLabel }
+    #OPTIONAL { ?reconstructedcells nxs:subject / nxs:age / schema:value ?age }
+    OPTIONAL { ?reconstructedcells nxv:project ?project }
+    OPTIONAL { ?reconstructedcells nxv:createdAt ?createdAt }
+  }`;
+}
+
+export function getCollectionReconstructedCellsFilesQuery(resourceId: string) {
+  return `prefix nxs: <https://neuroshapes.org/>
+  prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+  prefix schema: <http://schema.org/>
+  prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
+  prefix prov: <http://www.w3.org/ns/prov#>
+  SELECT DISTINCT  ?fileId ?filename ?name ?brainRegionLabel    ?self ?project ?createdAt?size WHERE {
+    <${resourceId}> nxs:reconstructedcells ?reconstructedcells .
+    ?reconstructedcells nexus:self ?self .
+    ?reconstructedcells schema:name ?name .
+    ?reconstructedcells schema:distribution / schema:contentUrl ?fileId .        
+    ?fileId nxv:constrainedBy <https://bluebrain.github.io/nexus/schemas/file.json> .
+    ?fileId nxv:filename ?filename .
+    ?fileId nxv:bytes ?size .
     optional {?reconstructedcells schema:description  ?description}
     OPTIONAL { ?s schema:name ?name }
     OPTIONAL { ?reconstructedcells nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }

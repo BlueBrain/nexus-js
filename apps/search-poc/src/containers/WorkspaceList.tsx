@@ -1,6 +1,5 @@
 import * as React from 'react';
 import queryString from 'query-string';
-
 import TabList from '../components/TabList';
 import { HandleClickParams } from '../types';
 

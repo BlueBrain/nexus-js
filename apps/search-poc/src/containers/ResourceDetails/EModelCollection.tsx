@@ -4,7 +4,7 @@ import { Resource, DEFAULT_SPARQL_VIEW_ID } from '@bbp/nexus-sdk';
 import { useNexus } from '@bbp/react-nexus';
 
 import { MINDSResource, EModelResource } from './types';
-import { getCollectionEModelsQuery } from '../../config';
+import { getCollectionEModelsQuery, getCollectionEModelsFilesQuery } from '../../config';
 import { parseProjectUrl, camelCaseToLabelString, getLabel } from '../../utils';
 import ResultTable from '../../components/ResultTable';
 import { HandleClickParams } from '../../types';
@@ -13,12 +13,14 @@ import { HandleClickParams } from '../../types';
 const EModelCollectionDetailsContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource & EModelResource;
   handleClick: (params: HandleClickParams) => void;
+  isDownload: boolean;
 }> = props => {
-  const query = getCollectionEModelsQuery(props.resource['@id']);
+  const query = props.isDownload ? getCollectionEModelsFilesQuery(props.resource['@id']): 
+    getCollectionEModelsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
 
   const { data, loading, error } = useNexus<any>(nexus =>
-    nexus.View.sparqlQuery(org, proj, DEFAULT_SPARQL_VIEW_ID, query),
+    nexus.View.sparqlQuery(org, proj, DEFAULT_SPARQL_VIEW_ID, query),[props.isDownload]
   );
 
   // build header properties

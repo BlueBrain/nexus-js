@@ -22,6 +22,7 @@ import Realm from './Realm';
 import Permissions from './Permissions';
 import ACL from './ACL';
 import Resource from './Resource';
+import Archive from './Archive';
 
 export type NexusClientOptions = {
   uri: string;
@@ -73,6 +74,7 @@ export function createNexusClient(options: NexusClientOptions) {
     Realm: Realm(fetchers, context),
     Permissions: Permissions(fetchers, context),
     ACL: ACL(fetchers, context),
+    Archive: Archive(fetchers, context),
     ...fetchers,
   };
 }

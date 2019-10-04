@@ -12,12 +12,14 @@ const DetailsView: React.FunctionComponent<RouteComponentProps> = props => {
   const handleClick = (params: HandleClickParams) => {
     props.history.push(`/resources?self=${params.self}`);
   }
+  
 
-  return (
+
+  return (    
     <ResourceDetailsContainer
-      selfUrl={selfUrl}
-      handleClick={handleClick}
-    />
+       selfUrl={selfUrl}
+       handleClick={handleClick}
+      />
   );
 };
 

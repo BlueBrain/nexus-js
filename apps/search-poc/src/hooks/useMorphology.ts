@@ -28,11 +28,13 @@ export default (
     setLoading(true);
     setStage('Loading');
     nexus.File.get(org, proj, encodeURIComponent(id), { as: 'blob' })
+      // @ts-ignore
       .then(morpho => {
         setStage('Converting');
         return morpho;
       })
       .then(convertToSwc)
+      // @ts-ignore
       .then(morpho => {
         setStage('Parsing');
         return morpho;

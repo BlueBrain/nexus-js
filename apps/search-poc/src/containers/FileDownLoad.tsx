@@ -14,7 +14,7 @@ const FileDownloadContainer: React.FunctionComponent<{
     const nexus = useNexusContext();
     const icons = ['download', 'loading','check'];
     const refContainer = React.useRef<any>(null);
-    let linkStyle:any = {
+    const linkStyle:any = {
       display: 'none'
     };
     const filePanel = () => {

@@ -1,11 +1,10 @@
-import * as renderer from "react-test-renderer";
 import ResultTableContainer from '../ResultTable';
 import React from "react";
 import { mount } from "enzyme";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { NexusProvider } from '@bbp/react-nexus';
 import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
-import { setUpSession, setToken } from '../../utils/auth.ts';
+import {  setToken } from '../../utils/auth.ts';
 
 describe('ResultTableContainer', () => {
     

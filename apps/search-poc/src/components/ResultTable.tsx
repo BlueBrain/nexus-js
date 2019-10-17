@@ -84,9 +84,9 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
           }
 
           return {
-            title : titleRender,
             dataIndex,
             render,
+            title : titleRender,
             className: `result-column ${dataIndex}`,
           };
         })

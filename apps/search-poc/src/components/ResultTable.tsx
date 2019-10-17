@@ -35,12 +35,10 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   const handelSelectAll = () => {
     const selectedFiles = !selectAll
       ? items.map(item => {
-          console.log(item);
           return item.fileId;
         })
       : [];
     setSelectAll(!selectAll);
-    console.log(selectedFiles);
     handleFileSelect && handleFileSelect(selectedFiles);
   };
   const selectHandler = (fileId: string) => {

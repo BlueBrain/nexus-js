@@ -74,7 +74,7 @@ prefix prov: <http://www.w3.org/ns/prov#>
           }`
             : ''
         }
-        ?s nxv:self ?self    .
+        ?s nxv:self ?self .
         ?s schema:name ?name .
         ?s nxs:reconstructedcells ?reconstructedcells .
         ?reconstructedcells schema:distribution / schema:contentUrl ?fileId .

@@ -1,11 +1,10 @@
-import * as renderer from "react-test-renderer";
 import FileDownload from '../FileDownLoad';
 import React from "react";
 import {  mount } from "enzyme";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { NexusProvider } from '@bbp/react-nexus';
 import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
-import { setToken } from '../../utils/auth.ts';
+import { setToken } from '../../utils/auth';
 
 describe('FileDownload', () => {
     

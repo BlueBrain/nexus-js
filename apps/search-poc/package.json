@@ -16,7 +16,6 @@
     "morphoviewer": "^0.1.15",
     "oidc-client": "^1.8.2",
     "query-string": "^6.8.2",
-    "rdflib": "^1.0.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router": "^5.0.1",

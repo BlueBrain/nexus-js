@@ -60,7 +60,7 @@ const FileDownloadContainer: React.FunctionComponent<{
       });
       const [, , , , , org, proj] = props.fileIds[0].split('/');
 
-      nexus.Archive.create(org, proj, { resources: resources }).then(
+      nexus.Archive.create(org, proj, { resources }).then(
         (archive: any) => {
           if (archive) {
             const blob = new Blob([archive]);

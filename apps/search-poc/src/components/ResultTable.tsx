@@ -17,8 +17,8 @@ type ResultTableProps = {
     [dataIndex: string]: any;
   }[];
   pageSize?: number;
-  handleFileSelect?: (fileIds:string[]) => void;
-  selectedFileIds?: string[]
+  handleFileSelect?: (fileIds: string[]) => void;
+  selectedFileIds?: string[];
   handleClick: (params: HandleClickParams) => void;
 };
 
@@ -28,28 +28,40 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   pageSize = PAGE_SIZE,
   handleClick,
   handleFileSelect,
-  selectedFileIds
+  selectedFileIds,
 }) => {
   const [searchValue, setSearchValue] = React.useState();
   const [selectAll, setSelectAll] = React.useState<boolean>(false);
   const handelSelectAll = () => {
-    const selectedFiles = !selectAll ?  items.map((item) => { console.log(item); return item.fileId}): [];
+    const selectedFiles = !selectAll
+      ? items.map(item => {
+          console.log(item);
+          return item.fileId;
+        })
+      : [];
     setSelectAll(!selectAll);
     console.log(selectedFiles);
-    handleFileSelect &&
-    handleFileSelect(selectedFiles);
+    handleFileSelect && handleFileSelect(selectedFiles);
   };
   const selectHandler = (fileId: string) => {
-    if(handleFileSelect) {
+    if (handleFileSelect) {
       const hasFileId = selectedFileIds && selectedFileIds.includes(fileId);
 
-      return <input checked={hasFileId} type='checkbox' onClick={(e) => {
-        if(selectedFileIds) {
-          const fileIds = hasFileId ?   selectedFileIds.filter((id) => (id !== fileId)) : [...selectedFileIds, fileId];
-          handleFileSelect(fileIds);
-          e.stopPropagation();
-        }
-      }} />;
+      return (
+        <input
+          checked={hasFileId}
+          type="checkbox"
+          onClick={e => {
+            if (selectedFileIds) {
+              const fileIds = hasFileId
+                ? selectedFileIds.filter(id => id !== fileId)
+                : [...selectedFileIds, fileId];
+              handleFileSelect(fileIds);
+              e.stopPropagation();
+            }
+          }}
+        />
+      );
     }
     return null;
   };
@@ -59,7 +71,7 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
       ? headerProperties.map(({ title, dataIndex }) => {
           // We can create special renderers for the cells here
           let render;
-          let titleRender:any = title;
+          let titleRender: any = title;
           switch (title) {
             case 'Created At':
               render = (date: string) => <span>{moment(date).fromNow()}</span>;
@@ -74,9 +86,21 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
                 );
               };
               break;
-            case 'File Id': 
-              titleRender = () => ( <> <label> Select All </label> <input checked={selectAll} type='checkbox' onChange={(e) => { handelSelectAll()} } /> </>)
-              render = (value: string) => selectHandler(value) ;
+            case 'File Id':
+              titleRender = () => (
+                <>
+                  {' '}
+                  <label> Select All </label>{' '}
+                  <input
+                    checked={selectAll}
+                    type="checkbox"
+                    onChange={e => {
+                      handelSelectAll();
+                    }}
+                  />{' '}
+                </>
+              );
+              render = (value: string) => selectHandler(value);
               break;
             default:
               render = (value: string) => <span>{value}</span>;
@@ -86,7 +110,7 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
           return {
             dataIndex,
             render,
-            title : titleRender,
+            title: titleRender,
             className: `result-column ${dataIndex}`,
           };
         })
@@ -108,7 +132,7 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   return (
     <div className="result-table">
       <Table
-        onRow={(data) => ({
+        onRow={data => ({
           onClick: event => handleClick({ ...data, type: 'resource' }),
         })}
         columns={columnList}

@@ -13,7 +13,6 @@ import { getLabel, camelToKebab } from '../../utils';
 import { HandleClickParams } from '../../types';
 import FileDownloadContainer from '../FileDownLoad';
 
-
 const ResourceDetailsContainer: React.FunctionComponent<{
   selfUrl: string;
   handleClick: (params: HandleClickParams) => void;
@@ -33,7 +32,6 @@ const ResourceDetailsContainer: React.FunctionComponent<{
   const name = get(data, 'name');
   const description = get(data, 'description');
   const [isDownload, setIsDownload] = React.useState<boolean>(false);
-  
 
   const types = get(data, '@type', []) as string[];
   const components = getComponentsForTypes(types);
@@ -85,7 +83,12 @@ const ResourceDetailsContainer: React.FunctionComponent<{
       uploadedAt={uploadedAt}
       uploadedBy={uploadedBy}
     >
-      <FileDownloadContainer OnShowFiles={() => setIsDownload(!isDownload)} isDownload={isDownload} fileIds={fileIds} downloadFileName='nexus-download' />
+      <FileDownloadContainer
+        OnShowFiles={() => setIsDownload(!isDownload)}
+        isDownload={isDownload}
+        fileIds={fileIds}
+        downloadFileName="nexus-download"
+      />
       <ErrorBoundary>
         <Suspense fallback={<Spin />}>
           {Object.keys(components).map((compName: string) => {

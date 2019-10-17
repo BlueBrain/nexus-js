@@ -1,10 +1,12 @@
-
 import React from 'react';
 import { Spin, Empty } from 'antd';
 import { Resource, DEFAULT_SPARQL_VIEW_ID } from '@bbp/nexus-sdk';
 import { useNexus } from '@bbp/react-nexus';
 import { MINDSResource } from './types';
-import { getCollectionReconstructedCellsQuery, getCollectionReconstructedCellsFilesQuery } from '../../config';
+import {
+  getCollectionReconstructedCellsQuery,
+  getCollectionReconstructedCellsFilesQuery,
+} from '../../config';
 import { parseProjectUrl, getLabel, camelCaseToLabelString } from '../../utils';
 import ResultTable from '../../components/ResultTable';
 import { HandleClickParams } from '../../types';
@@ -16,17 +18,16 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
   OnFileSelect: (fileId: string[]) => void;
   selectedFileIds?: string[];
 }> = props => {
-  const query = props.isDownload ? getCollectionReconstructedCellsFilesQuery(props.resource['@id']) 
+  const query = props.isDownload
+    ? getCollectionReconstructedCellsFilesQuery(props.resource['@id'])
     : getCollectionReconstructedCellsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
 
-
-
-  
-  const { data, loading, error } = useNexus<any>(nexus =>
-    nexus.View.sparqlQuery(org, proj, DEFAULT_SPARQL_VIEW_ID, query), [props.isDownload]
+  const { data, loading, error } = useNexus<any>(
+    nexus => nexus.View.sparqlQuery(org, proj, DEFAULT_SPARQL_VIEW_ID, query),
+    [props.isDownload]
   );
-  
+
   const headerProperties: {
     title: string;
     dataIndex: string;
@@ -35,13 +36,13 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
     data.head.vars
       .filter(
         // we don't want to display total or self url in result table
-        (headVar: string) => !(headVar === 'self'),
+        (headVar: string) => !(headVar === 'self')
       )
       .map((headVar: string) => ({
         title: camelCaseToLabelString(headVar), // TODO: get the matching title from somewhere?
         dataIndex: headVar,
       }));
-       
+
   // build items
   const items =
     data &&
@@ -57,7 +58,7 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
               (binding[curr.dataIndex] && binding[curr.dataIndex].value) ||
               undefined,
           }),
-          {},
+          {}
         );
 
         // return item data
@@ -86,6 +87,5 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
     </Spin>
   );
 };
-
 
 export default RecNrnMorphologyCollectionContainer;

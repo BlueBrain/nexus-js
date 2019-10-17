@@ -4,23 +4,27 @@ import { Resource, DEFAULT_SPARQL_VIEW_ID } from '@bbp/nexus-sdk';
 import { useNexus } from '@bbp/react-nexus';
 
 import { MINDSResource, EModelResource } from './types';
-import { getCollectionEModelsQuery, getCollectionEModelsFilesQuery } from '../../config';
+import {
+  getCollectionEModelsQuery,
+  getCollectionEModelsFilesQuery,
+} from '../../config';
 import { parseProjectUrl, camelCaseToLabelString, getLabel } from '../../utils';
 import ResultTable from '../../components/ResultTable';
 import { HandleClickParams } from '../../types';
-
 
 const EModelCollectionDetailsContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource & EModelResource;
   handleClick: (params: HandleClickParams) => void;
   isDownload: boolean;
 }> = props => {
-  const query = props.isDownload ? getCollectionEModelsFilesQuery(props.resource['@id']): 
-    getCollectionEModelsQuery(props.resource['@id']);
+  const query = props.isDownload
+    ? getCollectionEModelsFilesQuery(props.resource['@id'])
+    : getCollectionEModelsQuery(props.resource['@id']);
   const [org, proj] = parseProjectUrl(props.resource._project);
 
-  const { data, loading, error } = useNexus<any>(nexus =>
-    nexus.View.sparqlQuery(org, proj, DEFAULT_SPARQL_VIEW_ID, query),[props.isDownload]
+  const { data, loading, error } = useNexus<any>(
+    nexus => nexus.View.sparqlQuery(org, proj, DEFAULT_SPARQL_VIEW_ID, query),
+    [props.isDownload]
   );
 
   // build header properties
@@ -32,7 +36,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
     data.head.vars
       .filter(
         // we don't want to display total or self url in result table
-        (headVar: string) => !(headVar === 'self'),
+        (headVar: string) => !(headVar === 'self')
       )
       .map((headVar: string) => ({
         title: camelCaseToLabelString(headVar), // TODO: get the matching title from somewhere?
@@ -54,7 +58,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
               (binding[curr.dataIndex] && binding[curr.dataIndex].value) ||
               undefined,
           }),
-          {},
+          {}
         );
 
         // return item data
@@ -79,6 +83,5 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
     </Spin>
   );
 };
-
 
 export default EModelCollectionDetailsContainer;

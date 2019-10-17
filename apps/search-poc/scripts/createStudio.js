@@ -81,12 +81,12 @@ async function main() {
     await nexus.View.create(
       config.orgName,
       config.projectName,
-      generateStudioView(config.aggregateStudioProjects),
+      generateStudioView(config.aggregateStudioProjects)
     );
     await nexus.Resource.create(
       config.orgName,
       config.projectName,
-      studioContext,
+      studioContext
     );
 
     // Generate each workspace!
@@ -99,31 +99,31 @@ async function main() {
       const { '@id': emodelDashboardId } = await nexus.Resource.create(
         config.orgName,
         config.projectName,
-        emodelsCollectionDashboard(workspaceConfig.filters),
+        emodelsCollectionDashboard(workspaceConfig.filters)
       );
       const { '@id': morphoDashboardId } = await nexus.Resource.create(
         config.orgName,
         config.projectName,
-        morphologyCollectionDashboard(workspaceConfig.filters),
+        morphologyCollectionDashboard(workspaceConfig.filters)
       );
       const { '@id': circuitsDashboardId } = await nexus.Resource.create(
         config.orgName,
         config.projectName,
-        circuitsDashboard(workspaceConfig.filters),
+        circuitsDashboard(workspaceConfig.filters)
       );
       const {
         '@id': simulationsCampaignDashboardId,
       } = await nexus.Resource.create(
         config.orgName,
         config.projectName,
-        simulationsCampaignDashboard(workspaceConfig.filters),
+        simulationsCampaignDashboard(workspaceConfig.filters)
       );
       const {
         '@id': modelCellCollectionDashboardId,
       } = await nexus.Resource.create(
         config.orgName,
         config.projectName,
-        modelCellCollectionDashboard(workspaceConfig.filters),
+        modelCellCollectionDashboard(workspaceConfig.filters)
       );
       const { '@id': workspaceId } = await nexus.Resource.create(
         config.orgName,
@@ -134,7 +134,7 @@ async function main() {
           [circuitsDashboardId, 'nxv:StudioSparqlView'],
           [simulationsCampaignDashboardId, 'nxv:StudioSparqlView'],
           [modelCellCollectionDashboardId, 'nxv:StudioSparqlView'],
-        ]),
+        ])
       );
 
       return workspaceId;
@@ -146,7 +146,7 @@ async function main() {
     await nexus.Resource.create(
       config.orgName,
       config.projectName,
-      generateStudioResource(workspaceIds),
+      generateStudioResource(workspaceIds)
     );
 
     console.log('Success!');

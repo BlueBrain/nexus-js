@@ -50,7 +50,6 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
      }
 `;
 
-
 /**
  *
  *
@@ -85,8 +84,6 @@ prefix prov: <http://www.w3.org/ns/prov#>
       }
      } 
 `;
-
-
 
 /**
  *
@@ -393,7 +390,7 @@ const morphologyCollectionDashboard = filters => ({
   label: 'Morphology Dashboard',
   description: 'Morphology curation',
   dataQuery: morphologyDataQuery(filters),
-  downloadDataQuery: morphologyDownLoadDataQuery(filters)
+  downloadDataQuery: morphologyDownLoadDataQuery(filters),
 });
 
 /**

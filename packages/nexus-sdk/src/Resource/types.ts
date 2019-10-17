@@ -40,7 +40,7 @@ export type Resource = {
 export type PaginatedResource<T = Resource> = {
   '@context': Context;
   total: number;
-  _result: T[];
+  _results: T[];
   _next?: string;
 };
 

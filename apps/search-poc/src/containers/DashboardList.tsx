@@ -11,7 +11,7 @@ function getDashBoardConfig(
   configs: DashboardConfig[],
 ): DashboardConfig {
   return (
-    configs.find(config => id === `${config.dashboard['@id']}_{workspaceId}`) ||
+    configs.find(config => id === `${config.dashboard['@id']}_${workspaceId}`) ||
     configs[0]
   );
 }
@@ -57,7 +57,7 @@ const DashboardListContainer: React.FunctionComponent<{
 
   // format dashboard data for TabList component
   const dashboardConfigData = dashboardConfig.map(config => ({
-    id: `${config.dashboard['@id']}_{workspaceId}`,
+    id: `${config.dashboard['@id']}_${workspaceId}`,
     label: config.dashboard.label,
     description: config.dashboard.description || '',
   }));

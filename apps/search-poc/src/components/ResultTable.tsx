@@ -37,6 +37,12 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
             case 'Created At':
               render = (date: string) => <span>{moment(date).fromNow()}</span>;
               break;
+            case 'Started At Time':
+              render = (date: string) => <span>{moment(date).format('L HH:mm')}</span>;
+              break;
+            case 'Ended At Time':
+              render = (date: string) => <span>{date ? moment(date).format('L HH:mm') : ''}</span>;
+              break;
             case 'Project':
               render = (projectURI: string) => {
                 const [org, project] = parseProjectUrl(projectURI);

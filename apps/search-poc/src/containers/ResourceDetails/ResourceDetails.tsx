@@ -26,7 +26,11 @@ const ResourceDetailsContainer: React.FunctionComponent<{
   const name = get(data, 'name');
   const description = get(data, 'description');
 
-  const types = get(data, '@type', []) as string[];
+  const rawTypes = get(data, '@type', []) as string | string[];
+  const types = typeof(rawTypes) === 'string'
+    ? [rawTypes]
+    : rawTypes;
+
   const components = getComponentsForTypes(types);
   const visibleTypes = types.filter(type => type !== 'Entity');
 

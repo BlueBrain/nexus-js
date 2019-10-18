@@ -68,7 +68,7 @@ const MainView: React.FunctionComponent<RouteComponentProps & {
     return (
       <Alert
         message="Error loading studio"
-        description={'There was an error loading the Studio configuration'}
+        description={error.reason || 'There was an error loading the Studio configuration'}
         type="error"
         showIcon
       />

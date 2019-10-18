@@ -29,14 +29,14 @@ const ResourceDetails: React.FunctionComponent<{
   uploadedBy: string;
   className: string;
 }> = props => {
-  const NotFound = ({ label }: { label: string }) => {
-    return (
-      <p>
-        <Icon type="warning" />
-        This dataset does not have <b>{label}</b> information
-      </p>
-    );
-  };
+  const missingProps = [];
+
+  if (!props.brainRegion.label) missingProps.push('Brain Region');
+  if (!props.species.label) missingProps.push('Species');
+  if (!props.strain.label) missingProps.push('Strain');
+  if (!props.description) missingProps.push('description');
+
+
   return (
     <div className={`resource-details ${props.className}`}>
       <div className="metadata-container">
@@ -44,7 +44,7 @@ const ResourceDetails: React.FunctionComponent<{
 
         <h2>
           {props.types.map(type => (
-            <em>{camelCaseToLabelString(type)}</em>
+            <em key={type}>{camelCaseToLabelString(type)}</em>
           ))}
         </h2>
 
@@ -61,9 +61,8 @@ const ResourceDetails: React.FunctionComponent<{
             >
               {props.brainRegion.label}
             </a>
-          ) : (
-            <NotFound label="Brain Region" />
-          )}
+          ) : ""
+          }
         </div>
 
         {props.layers.length ? (
@@ -87,9 +86,8 @@ const ResourceDetails: React.FunctionComponent<{
             >
               {props.species.label}
             </a>
-          ) : (
-            <NotFound label="Species" />
-          )}
+          ) : ""
+          }
         </p>
 
         <p>
@@ -97,18 +95,24 @@ const ResourceDetails: React.FunctionComponent<{
             <a target="_blank" rel="noopener noreferrer" href={props.strain.id}>
               {props.strain.label}
             </a>
-          ) : (
-            <NotFound label="Strain" />
-          )}
+          ) : ""
+          }
         </p>
 
         <p className="descripion">
           {props.description ? (
             props.description
-          ) : (
-            <NotFound label="description" />
-          )}
+          ) : ""
+          }
         </p>
+
+        {missingProps.length
+          ? <p>
+              <Icon type="warning" />
+              This dataset does not have <b>{missingProps.join(', ')}</b> information
+            </p>
+          : ""
+        }
       </div>
       <div className="module-container">{props.children}</div>
     </div>

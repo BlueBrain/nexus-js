@@ -4,6 +4,13 @@ const MorphViewer = lazy(() => import('./MorphologyViewer'));
 const EModelDetails = lazy(() =>
   import('../../components/ResourceDetails/EModel'),
 );
+const SimulationCampaignDetails = lazy(() =>
+  import('./SimulationCampaign/SimulationCampaign'),
+);
+const SimulationDetails = lazy(() => import('./Simulation/Simulation'));
+const DetailedCircuitDetails = lazy(() =>
+  import('./DetailedCircuit/DetailedCircuit'),
+);
 const EModelCollectionDetails = lazy(() => import('./EModelCollection'));
 const RecNrnMorphologyCollectionDetails = lazy(() =>
   import('./RecNrnMorphologyCollection'),
@@ -16,6 +23,9 @@ const detailsComponents: {
   morphCollection: RecNrnMorphologyCollectionDetails,
   emodelDetails: EModelDetails,
   emodelCollectionDetails: EModelCollectionDetails,
+  simulationCampaign: SimulationCampaignDetails,
+  simulation: SimulationDetails,
+  circuit: DetailedCircuitDetails,
 };
 
 const compNamesByType: { [componentType: string]: string[] } = {
@@ -23,6 +33,9 @@ const compNamesByType: { [componentType: string]: string[] } = {
   ReconstructedNeuronMorphologyCollection: ['morphCollection'],
   EModel: ['emodelDetails'],
   EModelCollection: ['emodelCollectionDetails'],
+  SimulationCampaign: ['simulationCampaign'],
+  Simulation: ['simulation'],
+  DetailedCircuit: ['circuit'],
 };
 
 // Get matching components by a list of resource types.
@@ -32,7 +45,6 @@ export function getComponentsForTypes(
 ): {
   [componentName: string]: LazyExoticComponent<any>;
 }[] {
-  // TODO: FIX
   // @ts-ignore
   return resourceTypes
     .flatMap(type => compNamesByType[type] || [])

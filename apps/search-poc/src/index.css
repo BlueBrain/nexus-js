@@ -15,3 +15,38 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.white-bg {
+  background-color: white;
+}
+
+.white-box {
+  padding: 4px 8px;
+  background-color: white;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+}
+
+.mt {
+  margin-top: 1.2em;
+}
+
+.mb {
+  margin-bottom: 1.2em;
+}
+
+.mr {
+  margin-right: 1.2em;
+}
+
+.ml {
+  margin-left: 1.2em;
+}
+
+.p {
+  padding: 1em;
+}
+
+.float-right {
+  float: right;
+}

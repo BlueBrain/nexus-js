@@ -76,6 +76,8 @@ const Header: React.FunctionComponent<{
     }
     const nextUserManagerConfig = getConfig(realm);
     const nextUserManager = new UserManager(nextUserManagerConfig);
+    localStorage.setItem('nextLocationSearch', window.location.search);
+    localStorage.setItem('nextLocationPathname', window.location.pathname);
     nextUserManager
       .signinRedirect()
       .then(() => {

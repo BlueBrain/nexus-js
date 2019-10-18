@@ -1,0 +1,30 @@
+
+.cm-s-base16-light span.cm-string.cm-property {
+  color: #00adee;
+}
+.CodeMirror {
+  height: auto;
+}
+
+.CodeMirror pre {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.sm-string .cm-property {
+  color: rgba(0, 0, 0, 0.65);
+}
+.cm-s-base16-light.CodeMirror {
+  background-color: white;
+}
+
+.panel--no-padding.ant-collapse-item .ant-collapse-content-box {
+  padding: 0;
+}
+
+.card--no-padding .ant-card-body {
+  padding: 0;
+}
+
+.config-info-container {
+  padding: 18px;
+}

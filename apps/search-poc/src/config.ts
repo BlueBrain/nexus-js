@@ -4,14 +4,13 @@ export const SETTINGS = {
   preferredRealmKey: 'preferredRealm',
   bearerTokenKey: 'nexusToken',
   serviceAccountName: 'serviceaccounts',
-  clientId: 'nexus-web',
+  clientId: 'bbp-workflow-web',
   redirectUrl: window.location.origin,
-  environment: 'https://staging.nexus.ocp.bbp.epfl.ch/v1',
-  studioOrg: 'bbp_test',
-  studioProject: 'studio',
+  environment: 'https://bbp.epfl.ch/nexus/v1',
+  studioOrg: 'nse',
+  studioProject: 'test',
   studioViewId: 'nxv:defaultSparqlIndex',
-  studioId:
-    'https://staging.nexus.ocp.bbp.epfl.ch/v1/resources/bbp_test/studio/_/3cb3997c-2a3b-4160-bccb-00de904aa566',
+  studioId: 'https://bluebrainnexus.io/studio/bbp-studio',
 };
 
 export const MORPH_CONVERTER_URL =
@@ -60,6 +59,26 @@ export function getCollectionReconstructedCellsQuery(resourceId: string) {
     OPTIONAL { ?reconstructedcells nxv:project ?project }
     OPTIONAL { ?reconstructedcells nxv:createdAt ?createdAt }
   }`;
+}
+
+export function getSimulationCampaignSimulationsQuery(resourceId: string) {
+  return `prefix nxs: <https://neuroshapes.org/>
+  prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+  prefix schema: <http://schema.org/>
+  prefix nexus: <https://bluebrain.github.io/nexus/vocabulary/>
+  prefix prov: <http://www.w3.org/ns/prov#>
+  SELECT DISTINCT ?simulation ?name ?self ?startedAtTime ?endedAtTime ?status ?job_id ?path
+  WHERE {
+    ?simulation prov:wasStartedBy <${resourceId}> .
+    ?simulation nexus:self ?self .
+    ?simulation schema:name ?name .
+    OPTIONAL { ?simulation nxv:project ?project }
+    OPTIONAL { ?simulation nxs:status ?status }
+    OPTIONAL { ?simulation nxs:job_id ?job_id }
+    OPTIONAL { ?simulation prov:startedAtTime ?startedAtTime }
+    OPTIONAL { ?simulation prov:endedAtTime ?endedAtTime }
+  }
+  `;
 }
 
 export const getStudioConfig = (studioId: string) => `

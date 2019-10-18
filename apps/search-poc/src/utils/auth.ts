@@ -1,11 +1,12 @@
 import { Realm } from '@bbp/nexus-sdk';
-import { UserManager, User } from 'oidc-client';
+import { UserManager, User, WebStorageStateStore } from 'oidc-client';
 import { Operation, Link, Observable } from '@bbp/nexus-link';
 import { SETTINGS } from '../config';
 
 // creates a OIDC config based on input realm
 export function getConfig(realm?: Realm) {
   return {
+    userStore: new WebStorageStateStore({ store: window.localStorage }),
     authority: realm ? realm._issuer : '',
     client_id: SETTINGS.clientId,
     redirect_uri: SETTINGS.redirectUrl,
@@ -22,9 +23,14 @@ export function saveAccessToken(token: string) {
   localStorage.setItem(SETTINGS.bearerTokenKey, token);
 }
 
+export function deleteAccessToken() {
+  localStorage.removeItem(SETTINGS.bearerTokenKey);
+}
+
 // link that sets the bearer token before each nexus call
 export const setToken: Link = (operation: Operation, forward?: Link) => {
   const token = localStorage.getItem(SETTINGS.bearerTokenKey);
+  if (!token) console.log('No access token in localstorage');
   const nextHeaders: any = { ...operation.headers };
   token && (nextHeaders['Authorization'] = `Bearer ${token}`);
 
@@ -56,20 +62,48 @@ export async function setUpSession(): Promise<[UserManager, User | null]> {
     getConfig(preferredRealm),
   );
 
-  // maybe we're getting new user session after redirect
-  try {
-    await userManager.signinRedirectCallback();
-  } catch (error) {}
-  // if not, check if we already had a running session
-  const user: User | null = await userManager.getUser();
+  // @ts-ignore
+  window.userManager = userManager;
+
+  const user: User | null = window.location.hash
+    ? await userManager.signinRedirectCallback()
+    : await userManager.getUser();
+
+  // @ts-ignore
+  window.history.pushState(
+    '',
+    document.title,
+    window.location.pathname + window.location.search,
+  );
+
+  // @ts-ignore
+  window.user = user;
+
+  const nextLocationSearch = localStorage.getItem('nextLocationSearch');
+  if (nextLocationSearch) {
+    const nextLocationPathname = localStorage.getItem('nextLocationPathname');
+    const loc = window.location;
+    window.history.replaceState(
+      null,
+      '',
+      `${loc.protocol}//${loc.host}${nextLocationPathname}${nextLocationSearch}`,
+    );
+    localStorage.removeItem('nextLocationSearch');
+  }
 
   if (user) {
-    saveAccessToken(user.id_token);
+    if (user.expired) {
+      userManager.signinRedirect();
+    }
+
+    saveAccessToken(user.access_token);
+  } else {
+    deleteAccessToken();
   }
 
   // Set events
   userManager.events.addUserLoaded((user: User) => {
-    saveAccessToken(user.id_token);
+    saveAccessToken(user.access_token);
   });
 
   userManager.events.addAccessTokenExpired(() => {

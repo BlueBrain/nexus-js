@@ -6,6 +6,8 @@ import { parseProjectUrl } from '../utils';
 import { PAGE_SIZE } from '../config';
 import Search from 'antd/lib/input/Search';
 import { HandleClickParams } from '../types';
+import { TableRowSelection } from 'antd/lib/table';
+import { object } from 'prop-types';
 
 type ResultTableProps = {
   headerProperties?: {
@@ -17,8 +19,8 @@ type ResultTableProps = {
     [dataIndex: string]: any;
   }[];
   pageSize?: number;
+  isDownload?: boolean;
   handleFileSelect?: (fileIds: string[]) => void;
-  selectedFileIds?: string[];
   handleClick: (params: HandleClickParams) => void;
 };
 
@@ -28,48 +30,17 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   pageSize = PAGE_SIZE,
   handleClick,
   handleFileSelect,
-  selectedFileIds,
+  isDownload,
 }) => {
   const [searchValue, setSearchValue] = React.useState();
-  const [selectAll, setSelectAll] = React.useState<boolean>(false);
-  const handelSelectAll = () => {
-    const selectedFiles = !selectAll
-      ? items.map(item => {
-          return item.fileId;
-        })
-      : [];
-    setSelectAll(!selectAll);
-    handleFileSelect && handleFileSelect(selectedFiles);
-  };
-  const selectHandler = (fileId: string) => {
-    if (handleFileSelect) {
-      const hasFileId = selectedFileIds && selectedFileIds.includes(fileId);
+  const [selectedRows, setSelectedRows] = React.useState<any[] | []>([]);;
 
-      return (
-        <input
-          checked={hasFileId}
-          type="checkbox"
-          onClick={e => {
-            if (selectedFileIds) {
-              const fileIds = hasFileId
-                ? selectedFileIds.filter(id => id !== fileId)
-                : [...selectedFileIds, fileId];
-              handleFileSelect(fileIds);
-              e.stopPropagation();
-            }
-          }}
-        />
-      );
-    }
-    return null;
-  };
 
   const columnList = [
     ...(headerProperties
       ? headerProperties.map(({ title, dataIndex }) => {
           // We can create special renderers for the cells here
           let render;
-          let titleRender: any = title;
           switch (title) {
             case 'Created At':
               render = (date: string) => <span>{moment(date).fromNow()}</span>;
@@ -84,22 +55,6 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
                 );
               };
               break;
-            case 'File Id':
-              titleRender = () => (
-                <>
-                  {' '}
-                  <label> Select All </label>{' '}
-                  <input
-                    checked={selectAll}
-                    type="checkbox"
-                    onChange={e => {
-                      handelSelectAll();
-                    }}
-                  />{' '}
-                </>
-              );
-              render = (value: string) => selectHandler(value);
-              break;
             default:
               render = (value: string) => <span>{value}</span>;
               break;
@@ -108,7 +63,7 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
           return {
             dataIndex,
             render,
-            title: titleRender,
+            title,
             className: `result-column ${dataIndex}`,
           };
         })
@@ -127,12 +82,27 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   const tableItems = searchValue ? filteredItems : items;
   const total = tableItems.length;
   const showPagination = total > pageSize;
+  const rowSelection: TableRowSelection<any>  = { 
+    fixed:true,
+    selectedRowKeys: selectedRows,
+    onChange:  (selectedRowKeys , selectedRows)  => { 
+      setSelectedRows(selectedRowKeys);
+      const fileIds = selectedRows.map((o) => {
+        return o.fileId;
+      })
+      handleFileSelect && handleFileSelect(fileIds);
+  }};
+ const extraProp = isDownload ? { rowSelection } : {};
+ console.log(selectedRows);
+  
+  
   return (
     <div className="result-table">
       <Table
         onRow={data => ({
           onClick: event => handleClick({ ...data, type: 'resource' }),
         })}
+        
         columns={columnList}
         dataSource={tableItems}
         bordered
@@ -158,6 +128,7 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
             </div>
           </div>
         )}
+        {...extraProp}
       />
     </div>
   );

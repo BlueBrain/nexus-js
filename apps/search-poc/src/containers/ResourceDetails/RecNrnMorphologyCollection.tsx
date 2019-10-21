@@ -80,7 +80,7 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
             items={items}
             handleClick={props.handleClick}
             handleFileSelect={props.OnFileSelect}
-            selectedFileIds={props.selectedFileIds}
+            isDownload={props.isDownload}
           />
         </>
       )}

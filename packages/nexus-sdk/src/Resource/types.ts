@@ -20,7 +20,7 @@ export type ResourcePayload = {
   [key: string]: any;
 };
 
-export type Resource = {
+export type Resource<T = { [key: string]: any }> = T & {
   '@context'?: Context;
   '@type'?: string | string[];
   '@id': string;

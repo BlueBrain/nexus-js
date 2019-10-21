@@ -17,6 +17,7 @@ const Resource = (
       options?: GetResourceOptions,
     ): Promise<Resource & T> =>
       httpGet({
+        headers: { Accept: 'application/ld+json' },
         path: `${
           context.uri
         }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(

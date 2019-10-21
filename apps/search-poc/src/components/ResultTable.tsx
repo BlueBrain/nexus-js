@@ -7,7 +7,6 @@ import { PAGE_SIZE } from '../config';
 import Search from 'antd/lib/input/Search';
 import { HandleClickParams } from '../types';
 import { TableRowSelection } from 'antd/lib/table';
-import { object } from 'prop-types';
 
 type ResultTableProps = {
   headerProperties?: {
@@ -92,8 +91,8 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
       })
       handleFileSelect && handleFileSelect(fileIds);
   }};
- const extraProp = isDownload ? { rowSelection } : {};
- console.log(selectedRows);
+ const rowSelectionProp = isDownload ? { rowSelection } : {};
+ 
   
   
   return (
@@ -128,7 +127,7 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
             </div>
           </div>
         )}
-        {...extraProp}
+        {...rowSelectionProp}
       />
     </div>
   );

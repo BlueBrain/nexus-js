@@ -15,14 +15,14 @@ const detailsComponents: {
   morphViewer: MorphViewer,
   morphCollection: RecNrnMorphologyCollectionDetails,
   emodelDetails: EModelDetails,
-  emodelCollectionDetails: EModelCollectionDetails
+  emodelCollectionDetails: EModelCollectionDetails,
 };
 
 const compNamesByType: { [componentType: string]: string[] } = {
   ReconstructedNeuronMorphology: ['morphViewer'],
   ReconstructedNeuronMorphologyCollection: ['morphCollection'],
   EModel: ['emodelDetails'],
-  EModelCollection: ['emodelCollectionDetails']
+  EModelCollection: ['emodelCollectionDetails'],
 };
 
 // Get matching components by a list of resource types.

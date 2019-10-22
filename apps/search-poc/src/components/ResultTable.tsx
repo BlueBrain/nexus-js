@@ -32,8 +32,7 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   isDownload,
 }) => {
   const [searchValue, setSearchValue] = React.useState();
-  const [selectedRows, setSelectedRows] = React.useState<any[] | []>([]);;
-
+  const [selectedRows, setSelectedRows] = React.useState<any[] | []>([]);
 
   const columnList = [
     ...(headerProperties
@@ -81,27 +80,25 @@ const ResultsTable: React.FunctionComponent<ResultTableProps> = ({
   const tableItems = searchValue ? filteredItems : items;
   const total = tableItems.length;
   const showPagination = total > pageSize;
-  const rowSelection: TableRowSelection<any>  = { 
-    fixed:true,
+  const rowSelection: TableRowSelection<any> = {
+    fixed: true,
     selectedRowKeys: selectedRows,
-    onChange:  (selectedRowKeys , selectedRows)  => { 
+    onChange: (selectedRowKeys, selectedRows) => {
       setSelectedRows(selectedRowKeys);
-      const fileIds = selectedRows.map((o) => {
+      const fileIds = selectedRows.map(o => {
         return o.fileId;
-      })
+      });
       handleFileSelect && handleFileSelect(fileIds);
-  }};
- const rowSelectionProp = isDownload ? { rowSelection } : {};
- 
-  
-  
+    },
+  };
+  const rowSelectionProp = isDownload ? { rowSelection } : {};
+
   return (
     <div className="result-table">
       <Table
         onRow={data => ({
           onClick: event => handleClick({ ...data, type: 'resource' }),
         })}
-        
         columns={columnList}
         dataSource={tableItems}
         bordered

@@ -4,11 +4,10 @@ import queryString from 'query-string';
 import TabList from '../components/TabList';
 import { HandleClickParams } from '../types';
 
-
 function getDashBoardConfig(
   id: string,
   workspaceId: string,
-  configs: DashboardConfig[],
+  configs: DashboardConfig[]
 ): DashboardConfig {
   return (
     configs.find(config => id === `${config.dashboard['@id']}_{workspaceId}`) ||
@@ -39,20 +38,25 @@ const DashboardListContainer: React.FunctionComponent<{
     orgLabel: string,
     projectLabel: string,
     viewId: string,
-    dataQuery: string,
+    dataQuery: string
   ) => void;
-  handleClick: (params: HandleClickParams) => void,
-  query: string,
-}> = ({ workspaceId, dashboardConfig, onDashboardSelected, handleClick, query }) => {
+  handleClick: (params: HandleClickParams) => void;
+  query: string;
+}> = ({
+  workspaceId,
+  dashboardConfig,
+  onDashboardSelected,
+  handleClick,
+  query,
+}) => {
   // get active id from query string on mount (if any)
-  const queryStringDashboardId =
-    queryString.parse(query).dashboard || '';
+  const queryStringDashboardId = queryString.parse(query).dashboard || '';
 
   // find out if we have a matching dashboard config with that id
   const activeDb = getDashBoardConfig(
     queryStringDashboardId.toString(),
     workspaceId,
-    dashboardConfig,
+    dashboardConfig
   );
 
   // format dashboard data for TabList component
@@ -68,7 +72,7 @@ const DashboardListContainer: React.FunctionComponent<{
       activeDb.view.org,
       activeDb.view.project,
       activeDb.view['@id'],
-      activeDb.dashboard.dataQuery,
+      activeDb.dashboard.dataQuery
     );
     // eslint-disable-next-line
   }, [dashboardConfig]); // watch config and trigger callback parent when it changes
@@ -80,24 +84,23 @@ const DashboardListContainer: React.FunctionComponent<{
         const activeDashboard = getDashBoardConfig(
           dashboardId,
           workspaceId,
-          dashboardConfig,
+          dashboardConfig
         );
         onDashboardSelected(
           activeDashboard.view.org,
           activeDashboard.view.project,
           activeDashboard.view['@id'],
-          activeDashboard.dashboard.dataQuery,
+          activeDashboard.dashboard.dataQuery
         );
         const search = queryString.stringify({
           ...queryString.parse(query),
           dashboard: dashboardId,
-        })
+        });
         handleClick({ search, type: 'dashboard' });
       }}
       defaultActiveId={`${activeDb.dashboard['@id']}_${workspaceId}`}
     />
   );
 };
-
 
 export default DashboardListContainer;

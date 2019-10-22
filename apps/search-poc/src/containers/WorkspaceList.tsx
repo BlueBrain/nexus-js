@@ -3,10 +3,9 @@ import queryString from 'query-string';
 import TabList from '../components/TabList';
 import { HandleClickParams } from '../types';
 
-
 function getWorkspaceConfig(
   id: string,
-  configs: WorkspaceConfig[],
+  configs: WorkspaceConfig[]
 ): WorkspaceConfig {
   return configs.find(config => config['@id'] === id) || configs[0];
 }
@@ -22,16 +21,20 @@ const WorkspaceListContainer: React.FunctionComponent<{
   onWorkspaceSelected: (workspaceId: string) => void;
   handleClick: (params: HandleClickParams) => void;
   query: string;
-}> = ({ workspaceConfig, onWorkspaceSelected, handleClick, query, children }) => {
-
+}> = ({
+  workspaceConfig,
+  onWorkspaceSelected,
+  handleClick,
+  query,
+  children,
+}) => {
   // get active id from query string on mount (if any)
-  const queryStringWorkspaceId =
-    queryString.parse(query).workspace || '';
+  const queryStringWorkspaceId = queryString.parse(query).workspace || '';
 
   // find out if we have a matching workspace with that id
   const activeId = getWorkspaceConfig(
     queryStringWorkspaceId.toString(),
-    workspaceConfig,
+    workspaceConfig
   )['@id'];
 
   // format workspace data for Tablist component
@@ -62,7 +65,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
         const search = queryString.stringify({
           ...withoutDashboard,
           workspace: workspaceId,
-        })
+        });
 
         handleClick({ search, type: 'dashboard' });
         onWorkspaceSelected(activeWorkspace['@id']);

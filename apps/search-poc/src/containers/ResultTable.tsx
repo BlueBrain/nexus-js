@@ -33,9 +33,9 @@ const ResultTableContainer: React.FunctionComponent<{
         props.orgLabel,
         props.projectLabel,
         encodeURIComponent(props.viewId),
-        props.dataQuery,
+        props.dataQuery
       ),
-    [props.dataQuery, props.viewId], // only trigger new call if we have a new query and a new view
+    [props.dataQuery, props.viewId] // only trigger new call if we have a new query and a new view
   );
 
   if (error) {
@@ -57,7 +57,7 @@ const ResultTableContainer: React.FunctionComponent<{
     data.head.vars
       .filter(
         // we don't want to display total or self url in result table
-        (headVar: string) => !(headVar === 'total' || headVar === 'self'),
+        (headVar: string) => !(headVar === 'total' || headVar === 'self')
       )
       .map((headVar: string) => ({
         title: camelCaseToLabelString(headVar), // TODO: get the matching title from somewhere?
@@ -79,7 +79,7 @@ const ResultTableContainer: React.FunctionComponent<{
               (binding[curr.dataIndex] && binding[curr.dataIndex].value) ||
               undefined,
           }),
-          {},
+          {}
         );
 
         // return item data

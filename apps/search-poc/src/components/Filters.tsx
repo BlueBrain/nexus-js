@@ -1,6 +1,6 @@
-import * as React from "react";
-import { Checkbox, Collapse, Badge } from "antd";
-import CollapsePanel from "antd/lib/collapse/CollapsePanel";
+import * as React from 'react';
+import { Checkbox, Collapse, Badge } from 'antd';
+import CollapsePanel from 'antd/lib/collapse/CollapsePanel';
 
 export interface Filter {
   name: string;
@@ -31,7 +31,7 @@ const Filters: React.FunctionComponent<FilterProps> = props => {
   const handleChange = (filterName: string, values: any[]) => {
     updateFilters({
       filterName,
-      values
+      values,
     });
   };
 
@@ -48,15 +48,15 @@ const Filters: React.FunctionComponent<FilterProps> = props => {
             const header = (
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between"
+                  display: 'flex',
+                  justifyContent: 'space-between',
                 }}
               >
-                <div style={{ width: "60%" }}>{filter.name}</div>
-                <div style={{ width: "20%" }}>
+                <div style={{ width: '60%' }}>{filter.name}</div>
+                <div style={{ width: '20%' }}>
                   <Badge
                     count={groupAppliedFiltersCount}
-                    style={{ backgroundColor: "#44c7f4" }}
+                    style={{ backgroundColor: '#44c7f4' }}
                   />
                 </div>
                 <div>{filter.values.length}</div>
@@ -65,7 +65,7 @@ const Filters: React.FunctionComponent<FilterProps> = props => {
             return (
               <CollapsePanel header={header} key={`$${index}`}>
                 <Checkbox.Group
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   onChange={values => handleChange(filter.name, values)}
                 >
                   <ul className="checkbox-list">

@@ -23,7 +23,7 @@ const FileDownloadContainer: React.FunctionComponent<{
         ? `${props.downloadFileName}.tar.gz`
         : 'nexus-download.tar.gz';
       return (
-        <div className='download'>
+        <div className="download">
           <a
             href={downloadUrl}
             style={linkStyle}
@@ -33,7 +33,7 @@ const FileDownloadContainer: React.FunctionComponent<{
             download
           </a>
           <Button
-            size='small'
+            size="small"
             onClick={() => {
               setLoading(1);
             }}
@@ -73,10 +73,10 @@ const FileDownloadContainer: React.FunctionComponent<{
   }, [props, nexus.Archive, isLoading]);
 
   return (
-    <div className='file-download'>
-      <div className='toggle'>
+    <div className="file-download">
+      <div className="toggle">
         <Switch
-          size='small'
+          size="small"
           onChange={() => {
             props.OnShowFiles();
           }}

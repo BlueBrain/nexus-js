@@ -63,8 +63,8 @@ const Header: React.FunctionComponent<{
         // nexus uses a realm called `serviceaccount` internally, we need to filter it out
         setRealms(
           realms._results.filter(
-            realm => realm._label !== SETTINGS.serviceAccountName,
-          ),
+            realm => realm._label !== SETTINGS.serviceAccountName
+          )
         );
       })
       .catch(e => console.error(e));
@@ -83,7 +83,7 @@ const Header: React.FunctionComponent<{
         userManager.clearStaleState();
         localStorage.setItem(
           SETTINGS.preferredRealmKey,
-          JSON.stringify({ _issuer: nextUserManagerConfig.authority }),
+          JSON.stringify({ _issuer: nextUserManagerConfig.authority })
         );
       })
       .catch(e => console.log(e.message));

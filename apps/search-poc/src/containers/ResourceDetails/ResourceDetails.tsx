@@ -87,7 +87,7 @@ const ResourceDetailsContainer: React.FunctionComponent<{
         OnShowFiles={() => setIsDownload(!isDownload)}
         isDownload={isDownload}
         fileIds={fileIds}
-        downloadFileName='nexus-download'
+        downloadFileName="nexus-download"
       />
       <ErrorBoundary>
         <Suspense fallback={<Spin />}>

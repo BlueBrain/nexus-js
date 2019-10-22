@@ -15,7 +15,6 @@ import { SETTINGS, getStudioConfig } from './config';
 import 'antd/dist/antd.css';
 import './index.css';
 
-
 async function main() {
   const [userManager, user] = await setUpSession();
   // create nexus instance
@@ -43,7 +42,7 @@ async function main() {
         </Switch>
       </Router>
     </NexusProvider>,
-    rootElement,
+    rootElement
   );
 }
 main();

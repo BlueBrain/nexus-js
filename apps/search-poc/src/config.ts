@@ -11,7 +11,7 @@ export const SETTINGS = {
   studioProject: 'studio',
   studioViewId: 'nxv:defaultSparqlIndex',
   studioId:
-    'https://staging.nexus.ocp.bbp.epfl.ch/v1/resources/bbp_test/studio/_/3cb3997c-2a3b-4160-bccb-00de904aa566'
+    'https://staging.nexus.ocp.bbp.epfl.ch/v1/resources/bbp_test/studio/_/3cb3997c-2a3b-4160-bccb-00de904aa566',
 };
 
 export const MORPH_CONVERTER_URL =
@@ -149,31 +149,31 @@ export const studioContext = {
   '@base': 'https://bluebrainnexus.io/studio/',
   '@vocab': 'https://bluebrainnexus.io/studio/vocabulary/',
   label: {
-    '@id': 'http://www.w3.org/2000/01/rdf-schema#label'
+    '@id': 'http://www.w3.org/2000/01/rdf-schema#label',
   },
   name: {
-    '@id': 'http://schema.org/name'
+    '@id': 'http://schema.org/name',
   },
   description: {
-    '@id': 'http://schema.org/description'
+    '@id': 'http://schema.org/description',
   },
   workspaces: {
     '@id': 'https://bluebrainnexus.io/studio/vocabulary/workspaces',
     '@container': '@set',
-    '@type': '@id'
+    '@type': '@id',
   },
   dashboards: { '@container': '@set' },
   dashboard: {
     '@id': 'https://bluebrainnexus.io/studio/vocabulary/dashboard',
-    '@type': '@id'
+    '@type': '@id',
   },
   view: {
     '@id': 'https://bluebrainnexus.io/studio/vocabulary/view',
-    '@type': '@id'
-  }
+    '@type': '@id',
+  },
 };
 
 export const studioFrame = {
   '@id': SETTINGS.studioId,
-  '@context': studioContext
+  '@context': studioContext,
 };

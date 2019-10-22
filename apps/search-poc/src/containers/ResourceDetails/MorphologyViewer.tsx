@@ -19,7 +19,7 @@ const MorpologyViewerContainer: React.FunctionComponent<{
       proj,
       id,
     },
-    ref
+    ref,
   );
 
   return MorphologyViewer({

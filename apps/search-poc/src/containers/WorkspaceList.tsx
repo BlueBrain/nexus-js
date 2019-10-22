@@ -5,7 +5,7 @@ import { HandleClickParams } from '../types';
 
 function getWorkspaceConfig(
   id: string,
-  configs: WorkspaceConfig[]
+  configs: WorkspaceConfig[],
 ): WorkspaceConfig {
   return configs.find(config => config['@id'] === id) || configs[0];
 }
@@ -34,7 +34,7 @@ const WorkspaceListContainer: React.FunctionComponent<{
   // find out if we have a matching workspace with that id
   const activeId = getWorkspaceConfig(
     queryStringWorkspaceId.toString(),
-    workspaceConfig
+    workspaceConfig,
   )['@id'];
 
   // format workspace data for Tablist component

@@ -19,7 +19,7 @@ const ResourceDetailsContainer: React.FunctionComponent<{
 }> = props => {
   const { data, loading, error } = useNexus<Resource & MINDSResource>(
     nexus => nexus.httpGet({ path: props.selfUrl }),
-    [props.selfUrl]
+    [props.selfUrl],
   );
 
   const [fileIds, setFIleIds] = React.useState<string[]>([]);

@@ -25,7 +25,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
 
   const { data, loading, error } = useNexus<any>(
     nexus => nexus.View.sparqlQuery(org, proj, DEFAULT_SPARQL_VIEW_ID, query),
-    [props.isDownload]
+    [props.isDownload],
   );
 
   // build header properties
@@ -37,7 +37,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
     data.head.vars
       .filter(
         // we don't want to display total or self url in result table
-        (headVar: string) => !(headVar === 'self')
+        (headVar: string) => !(headVar === 'self'),
       )
       .map((headVar: string) => ({
         title: camelCaseToLabelString(headVar), // TODO: get the matching title from somewhere?
@@ -59,7 +59,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
               (binding[curr.dataIndex] && binding[curr.dataIndex].value) ||
               undefined,
           }),
-          {}
+          {},
         );
 
         // return item data

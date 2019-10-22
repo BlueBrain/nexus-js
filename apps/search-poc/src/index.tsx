@@ -42,7 +42,7 @@ async function main() {
         </Switch>
       </Router>
     </NexusProvider>,
-    rootElement
+    rootElement,
   );
 }
 main();

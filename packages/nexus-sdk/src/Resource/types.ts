@@ -49,6 +49,8 @@ export type ResourceList<T> = PaginatedResource<Resource & T>;
 export type GetResourceOptions = {
   rev?: number;
   tag?: string;
+  format?: 'compacted' | 'expanded';
+  as?: 'vnd.graph-viz' | 'n-triples' | 'json';
   [key: string]: any;
 };
 

@@ -27,6 +27,7 @@ describe('Resource', () => {
       await resource.get<{ name: string }>('org', 'project', 'myId', {
         rev: 1,
         q: 'myTextString',
+        as: 'n-triples',
       });
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
@@ -34,7 +35,7 @@ describe('Resource', () => {
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
       expect(fetchMock.mock.calls[0][1].headers).toEqual({
-        Accept: 'application/ld+json',
+        Accept: 'application/n-triples',
       });
     });
   });

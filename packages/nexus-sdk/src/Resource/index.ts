@@ -1,6 +1,12 @@
 import { Observable } from '@bbp/nexus-link';
-import { Fetchers, GetResourceOptions, Resource } from '../types';
-import { ResourceListOptions, ResourcePayload, ResourceList } from './types';
+import { Fetchers, Resource } from '../types';
+import {
+  ResourceListOptions,
+  ResourcePayload,
+  ResourceList,
+  GetResourceCommonOptions,
+  GetResourceOptions,
+} from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
 import { DEFAULT_SCHEMA_ID } from '../constants';
@@ -112,7 +118,7 @@ const Resource = (
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
-      options?: GetResourceOptions & { pollIntervalMs: number },
+      options?: GetResourceCommonOptions & { pollIntervalMs: number },
     ): Observable<Resource & T> => {
       const { pollIntervalMs, ...getResourceOptions } = options;
       return poll({

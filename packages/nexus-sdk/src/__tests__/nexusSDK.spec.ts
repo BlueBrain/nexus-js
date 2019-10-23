@@ -1,4 +1,4 @@
-import { createNexusClient } from '../nexusSDK';
+import { createNexusClient } from '../nexusSdk';
 
 describe('createNexusClient', () => {
   const options = {

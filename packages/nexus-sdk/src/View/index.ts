@@ -3,10 +3,7 @@ import { Fetchers, Resource } from '../types';
 import { NexusContext } from '../nexusSdk';
 import { View, ViewList, ViewPayload, Statistics } from './types';
 import { buildQueryParams } from '../utils';
-import {
-  GetResourceCommonOptions,
-  ResourceListOptions,
-} from '../Resource/types';
+import { GetResourceOptions, ResourceListOptions } from '../Resource/types';
 
 const View = (
   { httpGet, httpPost, httpPut, httpDelete, poll }: Fetchers,
@@ -17,7 +14,7 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
-      options?: GetResourceCommonOptions,
+      options?: GetResourceOptions,
     ): Promise<View> =>
       httpGet({
         path: `${
@@ -83,7 +80,7 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
-      options?: GetResourceCommonOptions & { pollIntervalMs: number },
+      options?: GetResourceOptions & { pollIntervalMs: number },
     ): Observable<View> => {
       const { pollIntervalMs, ...getViewOptions } = options;
       return poll({

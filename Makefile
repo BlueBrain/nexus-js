@@ -8,7 +8,7 @@ dshell:
 
 install:
 	@echo "Installing project's dependencies... 🚀"
-	@yarn && yarn lerna bootstrap
+	@yarn && yarn lerna init && yarn lerna bootstrap
 
 build:
 	@echo "Building projects... 👷"

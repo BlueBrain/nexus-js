@@ -12,7 +12,7 @@ import {
   PaginatedResource,
   ResourceListOptions,
   TagResourcePayload,
-  GetResourceCommonOptions,
+  GetResourceOptions,
 } from '../Resource/types';
 import { Fetchers } from '../types';
 import { NexusContext } from '../nexusSdk';
@@ -137,7 +137,7 @@ const NexusFile = (
       orgLabel: string,
       projectLabel: string,
       fileId: string,
-      options?: GetResourceCommonOptions & { pollIntervalMs: number },
+      options?: GetResourceOptions & { pollIntervalMs: number },
     ): Observable<NexusFile> => {
       const { pollIntervalMs, ...getResourceOptions } = options;
       return poll({

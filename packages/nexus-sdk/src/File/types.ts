@@ -1,4 +1,4 @@
-import { Resource, GetResourceCommonOptions } from '../Resource/types';
+import { GetResourceOptions, Resource } from '../Resource/types';
 
 export type NexusFile = Resource & {
   '@type': 'File';
@@ -11,7 +11,7 @@ export type NexusFile = Resource & {
   _mediaType: string;
 };
 
-export type GetFileOptions = GetResourceCommonOptions & {
+export type GetFileOptions = GetResourceOptions & {
   as?: 'text' | 'blob' | 'document' | 'arraybuffer' | 'stream' | 'json';
 };
 

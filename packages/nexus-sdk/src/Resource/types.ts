@@ -1,5 +1,17 @@
 import { Context, Resource, PaginatedResource } from '../types';
 
+export type ExternalLink = {
+  '@id': string;
+  '@type'?: Resource['@type'];
+  paths: string[];
+};
+
+export type InternalLink = Resource & {
+  paths: string[];
+};
+
+export type ResourceLink = ExternalLink | InternalLink;
+
 export type ResourceListOptions = {
   q?: string; // full text search query
   from?: number;

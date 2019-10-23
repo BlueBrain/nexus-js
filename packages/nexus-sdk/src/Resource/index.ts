@@ -5,6 +5,7 @@ import {
   GetResourceSourceOptions,
   Resource,
   ResourceSource,
+  ResourceLink,
 } from '../types';
 import { ResourceListOptions, ResourcePayload, ResourceList } from './types';
 import { NexusContext } from '../nexusSdk';
@@ -49,13 +50,13 @@ const Resource = (
         path: `${context.uri}/resources/${orgLabel}/${projectLabel}${opts}`,
       });
     },
-    links: <T>(
+    links: (
       orgLabel: string,
       projectLabel: string,
       resourceId: string,
       direction: 'incoming' | 'outgoing',
       options?: ResourceListOptions,
-    ): Promise<ResourceList<T>> =>
+    ): Promise<ResourceList<ResourceLink>> =>
       httpGet({
         path: `${
           context.uri

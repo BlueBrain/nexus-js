@@ -24,18 +24,43 @@ describe('Resource', () => {
 
     it('should make httpGet call to the resources api with the right url and query params', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
-      await resource.get<{ name: string }>('org', 'project', 'myId', {
+      await resource.get('org', 'project', 'myId', {
         rev: 1,
         q: 'myTextString',
+        format: 'expanded',
+        as: 'json',
+      });
+      await resource.get('org', 'project', 'myId', {
+        rev: 2,
         as: 'n-triples',
       });
-      expect(fetchMock.mock.calls.length).toEqual(1);
+      await resource.get('org', 'project', 'myId', {
+        rev: 3,
+        as: 'vnd.graph-viz',
+      });
+      expect(fetchMock.mock.calls.length).toEqual(3);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resources/org/project/_/myId?rev=1&q=myTextString',
+        'http://api.url/v1/resources/org/project/_/myId?rev=1&q=myTextString&format=expanded',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
       expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
+
+      expect(fetchMock.mock.calls[1][0]).toEqual(
+        'http://api.url/v1/resources/org/project/_/myId?rev=2',
+      );
+      expect(fetchMock.mock.calls[1][1].method).toEqual('GET');
+      expect(fetchMock.mock.calls[1][1].headers).toEqual({
         Accept: 'application/n-triples',
+      });
+
+      expect(fetchMock.mock.calls[2][0]).toEqual(
+        'http://api.url/v1/resources/org/project/_/myId?rev=3',
+      );
+      expect(fetchMock.mock.calls[2][1].method).toEqual('GET');
+      expect(fetchMock.mock.calls[2][1].headers).toEqual({
+        Accept: 'text/vnd.graphviz',
       });
     });
   });
@@ -48,7 +73,6 @@ describe('Resource', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/resources/org/project',
       );
-      console.log(fetchMock.mock.calls[0][1]);
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 

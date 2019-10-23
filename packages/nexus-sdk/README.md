@@ -185,6 +185,7 @@ The client also exposes bare http methods that can be use for operations on a re
  * - nexus.httpPut
  * - nexus.httpDelete
  * - nexus.poll
+ * - nexus.context
  */
 
 // post something as text
@@ -195,10 +196,14 @@ nexus.httpPost({
 });
 
 // get something as blob
-nexus.get({ path: 'https://mySelfUrl.com', context: { as: 'blob' } });
+nexus.httpGet({ path: 'https://mySelfUrl.com', context: { as: 'blob' } });
 
 // poll something
 nexus.poll({ path: 'https://mySelfUrl.com', context: { pollTime: 1000 } });
+
+// you can access a base URL from context if you want to use it somewhere, for example:
+const baseURL = nexus.context.uri;
+const mySource = await nexus.httpGet(`${baseURL}/sources/${orgLabel}/${projectLabel}/${resourceId}`);
 ```
 
 You can also import constants for default view IDs or default Schema IDs:

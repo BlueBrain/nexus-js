@@ -15,14 +15,24 @@ const Resource = (
       projectLabel: string,
       resourceId: string,
       options?: GetResourceOptions,
-    ): Promise<Resource & T> =>
-      httpGet({
+    ): Promise<Resource & T> => {
+      const { as = 'json', ...opts } = options || {};
+      let acceptHeader = 'application/ld+json';
+      if (as === 'vnd.graph-viz') {
+        acceptHeader = 'text/vnd.graphviz';
+      }
+      if (as === 'n-triples') {
+        acceptHeader = 'application/n-triples';
+      }
+      return httpGet({
+        headers: { Accept: acceptHeader },
         path: `${
           context.uri
         }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
-          options,
+          opts,
         )}`,
-      }),
+      });
+    },
     list: <T>(
       orgLabel: string,
       projectLabel: string,

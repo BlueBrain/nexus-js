@@ -46,12 +46,15 @@ export type PaginatedResource<T = Resource> = {
 
 export type ResourceList<T> = PaginatedResource<Resource & T>;
 
-export type GetResourceOptions = {
+export type GetResourceCommonOptions = {
   rev?: number;
   tag?: string;
+  [key: string]: any;
+};
+
+export type GetResourceOptions = GetResourceCommonOptions & {
   format?: 'compacted' | 'expanded';
   as?: 'vnd.graph-viz' | 'n-triples' | 'json';
-  [key: string]: any;
 };
 
 export type TagResourcePayload = {

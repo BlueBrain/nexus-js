@@ -8,7 +8,7 @@ import {
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
-import { GetResourceOptions } from '../Resource/types';
+import { GetResourceCommonOptions } from '../Resource/types';
 
 const Project = (
   { httpGet, httpPut, httpDelete, poll }: Fetchers,
@@ -18,7 +18,7 @@ const Project = (
     get: (
       orgLabel: string,
       projectLabel: string,
-      options?: GetResourceOptions,
+      options?: GetResourceCommonOptions,
     ): Promise<Project> =>
       httpGet({
         path: `${
@@ -66,7 +66,7 @@ const Project = (
     poll: (
       orgLabel: string,
       projectLabel: string,
-      options?: GetResourceOptions & { pollIntervalMs: number },
+      options?: GetResourceCommonOptions & { pollIntervalMs: number },
     ): Observable<Project> => {
       const { pollIntervalMs, ...getProjectOptions } = options;
       return poll({

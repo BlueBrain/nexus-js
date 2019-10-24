@@ -2,11 +2,11 @@ import { Observable } from '@bbp/nexus-link';
 import { Fetchers, Resource } from '../types';
 import { NexusContext } from '../nexusSdk';
 import {
+  SparqlViewQueryResponse,
+  Statistics,
   View,
   ViewList,
   ViewPayload,
-  SparqlViewQueryResponse,
-  Statistics,
 } from './types';
 import { buildQueryParams } from '../utils';
 import { GetResourceOptions, ResourceListOptions } from '../Resource/types';

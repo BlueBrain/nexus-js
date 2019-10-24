@@ -59,3 +59,8 @@ export type TagResourcePayload = {
   tag: string;
   rev: number;
 };
+
+export type GetResourceSourceOptions = {
+  rev?: number;
+  tag?: string;
+};

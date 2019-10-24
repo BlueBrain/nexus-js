@@ -1,5 +1,10 @@
 import { Observable } from '@bbp/nexus-link';
-import { Fetchers, GetResourceOptions, Resource } from '../types';
+import {
+  Fetchers,
+  GetResourceOptions,
+  GetResourceSourceOptions,
+  Resource,
+} from '../types';
 import { ResourceListOptions, ResourcePayload, ResourceList } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
@@ -122,6 +127,20 @@ const Resource = (
           getResourceOptions,
         )}`,
         context: { pollIntervalMs: pollIntervalMs || 1000 },
+      });
+    },
+    getSource: <T>(
+      orgLabel: string,
+      projectLabel: string,
+      resourceId: string,
+      schemaId?: string,
+      options?: GetResourceSourceOptions,
+    ): Promise<Resource & T> => {
+      return httpGet({
+        path: `${
+          context.uri
+        }/resources/${orgLabel}/${projectLabel}/${schemaId ||
+          DEFAULT_SCHEMA_ID}/${resourceId}/source${buildQueryParams(options)}`,
       });
     },
   };

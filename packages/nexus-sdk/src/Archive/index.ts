@@ -1,6 +1,7 @@
 import { Fetchers, Resource } from '../types';
 import { NexusContext } from '../nexusSdk';
-import { ArchivePayload } from './types';
+import { ArchivePayload, GetArchiveOptions } from './types';
+import { buildQueryParams } from '../utils';
 
 const Archive = (
   { httpGet, httpPut, httpPost, poll }: Fetchers,
@@ -11,11 +12,20 @@ const Archive = (
       orgLabel: string,
       projectLabel: string,
       archiveId: string,
-    ): Promise<Resource & T> =>
-      httpGet({
-        path: `${context.uri}/archives/${orgLabel}/${projectLabel}/${archiveId}`,
-        context: { as: 'text' },
-      }),
+      options?: GetArchiveOptions,
+    ): Promise<Resource & T> => {
+      const opts = { as: 'text', ...options };
+      const acceptHeader =
+        opts.as === 'json' ? 'application/ld+json' : 'application/x-tar';
+      return httpGet({
+        headers: { Accept: acceptHeader },
+        path: `${
+          context.uri
+        }/archives/${orgLabel}/${projectLabel}/${archiveId}${buildQueryParams(
+          opts,
+        )}`,
+      });
+    },
     create: (
       orgLabel: string,
       projectLabel: string,

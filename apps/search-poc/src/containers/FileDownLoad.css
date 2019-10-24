@@ -17,3 +17,7 @@
 .file-download > .toggle > label {
   padding: 0.5em;
 }
+
+
+.file-download > .error {
+}

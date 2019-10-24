@@ -16,7 +16,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource & EModelResource;
   handleClick: (params: HandleClickParams) => void;
   isDownload: boolean;
-  OnFileSelect: (fileId: string[]) => void;
+  onFileSelect: (fileId: string[]) => void;
 }> = props => {
   const query = props.isDownload
     ? getCollectionEModelsFilesQuery(props.resource['@id'])
@@ -79,7 +79,7 @@ const EModelCollectionDetailsContainer: React.FunctionComponent<{
           headerProperties={headerProperties}
           items={items}
           handleClick={props.handleClick}
-          handleFileSelect={props.OnFileSelect}
+          handleFileSelect={props.onFileSelect}
           isDownload={props.isDownload}
         />
       )}

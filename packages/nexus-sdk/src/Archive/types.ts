@@ -1,11 +1,16 @@
 export type ArchivePayload = {
   resources: {
+    '@type': string;
     resourceId?: string;
     project?: string;
-    '@type': string;
-    tag?: string;
-    rev?: number;
-    originalSource?: boolean;
     path?: string;
+    originalSource?: boolean;
+    rev?: number;
+    tag?: string;
   }[];
+};
+
+export type GetArchiveOptions = {
+  format?: 'compacted' | 'expanded';
+  as?: 'json' | 'text';
 };

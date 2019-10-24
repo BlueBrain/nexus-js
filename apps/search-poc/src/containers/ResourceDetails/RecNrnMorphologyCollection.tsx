@@ -15,7 +15,7 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
   resource: Resource & MINDSResource;
   handleClick: (params: HandleClickParams) => void;
   isDownload: boolean;
-  OnFileSelect: (fileId: string[]) => void;
+  onFileSelect: (fileId: string[]) => void;
   selectedFileIds?: string[];
 }> = props => {
   const query = props.isDownload
@@ -79,7 +79,7 @@ const RecNrnMorphologyCollectionContainer: React.FunctionComponent<{
             headerProperties={headerProperties}
             items={items}
             handleClick={props.handleClick}
-            handleFileSelect={props.OnFileSelect}
+            handleFileSelect={props.onFileSelect}
             isDownload={props.isDownload}
           />
         </>

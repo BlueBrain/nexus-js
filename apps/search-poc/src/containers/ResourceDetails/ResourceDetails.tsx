@@ -101,7 +101,7 @@ const ResourceDetailsContainer: React.FunctionComponent<{
                 resource={data}
                 isDownload={isDownload}
                 handleClick={props.handleClick}
-                OnFileSelect={fileSelectHandler}
+                onFileSelect={fileSelectHandler}
                 selectedFileIds={fileIds}
               />
             );

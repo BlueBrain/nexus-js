@@ -24,7 +24,7 @@ describe('Archive', () => {
     it('Uses a GET to the correct path', async () => {
       await archive.get('org', 'project', 'archiveId');
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/archives/org/project/archiveId',
+        'http://api.url/v1/archives/org/project/archiveId?as=text',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });

@@ -2,6 +2,9 @@ import * as React from 'react';
 import { useNexusContext } from '@bbp/react-nexus';
 import { Button, Switch } from 'antd';
 import './FileDownLoad.css';
+import { Resource } from '@bbp/nexus-sdk';
+
+
 
 const FileDownloadContainer: React.FunctionComponent<{
   fileIds: string[];
@@ -11,6 +14,7 @@ const FileDownloadContainer: React.FunctionComponent<{
 }> = props => {
   const [downloadUrl, setDownloadUrl] = React.useState<any>(null);
   const [isLoading, setLoading] = React.useState<number>(0);
+  const [isError, setError] = React.useState<boolean>(false);
   const nexus = useNexusContext();
   const icons = ['download', 'loading', 'check'];
   const refContainer = React.useRef<any>(null);
@@ -36,11 +40,13 @@ const FileDownloadContainer: React.FunctionComponent<{
             size="small"
             onClick={() => {
               setLoading(1);
+              setError(false);
             }}
             icon={icons[isLoading]}
             loading={isLoading === 1}
             onBlur={() => {
               setLoading(0);
+              setError(false);
             }}
           >
             Download {props.fileIds.length} file(s)
@@ -60,15 +66,18 @@ const FileDownloadContainer: React.FunctionComponent<{
       });
       const [, , , , , org, proj] = props.fileIds[0].split('/');
 
-      nexus.Archive.create(org, proj, { resources }).then((archive: any) => {
-        if (archive) {
-          const blob = new Blob([archive]);
+      nexus.Archive.create(org, proj, { resources })
+        .then((archive: Resource ) => {
+          const blob = new Blob([archive.toString()]);
           const url = window.URL.createObjectURL(blob);
           setDownloadUrl(url);
           setLoading(2);
           refContainer.current.click();
-        }
-      });
+        })
+        .catch((error: any) => {
+          setLoading(0);
+          setError(true);
+        });
     }
   }, [props, nexus.Archive, isLoading]);
 
@@ -84,6 +93,7 @@ const FileDownloadContainer: React.FunctionComponent<{
         />
         <label>Files</label>
       </div>
+      {isError ? <div className="error"> Failed to fetch </div> : null}
       {filePanel()}
     </div>
   );

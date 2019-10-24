@@ -4,6 +4,7 @@ import {
   GetResourceOptions,
   GetResourceSourceOptions,
   Resource,
+  ResourceSource,
 } from '../types';
 import { ResourceListOptions, ResourcePayload, ResourceList } from './types';
 import { NexusContext } from '../nexusSdk';
@@ -135,7 +136,7 @@ const Resource = (
       resourceId: string,
       schemaId?: string,
       options?: GetResourceSourceOptions,
-    ): Promise<Resource & T> => {
+    ): Promise<ResourceSource & T> => {
       return httpGet({
         path: `${
           context.uri

@@ -64,3 +64,9 @@ export type GetResourceSourceOptions = {
   rev?: number;
   tag?: string;
 };
+
+export type ResourceSource = {
+  '@context'?: Context;
+  '@type'?: string | string[];
+  '@id': string;
+};

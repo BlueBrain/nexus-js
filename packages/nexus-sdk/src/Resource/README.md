@@ -42,4 +42,9 @@ nexus.Resource.update('myOrg', 'myProject', 'myId', 1, {
 nexus.Resource.deprecate('myOrg', 'myProject', 'myId', 1)
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
+
+// get the original payload of a resource:
+nexus.Resource.getSource('myOrg', 'myProject', 'myResourceId', 'schemaId', { rev: 1, tag: 'tag' })
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));  
 ```

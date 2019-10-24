@@ -206,4 +206,26 @@ describe('Resource', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
+
+  describe('getSource', () => {
+    it('should make httpGet call to the resources api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const options = {
+        rev: 2,
+        tag: 'randomTag',
+      };
+      await resource.getSource(
+        'orgLabel',
+        'projectLabel',
+        'resourceId',
+        'schemaId',
+        options,
+      );
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/orgLabel/projectLabel/schemaId/resourceId/source?rev=2&tag=randomTag',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+  });
 });

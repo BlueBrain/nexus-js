@@ -72,6 +72,23 @@ export type ElasticSearchViewQueryResponse<T> = {
   _scroll_id?: string;
 };
 
+export type Bindings = {
+  [key: string]: {
+    type: string;
+    value: string;
+    datatype?: string;
+  };
+}[];
+
+export type SparqlViewQueryResponse = {
+  head: {
+    vars: string[];
+  };
+  results: {
+    bindings: Bindings;
+  };
+};
+
 export type ElasticSearchViewPayload = {
   '@id'?: string;
   '@type': ['ElasticSearchView'];

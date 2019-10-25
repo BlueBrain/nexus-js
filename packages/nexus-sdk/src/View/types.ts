@@ -77,6 +77,7 @@ export type Binding = {
     type: 'uri' | 'litteral' | 'bnode';
     value: string;
     datatype?: string;
+    'xml:lang'?: string;
   };
 };
 

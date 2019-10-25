@@ -36,6 +36,23 @@ export type ResourcePayload = {
   [key: string]: any;
 };
 
+export type ExpandedResource<T = { [key: string]: any }> = T & {
+  '@context'?: Context;
+  '@type'?: string | string[];
+  '@id': string;
+  'https://bluebrain.github.io/nexus/vocabulary/incoming': string;
+  'https://bluebrain.github.io/nexus/vocabulary/outgoing': string;
+  'https://bluebrain.github.io/nexus/vocabulary/self': string;
+  'https://bluebrain.github.io/nexus/vocabulary/constrainedBy': string;
+  'https://bluebrain.github.io/nexus/vocabulary/project': string;
+  'https://bluebrain.github.io/nexus/vocabulary/rev': number;
+  'https://bluebrain.github.io/nexus/vocabulary/deprecated': boolean;
+  'https://bluebrain.github.io/nexus/vocabulary/createdAt': string;
+  'https://bluebrain.github.io/nexus/vocabulary/createdBy': string;
+  'https://bluebrain.github.io/nexus/vocabulary/updatedAt': string;
+  'https://bluebrain.github.io/nexus/vocabulary/updatedBy': string;
+};
+
 export type Resource<T = { [key: string]: any }> = T & {
   '@context'?: Context;
   '@type'?: string | string[];

@@ -8,7 +8,7 @@ import {
   ResolverPayload,
 } from './types';
 import { NexusContext } from '../nexusSdk';
-import { buildQueryParams } from '../utils';
+import { buildHeader, buildQueryParams } from '../utils';
 import { Resource } from '../Resource/types';
 
 const Resolver = (
@@ -22,9 +22,14 @@ const Resolver = (
       resolverId: string,
       options?: GetResolverOptions,
     ): Promise<Resource> => {
-      const opts = buildQueryParams(options);
+      const { as = 'json', ...opts } = options || {};
       return httpGet({
-        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}/${resolverId}${opts}`,
+        headers: { Accept: buildHeader(as) },
+        path: `${
+          context.uri
+        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}${buildQueryParams(
+          opts,
+        )}`,
       });
     },
     list: (

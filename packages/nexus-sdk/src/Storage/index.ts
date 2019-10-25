@@ -7,7 +7,7 @@ import {
   StoragePayload,
 } from './types';
 import { NexusContext } from '../nexusSdk';
-import { buildQueryParams } from '../utils';
+import { buildHeader, buildQueryParams } from '../utils';
 import { Resource } from '../Resource/types';
 
 const Storage = (
@@ -21,11 +21,14 @@ const Storage = (
       storageId: string,
       options?: GetStorageOptions,
     ): Promise<Storage> => {
-      const opts = buildQueryParams(options);
+      const { as = 'json', ...opts } = options || {};
       return httpGet({
+        headers: { Accept: buildHeader(as) },
         path: `${
           context.uri
-        }/storages/${orgLabel}/${projectLabel}/${storageId}${opts}`,
+        }/storages/${orgLabel}/${projectLabel}/${storageId}${buildQueryParams(
+          opts,
+        )}`,
       });
     },
     list: (
@@ -55,9 +58,7 @@ const Storage = (
       payload: StoragePayload,
     ): Promise<Resource> =>
       httpPut({
-        path: `${
-          context.uri
-        }/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
+        path: `${context.uri}/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     tag: (
@@ -71,9 +72,7 @@ const Storage = (
       },
     ): Promise<Resource> =>
       httpPost({
-        path: `${
-          context.uri
-        }/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
+        path: `${context.uri}/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -83,9 +82,7 @@ const Storage = (
       rev: number,
     ): Promise<Resource> =>
       httpDelete({
-        path: `${
-          context.uri
-        }/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
+        path: `${context.uri}/storages/${orgLabel}/${projectLabel}/${storageId}?rev=${rev}`,
       }),
     poll: (
       orgLabel: string,
@@ -94,9 +91,7 @@ const Storage = (
       options?: { pollTime: number },
     ): Observable<Storage> =>
       poll({
-        path: `${
-          context.uri
-        }/storages/${orgLabel}/${projectLabel}/${storageId}`,
+        path: `${context.uri}/storages/${orgLabel}/${projectLabel}/${storageId}`,
         context: { pollTime: options && options.pollTime | 1000 },
       }),
   };

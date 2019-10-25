@@ -20,6 +20,15 @@ describe('Resolver', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 
+    it('should make httpGet call to the resolvers api with the right header', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await resolver.get('org', 'project', 'myId', { as: 'vnd.graph-viz' });
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'text/vnd.graphviz',
+      });
+    });
+
     it('should make httpGet call to the resolvers api with the right url and query params', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await resolver.get('org', 'project', 'myId', { rev: 1 });

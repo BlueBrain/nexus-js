@@ -28,6 +28,16 @@ describe('Views', () => {
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
+
+    it('should make httpGet call with the right header', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await view.get('org', 'project', 'myId', { rev: 1 });
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
   });
 
   describe('list', () => {

@@ -7,7 +7,7 @@ import {
   SchemaPayload,
 } from './types';
 import { NexusContext } from '../nexusSdk';
-import { buildQueryParams } from '../utils';
+import { buildHeader, buildQueryParams } from '../utils';
 
 const Schema = (
   { httpGet, httpPost, httpPut, httpDelete, poll }: Fetchers,
@@ -20,9 +20,14 @@ const Schema = (
       schemaId: string,
       options?: GetSchemaOptions,
     ): Promise<Resource> => {
-      const opts = buildQueryParams(options);
+      const { as = 'json', ...opts } = options || {};
       return httpGet({
-        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemaId}${opts}`,
+        headers: { Accept: buildHeader(as) },
+        path: `${
+          context.uri
+        }/schemas/${orgLabel}/${projectLabel}/${schemaId}${buildQueryParams(
+          opts,
+        )}`,
       });
     },
     list: (

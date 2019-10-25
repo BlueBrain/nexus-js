@@ -24,8 +24,10 @@ export type SchemaList = PaginatedList<Schema>;
 export type GetSchemaOptions = {
   rev?: number;
   tag?: string;
+  as?: 'vnd.graph-viz' | 'n-triples' | 'json';
   [key: string]: string | number | boolean;
 };
+
 export type ListSchemaOptions = {
   from?: number;
   size?: number;

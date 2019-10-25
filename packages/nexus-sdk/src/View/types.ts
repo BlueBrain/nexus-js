@@ -72,20 +72,21 @@ export type ElasticSearchViewQueryResponse<T> = {
   _scroll_id?: string;
 };
 
-export type Bindings = {
+export type Binding = {
   [key: string]: {
-    type: string;
+    type: 'uri' | 'litteral' | 'bnode';
     value: string;
     datatype?: string;
   };
-}[];
+};
 
 export type SparqlViewQueryResponse = {
   head: {
     vars: string[];
+    link?: string[];
   };
   results: {
-    bindings: Bindings;
+    bindings: Binding[];
   };
 };
 

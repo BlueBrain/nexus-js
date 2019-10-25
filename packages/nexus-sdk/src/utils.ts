@@ -1,3 +1,11 @@
+export const isBrowser =
+  typeof window !== 'undefined' && typeof window.document !== 'undefined';
+
+export const isNode =
+  typeof process !== 'undefined' &&
+  process.versions != null &&
+  process.versions.node != null;
+
 export function buildQueryParams(options?: {
   [key: string]: string | number | boolean | undefined;
 }): string {
@@ -18,4 +26,26 @@ export function buildQueryParams(options?: {
 
 export function removeLeadingSlash(string: string) {
   return string.replace(/^\/+/g, '');
+}
+
+export function getFetchInstance() {
+  if (isBrowser) {
+    return window.fetch || undefined;
+  }
+  if (isNode) {
+    // @ts-ignore
+    return global.fetch || undefined;
+  }
+  return undefined;
+}
+
+export function getAbortControllerInstance() {
+  if (isBrowser) {
+    return window.AbortController || undefined;
+  }
+  if (isNode) {
+    // @ts-ignore
+    return global.AbortController || undefined;
+  }
+  return undefined;
 }

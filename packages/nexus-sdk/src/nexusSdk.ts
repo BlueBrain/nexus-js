@@ -11,6 +11,7 @@ import {
 } from '@bbp/nexus-link';
 import { Fetchers } from './types';
 import Organization from './Organization';
+// tslint:disable-next-line: import-name
 import NexusFile from './File';
 import Project from './Project';
 import View from './View';
@@ -22,6 +23,7 @@ import Realm from './Realm';
 import Permissions from './Permissions';
 import ACL from './ACL';
 import Resource from './Resource';
+import { getFetchInstance, getAbortControllerInstance } from './utils';
 
 export type NexusClientOptions = {
   uri: string;
@@ -36,7 +38,21 @@ export type NexusContext = Context & {
 };
 
 export function createNexusClient(options: NexusClientOptions) {
-  const defaultLinks = [triggerFetch(options.fetch)];
+  // get fetch instance
+  const fetchInstance = options.fetch || getFetchInstance();
+  if (!fetchInstance) {
+    throw new Error(
+      'No `fetch` instance was found. It could be because your browser requires a polyfill, or maybe you are trying to run this in Node.js, in which case you should use node-fetch or equivalent. You can find more information here: https://github.com/BlueBrain/nexus-js/tree/master/packages/nexus-sdk#nodejs-support',
+    );
+  }
+  // check abort controller presence
+  if (!getAbortControllerInstance()) {
+    throw new Error(
+      'No `AbortController` instance was found. It could be because your browser requires a polyfill, or maybe you are trying to run this in Node.js, in which case you should use abort-controller or equivalent. You can find more information here: https://github.com/BlueBrain/nexus-js/tree/master/packages/nexus-sdk#nodejs-support',
+    );
+  }
+
+  const defaultLinks = [triggerFetch(fetchInstance)];
   options.token && defaultLinks.unshift(setToken(options.token));
   const links = options.links
     ? [...options.links, ...defaultLinks]
@@ -61,6 +77,7 @@ export function createNexusClient(options: NexusClientOptions) {
   };
 
   return {
+    context,
     Organization: Organization(fetchers, context),
     Project: Project(fetchers, context),
     Resource: Resource(fetchers, context),
@@ -73,7 +90,6 @@ export function createNexusClient(options: NexusClientOptions) {
     Realm: Realm(fetchers, context),
     Permissions: Permissions(fetchers, context),
     ACL: ACL(fetchers, context),
-    context,
     ...fetchers,
   };
 }

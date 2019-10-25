@@ -81,16 +81,24 @@ export type Binding = {
   };
 };
 
-export type SparqlViewQueryResponse = {
+export type AskQueryResponse = {
+  head: {
+    link?: string[];
+  };
+  boolean: boolean;
+};
+
+export type SelectQueryResponse = {
   head: {
     vars: string[];
     link?: string[];
   };
-  results?: {
+  results: {
     bindings: Binding[];
   };
-  boolean?: boolean;
 };
+
+export type SparqlViewQueryResponse = SelectQueryResponse | AskQueryResponse;
 
 export type ElasticSearchViewPayload = {
   '@id'?: string;

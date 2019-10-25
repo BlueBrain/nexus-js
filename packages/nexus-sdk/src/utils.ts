@@ -49,3 +49,17 @@ export function getAbortControllerInstance() {
   }
   return undefined;
 }
+
+export function buildHeader(as: string) {
+  let acceptHeader = 'application/ld+json';
+
+  if (as === 'vnd.graph-viz') {
+    acceptHeader = 'text/vnd.graphviz';
+  }
+
+  if (as === 'n-triples') {
+    acceptHeader = 'application/n-triples';
+  }
+
+  return acceptHeader;
+}

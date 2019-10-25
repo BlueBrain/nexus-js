@@ -1,4 +1,4 @@
-import { buildQueryParams, removeLeadingSlash } from '../utils';
+import { buildHeader, buildQueryParams, removeLeadingSlash } from '../utils';
 
 describe('utils functions', () => {
   describe('buildQueryParams()', () => {
@@ -31,12 +31,21 @@ describe('utils functions', () => {
       expect(buildQueryParams()).toEqual('');
     });
   });
+
   describe('removeLeadingSlash()', () => {
     it('should remove leading slash', () => {
       expect(removeLeadingSlash('/some/path')).toEqual('some/path');
     });
     it('should return the original string', () => {
       expect(removeLeadingSlash('*')).toEqual('*');
+    });
+  });
+
+  describe('buildHeader()', () => {
+    it('should return a header string', () => {
+      expect(buildHeader('json')).toEqual('application/ld+json');
+      expect(buildHeader('vnd.graph-viz')).toEqual('text/vnd.graphviz');
+      expect(buildHeader('n-triples')).toEqual('application/n-triples');
     });
   });
 });

@@ -1,4 +1,4 @@
-import { Context, Resource, PaginatedResource } from '../types';
+import { Context, Resource, PaginatedList } from '../types';
 
 export type ExternalLink = {
   '@id': string;
@@ -49,14 +49,14 @@ export type Resource<T = { [key: string]: any }> = T & {
   _updatedBy: string;
 };
 
-export type PaginatedResource<T = Resource> = {
+export type PaginatedList<T = Resource> = {
   '@context': Context;
   _total: number;
   _results: T[];
   _next?: string;
 };
 
-export type ResourceList<T> = PaginatedResource<Resource & T>;
+export type ResourceList<T> = PaginatedList<Resource & T>;
 
 export type GetResourceOptions = {
   rev?: number;

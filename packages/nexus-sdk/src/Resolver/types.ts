@@ -1,4 +1,4 @@
-import { Resource, PaginatedResource, Identity } from '../types';
+import { Resource, PaginatedList, Identity } from '../types';
 
 export type ResolverType = 'InProject' | 'CrossProject';
 
@@ -14,7 +14,7 @@ export type CrossProjectResolver = Resource & {
   identities: Identity[];
   priority: number;
 };
-export type ResolverList = PaginatedResource<Resolver>;
+export type ResolverList = PaginatedList<Resolver>;
 
 export type GetResolverOptions = {
   rev?: number;

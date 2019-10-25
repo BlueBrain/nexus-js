@@ -1,4 +1,4 @@
-import { Resource, PaginatedResource, Context } from '../types';
+import { Resource, PaginatedList, Context } from '../types';
 
 export type SparqlView = Resource & {
   '@id': ['SparqlView', 'View'];
@@ -30,7 +30,7 @@ export type View =
   | ElasticSearchView
   | AggregatedElasticSearchView
   | AggregatedSparqlView;
-export type ViewList = PaginatedResource<View>;
+export type ViewList = PaginatedList<View>;
 
 export type ElasticSearchExplanation = {
   value: number;

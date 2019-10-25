@@ -22,6 +22,7 @@ import Identity from './Identity';
 import Realm from './Realm';
 import Permissions from './Permissions';
 import ACL from './ACL';
+import Archive from './Archive';
 import Resource from './Resource';
 import { getFetchInstance, getAbortControllerInstance } from './utils';
 
@@ -90,6 +91,7 @@ export function createNexusClient(options: NexusClientOptions) {
     Realm: Realm(fetchers, context),
     Permissions: Permissions(fetchers, context),
     ACL: ACL(fetchers, context),
+    Archive: Archive(fetchers, context),
     ...fetchers,
   };
 }

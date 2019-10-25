@@ -86,9 +86,10 @@ export type SparqlViewQueryResponse = {
     vars: string[];
     link?: string[];
   };
-  results: {
+  results?: {
     bindings: Binding[];
   };
+  boolean?: boolean;
 };
 
 export type ElasticSearchViewPayload = {

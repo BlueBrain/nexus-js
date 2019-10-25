@@ -42,13 +42,13 @@ export function createNexusClient(options: NexusClientOptions) {
   const fetchInstance = options.fetch || getFetchInstance();
   if (!fetchInstance) {
     throw new Error(
-      'No `fetch` instance was found. It could be because your browser requires a polyfill or maybe you are trying to run this in Node.js in which case you should use node-fetch or equivalent. You can find more information here: https://github.com/BlueBrain/nexus-js/tree/master/packages/nexus-sdk#nodejs-support',
+      'No `fetch` instance was found. It could be because your browser requires a polyfill, or maybe you are trying to run this in Node.js, in which case you should use node-fetch or equivalent. You can find more information here: https://github.com/BlueBrain/nexus-js/tree/master/packages/nexus-sdk#nodejs-support',
     );
   }
   // check abort controller presence
   if (!getAbortControllerInstance()) {
     throw new Error(
-      'No `AbortController` instance was found. It could be because your browser requires a polyfill or maybe you are trying to run this in Node.js in which case you should use abort-controller or equivalent. You can find more information here: https://github.com/BlueBrain/nexus-js/tree/master/packages/nexus-sdk#nodejs-support',
+      'No `AbortController` instance was found. It could be because your browser requires a polyfill, or maybe you are trying to run this in Node.js, in which case you should use abort-controller or equivalent. You can find more information here: https://github.com/BlueBrain/nexus-js/tree/master/packages/nexus-sdk#nodejs-support',
     );
   }
 

@@ -1,7 +1,13 @@
 import { Observable } from '@bbp/nexus-link';
 import { Fetchers, Resource } from '../types';
 import { NexusContext } from '../nexusSdk';
-import { View, ViewList, ViewPayload, Statistics } from './types';
+import {
+  SparqlViewQueryResponse,
+  Statistics,
+  View,
+  ViewList,
+  ViewPayload,
+} from './types';
 import { buildQueryParams } from '../utils';
 import { GetResourceOptions, ResourceListOptions } from '../Resource/types';
 
@@ -108,12 +114,12 @@ const View = (
         body: JSON.stringify(query),
       });
     },
-    sparqlQuery: <T = any>(
+    sparqlQuery: (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
       query: string,
-    ): Promise<T> => {
+    ): Promise<SparqlViewQueryResponse> => {
       return httpPost({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/sparql`,
         body: query,

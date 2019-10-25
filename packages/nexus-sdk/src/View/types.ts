@@ -72,6 +72,34 @@ export type ElasticSearchViewQueryResponse<T> = {
   _scroll_id?: string;
 };
 
+export type Binding = {
+  [key: string]: {
+    type: 'uri' | 'litteral' | 'bnode';
+    value: string;
+    datatype?: string;
+    'xml:lang'?: string;
+  };
+};
+
+export type AskQueryResponse = {
+  head: {
+    link?: string[];
+  };
+  boolean: boolean;
+};
+
+export type SelectQueryResponse = {
+  head: {
+    vars: string[];
+    link?: string[];
+  };
+  results: {
+    bindings: Binding[];
+  };
+};
+
+export type SparqlViewQueryResponse = SelectQueryResponse | AskQueryResponse;
+
 export type ElasticSearchViewPayload = {
   '@id'?: string;
   '@type': ['ElasticSearchView'];

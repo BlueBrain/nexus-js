@@ -7,7 +7,12 @@ import {
   ResourceSource,
   ResourceLink,
 } from '../types';
-import { ResourceListOptions, ResourcePayload, ResourceList } from './types';
+import {
+  ResourceListOptions,
+  ResourcePayload,
+  ResourceList,
+  PaginatedList,
+} from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
 import { DEFAULT_SCHEMA_ID } from '../constants';
@@ -56,7 +61,7 @@ const Resource = (
       resourceId: string,
       direction: 'incoming' | 'outgoing',
       options?: ResourceListOptions,
-    ): Promise<ResourceList<ResourceLink>> =>
+    ): Promise<PaginatedList<ResourceLink>> =>
       httpGet({
         path: `${
           context.uri

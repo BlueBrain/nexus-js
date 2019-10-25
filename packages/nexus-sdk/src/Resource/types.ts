@@ -1,14 +1,18 @@
 import { Context, Resource, PaginatedList } from '../types';
 
-export type ExternalLink = {
-  '@id': string;
-  '@type'?: Resource['@type'];
-  paths: string[];
-};
-
 export type InternalLink = Resource & {
   paths: string[];
 };
+
+export type ExternalLink =
+  | {
+      '@id': string;
+      '@type'?: Resource['@type'];
+      paths: string[];
+    }
+  | Resource & {
+      paths: string[];
+    };
 
 export type ResourceLink = ExternalLink | InternalLink;
 

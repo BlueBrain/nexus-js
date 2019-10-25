@@ -139,20 +139,31 @@ const reduxDispatcher: (dispatch: any) => Link = dispatch => (
 
 ### Node.js support
 
-The Nexus SDK relies on [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), so in order to use this library in Node.js, you need to provide a `fetch` implementation when creating a new client. We recommend using [`node-fetch`](https://www.npmjs.com/package/node-fetch)
+The Nexus SDK relies on [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), so in order to use this library in Node.js, you need to provide a `fetch` implementation when creating a new client. We recommend using [`node-fetch`](https://www.npmjs.com/package/node-fetch) or even [`isomorphic-fetch`](https://www.npmjs.com/package/isomorphic-fetch) if you build a universal app.
 
 Request Cancellation is using `AbortController`, so you need to polyfill it. As [documented](https://www.npmjs.com/package/node-fetch#request-cancellation-with-abortsignal) in `node-fetch`, you can use [`abort-controller`](https://www.npmjs.com/package/abort-controller) as a polyfill.
 
 Example:
 
 ```javascript
+// pure node app
 const fetch = require('node-fetch');
 require('abort-controller/polyfill');
 
 const nexus = createNexusClient({
-  uri: 'https://sandbox.bluebrainnexus.io',
+  uri: 'https://sandbox.bluebrainnexus.io/v1',
   fetch,
 });
+
+// universal app
+require('isomorphic-fetch');
+require('abort-controller/polyfill');
+
+const nexus = createNexusClient({
+  uri: 'https://sandbox.bluebrainnexus.io/v1',
+});
+
+// and then
 
 nexus.Organization.list()
   .then(orgs => console.log(orgs))
@@ -203,7 +214,9 @@ nexus.poll({ path: 'https://mySelfUrl.com', context: { pollTime: 1000 } });
 
 // you can access a base URL from context if you want to use it somewhere, for example:
 const baseURL = nexus.context.uri;
-const mySource = await nexus.httpGet(`${baseURL}/sources/${orgLabel}/${projectLabel}/${resourceId}`);
+const mySource = await nexus.httpGet(
+  `${baseURL}/sources/${orgLabel}/${projectLabel}/${resourceId}`,
+);
 ```
 
 You can also import constants for default view IDs or default Schema IDs:

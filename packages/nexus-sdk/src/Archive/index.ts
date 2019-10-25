@@ -1,6 +1,6 @@
 import { Fetchers } from '../types';
 import { NexusContext } from '../nexusSdk';
-import { ArchivePayload, GetArchiveOptions } from './types';
+import { ArchivePayload, GetArchiveOptions, Archive } from './types';
 import { buildQueryParams } from '../utils';
 
 const Archive = (
@@ -13,7 +13,7 @@ const Archive = (
       projectLabel: string,
       archiveId: string,
       options?: GetArchiveOptions,
-    ): Promise<string> => {
+    ): Promise<Archive | Blob | string> => {
       const opts = { as: 'text', ...options };
       const acceptHeader =
         opts.as === 'json' ? 'application/ld+json' : 'application/x-tar';
@@ -30,7 +30,7 @@ const Archive = (
       orgLabel: string,
       projectLabel: string,
       payload: ArchivePayload,
-    ): Promise<string> => {
+    ): Promise<Archive | Blob | string> => {
       const id = payload.archiveId;
       return id
         ? httpPut({

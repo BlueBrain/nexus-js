@@ -1,3 +1,4 @@
+import { Resource } from '../types';
 export type ArchivePayload = {
   archiveId?: string;
   resources: {
@@ -11,7 +12,8 @@ export type ArchivePayload = {
   }[];
 };
 
-export type Archive = {
+export type Archive = Resource & {
+  '@type': 'Archive';
   resources: {
     '@type': string;
     resourceId?: string;

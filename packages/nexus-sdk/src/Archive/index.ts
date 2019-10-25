@@ -8,7 +8,7 @@ const Archive = (
   context: NexusContext,
 ) => {
   return {
-    get: <T>(
+    get: (
       orgLabel: string,
       projectLabel: string,
       archiveId: string,

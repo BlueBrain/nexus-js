@@ -9,7 +9,7 @@ import {
 } from './types';
 import { buildQueryParams } from '../utils';
 import {
-  PaginatedResource,
+  PaginatedList,
   ResourceListOptions,
   TagResourcePayload,
   GetResourceOptions,
@@ -50,7 +50,7 @@ const NexusFile = (
       orgLabel: string,
       projectLabel: string,
       options?: ResourceListOptions,
-    ): Promise<PaginatedResource<NexusFile>> => {
+    ): Promise<PaginatedList<NexusFile>> => {
       const opts = buildQueryParams(options);
       return httpGet({
         path: `${context.uri}/files/${orgLabel}/${projectLabel}${opts}`,

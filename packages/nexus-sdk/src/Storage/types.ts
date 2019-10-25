@@ -1,4 +1,4 @@
-import { Resource, PaginatedResource } from '../types';
+import { Resource, PaginatedList } from '../types';
 
 export type StorageType = 'DiskStorage' | 'RemoteDiskStorage' | 'S3Storage';
 
@@ -28,7 +28,7 @@ export type S3Storage = Resource & {
   bucket: string;
   _algorithm: string;
 };
-export type StorageList = PaginatedResource<Storage>;
+export type StorageList = PaginatedList<Storage>;
 
 export type GetStorageOptions = {
   rev?: number;

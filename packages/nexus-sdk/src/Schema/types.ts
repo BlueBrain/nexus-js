@@ -1,4 +1,4 @@
-import { Resource, PaginatedResource, Context } from '../types';
+import { Resource, PaginatedList, Context } from '../types';
 
 export type Property = {
   datatype: string;
@@ -19,7 +19,7 @@ export type Schema = Resource & {
   shapes: Shape[];
 };
 
-export type SchemaList = PaginatedResource<Schema>;
+export type SchemaList = PaginatedList<Schema>;
 
 export type GetSchemaOptions = {
   rev?: number;

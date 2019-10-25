@@ -12,6 +12,7 @@ import {
   ResourcePayload,
   ResourceList,
   PaginatedList,
+  ExpandedResource,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
@@ -27,7 +28,7 @@ const Resource = (
       projectLabel: string,
       resourceId: string,
       options?: GetResourceOptions,
-    ): Promise<Resource & T> => {
+    ): Promise<Resource<T> | ExpandedResource<T>> => {
       const { as = 'json', ...opts } = options || {};
       let acceptHeader = 'application/ld+json';
       if (as === 'vnd.graph-viz') {

@@ -17,6 +17,9 @@ describe('Resolver', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/resolvers/org/project/myId',
       );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 

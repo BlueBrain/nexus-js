@@ -9,7 +9,7 @@ describe('Resource', () => {
   });
 
   describe('get', () => {
-    it('should make httpGet call to the resources api with the right url', async () => {
+    it('should make httpGet call to the resources api with the right url and headers', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await resource.get('org', 'project', 'myId');
       expect(fetchMock.mock.calls.length).toEqual(1);

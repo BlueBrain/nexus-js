@@ -3,6 +3,7 @@ import { mockFetchers } from '../../testUtils';
 import { SchemaPayload } from '../types';
 
 const schema = Schema(mockFetchers, { uri: 'http://api.url/v1' });
+
 const responseTriples = `_:ec503c665478101a9c4f75845d20c20e <http://www.w3.org/ns/shacl#minCount> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
 <https://neuroshapes.org/commons/brainlocation> <https://bluebrain.github.io/nexus/vocabulary/createdBy> "https://staging.nexus.ocp.bbp.epfl.ch/v1/realms/bbp/users/sy" .
 <https://neuroshapes.org/commons/brainlocation/shapes/BrainLocationShape> <http://www.w3.org/ns/shacl#property> _:0e1a60e4a1f341c352cae4bd03d586e9 .
@@ -21,6 +22,9 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/schemas/org/project/myId',
       );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 

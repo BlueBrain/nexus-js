@@ -18,6 +18,7 @@ const Archive = (
       const acceptHeader =
         as === 'x-tar' ? 'application/x-tar' : 'application/ld+json';
       const parseAs = as === 'x-tar' ? 'blob' : 'json';
+      
       return httpGet({
         headers: { Accept: acceptHeader },
         path: `${
@@ -26,7 +27,7 @@ const Archive = (
           opts,
         )}`,
         context: {
-          as: parseAs,
+          parseAs,
         },
       });
     },

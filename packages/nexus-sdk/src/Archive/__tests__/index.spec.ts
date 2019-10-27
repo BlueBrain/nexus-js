@@ -36,6 +36,20 @@ describe('Archive', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/archives/org/project/archiveId',
       );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/x-tar',
+      });
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('calls hhtpGet with the correct header', async () => {
+      await archive.get('org', 'project', 'archiveId', { as: 'json' });
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/archives/org/project/archiveId?as=json',
+      );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 

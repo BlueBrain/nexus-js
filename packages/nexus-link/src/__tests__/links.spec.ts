@@ -97,4 +97,17 @@ describe('triggerFetch', () => {
       done();
     });
   });
+
+  it('throws an error when tries to parse a text as json', done => {
+    const testLink = Links.triggerFetch(fetch);
+    const data = 'randomText';
+    const obs = testLink({ path: 'testpath', context: { parseAs: 'json' } });
+
+    fetchMock.mockResponseOnce(data);
+
+    obs.subscribe(undefined, err => {
+      expect(err).toBeTruthy();
+      done();
+    });
+  });
 });

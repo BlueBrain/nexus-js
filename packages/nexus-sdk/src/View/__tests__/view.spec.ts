@@ -35,11 +35,9 @@ describe('Views', () => {
     it('should make httpGet call with the right header', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await view.get('org', 'project', 'myId', { rev: 1, as: 'n-triples' });
-      expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][1].headers).toEqual({
         Accept: 'application/n-triples',
       });
-      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
 

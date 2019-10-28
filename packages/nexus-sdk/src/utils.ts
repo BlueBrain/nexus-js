@@ -64,9 +64,9 @@ export function buildHeader(as: string) {
   return acceptHeader;
 }
 
-export function parseAsBuilder(as: string) {
-  let parseAs = 'json';
-
+export function parseAsBuilder(
+  as: string,
+): 'json' | 'blob' | 'document' | 'text' {
   if (
     as === 'n-triples' ||
     as === 'vnd.graph-viz' ||
@@ -74,12 +74,12 @@ export function parseAsBuilder(as: string) {
     as === 'arraybuffer' ||
     as === 'stream'
   ) {
-    parseAs = 'text';
+    return 'text';
   }
 
   if (as === 'blob' || as === 'document') {
-    parseAs = as;
+    return as;
   }
 
-  return parseAs;
+  return 'json';
 }

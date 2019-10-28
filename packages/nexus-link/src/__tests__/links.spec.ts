@@ -72,7 +72,7 @@ describe('poll', () => {
 });
 
 describe('triggerFetch', () => {
-  it('fetches the data', done => {
+  it('fetches the data and parses as json by default', done => {
     const testLink = Links.triggerFetch(fetch);
     const data = { data: '12345' };
     const obs = testLink({ path: 'testpath' });
@@ -87,13 +87,13 @@ describe('triggerFetch', () => {
 
   it('parses the data as text', done => {
     const testLink = Links.triggerFetch(fetch);
-    const data = { data: '12345' };
+    const data = '12345';
     const obs = testLink({ path: 'testpath', context: { parseAs: 'text' } });
 
-    fetchMock.mockResponseOnce(JSON.stringify(data));
+    fetchMock.mockResponseOnce(data);
 
     obs.subscribe(res => {
-      expect(res).toEqual(JSON.stringify(data));
+      expect(res).toEqual(data);
       done();
     });
   });

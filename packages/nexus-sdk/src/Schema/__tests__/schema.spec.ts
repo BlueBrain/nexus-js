@@ -4,11 +4,6 @@ import { SchemaPayload } from '../types';
 
 const schema = Schema(mockFetchers, { uri: 'http://api.url/v1' });
 
-const responseTriples = `_:ec503c665478101a9c4f75845d20c20e <http://www.w3.org/ns/shacl#minCount> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
-<https://neuroshapes.org/commons/brainlocation> <https://bluebrain.github.io/nexus/vocabulary/createdBy> "https://staging.nexus.ocp.bbp.epfl.ch/v1/realms/bbp/users/sy" .
-<https://neuroshapes.org/commons/brainlocation/shapes/BrainLocationShape> <http://www.w3.org/ns/shacl#property> _:0e1a60e4a1f341c352cae4bd03d586e9 .
-<https://neuroshapes.org/commons/brainlocation/shapes/CoordinatesInBrainAtlasShape> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#NodeShape> .`;
-
 describe('Views', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
@@ -29,7 +24,7 @@ describe('Views', () => {
     });
 
     it('should make httpGet call to the schema api with the right header', async () => {
-      fetchMock.mockResponseOnce(responseTriples);
+      fetchMock.mockResponseOnce('response');
       const result = await schema.get('org', 'project', 'myId', {
         as: 'n-triples',
       });
@@ -38,7 +33,7 @@ describe('Views', () => {
         Accept: 'application/n-triples',
       });
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
-      expect(result.body).toEqual(responseTriples);
+      expect(result.body).toEqual('response');
     });
 
     it('should make httpGet call to the schema api with the right url and query params', async () => {

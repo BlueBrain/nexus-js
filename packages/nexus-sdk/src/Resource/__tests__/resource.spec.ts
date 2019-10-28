@@ -63,6 +63,36 @@ describe('Resource', () => {
         Accept: 'text/vnd.graphviz',
       });
     });
+
+    it('should call httpGet with the correct parseAs context property', async () => {
+      const mockHttpGet = jest.fn();
+
+      const resource = Resource(
+        {
+          ...mockFetchers,
+          httpGet: mockHttpGet,
+        },
+        {
+          uri: 'http://api.url/v1',
+        },
+      );
+
+      await resource.get('org', 'project', 'myId', { as: 'json' });
+      await resource.get('org', 'project', 'myId', { as: 'n-triples' });
+      await resource.get('org', 'project', 'myId', { as: 'vnd.graph-viz' });
+      expect(mockHttpGet.mock.calls[0][0].context).toHaveProperty(
+        'parseAs',
+        'json',
+      );
+      expect(mockHttpGet.mock.calls[1][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[2][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+    });
   });
 
   describe('list', () => {

@@ -30,6 +30,13 @@ const Resource = (
       options?: GetResourceOptions,
     ): Promise<Resource<T> | ExpandedResource<T>> => {
       const { as = 'json', ...opts } = options || {};
+
+      let parseAs = 'json';
+
+      if (as === 'n-triples' || as === 'vnd.graph-viz') {
+        parseAs = 'text';
+      }
+
       return httpGet({
         headers: { Accept: buildHeader(as) },
         path: `${
@@ -37,6 +44,9 @@ const Resource = (
         }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
           opts,
         )}`,
+        context: {
+          parseAs,
+        },
       });
     },
     list: <T>(

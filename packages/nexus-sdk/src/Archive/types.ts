@@ -26,6 +26,7 @@ export type Archive = Resource & {
 };
 
 export type GetArchiveOptions = {
+  [key: string]: string;
   format?: 'compacted' | 'expanded';
-  as?: 'json' | 'text';
+  as?: 'json' | 'x-tar';
 };

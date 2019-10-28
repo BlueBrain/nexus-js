@@ -22,6 +22,13 @@ const Storage = (
       options?: GetStorageOptions,
     ): Promise<Storage> => {
       const { as = 'json', ...opts } = options || {};
+
+      let parseAs = 'json';
+
+      if (as === 'n-triples' || as === 'vnd.graph-viz') {
+        parseAs = 'text';
+      }
+
       return httpGet({
         headers: { Accept: buildHeader(as) },
         path: `${
@@ -29,6 +36,9 @@ const Storage = (
         }/storages/${orgLabel}/${projectLabel}/${storageId}${buildQueryParams(
           opts,
         )}`,
+        context: {
+          parseAs,
+        },
       });
     },
     list: (

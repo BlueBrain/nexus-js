@@ -63,6 +63,11 @@ describe('utils functions', () => {
       expect(parseAsBuilder('arraybuffer')).toEqual('text');
       expect(parseAsBuilder('n-triples')).toEqual('text');
       expect(parseAsBuilder('stream')).toEqual('text');
+      expect(parseAsBuilder('randomString')).toEqual('json');
+    });
+
+    it('should retrun "json" when a random string is passed', () => {
+      expect(parseAsBuilder('randomString')).toEqual('json');
     });
   });
 });

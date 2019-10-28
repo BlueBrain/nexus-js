@@ -14,9 +14,10 @@ const Archive = (
       archiveId: string,
       options?: GetArchiveOptions,
     ): Promise<Archive | Blob | string> => {
-      const opts = { as: 'text', ...options };
+      const { as, ...opts } = options || {};
       const acceptHeader =
-        opts.as === 'json' ? 'application/ld+json' : 'application/x-tar';
+        as === 'x-tar' ? 'application/x-tar' : 'application/ld+json';
+      const parseAs = as === 'x-tar' ? 'blob' : 'json';
       return httpGet({
         headers: { Accept: acceptHeader },
         path: `${
@@ -24,6 +25,9 @@ const Archive = (
         }/archives/${orgLabel}/${projectLabel}/${archiveId}${buildQueryParams(
           opts,
         )}`,
+        context: {
+          as: parseAs,
+        },
       });
     },
     create: (

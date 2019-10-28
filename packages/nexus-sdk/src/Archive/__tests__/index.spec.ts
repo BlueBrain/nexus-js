@@ -34,9 +34,31 @@ describe('Archive', () => {
     it('Uses a GET to the correct path', async () => {
       await archive.get('org', 'project', 'archiveId');
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/archives/org/project/archiveId?as=text',
+        'http://api.url/v1/archives/org/project/archiveId',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('Appends format=expanded to the url when those options are used', async () => {
+      await archive.get('org', 'project', 'archiveId', { format: 'expanded' });
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/archives/org/project/archiveId?format=expanded',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('Returns a blob when using as = "x-tar" option', async () => {
+      const mockHttpGet = jest.fn();
+      const archive = Archive(
+        {
+          ...mockFetchers,
+          httpGet: mockHttpGet,
+        },
+        { uri: 'http://api.url/v1' },
+      );
+      archive.get('org', 'project', 'archiveId', { as: 'x-tar' });
+      const { context } = mockHttpGet.mock.calls[0][0];
+      expect(context).toStrictEqual({ as: 'blob' });
     });
   });
 });

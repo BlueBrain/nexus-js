@@ -23,11 +23,21 @@ const View = (
       options?: GetResourceOptions,
     ): Promise<View> => {
       const { as = 'json', ...opts } = options || {};
+
+      let parseAs = 'json';
+
+      if (as === 'n-triples' || as === 'vnd.graph-viz') {
+        parseAs = 'text';
+      }
+
       return httpGet({
         headers: { Accept: buildHeader(as) },
         path: `${
           context.uri
         }/views/${orgLabel}/${projectLabel}/${viewId}${buildQueryParams(opts)}`,
+        context: {
+          parseAs,
+        },
       });
     },
     list: (

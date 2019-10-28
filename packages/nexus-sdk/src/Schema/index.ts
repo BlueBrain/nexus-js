@@ -21,6 +21,13 @@ const Schema = (
       options?: GetSchemaOptions,
     ): Promise<Resource> => {
       const { as = 'json', ...opts } = options || {};
+
+      let parseAs = 'json';
+
+      if (as === 'n-triples' || as === 'vnd.graph-viz') {
+        parseAs = 'text';
+      }
+
       return httpGet({
         headers: { Accept: buildHeader(as) },
         path: `${
@@ -28,6 +35,9 @@ const Schema = (
         }/schemas/${orgLabel}/${projectLabel}/${schemaId}${buildQueryParams(
           opts,
         )}`,
+        context: {
+          parseAs,
+        },
       });
     },
     list: (

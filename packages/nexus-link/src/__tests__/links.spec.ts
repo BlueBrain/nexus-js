@@ -72,24 +72,29 @@ describe('poll', () => {
 });
 
 describe('triggerFetch', () => {
-  const testLink = Links.triggerFetch(fetch);
-  const data = { data: '12345' };
-  const obs = testLink({ path: 'testpath', context: { as: 'json' } });
-  let result;
+  it('fetches the data', done => {
+    const testLink = Links.triggerFetch(fetch);
+    const data = { data: '12345' };
+    const obs = testLink({ path: 'testpath' });
 
-  beforeAll(() => {
     fetchMock.mockResponseOnce(JSON.stringify(data));
-    obs.subscribe({
-      next(x) {
-        result = x;
-      },
-      complete() {
-        console.log('done');
-      },
+
+    obs.subscribe(res => {
+      expect(res).toMatchObject(data);
+      done();
     });
   });
 
-  test('fetch the data', () => {
-    expect(result).toMatchObject(data);
+  it('parses the data as text', done => {
+    const testLink = Links.triggerFetch(fetch);
+    const data = { data: '12345' };
+    const obs = testLink({ path: 'testpath', context: { parseAs: 'text' } });
+
+    fetchMock.mockResponseOnce(JSON.stringify(data));
+
+    obs.subscribe(res => {
+      expect(res).toEqual(JSON.stringify(data));
+      done();
+    });
   });
 });

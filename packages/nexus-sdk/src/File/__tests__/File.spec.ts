@@ -66,6 +66,56 @@ describe('File', () => {
         Accept: 'text/vnd.graphviz',
       });
     });
+
+    it('should call httpGet with the correct parseAs context property', async () => {
+      const mockHttpGet = jest.fn();
+
+      const file = NexusFile(
+        {
+          ...mockFetchers,
+          httpGet: mockHttpGet,
+        },
+        {
+          uri: 'http://api.url/v1',
+        },
+      );
+
+      await file.get('org', 'project', 'myId', { as: 'json' });
+      await file.get('org', 'project', 'myId', { as: 'n-triples' });
+      await file.get('org', 'project', 'myId', { as: 'vnd.graph-viz' });
+      await file.get('org', 'project', 'myId', { as: 'text' });
+      await file.get('org', 'project', 'myId', { as: 'document' });
+      await file.get('org', 'project', 'myId', { as: 'arraybuffer' });
+      await file.get('org', 'project', 'myId', { as: 'stream' });
+      expect(mockHttpGet.mock.calls[0][0].context).toHaveProperty(
+        'parseAs',
+        'json',
+      );
+      expect(mockHttpGet.mock.calls[1][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[2][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[3][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[4][0].context).toHaveProperty(
+        'parseAs',
+        'document',
+      );
+      expect(mockHttpGet.mock.calls[5][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[6][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+    });
   });
 
   describe('list', () => {

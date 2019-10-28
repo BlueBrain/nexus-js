@@ -29,6 +29,23 @@ const NexusFile = (
       options?: GetFileOptions,
     ): Promise<NexusFile | Blob | string | FormData> => {
       const { as = 'json', ...opts } = options || {};
+
+      let parseAs = 'json';
+
+      if (
+        as === 'n-triples' ||
+        as === 'vnd.graph-viz' ||
+        as === 'text' ||
+        as === 'arraybuffer' ||
+        as === 'stream'
+      ) {
+        parseAs = 'text';
+      }
+
+      if (as === 'blob' || as === 'document') {
+        parseAs = as;
+      }
+
       const headers =
         as === 'json' || as === 'vnd.graph-viz' || as === 'n-triples'
           ? { Accept: buildHeader(as) }
@@ -39,7 +56,7 @@ const NexusFile = (
           context.uri
         }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(opts)}`,
         context: {
-          as,
+          parseAs,
         },
       });
     },

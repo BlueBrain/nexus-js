@@ -8,7 +8,7 @@ import {
   ResolverPayload,
 } from './types';
 import { NexusContext } from '../nexusSdk';
-import { buildHeader, buildQueryParams } from '../utils';
+import { buildHeader, buildQueryParams, parseAsBuilder } from '../utils';
 import { Resource } from '../Resource/types';
 
 const Resolver = (
@@ -23,12 +23,7 @@ const Resolver = (
       options?: GetResolverOptions,
     ): Promise<Resource> => {
       const { as = 'json', ...opts } = options || {};
-
-      let parseAs = 'json';
-
-      if (as === 'n-triples' || as === 'vnd.graph-viz') {
-        parseAs = 'text';
-      }
+      const parseAs = parseAsBuilder(as);
 
       return httpGet({
         headers: { Accept: buildHeader(as) },

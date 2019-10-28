@@ -63,3 +63,23 @@ export function buildHeader(as: string) {
 
   return acceptHeader;
 }
+
+export function parseAsBuilder(as: string) {
+  let parseAs = 'json';
+
+  if (
+    as === 'n-triples' ||
+    as === 'vnd.graph-viz' ||
+    as === 'text' ||
+    as === 'arraybuffer' ||
+    as === 'stream'
+  ) {
+    parseAs = 'text';
+  }
+
+  if (as === 'blob' || as === 'document') {
+    parseAs = as;
+  }
+
+  return parseAs;
+}

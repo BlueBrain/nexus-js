@@ -8,7 +8,7 @@ import {
   ViewList,
   ViewPayload,
 } from './types';
-import { buildHeader, buildQueryParams } from '../utils';
+import { buildHeader, buildQueryParams, parseAsBuilder } from '../utils';
 import { GetResourceOptions, ResourceListOptions } from '../Resource/types';
 
 const View = (
@@ -23,12 +23,7 @@ const View = (
       options?: GetResourceOptions,
     ): Promise<View> => {
       const { as = 'json', ...opts } = options || {};
-
-      let parseAs = 'json';
-
-      if (as === 'n-triples' || as === 'vnd.graph-viz') {
-        parseAs = 'text';
-      }
+      const parseAs = parseAsBuilder(as);
 
       return httpGet({
         headers: { Accept: buildHeader(as) },

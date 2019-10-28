@@ -23,6 +23,13 @@ const Resolver = (
       options?: GetResolverOptions,
     ): Promise<Resource> => {
       const { as = 'json', ...opts } = options || {};
+
+      let parseAs = 'json';
+
+      if (as === 'n-triples' || as === 'vnd.graph-viz') {
+        parseAs = 'text';
+      }
+
       return httpGet({
         headers: { Accept: buildHeader(as) },
         path: `${
@@ -30,6 +37,9 @@ const Resolver = (
         }/resolvers/${orgLabel}/${projectLabel}/${resolverId}${buildQueryParams(
           opts,
         )}`,
+        context: {
+          parseAs,
+        },
       });
     },
     list: (

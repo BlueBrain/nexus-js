@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/BlueBrain/nexus-js/issues"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@bbp/nexus-link": "^1.1.7"
   },
   "publishConfig": {

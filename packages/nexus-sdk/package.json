@@ -37,6 +37,9 @@
   "peerDependencies": {
     "@bbp/nexus-link": "^1.1.7"
   },
+  "devDependencies": {
+    "@bbp/nexus-link": "^1.1.7"
+  },
   "publishConfig": {
     "access": "public"
   }

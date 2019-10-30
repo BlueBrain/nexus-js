@@ -7,7 +7,7 @@ import {
   UpdateFilePayload,
   CreateFileOptions,
 } from './types';
-import { buildQueryParams } from '../utils';
+import { buildHeader, buildQueryParams, parseAsBuilder } from '../utils';
 import {
   PaginatedList,
   ResourceListOptions,
@@ -29,19 +29,19 @@ const NexusFile = (
       options?: GetFileOptions,
     ): Promise<NexusFile | Blob | string | FormData> => {
       const { as = 'json', ...opts } = options || {};
+      const parseAs = parseAsBuilder(as);
       const headers =
-        as === 'json'
-          ? {
-              Accept: 'application/json',
-            }
+        as === 'json' || as === 'vnd.graph-viz' || as === 'n-triples'
+          ? { Accept: buildHeader(as) }
           : {};
+
       return httpGet({
         headers,
         path: `${
           context.uri
         }/files/${orgLabel}/${projectLabel}/${fileId}${buildQueryParams(opts)}`,
         context: {
-          as,
+          parseAs,
         },
       });
     },

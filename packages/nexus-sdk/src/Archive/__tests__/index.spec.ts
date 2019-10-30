@@ -39,6 +39,52 @@ describe('Archive', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 
+    it('should call httpGet with the correct parseAs context property', async () => {
+      const mockHttpGet = jest.fn();
+
+      const archive = Archive(
+        {
+          ...mockFetchers,
+          httpGet: mockHttpGet,
+        },
+        {
+          uri: 'http://api.url/v1',
+        },
+      );
+
+      await archive.get('org', 'project', 'myId', { as: 'x-tar' });
+      await archive.get('org', 'project', 'myId', { as: 'json' });
+      await archive.get('org', 'project', 'myId');
+      expect(mockHttpGet.mock.calls[0][0].context).toHaveProperty(
+        'parseAs',
+        'blob',
+      );
+      expect(mockHttpGet.mock.calls[1][0].context).toHaveProperty(
+        'parseAs',
+        'json',
+      );
+      expect(mockHttpGet.mock.calls[2][0].context).toHaveProperty(
+        'parseAs',
+        'json',
+      );
+    });
+  });
+
+  describe('headers', () => {
+    it('calls httpGet with the correct default header', async () => {
+      await archive.get('org', 'project', 'archiveId');
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
+    });
+
+    it('calls httpGet with the correct header when the format is passed', async () => {
+      await archive.get('org', 'project', 'archiveId', { as: 'x-tar' });
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/x-tar',
+      });
+    });
+
     it('Appends format=expanded to the url when those options are used', async () => {
       await archive.get('org', 'project', 'archiveId', { format: 'expanded' });
       expect(fetchMock.mock.calls[0][0]).toEqual(
@@ -58,7 +104,7 @@ describe('Archive', () => {
       );
       archive.get('org', 'project', 'archiveId', { as: 'x-tar' });
       const { context } = mockHttpGet.mock.calls[0][0];
-      expect(context).toStrictEqual({ as: 'blob' });
+      expect(context).toStrictEqual({ parseAs: 'blob' });
     });
   });
 });

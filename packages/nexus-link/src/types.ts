@@ -7,6 +7,7 @@ export type Operation = RequestInit & {
 
 export type Context = {
   [keys: string]: any;
+  parseAs?: 'blob' | 'text' | 'document' | 'json';
 };
 
 export type Link = (

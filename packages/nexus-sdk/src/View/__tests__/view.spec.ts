@@ -9,13 +9,16 @@ describe('Views', () => {
   });
 
   describe('get', () => {
-    it('should make httpGet call to the views api with the right url', async () => {
+    it('should make httpGet call to the views api with the right url and a header', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await view.get('org', 'project', 'myId');
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project/myId',
       );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
 
@@ -27,6 +30,44 @@ describe('Views', () => {
         'http://api.url/v1/views/org/project/myId?rev=1',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('should make httpGet call with the right header', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await view.get('org', 'project', 'myId', { rev: 1, as: 'n-triples' });
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/n-triples',
+      });
+    });
+
+    it('should call httpGet with the correct parseAs context property', async () => {
+      const mockHttpGet = jest.fn();
+
+      const view = View(
+        {
+          ...mockFetchers,
+          httpGet: mockHttpGet,
+        },
+        {
+          uri: 'http://api.url/v1',
+        },
+      );
+
+      await view.get('org', 'project', 'myId', { as: 'json' });
+      await view.get('org', 'project', 'myId', { as: 'n-triples' });
+      await view.get('org', 'project', 'myId', { as: 'vnd.graph-viz' });
+      expect(mockHttpGet.mock.calls[0][0].context).toHaveProperty(
+        'parseAs',
+        'json',
+      );
+      expect(mockHttpGet.mock.calls[1][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[2][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
     });
   });
 

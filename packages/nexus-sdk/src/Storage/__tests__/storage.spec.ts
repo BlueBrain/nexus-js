@@ -27,7 +27,53 @@ describe('Storage', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/storages/org/project/myId?rev=1',
       );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('should make httpGet call to the storages api with the right header when a format is passed', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await storage.get('org', 'project', 'myId', { rev: 1, as: 'n-triples' });
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/storages/org/project/myId?rev=1',
+      );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/n-triples',
+      });
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('should call httpGet with the correct parseAs context property', async () => {
+      const mockHttpGet = jest.fn();
+
+      const storage = Storage(
+        {
+          ...mockFetchers,
+          httpGet: mockHttpGet,
+        },
+        {
+          uri: 'http://api.url/v1',
+        },
+      );
+
+      await storage.get('org', 'project', 'myId', { as: 'json' });
+      await storage.get('org', 'project', 'myId', { as: 'n-triples' });
+      await storage.get('org', 'project', 'myId', { as: 'vnd.graph-viz' });
+      expect(mockHttpGet.mock.calls[0][0].context).toHaveProperty(
+        'parseAs',
+        'json',
+      );
+      expect(mockHttpGet.mock.calls[1][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[2][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
     });
   });
 

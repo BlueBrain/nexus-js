@@ -17,7 +17,23 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/schemas/org/project/myId',
       );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('should make httpGet call to the schema api with the right header', async () => {
+      fetchMock.mockResponseOnce('response');
+      const result = await schema.get('org', 'project', 'myId', {
+        as: 'n-triples',
+      });
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/n-triples',
+      });
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+      expect(result.body).toEqual('response');
     });
 
     it('should make httpGet call to the schema api with the right url and query params', async () => {
@@ -28,6 +44,36 @@ describe('Views', () => {
         'http://api.url/v1/schemas/org/project/myId?rev=1',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('should call httpGet with the correct parseAs context property', async () => {
+      const mockHttpGet = jest.fn();
+
+      const schema = Schema(
+        {
+          ...mockFetchers,
+          httpGet: mockHttpGet,
+        },
+        {
+          uri: 'http://api.url/v1',
+        },
+      );
+
+      await schema.get('org', 'project', 'myId', { as: 'json' });
+      await schema.get('org', 'project', 'myId', { as: 'n-triples' });
+      await schema.get('org', 'project', 'myId', { as: 'vnd.graph-viz' });
+      expect(mockHttpGet.mock.calls[0][0].context).toHaveProperty(
+        'parseAs',
+        'json',
+      );
+      expect(mockHttpGet.mock.calls[1][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[2][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
     });
   });
 

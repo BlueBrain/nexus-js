@@ -15,7 +15,7 @@ import {
   ExpandedResource,
 } from './types';
 import { NexusContext } from '../nexusSdk';
-import { buildQueryParams } from '../utils';
+import { buildHeader, buildQueryParams, parseAsBuilder } from '../utils';
 import { DEFAULT_SCHEMA_ID } from '../constants';
 
 const Resource = (
@@ -30,20 +30,18 @@ const Resource = (
       options?: GetResourceOptions,
     ): Promise<Resource<T> | ExpandedResource<T>> => {
       const { as = 'json', ...opts } = options || {};
-      let acceptHeader = 'application/ld+json';
-      if (as === 'vnd.graph-viz') {
-        acceptHeader = 'text/vnd.graphviz';
-      }
-      if (as === 'n-triples') {
-        acceptHeader = 'application/n-triples';
-      }
+      const parseAs = parseAsBuilder(as);
+
       return httpGet({
-        headers: { Accept: acceptHeader },
+        headers: { Accept: buildHeader(as) },
         path: `${
           context.uri
         }/resources/${orgLabel}/${projectLabel}/${DEFAULT_SCHEMA_ID}/${resourceId}${buildQueryParams(
           opts,
         )}`,
+        context: {
+          parseAs,
+        },
       });
     },
     list: <T>(

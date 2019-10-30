@@ -33,7 +33,10 @@ export type StorageList = PaginatedList<Storage>;
 export type GetStorageOptions = {
   rev?: number;
   tag?: string;
+  as?: 'vnd.graph-viz' | 'n-triples' | 'json';
+  [key: string]: string | number | boolean;
 };
+
 export type ListStorageOptions = {
   from?: number;
   size?: number;

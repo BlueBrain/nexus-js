@@ -8,7 +8,7 @@ import {
   ViewList,
   ViewPayload,
 } from './types';
-import { buildQueryParams } from '../utils';
+import { buildHeader, buildQueryParams, parseAsBuilder } from '../utils';
 import { GetResourceOptions, ResourceListOptions } from '../Resource/types';
 
 const View = (
@@ -21,14 +21,20 @@ const View = (
       projectLabel: string,
       viewId: string,
       options?: GetResourceOptions,
-    ): Promise<View> =>
-      httpGet({
+    ): Promise<View> => {
+      const { as = 'json', ...opts } = options || {};
+      const parseAs = parseAsBuilder(as);
+
+      return httpGet({
+        headers: { Accept: buildHeader(as) },
         path: `${
           context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}${buildQueryParams(
-          options,
-        )}`,
-      }),
+        }/views/${orgLabel}/${projectLabel}/${viewId}${buildQueryParams(opts)}`,
+        context: {
+          parseAs,
+        },
+      });
+    },
     list: (
       orgLabel: string,
       projectLabel: string,

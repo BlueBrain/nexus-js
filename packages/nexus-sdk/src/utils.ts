@@ -49,3 +49,37 @@ export function getAbortControllerInstance() {
   }
   return undefined;
 }
+
+export function buildHeader(as: string) {
+  let acceptHeader = 'application/ld+json';
+
+  if (as === 'vnd.graph-viz') {
+    acceptHeader = 'text/vnd.graphviz';
+  }
+
+  if (as === 'n-triples') {
+    acceptHeader = 'application/n-triples';
+  }
+
+  return acceptHeader;
+}
+
+export function parseAsBuilder(
+  as: string,
+): 'json' | 'blob' | 'document' | 'text' {
+  if (
+    as === 'n-triples' ||
+    as === 'vnd.graph-viz' ||
+    as === 'text' ||
+    as === 'arraybuffer' ||
+    as === 'stream'
+  ) {
+    return 'text';
+  }
+
+  if (as === 'blob' || as === 'document') {
+    return as;
+  }
+
+  return 'json';
+}

@@ -14,7 +14,15 @@ export type NexusFile = Resource & {
 export type GetFileOptions = {
   rev?: number;
   tag?: string;
-  as?: 'text' | 'blob' | 'document' | 'arraybuffer' | 'stream' | 'json';
+  as?:
+    | 'text'
+    | 'blob'
+    | 'document'
+    | 'arraybuffer'
+    | 'stream'
+    | 'json'
+    | 'vnd.graph-viz'
+    | 'n-triples';
   [key: string]: any;
 };
 

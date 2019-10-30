@@ -17,7 +17,19 @@ describe('Resolver', () => {
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/resolvers/org/project/myId',
       );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('should make httpGet call to the resolvers api with the right header', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await resolver.get('org', 'project', 'myId', { as: 'vnd.graph-viz' });
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'text/vnd.graphviz',
+      });
     });
 
     it('should make httpGet call to the resolvers api with the right url and query params', async () => {
@@ -28,6 +40,36 @@ describe('Resolver', () => {
         'http://api.url/v1/resolvers/org/project/myId?rev=1',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('should call httpGet with the correct parseAs context property', async () => {
+      const mockHttpGet = jest.fn();
+
+      const resolver = Resolver(
+        {
+          ...mockFetchers,
+          httpGet: mockHttpGet,
+        },
+        {
+          uri: 'http://api.url/v1',
+        },
+      );
+
+      await resolver.get('org', 'project', 'myId', { as: 'json' });
+      await resolver.get('org', 'project', 'myId', { as: 'n-triples' });
+      await resolver.get('org', 'project', 'myId', { as: 'vnd.graph-viz' });
+      expect(mockHttpGet.mock.calls[0][0].context).toHaveProperty(
+        'parseAs',
+        'json',
+      );
+      expect(mockHttpGet.mock.calls[1][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[2][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
     });
   });
 

@@ -39,7 +39,7 @@ describe('File', () => {
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
       expect(fetchMock.mock.calls[0][1].headers).toEqual({
-        Accept: 'application/json',
+        Accept: 'application/ld+json',
       });
     });
 
@@ -52,6 +52,69 @@ describe('File', () => {
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
       expect(fetchMock.mock.calls[0][1].headers).toEqual({});
+    });
+
+    it('should make httpGet call to get the file and parse the response correctly with a header', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await file.get('org', 'project', 'myId', { rev: 1, as: 'vnd.graph-viz' });
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/files/org/project/myId?rev=1',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'text/vnd.graphviz',
+      });
+    });
+
+    it('should call httpGet with the correct parseAs context property', async () => {
+      const mockHttpGet = jest.fn();
+
+      const file = NexusFile(
+        {
+          ...mockFetchers,
+          httpGet: mockHttpGet,
+        },
+        {
+          uri: 'http://api.url/v1',
+        },
+      );
+
+      await file.get('org', 'project', 'myId', { as: 'json' });
+      await file.get('org', 'project', 'myId', { as: 'n-triples' });
+      await file.get('org', 'project', 'myId', { as: 'vnd.graph-viz' });
+      await file.get('org', 'project', 'myId', { as: 'text' });
+      await file.get('org', 'project', 'myId', { as: 'document' });
+      await file.get('org', 'project', 'myId', { as: 'arraybuffer' });
+      await file.get('org', 'project', 'myId', { as: 'stream' });
+      expect(mockHttpGet.mock.calls[0][0].context).toHaveProperty(
+        'parseAs',
+        'json',
+      );
+      expect(mockHttpGet.mock.calls[1][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[2][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[3][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[4][0].context).toHaveProperty(
+        'parseAs',
+        'document',
+      );
+      expect(mockHttpGet.mock.calls[5][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
+      expect(mockHttpGet.mock.calls[6][0].context).toHaveProperty(
+        'parseAs',
+        'text',
+      );
     });
   });
 

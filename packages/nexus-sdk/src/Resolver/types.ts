@@ -19,8 +19,10 @@ export type ResolverList = PaginatedList<Resolver>;
 export type GetResolverOptions = {
   rev?: number;
   tag?: string;
+  as?: 'vnd.graph-viz' | 'n-triples' | 'json';
   [key: string]: string | number | boolean;
 };
+
 export type ListResolverOptions = {
   from?: number;
   size?: number;

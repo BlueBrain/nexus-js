@@ -42,7 +42,7 @@ export const triggerFetch = (fetch?: any): Link => (operation: Operation) =>
     const defaultHeaders = {
       'Content-Type': 'application/json',
     };
-    const { path, body, headers, method } = operation;
+    const { path, body, headers, method, context = {} } = operation;
     fetch(path, {
       body,
       headers: { ...defaultHeaders, ...headers },
@@ -53,7 +53,7 @@ export const triggerFetch = (fetch?: any): Link => (operation: Operation) =>
         if (response.status >= 400) {
           observer.error(await response.json());
         } else {
-          const parseAs = operation.context && operation.context.as;
+          const { parseAs } = context;
           switch (parseAs) {
             case FetchAs.TEXT:
               observer.next(await response.text());

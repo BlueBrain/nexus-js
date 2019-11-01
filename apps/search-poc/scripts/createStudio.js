@@ -18,15 +18,13 @@ const {
   circuitsDashboard,
   simulationsCampaignDashboard,
   modelCellCollectionDashboard,
+  modelCollectionDashboard,
 } = require('./resources');
 
 const config = {
   environment: 'https://bbp.epfl.ch/nexus/v1',
-  orgName: 'nse', // MUST ALREADY EXIST
-  projectName: 'test', // MUST ALREADY EXIST
-  aggregateStudioProjects: [
-    ['nse/test', 'nxv:defaultSparqlIndex'],
-  ],
+  orgName: 'bbp', // MUST ALREADY EXIST
+  projectName: 'studio', // MUST ALREADY EXIST
 };
 
 // const logger = (operation, forward) => {
@@ -44,7 +42,7 @@ const config = {
 const nexus = createNexusClient({
   fetch,
   uri: config.environment,
-  token: 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJONS1CU0ZxZG5NS3Y4SWtKUkg1R3E0LVA2c1RWQUxwU0EydGNQeEpWM1NBIn0.eyJqdGkiOiI4MjAyOTFkMy1iNDYwLTQwNmEtOWRiNS0xNTgzNjJiNjdjMWEiLCJleHAiOjE1NzA1NTQwMTIsIm5iZiI6MCwiaWF0IjoxNTcwNTI1MjEyLCJpc3MiOiJodHRwczovL2JicHRlYW0uZXBmbC5jaC9hdXRoL3JlYWxtcy9CQlAiLCJzdWIiOiJmOjlkNDZkZGQ2LTEzNGUtNDRkNi1hYTc0LWJkZjAwZjQ4ZGZjZTpnZXR0YSIsInR5cCI6IkJlYXJlciIsImF6cCI6Im5leHVzLXdlYiIsIm5vbmNlIjoiYjFjN2I1MDI2ZmRjNDk0YjlmYjQwNzhmZWYzY2I5M2EiLCJhdXRoX3RpbWUiOjE1NzA1MjUyMTEsInNlc3Npb25fc3RhdGUiOiJkNGQ1OTA4Yy02OTg2LTRkYjYtOTU4ZC05ZjA4MDNlN2JhNzYiLCJhY3IiOiIwIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vZGV2Lm5leHVzLm9jcC5iYnAuZXBmbC5jaCIsImh0dHBzOi8vYmJwLmVwZmwuY2giLCJodHRwOi8vZGV2Lm5leHVzLm9jcC5iYnAuZXBmbC5jaCIsImh0dHBzOi8vc3RhZ2luZy5uZXh1cy5vY3AuYmJwLmVwZmwuY2giLCJodHRwczovL2JicC1uZXh1cy5lcGZsLmNoIiwiaHR0cHM6Ly9iYnB0ZWFtLmVwZmwuY2giLCJodHRwOi8vc3RhZ2luZy5uZXh1cy5vY3AuYmJwLmVwZmwuY2giXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIl19LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiUGF2bG8gR2V0dGEiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJnZXR0YSIsImdpdmVuX25hbWUiOiJQYXZsbyIsImZhbWlseV9uYW1lIjoiR2V0dGEiLCJlbWFpbCI6InBhdmxvLmdldHRhQGVwZmwuY2gifQ.CF-ddGMGjaK40mp6RApBhEQ_JrC6aMUbrPHb5VgBqFTcsMQHhN-px-zKLCvOf3uwWq0dNXKWyev0x_IXhfsYjbDEHXzuqpEbVkhxovC5UvvzLB1QvzkZiY-iQ_PGbRv2FkKYKwFqpenfk5UmbkGTE-UtvQ35pxWx-_4-gabRj-oYkUYCypaGlJqBSfgADQJ53aqX-NA7iMbNHGxgwhKE20XdZqZ4yH2eKQLXTrgo2Wyd7KJgmyiEnk30YjhA6EIWehwlPMsS42awcs0IDBozRKX_JFu716rY0MI2I-QqfyTgDwmlQTfPLF55KSM6bblxrlQUPNGaEYcnUO6LPcTtgQ', // PUT YOUR TOKEN HERE
+  token: '', // PUT YOUR TOKEN HERE
   // links: [logger],
 });
 
@@ -73,18 +71,24 @@ async function createOrUpdateResource(orgName, projectName, resource) {
 
 async function main() {
   try {
-    const BBPConfig = {
-      name: 'BBP Workspace',
-      label: 'default',
+    const ThalamusWorkspaceConfig = {
+      name: 'Thalamus 2019',
+      label: 'thalamus',
+      viewId: 'nxv:thalamusSparqlIndex',
+      aggregateStudioProjects: [
+        ['nse/test', 'nxv:defaultSparqlIndex'],
+        ['bbp/thalamus', 'nxv:defaultSparqlIndex'],
+      ],
     };
 
-    try {
-      await nexus.View.create(
-        config.orgName,
-        config.projectName,
-        generateStudioView(config.aggregateStudioProjects),
-      );
-    } catch {}
+    const SscxWorkspaceConfig = {
+      name: 'SSCx dissemination',
+      label: 'sscx',
+      viewId: 'nxv:sscxSparqlIndex',
+      aggregateStudioProjects: [
+        ['nse/test2', 'nxv:defaultSparqlIndex'],
+      ],
+    };
 
     try {
       await createOrUpdateResource(
@@ -96,9 +100,23 @@ async function main() {
 
     // Generate each workspace!
     const workspaceIdsPromises = [
-      BBPConfig,
+      ThalamusWorkspaceConfig,
+      SscxWorkspaceConfig,
     ].map(async workspaceConfig => {
       // WARNING: We need to wait for the context resource to be indexed
+
+      try {
+        // TODO: fix this to use upsert
+        console.log(`Attempting to update Sparql view ${workspaceConfig.viewId}`);
+        await nexus.View.create(
+          config.orgName,
+          config.projectName,
+          generateStudioView(workspaceConfig.viewId, workspaceConfig.aggregateStudioProjects),
+        );
+      } catch(err) {
+        console.error(err);
+      }
+
       const { '@id': emodelDashboardId } = await createOrUpdateResource(
         config.orgName,
         config.projectName,
@@ -113,6 +131,11 @@ async function main() {
         config.orgName,
         config.projectName,
         circuitsDashboard(workspaceConfig),
+      );
+      const { '@id': modelCollectionDashboardId } = await createOrUpdateResource(
+        config.orgName,
+        config.projectName,
+        modelCollectionDashboard(workspaceConfig),
       );
       const {
         '@id': simulationsCampaignDashboardId,
@@ -132,11 +155,12 @@ async function main() {
         config.orgName,
         config.projectName,
         generateWorkspaceResource(workspaceConfig, [
-          [emodelDashboardId, 'nxv:StudioSparqlView'],
-          [morphoDashboardId, 'nxv:StudioSparqlView'],
-          [circuitsDashboardId, 'nxv:StudioSparqlView'],
-          [simulationsCampaignDashboardId, 'nxv:StudioSparqlView'],
-          [modelCellCollectionDashboardId, 'nxv:StudioSparqlView'],
+          [emodelDashboardId, workspaceConfig.viewId],
+          [morphoDashboardId, workspaceConfig.viewId],
+          [circuitsDashboardId, workspaceConfig.viewId],
+          [modelCollectionDashboardId, workspaceConfig.viewId],
+          [simulationsCampaignDashboardId, workspaceConfig.viewId],
+          [modelCellCollectionDashboardId, workspaceConfig.viewId],
         ]),
       );
 

@@ -63,16 +63,9 @@ prefix prov: <http://www.w3.org/ns/prov#>
 
 SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLabel ?project ?createdAt ?age
      WITH {
-      SELECT DISTINCT ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLabel ?project ?age ?createdAt{
+      SELECT DISTINCT ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLabel ?project ?age ?createdAt {
         Graph ?g {
-            ?s rdf:type nxs:ReconstructedNeuronMorphologyCollection
-        }
-        ${
-          filters && filters.brainRegion
-            ? `Graph ?g {
-            ?s nxs:brainLocation / nxs:brainRegion <${filters.brainRegion}>
-          }`
-            : ''
+          ?s rdf:type nxs:ReconstructedNeuronMorphologyCollection
         }
           ?s nxv:self ?self    .
           OPTIONAL { ?s schema:name ?name }
@@ -81,6 +74,44 @@ SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?description ?strainLa
           OPTIONAL { ?s prov:wasDerivedFrom / nxs:species / rdfs:label ?speciesLabel }
           OPTIONAL { ?s prov:wasDerivedFrom / nxs:strain / rdfs:label ?strainLabel }
           OPTIONAL { ?s prov:wasDerivedFrom / nxs:age / schema:value ?age }
+          OPTIONAL { ?s nxv:project ?project }
+          OPTIONAL { ?s nxv:createdAt ?createdAt }
+      }
+     } AS %resultSet
+
+   WHERE {
+        {
+           SELECT (COUNT(?self) AS ?total)
+           WHERE { INCLUDE %resultSet }
+        }
+        UNION
+       {
+           SELECT *
+           WHERE { INCLUDE %resultSet }
+           ORDER BY ?self
+           LIMIT 20
+           OFFSET 0
+        }
+     }
+`;
+
+
+const modelCollectionDataQuery = () => `
+prefix nxs: <https://neuroshapes.org/>
+prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
+prefix schema: <http://schema.org/>
+prefix prov: <http://www.w3.org/ns/prov#>
+
+SELECT ?total ?self ?name ?speciesLabel ?brainRegionLabel ?project ?createdAt
+     WITH {
+      SELECT DISTINCT ?self ?name ?speciesLabel ?brainRegionLabel ?project ?createdAt {
+        Graph ?g {
+          ?s rdf:type nxs:MorphologyRelease
+        }
+          ?s nxv:self ?self    .
+          OPTIONAL { ?s schema:name ?name }
+          OPTIONAL { ?s nxs:brainLocation / nxs:brainRegion / rdfs:label ?brainRegionLabel }
+          OPTIONAL { ?s nxs:species / rdfs:label ?speciesLabel }
           OPTIONAL { ?s nxv:project ?project }
           OPTIONAL { ?s nxv:createdAt ?createdAt }
       }
@@ -165,9 +196,9 @@ prefix nxv: <https://bluebrain.github.io/nexus/vocabulary/>
 prefix schema: <http://schema.org/>
 prefix prov: <http://www.w3.org/ns/prov#>
 
-SELECT ?total ?self ?name ?project ?startedAtTime ?endedAtTime ?status
+SELECT ?total ?self ?name ?project ?startedAtTime ?endedAtTime
      WITH {
-      SELECT DISTINCT ?self ?name ?description ?project ?startedAtTime ?endedAtTime ?status{
+      SELECT DISTINCT ?self ?name ?description ?project ?startedAtTime ?endedAtTime {
         Graph ?g {
             ?s rdf:type nxs:SimulationCampaign .
             ?s nxv:deprecated false
@@ -178,7 +209,6 @@ SELECT ?total ?self ?name ?project ?startedAtTime ?endedAtTime ?status
           OPTIONAL { ?s nxv:project ?project }
           OPTIONAL { ?s prov:startedAtTime ?startedAtTime }
           OPTIONAL { ?s prov:endedAtTime ?endedAtTime }
-          OPTIONAL { ?s nxs:status ?status }
         }
       }
      } AS %resultSet
@@ -284,8 +314,8 @@ const generateWorkspaceResource = (config, dashboardViewIdPairs) => ({
  *
  * @param {[string, string][]} projectViewIdPairs
  */
-const generateStudioView = projectViewIdPairs => ({
-  '@id': 'nxv:StudioSparqlView',
+const generateStudioView = (viewId, projectViewIdPairs) => ({
+  '@id': viewId,
   '@type': 'AggregateSparqlView',
   views: projectViewIdPairs.map(pair => ({
     project: pair[0],
@@ -354,6 +384,15 @@ const morphologyCollectionDashboard = config => ({
   dataQuery: morphologyDataQuery(config.filters),
 });
 
+const modelCollectionDashboard = config => ({
+  '@context': 'https://bluebrainnexus.io/studio/context',
+  '@id': `https://bluebrainnexus.io/studio/bbp-studio---${config.label}--model-collection-dashboard`,
+  '@type': 'StudioDashboard',
+  label: 'Model collection Dashboard',
+  description: 'Modal collection curation',
+  dataQuery: modelCollectionDataQuery(config.filters),
+});
+
 /**
  *
  *
@@ -406,4 +445,5 @@ module.exports = {
   circuitsDashboard,
   simulationsCampaignDashboard,
   modelCellCollectionDashboard,
+  modelCollectionDashboard,
 };

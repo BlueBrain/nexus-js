@@ -31,7 +31,10 @@ const AnalysisImage: React.FunctionComponent<{
           e.stopPropagation();
         }}
       >
-        <img src={src}/>
+        <img
+          src={src}
+          alt=""
+        />
       </div>
     </>
   )

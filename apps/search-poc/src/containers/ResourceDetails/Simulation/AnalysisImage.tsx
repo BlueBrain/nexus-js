@@ -15,7 +15,7 @@ const AnalysisImageContainer: React.FunctionComponent<{
   const imageUrl = props.resource.imageUrl;
   const {org, project} = parseNexusUrl(imageUrl);
 
-  const { data, loading, error } = useNexus<any>(nexus =>
+  const { data, loading } = useNexus<any>(nexus =>
     nexus.File.get(org, project, encodeURIComponent(imageUrl), { as: 'blob'})
   );
 

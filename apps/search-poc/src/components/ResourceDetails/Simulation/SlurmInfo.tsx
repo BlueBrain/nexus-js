@@ -19,10 +19,10 @@ const BasicInfo: React.FunctionComponent<{
     <div className="mt">
       <h3>Slurm info</h3>
       <Row gutter={16}>
-        <Col span={12}>
+        <Col span={8}>
           <Input
             readOnly
-            addonBefore="Slurm job ID"
+            addonBefore="Job ID"
             addonAfter={
               <Copy
                 textToCopy={resource.jobId}
@@ -42,10 +42,10 @@ const BasicInfo: React.FunctionComponent<{
             defaultValue={resource.jobId}
           />
         </Col>
-        <Col span={12}>
+        <Col span={16}>
           <Input
             readOnly
-            addonBefore="Slurm log path"
+            addonBefore="Log"
             addonAfter={
               <Copy
                 textToCopy={slurmLogPath}

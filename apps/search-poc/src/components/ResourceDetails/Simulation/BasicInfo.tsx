@@ -1,6 +1,7 @@
 
 import React from 'react';
 import moment from 'moment';
+import qs from 'qs';
 import { Badge, Input, Button, Row, Col } from 'antd';
 
 import { SimulationResource } from '../../../containers/ResourceDetails/types';
@@ -11,6 +12,8 @@ import { HandleClickParams } from '../../../types';
 interface BadgeStatus {
   [simStatus: string]: 'default' | 'processing' | 'error' | 'success' | 'warning',
 }
+
+const pairRecordingAppBaseUrl = 'http://bp.ocp.bbp.epfl.ch';
 
 const badgeStatus: BadgeStatus = {
   'Pending': 'default',
@@ -33,6 +36,15 @@ const BasicInfo: React.FunctionComponent<{
     : '-';
 
   const blueConfigPath = `${resource.path}/BlueConfig`;
+
+  const pairRecordingAppParams = {
+    name: blueConfigPath,
+    path: blueConfigPath,
+    simModel: blueConfigPath.match(/proj64/)
+      ? 'neocortexV6'
+      : 'thalamus',
+  };
+  const pairRecordingAppHref = `${pairRecordingAppBaseUrl}/simulations/?${qs.stringify(pairRecordingAppParams)}`;
 
   return (
     <div>
@@ -62,7 +74,7 @@ const BasicInfo: React.FunctionComponent<{
       <Input
         className="mt"
         readOnly
-        addonBefore="BlueConfig path"
+        addonBefore="BlueConfig"
         addonAfter={
           <Copy
             textToCopy={blueConfigPath}
@@ -81,6 +93,14 @@ const BasicInfo: React.FunctionComponent<{
         }
         defaultValue={blueConfigPath}
       />
+
+      <h3 className="mt">Actions</h3>
+      <Button
+        href={pairRecordingAppHref}
+        target="_blank"
+      >
+        Open in Pair Recording app
+      </Button>
     </div>
   );
 };

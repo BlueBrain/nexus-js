@@ -86,6 +86,10 @@ export interface SimWriterConfigResource extends Resource, MINDSResource {
     url: string;
     data: any;
   };
+  target?: {
+    url: string;
+    data: any;
+  };
 }
 
 export interface DetailedCircuitResource extends Resource, MINDSResource {
@@ -99,5 +103,3 @@ export interface DetailedCircuitResource extends Resource, MINDSResource {
   };
   circuitType?: string;
 }
-
-export interface SimWriterConfigResource extends Resource, MINDSResource {}

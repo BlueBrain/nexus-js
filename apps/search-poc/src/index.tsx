@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { NexusClient, createNexusClient } from '@bbp/nexus-sdk';
 import { NexusProvider } from '@bbp/react-nexus';
+import UserContext from './contexts/UserContext';
 
 import { setUpSession, setToken } from './utils/auth';
 import Header from './containers/Header';
@@ -28,20 +29,22 @@ async function main() {
   const rootElement = document.getElementById('root');
   render(
     <NexusProvider nexusClient={nexus}>
-      <Header user={user} userManager={userManager} />
-      <Router>
-        <Switch>
-          <Route path="/" exact>
-            <MainView
-              studioOrg={SETTINGS.studioOrg}
-              studioProject={SETTINGS.studioProject}
-              studioViewId={SETTINGS.studioViewId}
-              studioQuery={getStudioConfig(SETTINGS.studioId)}
-            />
-          </Route>
-          <Route path="/resources" component={DetailsView} />
-        </Switch>
-      </Router>
+      <UserContext.Provider value={user}>
+        <Header user={user} userManager={userManager} />
+        <Router>
+          <Switch>
+            <Route path="/" exact>
+              <MainView
+                studioOrg={SETTINGS.studioOrg}
+                studioProject={SETTINGS.studioProject}
+                studioViewId={SETTINGS.studioViewId}
+                studioQuery={getStudioConfig(SETTINGS.studioId)}
+              />
+            </Route>
+            <Route path="/resources" component={DetailsView} />
+          </Switch>
+        </Router>
+      </UserContext.Provider>
     </NexusProvider>,
     rootElement,
   );

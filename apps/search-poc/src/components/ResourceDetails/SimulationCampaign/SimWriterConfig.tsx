@@ -8,7 +8,7 @@ import { SimWriterConfigResource } from '../../../containers/ResourceDetails/typ
 import { HandleClickParams } from '../../../types';
 
 import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/nginx/nginx';
+import 'codemirror/mode/shell/shell';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/base16-light.css';
@@ -50,6 +50,7 @@ const SimWriterConfig: React.FunctionComponent<{
               readOnly: true,
               theme: 'base16-light',
               lineNumbers: true,
+              lineWrapping: true,
             }}
             onBeforeChange={() => {}}
           />
@@ -62,14 +63,35 @@ const SimWriterConfig: React.FunctionComponent<{
           <CodeMirror
             value={props.resource.template.data}
             options={{
-              mode: { name: 'nginx' },
+              mode: { name: 'shell' },
               readOnly: true,
               theme: 'base16-light',
               lineNumbers: true,
+              lineWrapping: true,
             }}
             onBeforeChange={() => {}}
           />
         </Panel>
+        {
+          props.resource.target &&
+          props.resource.target.data &&
+          <Panel
+            className="panel--no-padding"
+            header="Target"
+            key="target"
+          >
+            <CodeMirror
+              value={props.resource.target.data}
+              options={{
+                readOnly: true,
+                theme: 'base16-light',
+                lineNumbers: true,
+                lineWrapping: true,
+              }}
+              onBeforeChange={() => {}}
+            />
+          </Panel>
+        }
       </Collapse>
     </div>
   );

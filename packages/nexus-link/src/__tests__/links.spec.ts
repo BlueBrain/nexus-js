@@ -110,4 +110,37 @@ describe('triggerFetch', () => {
       done();
     });
   });
+
+  it('creates no default header if noDefaultHeader is set to true', async () => {
+    const mockFetch = jest.fn();
+    const testLink = Links.triggerFetch(mockFetch);
+    const obs = await testLink({
+      path: 'testpath',
+      context: { noDefaultHeader: true },
+    });
+
+    mockFetch.mockReturnValue('data');
+
+    obs.subscribe(res => {
+      expect(res).toEqual('data');
+    });
+
+    expect(mockFetch.mock.calls[0][1]['headers']).toEqual({});
+  });
+
+  it('creates the default header with the content type: json', async () => {
+    const mockFetch = jest.fn();
+    const testLink = Links.triggerFetch(mockFetch);
+    const obs = await testLink({ path: 'testpath' });
+
+    mockFetch.mockReturnValue('data');
+
+    obs.subscribe(res => {
+      expect(res).toEqual('data');
+    });
+
+    expect(mockFetch.mock.calls[0][1]['headers']).toEqual({
+      'Content-Type': 'application/json',
+    });
+  });
 });

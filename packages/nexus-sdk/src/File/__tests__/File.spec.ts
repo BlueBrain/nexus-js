@@ -200,6 +200,24 @@ describe('File', () => {
       });
     });
 
+    it('should pass no default headers', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const myFile = new FormData();
+      myFile.append('filename.txt', "pretend I'm a file okay?");
+      const payload: FilePayload = {
+        file: myFile,
+      };
+      await file.create('org', 'project', payload);
+
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/files/org/project',
+      );
+      expect(fetchMock.mock.calls[0][1].body).toEqual(myFile);
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({});
+    });
+
     it('should use a URL param for storage option', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const myFile = new FormData();

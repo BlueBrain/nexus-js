@@ -66,16 +66,23 @@ const NexusFile = (
       const { '@id': fileId, file: body, storage } = payload;
       const opts = buildQueryParams({ storage });
       const headers = (options && options.extraHeaders) || {};
+
       return fileId
         ? httpPut({
             headers,
             body,
             path: `${context.uri}/files/${orgLabel}/${projectLabel}/${fileId}${opts}`,
+            context: {
+              noDefaultHeader: true,
+            },
           })
         : httpPost({
             headers,
             body,
             path: `${context.uri}/files/${orgLabel}/${projectLabel}${opts}`,
+            context: {
+              noDefaultHeader: true,
+            },
           });
     },
 

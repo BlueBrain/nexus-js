@@ -39,10 +39,12 @@ export const triggerFetch = (fetch?: any): Link => (operation: Operation) =>
   new Observable(observer => {
     const controller = new AbortController();
     const signal = controller.signal;
-    const defaultHeaders = {
-      'Content-Type': 'application/json',
-    };
     const { path, body, headers, method, context = {} } = operation;
+    const defaultHeaders = context.noDefaultHeader
+      ? {}
+      : {
+          'Content-Type': 'application/json',
+        };
     fetch(path, {
       body,
       headers: { ...defaultHeaders, ...headers },

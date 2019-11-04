@@ -171,6 +171,21 @@ describe('Resource', () => {
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
     });
+    it('should make httpPost call with schemaID  to the resources api, when schemaId is present', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const payload = {
+        '@id': 'myResource',
+        '@context': 'something',
+        something: 'hello!',
+      };
+      await resource.create('org', 'project', payload, 'schemaId');
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/org/project/schemaId',
+      );
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+    });
   });
 
   describe('update', () => {

@@ -166,7 +166,7 @@ describe('Resource', () => {
       await resource.create('org', 'project', payload);
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resources/org/project',
+        'http://api.url/v1/resources/org/project/',
       );
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');

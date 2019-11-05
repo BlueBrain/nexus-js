@@ -72,15 +72,18 @@ const Resource = (
       orgLabel: string,
       projectLabel: string,
       payload: ResourcePayload,
-      schemaId?: string,
+      schemaId: string = '_',
+      resourceId?: string,
     ): Promise<Resource> =>
-      schemaId
-        ? httpPost({
-            path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${schemaId}`,
+      resourceId
+        ? httpPut({
+            path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${schemaId}/${resourceId}`,
             body: JSON.stringify(payload),
           })
         : httpPost({
-            path: `${context.uri}/resources/${orgLabel}/${projectLabel}`,
+            path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${
+              schemaId == '_' ? '' : schemaId
+            }`,
             body: JSON.stringify(payload),
           }),
     update: (

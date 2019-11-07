@@ -190,7 +190,7 @@ describe('Resource', () => {
     it('should make httpPut call  with ResourceId to the resources api, when ResourceId is present', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const payload = {
-        '@id': 'myResource',
+        '@id': 'resourceId',
         '@context': 'something',
         something: 'hello!',
       };
@@ -206,7 +206,7 @@ describe('Resource', () => {
     it('should make httpPut call with schemaId and ResourceId to the resources api, when schemaId and ResourceId is present', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const payload = {
-        '@id': 'myResource',
+        '@id': 'resourceId',
         '@context': 'something',
         something: 'hello!',
       };

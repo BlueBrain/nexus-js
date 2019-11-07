@@ -81,8 +81,8 @@ const Resource = (
             body: JSON.stringify(payload),
           })
         : httpPost({
-            path: `${context.uri}/resources/${orgLabel}/${projectLabel}/${
-              schemaId === '_' ? '' : schemaId
+            path: `${context.uri}/resources/${orgLabel}/${projectLabel}${
+              schemaId === '_' ? '' : `/${schemaId}`
             }`,
             body: JSON.stringify(payload),
           }),

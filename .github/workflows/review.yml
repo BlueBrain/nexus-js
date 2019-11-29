@@ -1,0 +1,29 @@
+name: Review
+
+on: [pull_request]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: install dependencies 🚀
+        run: |
+          make install
+      - name: linting ✨
+        run: |
+          make lint
+      - name: prettier 💅
+        run: |
+          yarn prettier -c ./src/**/*.ts
+      - name: running test 🛫🛬
+        run: |
+          make test
+      - name: Upload coverage to Codecov 💌
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: build project 👷
+        run: |
+          make build

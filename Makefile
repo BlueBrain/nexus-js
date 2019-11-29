@@ -22,6 +22,10 @@ lint:
 	@echo "Linting... ✨"
 	@yarn lint
 
+prettier:
+	@echo "Prettier... 💅"
+	@yarn prettier
+
 clean:
 	@echo "Cleaning... 🗑"
 	@yarn lerna clean && yarn clean

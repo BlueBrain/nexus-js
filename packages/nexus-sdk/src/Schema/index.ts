@@ -76,7 +76,7 @@ const Schema = (
       },
     ): Promise<Resource> =>
       httpPost({
-        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}${schemaId}?rev=${rev}`,
+        path: `${context.uri}/schemas/${orgLabel}/${projectLabel}/${schemaId}?rev=${rev}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (

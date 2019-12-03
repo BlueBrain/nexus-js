@@ -162,4 +162,19 @@ describe('Resolver', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
+
+  describe('getResource', () => {
+    it('should make httpGet call to the resolvers api with the right url', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await resolver.getResource('org', 'project', 'resolverId', 'resourceId');
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resolvers/org/project/resolverId/resourceId',
+      );
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        Accept: 'application/ld+json',
+      });
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+  });
 });

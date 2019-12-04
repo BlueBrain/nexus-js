@@ -8,22 +8,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn global add lerna
+
       - name: install dependencies 🚀
         run: |
-          make install
+          yarn && && lerna init && lerna bootstrap
       - name: linting ✨
         run: |
-          make lint
+          yarn lint
       - name: prettier 💅
         run: |
           yarn prettier -c ./src/**/*.ts
       - name: running test 🛫🛬
         run: |
-          make install && make test
+          yarn test
       - name: Upload coverage to Codecov 💌
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: build project 👷
         run: |
-          make build
+          lerna run build

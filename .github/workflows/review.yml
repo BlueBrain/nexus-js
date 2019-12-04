@@ -4,6 +4,7 @@ on: [pull_request]
 
 jobs:
   test-and-build:
+    name: Review code (test, lint and prettier)
     runs-on: ubuntu-latest
 
     steps:

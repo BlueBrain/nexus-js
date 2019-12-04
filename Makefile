@@ -24,7 +24,7 @@ lint:
 
 prettier:
 	@echo "Prettier... 💅"
-	@yarn prettier
+	@yarn prettier -c ./src/**/*.ts
 
 clean:
 	@echo "Cleaning... 🗑"

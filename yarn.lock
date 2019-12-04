@@ -1744,10 +1744,6 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
-argv@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/argv/-/argv-0.0.2.tgz#ecbd16f8949b157183711b1bda334f37840185ab"
-
 arr-diff@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/arr-diff/-/arr-diff-4.0.0.tgz#d6461074febfec71e7e15235761a329a5dc7c520"
@@ -2198,16 +2194,6 @@ co@^4.6.0:
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
-
-codecov@^3.5.0:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.6.1.tgz#f39fc49413445555f81f8e3ca5730992843b4517"
-  dependencies:
-    argv "^0.0.2"
-    ignore-walk "^3.0.1"
-    js-yaml "^3.13.1"
-    teeny-request "^3.11.3"
-    urlgrey "^0.4.4"
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -3428,7 +3414,7 @@ http-signature@~1.2.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-https-proxy-agent@^2.2.1, https-proxy-agent@^2.2.3:
+https-proxy-agent@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-2.2.3.tgz#fb6cd98ed5b9c35056b5a73cd01a8a721d7193d1"
   dependencies:
@@ -4884,7 +4870,7 @@ node-fetch@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
 
-node-fetch@2.6.0, node-fetch@^2.2.0, node-fetch@^2.3.0, node-fetch@^2.5.0:
+node-fetch@2.6.0, node-fetch@^2.3.0, node-fetch@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
 
@@ -6421,14 +6407,6 @@ tar@^4, tar@^4.4.10, tar@^4.4.12, tar@^4.4.8:
     safe-buffer "^5.1.2"
     yallist "^3.0.3"
 
-teeny-request@^3.11.3:
-  version "3.11.3"
-  resolved "https://registry.yarnpkg.com/teeny-request/-/teeny-request-3.11.3.tgz#335c629f7645e5d6599362df2f3230c4cbc23a55"
-  dependencies:
-    https-proxy-agent "^2.2.1"
-    node-fetch "^2.2.0"
-    uuid "^3.3.2"
-
 temp-dir@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/temp-dir/-/temp-dir-1.0.0.tgz#0a7c0ea26d3a39afa7e0ebea9c1fc0bc4daa011d"
@@ -6801,10 +6779,6 @@ url-parse@^1.4.3:
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
-
-urlgrey@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/urlgrey/-/urlgrey-0.4.4.tgz#892fe95960805e85519f1cd4389f2cb4cbb7652f"
 
 use@^3.1.0:
   version "3.1.1"

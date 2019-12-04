@@ -21,10 +21,10 @@ jobs:
       - name: prettier 💅
         run: |
           make prettier
-      - name: build project 👷
+      - name: build packages 👷
         run: |
           make build
-      - name: running test 🛫🛬
+      - name: running tests 🛫🛬
         run: |
           make test
       - name: Upload coverage to Codecov 💌

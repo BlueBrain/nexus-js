@@ -11,7 +11,7 @@ install:
 	@yarn && yarn lerna bootstrap
 
 build:
-	@echo "Building projects... 👷"
+	@echo "Building packages... 👷"
 	@yarn lerna run build
 
 test:

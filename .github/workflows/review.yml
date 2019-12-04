@@ -15,7 +15,7 @@ jobs:
 
       - name: install dependencies 🚀
         run: |
-          yarn && && lerna init && lerna bootstrap
+          yarn && lerna init && lerna bootstrap
       - name: linting ✨
         run: |
           yarn lint

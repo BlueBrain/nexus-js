@@ -14,10 +14,10 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest",
-    "codecov": "codecov",
     "lint": "tslint packages/**/src/**/* -e **/*.md",
+    "prettier": "prettier -c ./packages/**/src/**/*.ts",
     "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr documentation/",
-    "prepublishOnly": "npm run test && npm run lint"
+    "prepublishOnly": "yarn test && yarn lint"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -26,12 +26,11 @@
     "@types/eventsource": "^1.1.0",
     "@types/jest": "^24.0.13",
     "@types/node-fetch": "^2.3.4",
-    "codecov": "^3.5.0",
     "eslint": "^5.16.0",
     "husky": "^1.3.1",
     "jest": "^24.8.0",
     "jest-fetch-mock": "^2.1.2",
-    "lerna": "^3.18.3",
+    "lerna": "^3.19.0",
     "lint-staged": "^8.1.7",
     "prettier": "^1.17.1",
     "rollup": "^1.12.3",

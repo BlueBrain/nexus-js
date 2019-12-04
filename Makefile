@@ -8,10 +8,10 @@ dshell:
 
 install:
 	@echo "Installing project's dependencies... 🚀"
-	@yarn && yarn lerna init && yarn lerna bootstrap
+	@yarn && yarn lerna bootstrap
 
 build:
-	@echo "Building projects... 👷"
+	@echo "Building packages... 👷"
 	@yarn lerna run build
 
 test:
@@ -21,6 +21,10 @@ test:
 lint:
 	@echo "Linting... ✨"
 	@yarn lint
+
+prettier:
+	@echo "Prettier... 💅"
+	@yarn prettier -c ./src/**/*.ts
 
 clean:
 	@echo "Cleaning... 🗑"

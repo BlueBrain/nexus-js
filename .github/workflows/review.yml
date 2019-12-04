@@ -19,7 +19,7 @@ jobs:
           yarn prettier -c ./src/**/*.ts
       - name: running test 🛫🛬
         run: |
-          make test
+          make install && make test
       - name: Upload coverage to Codecov 💌
         uses: codecov/codecov-action@v1
         with:

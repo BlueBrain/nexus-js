@@ -21,6 +21,9 @@ jobs:
       - name: prettier 💅
         run: |
           make prettier
+      - name: build project 👷
+        run: |
+          make build
       - name: running test 🛫🛬
         run: |
           make test
@@ -28,6 +31,3 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: build project 👷
-        run: |
-          make build

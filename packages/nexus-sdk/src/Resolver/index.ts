@@ -37,6 +37,28 @@ const Resolver = (
         },
       });
     },
+    getResource: (
+      orgLabel: string,
+      projectLabel: string,
+      resolverId: string,
+      resourceId: string,
+      options?: GetResolverOptions,
+    ): Promise<Resource> => {
+      const { as = 'json', ...opts } = options || {};
+      const parseAs = parseAsBuilder(as);
+
+      return httpGet({
+        headers: { Accept: buildHeader(as) },
+        path: `${
+          context.uri
+        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}/${resourceId}${buildQueryParams(
+          opts,
+        )}`,
+        context: {
+          parseAs,
+        },
+      });
+    },
     list: (
       orgLabel: string,
       projectLabel: string,

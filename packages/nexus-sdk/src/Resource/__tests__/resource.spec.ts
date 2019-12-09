@@ -160,7 +160,11 @@ describe('Resource', () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const payload = {
         '@id': 'myResource',
-        '@context': 'something',
+        '@context': {
+          label: {
+            '@id': 'http://www.w3.org/2000/01/rdf-schema#label',
+          },
+        },
         something: 'hello!',
       };
       await resource.create('org', 'project', payload);
@@ -231,7 +235,11 @@ describe('Resource', () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const payload = {
         '@id': 'myResource',
-        '@context': 'something',
+        '@context': {
+          label: {
+            '@id': 'http://www.w3.org/2000/01/rdf-schema#label',
+          },
+        },
         something: 'hello!',
       };
       await resource.update('org', 'project', 'myResourceId', 1, payload);

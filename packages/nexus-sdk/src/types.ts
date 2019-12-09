@@ -12,8 +12,8 @@ export type Fetchers = {
 
 export type Context =
   | string
-  | (string | { [key: string]: string })[]
-  | { [key: string]: string };
+  | (string | { [key: string]: any })[]
+  | { [key: string]: any };
 
 // TODO: find the real way, I know this is cheating...
 // but this essentially generates the "global type" the nexus client is made of

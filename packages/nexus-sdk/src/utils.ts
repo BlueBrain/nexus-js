@@ -1,3 +1,5 @@
+const queryString = require('query-string');
+
 export const isBrowser =
   typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
@@ -10,16 +12,12 @@ export function buildQueryParams(options?: {
   [key: string]: string | number | boolean | undefined;
 }): string {
   let opts = '';
-  if (options && typeof options === 'object') {
-    opts = Object.keys(options).reduce(
-      (currentOps, key) =>
-        options[key] !== undefined
-          ? currentOps === ''
-            ? `?${key}=${encodeURIComponent(`${options[key]}`)}`
-            : `${currentOps}&${key}=${encodeURIComponent(`${options[key]}`)}`
-          : currentOps,
-      '',
-    );
+  if (
+    options &&
+    typeof options === 'object' &&
+    Object.keys(options).length > 0
+  ) {
+    opts = `?${queryString.stringify(options)}`;
   }
   return opts;
 }

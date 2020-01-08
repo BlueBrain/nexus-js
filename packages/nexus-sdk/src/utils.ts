@@ -12,12 +12,9 @@ export function buildQueryParams(options?: {
   [key: string]: string | number | boolean | undefined;
 }): string {
   let opts = '';
-  if (
-    options &&
-    typeof options === 'object' &&
-    Object.keys(options).length > 0
-  ) {
-    opts = `?${queryString.stringify(options)}`;
+  if (options && typeof options === 'object') {
+    const query = queryString.stringify(options);
+    opts = query.length ? `?${query}` : '';
   }
   return opts;
 }

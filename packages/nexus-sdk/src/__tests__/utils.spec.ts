@@ -18,7 +18,7 @@ describe('utils functions', () => {
     it('should return 3 query params', () => {
       expect(
         buildQueryParams({ foo: 'bar', rev: 2, deprecated: true }),
-      ).toEqual('?foo=bar&rev=2&deprecated=true');
+      ).toEqual('?deprecated=true&foo=bar&rev=2');
     });
     it('should remove undefined values', () => {
       expect(buildQueryParams({ foo: 'bar', error: undefined })).toEqual(

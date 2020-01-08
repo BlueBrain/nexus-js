@@ -40,7 +40,7 @@ describe('Resource', () => {
       });
       expect(fetchMock.mock.calls.length).toEqual(3);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resources/org/project/_/myId?rev=1&q=myTextString&format=expanded',
+        'http://api.url/v1/resources/org/project/_/myId?format=expanded&q=myTextString&rev=1',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
       expect(fetchMock.mock.calls[0][1].headers).toEqual({

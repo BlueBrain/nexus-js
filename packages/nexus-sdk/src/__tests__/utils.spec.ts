@@ -35,6 +35,11 @@ describe('utils functions', () => {
       );
       expect(buildQueryParams()).toEqual('');
     });
+    it('should handle duplicate params', () => {
+      expect(
+        buildQueryParams({ rev: 3, sort: ['myType', '-myOtherField'] }),
+      ).toEqual('?rev=3&sort=myType&sort=-myOtherField');
+    });
   });
 
   describe('removeLeadingSlash()', () => {

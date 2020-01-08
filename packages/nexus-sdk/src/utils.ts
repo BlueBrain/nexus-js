@@ -9,7 +9,7 @@ export const isNode =
   process.versions.node != null;
 
 export function buildQueryParams(options?: {
-  [key: string]: string | number | boolean | undefined;
+  [key: string]: string | string[] | number | boolean | undefined;
 }): string {
   let opts = '';
   if (options && typeof options === 'object') {

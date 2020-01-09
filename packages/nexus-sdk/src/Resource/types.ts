@@ -26,6 +26,7 @@ export type ResourceListOptions = {
   createdBy?: string;
   updatedBy?: string;
   schema?: string;
+  sort?: string | string[];
   [key: string]: any;
 };
 

@@ -25,7 +25,7 @@ describe('Organization', () => {
       await organization.get('organizationLabel', { rev: 1, label: 'myOrg' });
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/orgs/organizationLabel?rev=1&label=myOrg',
+        'http://api.url/v1/orgs/organizationLabel?label=myOrg&rev=1',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });

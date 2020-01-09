@@ -31,7 +31,6 @@ const Resource = (
     ): Promise<Resource<T> | ExpandedResource<T>> => {
       const { as = 'json', ...opts } = options || {};
       const parseAs = parseAsBuilder(as);
-
       return httpGet({
         headers: { Accept: buildHeader(as) },
         path: `${

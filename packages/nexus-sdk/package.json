@@ -35,7 +35,8 @@
     "url": "https://github.com/BlueBrain/nexus-js/issues"
   },
   "dependencies": {
-    "@bbp/nexus-link": "^1.2.0"
+    "@bbp/nexus-link": "^1.2.0",
+    "query-string": "^6.9.0"
   },
   "publishConfig": {
     "access": "public"

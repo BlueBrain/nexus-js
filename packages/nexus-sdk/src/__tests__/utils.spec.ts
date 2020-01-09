@@ -18,7 +18,7 @@ describe('utils functions', () => {
     it('should return 3 query params', () => {
       expect(
         buildQueryParams({ foo: 'bar', rev: 2, deprecated: true }),
-      ).toEqual('?foo=bar&rev=2&deprecated=true');
+      ).toEqual('?deprecated=true&foo=bar&rev=2');
     });
     it('should remove undefined values', () => {
       expect(buildQueryParams({ foo: 'bar', error: undefined })).toEqual(
@@ -34,6 +34,11 @@ describe('utils functions', () => {
         '?description=I%20love%20encoded%20URI',
       );
       expect(buildQueryParams()).toEqual('');
+    });
+    it('should handle duplicate params', () => {
+      expect(
+        buildQueryParams({ rev: 3, sort: ['myType', '-myOtherField'] }),
+      ).toEqual('?rev=3&sort=myType&sort=-myOtherField');
     });
   });
 

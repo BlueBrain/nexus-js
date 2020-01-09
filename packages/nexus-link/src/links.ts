@@ -1,7 +1,8 @@
 /**
  * A set of useful links
  */
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Link, Operation, FetchAs } from './types';
 
 export const setMethod = (method: string): Link => (
@@ -89,7 +90,14 @@ export const poll = (pollIntervalMs: number): Link => (
     (operation.context && operation.context.pollIntervalMs) || pollIntervalMs;
   return new Observable(observer => {
     const interval = setInterval(() => {
-      forward(operation).subscribe(s => observer.next(s));
+      forward(operation)
+        .pipe(
+          catchError(error => {
+            observer.error(error);
+            return of([]);
+          }),
+        )
+        .subscribe(s => observer.next(s));
     }, pollEvery);
     // On un-subscription, stop polling
     return () => clearInterval(interval);

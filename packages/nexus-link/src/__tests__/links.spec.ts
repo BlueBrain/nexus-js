@@ -53,6 +53,37 @@ describe('poll', () => {
     expect(() => pollLink({ path: 'testpath' })).toThrow();
   });
 
+  it('passes error to subscriber as expected', done => {
+    const pollLink = Links.poll(1000);
+    const testLink = (operation: Operation) =>
+      new Observable(observer => {
+        observer.error('oh no');
+      });
+    const obs = pollLink({ path: 'testpath' }, testLink);
+    obs.subscribe({
+      error: error => {
+        expect(error).toEqual('oh no');
+        done();
+      },
+    });
+    jest.runAllTimers();
+  });
+
+  it('passes runs normally if no errors', done => {
+    const pollLink = Links.poll(1000);
+    const testLink = (operation: Operation) =>
+      new Observable(observer => {
+        observer.next('hello');
+        observer.complete();
+      });
+    const obs = pollLink({ path: 'testpath' }, testLink);
+    obs.subscribe(data => {
+      expect(data).toEqual('hello');
+      done();
+    });
+    jest.advanceTimersByTime(1000);
+  });
+
   it('polls the link every x seconds', () => {
     const pollLink = Links.poll(1000);
     const testLink = (operation: Operation) =>

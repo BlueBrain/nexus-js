@@ -49,9 +49,6 @@ const Resource = (
       options?: ResourceListOptions,
     ): Promise<ResourceList<T>> => {
       const opts = buildQueryParams(options);
-      console.log('options', options);
-      console.log('opts', opts);
-
       return httpGet({
         path: `${context.uri}/resources/${orgLabel}/${projectLabel}${opts}`,
       });

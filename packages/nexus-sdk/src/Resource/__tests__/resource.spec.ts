@@ -126,7 +126,7 @@ describe('Resource', () => {
       });
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resources/org/project?sort=-_createdAt&sort=-@id',
+        'http://api.url/v1/resources/org/project?sort=-_createdAt&sort=-%40id',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });

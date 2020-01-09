@@ -118,6 +118,18 @@ describe('Resource', () => {
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
+
+    it('should make httpGet with sort params', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await resource.list('org', 'project', {
+        sort: ['-_createdAt', '-@id'],
+      });
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/org/project?sort=-_createdAt&sort=-@id',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
   });
 
   describe('links', () => {

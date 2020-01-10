@@ -1,6 +1,6 @@
 {
   "name": "@bbp/nexus-sdk",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "REST API abstraction for Nexus",
   "keywords": [
     "rest",
@@ -35,7 +35,7 @@
     "url": "https://github.com/BlueBrain/nexus-js/issues"
   },
   "dependencies": {
-    "@bbp/nexus-link": "^1.2.0",
+    "@bbp/nexus-link": "^1.2.1",
     "query-string": "^6.9.0"
   },
   "publishConfig": {

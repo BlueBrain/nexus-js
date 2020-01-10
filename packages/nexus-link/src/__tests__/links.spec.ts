@@ -69,7 +69,7 @@ describe('poll', () => {
     jest.runAllTimers();
   });
 
-  it('passes runs normally if no errors', done => {
+  it('runs normally if no errors', done => {
     const pollLink = Links.poll(1000);
     const testLink = (operation: Operation) =>
       new Observable(observer => {

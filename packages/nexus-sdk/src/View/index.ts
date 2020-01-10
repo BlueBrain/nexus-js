@@ -9,7 +9,11 @@ import {
   ViewPayload,
 } from './types';
 import { buildHeader, buildQueryParams, parseAsBuilder } from '../utils';
-import { GetResourceOptions, ResourceListOptions } from '../Resource/types';
+import {
+  GetResourceOptions,
+  ResourceListOptions,
+  PaginatedList,
+} from '../Resource/types';
 
 const View = (
   { httpGet, httpPost, httpPut, httpDelete, poll }: Fetchers,
@@ -138,7 +142,7 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
-    ): Promise<Statistics> =>
+    ): Promise<PaginatedList<Statistics>> =>
       httpGet({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
       }),
@@ -147,7 +151,7 @@ const View = (
       projectLabel: string,
       viewId: string,
       options?: { pollIntervalMs: number },
-    ): Observable<Statistics> =>
+    ): Observable<PaginatedList<Statistics>> =>
       poll({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
         context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },

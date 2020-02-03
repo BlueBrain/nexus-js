@@ -1,4 +1,4 @@
-import { Link, Context, Operation } from '@bbp/nexus-link';
+import { Link, Operation } from '@bbp/nexus-link';
 import { createNexusClient } from './nexusSdk';
 
 export type Fetchers = {
@@ -15,10 +15,7 @@ export type Context =
   | (string | { [key: string]: any })[]
   | { [key: string]: any };
 
-// TODO: find the real way, I know this is cheating...
-// but this essentially generates the "global type" the nexus client is made of
-const nexus = createNexusClient({ uri: '' });
-export type NexusClient = typeof nexus;
+export type NexusClient = ReturnType<typeof createNexusClient>;
 export * from './Resource/types';
 export * from './File/types';
 export * from './Identity/types';

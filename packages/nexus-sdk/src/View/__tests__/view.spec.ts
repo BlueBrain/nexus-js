@@ -253,4 +253,16 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
+
+  describe('restart', () => {
+    it('should make httpDelete call to the views api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await view.restart('org', 'project', 'myViewId');
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myViewId/progress',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
+    });
+  });
 });

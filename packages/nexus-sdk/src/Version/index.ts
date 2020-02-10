@@ -7,7 +7,6 @@ const Version = ({ httpGet }: Fetchers, context: NexusContext) => {
     get: (): Promise<Version> => {
       return httpGet({
         path: `${context.uri}/version`,
-        context: { as: 'json' },
       });
     },
   };

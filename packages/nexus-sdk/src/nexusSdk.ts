@@ -24,6 +24,7 @@ import Permissions from './Permissions';
 import ACL from './ACL';
 import Archive from './Archive';
 import Resource from './Resource';
+import Version from './Version';
 import { getFetchInstance, getAbortControllerInstance } from './utils';
 
 export type NexusClientOptions = {
@@ -92,6 +93,7 @@ export function createNexusClient(options: NexusClientOptions) {
     Permissions: Permissions(fetchers, context),
     ACL: ACL(fetchers, context),
     Archive: Archive(fetchers, context),
+    Version: Version(fetchers, context),
     ...fetchers,
   };
 }

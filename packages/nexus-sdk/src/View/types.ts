@@ -26,45 +26,6 @@ export type AggregatedSparqlView = Resource & {
   views: { project: string; viewId: string }[];
 };
 
-export type CrossProjectEventStreamSource = Source & {
-  '@type': 'CrossProjectEventStream';
-  project: string;
-  identities: {}[];
-};
-
-export type RemoteProjectEventStreamSource = Source & {
-  '@type': 'RemoteProjectEventStream';
-  endpoint: string;
-  token: string;
-};
-
-export type ProjectEventStreamSource = Source & {
-  '@type': 'ProjectEventStream';
-};
-
-export type Source = {
-  '@id': string;
-  resourceSchemas: string[];
-  resourceTypes: string[];
-  resourceTag: string;
-};
-
-export type ElasticSearchProjection = Projection & {
-  mapping: {};
-  context: Context;
-};
-
-export type Projection = {
-  '@id': string;
-  '@type': 'ElasticSearch' | 'Sparql';
-  query: string;
-  resourceSchemas: string[];
-  resourceTypes: string[];
-  resourceTag: string;
-  includeMetadata?: boolean;
-  includeDeprecated?: boolean;
-};
-
 export type View =
   | SparqlView
   | ElasticSearchView
@@ -176,31 +137,70 @@ export type AggregatedSparqlViewPayload = {
   views: { project: string; viewId: string }[];
 };
 
-export type CompositeViewPayload = Resource & {
-  '@type': ['CompositeView', 'Beta'];
-  sources:
-    | RemoteProjectEventStreamSource[]
-    | RemoteProjectEventStreamSource[]
-    | ProjectEventStreamSource[];
-  projections: Projection[] | ElasticSearchProjection[];
-  rebuildStrategy?: {
-    '@type': 'Interval';
-    value: {};
-  };
+type RebuildStrategyType = {
+  '@type': 'Interval';
+  value: {};
 };
 
 export type CompositeView = Resource & {
   '@id': ['CompositeView', 'Beta', 'View'];
-  sources:
-    | RemoteProjectEventStreamSource[]
-    | RemoteProjectEventStreamSource[]
-    | ProjectEventStreamSource[];
   _uuid: string;
-  projections: Projection[] | ElasticSearchProjection[];
-  rebuildStrategy?: {
-    '@type': 'Interval';
-    value: {};
-  };
+  sources: (
+    | ProjectEventStreamSource
+    | CrossProjectEventStreamSource
+    | RemoteProjectEventStreamSource)[];
+  projections: (Projection | ElasticSearchProjection)[];
+  rebuildStrategy?: RebuildStrategyType;
+};
+
+export type CrossProjectEventStreamSource = Source & {
+  '@type': 'CrossProjectEventStream';
+  project: string;
+  identities: {}[];
+};
+
+export type RemoteProjectEventStreamSource = Source & {
+  '@type': 'RemoteProjectEventStream';
+  endpoint: string;
+  token: string;
+};
+
+export type ProjectEventStreamSource = Source & {
+  '@type': 'ProjectEventStream';
+};
+
+export type Source = {
+  '@id': string;
+  includeDeprecated?: boolean;
+  resourceSchemas?: string[];
+  resourceTypes?: string[];
+  resourceTag?: string;
+};
+
+export type ElasticSearchProjection = Projection & {
+  mapping: {};
+  context: Context;
+};
+
+export type Projection = {
+  '@id': string;
+  '@type': 'ElasticSearchProjection' | 'SparqlProjection';
+  query: string;
+  resourceSchemas: string[];
+  resourceTypes: string[];
+  resourceTag: string;
+  includeMetadata?: boolean;
+  includeDeprecated?: boolean;
+};
+
+export type CompositeViewPayload = {
+  '@type': ['CompositeView', 'Beta'];
+  sources: (
+    | ProjectEventStreamSource
+    | CrossProjectEventStreamSource
+    | RemoteProjectEventStreamSource)[];
+  projections: (Projection | ElasticSearchProjection)[];
+  rebuildStrategy?: RebuildStrategyType;
 };
 
 export type ViewPayload =

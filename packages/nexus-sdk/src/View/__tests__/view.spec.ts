@@ -330,4 +330,21 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
+
+  describe('restartProjection', () => {
+    it('should make httpGet call to the views api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await view.restartProjection(
+        'org',
+        'project',
+        'myViewId',
+        'projectionId',
+      );
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myViewId/projections/projectionId',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
+    });
+  });
 });

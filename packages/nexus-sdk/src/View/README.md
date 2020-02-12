@@ -4,6 +4,8 @@
 
 [`View Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/kg/kg-storages-api.html)
 
+## Sparql and ElasticSearch Views
+
 ```typescript
 // Views
 nexus.View.get('myOrg', 'myProject', 'myID')
@@ -109,6 +111,62 @@ nexus.View.sparqlQuery(
   .catch(e => console.error(e));
 
 nexus.View.statistics('myOrg', 'myProject', 'myId')
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+```
+
+## Restarting a View's Indexing
+
+```typescript
+nexus.View.restart('myOrg', 'myProject', 'myViewId')
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+```
+
+## Query Composite Views
+
+```typescript
+nexus.View.compositeElasticSearchQuery(
+  'org',
+  'project',
+  'myId',
+  'myProjection',
+  {
+    query: {
+      term: {
+        _deprecated: true,
+      },
+    },
+  },
+)
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+
+nexus.View.compositeSparqlQuery(
+  'myOrg',
+  'myProject',
+  'myId',
+  'myProjection',
+  `
+  SELECT ?s ?p ?o WHERE {?s ?p ?o} LIMIT 20
+`,
+)
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+```
+
+### Composite View Projection Statistics
+
+```typescript
+nexus.View.projectionStatistics('org', 'project', 'myViewId', 'myProjectioId')
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+```
+
+### Restart Composite View Indexing
+
+```typescript
+nexus.View.restartProjection('org', 'project', 'myViewId', 'projectionId')
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
 ```

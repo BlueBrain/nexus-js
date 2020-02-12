@@ -160,7 +160,7 @@ export type CrossProjectEventStreamSource = Source & {
 };
 
 export type RemoteProjectEventStreamSource = Source & {
-  '@type': string;
+  '@type': 'RemoteProjectEventStream';
   endpoint: string;
   project: string;
   token?: string;

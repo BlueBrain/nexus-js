@@ -142,6 +142,38 @@ const View = (
       httpDelete({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/progress`,
       }),
+    compositeElasticSearchQuery: <T = any>(
+      orgLabel: string,
+      projectLabel: string,
+      viewId: string,
+      projection_id: string,
+      query: {},
+      options?: {
+        from: number;
+        size: number;
+      },
+    ): Promise<T> => {
+      const opts = buildQueryParams(options);
+      return httpPost({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/projections/${projection_id}/_search${opts}`,
+        body: JSON.stringify(query),
+      });
+    },
+    compositeSparqlQuery: (
+      orgLabel: string,
+      projectLabel: string,
+      viewId: string,
+      projection_id: string,
+      query: string,
+    ): Promise<SparqlViewQueryResponse> => {
+      return httpPost({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/projections/${projection_id}/sparql`,
+        body: query,
+        headers: {
+          'Content-Type': 'application/sparql-query',
+        },
+      });
+    },
     statistics: (
       orgLabel: string,
       projectLabel: string,
@@ -149,6 +181,15 @@ const View = (
     ): Promise<PaginatedList<Statistics>> =>
       httpGet({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
+      }),
+    projectionStatistics: (
+      orgLabel: string,
+      projectLabel: string,
+      viewId: string,
+      projectionId: string,
+    ): Promise<PaginatedList<Statistics>> =>
+      httpGet({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/${projectionId}/statistics`,
       }),
     pollStatistics: (
       orgLabel: string,
@@ -159,6 +200,15 @@ const View = (
       poll({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
         context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
+      }),
+    restartProjection: (
+      orgLabel: string,
+      projectLabel: string,
+      viewId: string,
+      projectionId: string,
+    ): Promise<Resource> =>
+      httpDelete({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/projections/${projectionId}`,
       }),
   };
 };

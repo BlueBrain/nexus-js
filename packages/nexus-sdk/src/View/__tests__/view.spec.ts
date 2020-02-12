@@ -225,6 +225,32 @@ describe('Views', () => {
     });
   });
 
+  describe('compositeElasticSearchQuery', () => {
+    it('should make httpPost call to the views query api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const payload = {
+        query: {
+          term: {
+            _deprecated: true,
+          },
+        },
+      };
+      await view.compositeElasticSearchQuery(
+        'org',
+        'project',
+        'myId',
+        'myProejection',
+        payload,
+      );
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myId/projections/myProejection/_search',
+      );
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+    });
+  });
+
   describe('sparqlQuery', () => {
     it('should make httpPost call to the views query api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
@@ -237,6 +263,29 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][1].body).toEqual(payload);
       expect(fetchMock.mock.calls[0][1].headers).toEqual({
         'Content-Type': 'text/plain',
+      });
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+    });
+  });
+
+  describe('compositeSparqlQuery', () => {
+    it('should make httpPost call to the views query api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const payload = 'SELECT ?s ?p ?o WHERE {?s ?p ?o} LIMIT 20';
+      await view.compositeSparqlQuery(
+        'org',
+        'project',
+        'myId',
+        'myProjectionId',
+        payload,
+      );
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myId/projections/myProjectionId/sparql',
+      );
+      expect(fetchMock.mock.calls[0][1].body).toEqual(payload);
+      expect(fetchMock.mock.calls[0][1].headers).toEqual({
+        'Content-Type': 'application/sparql-query',
       });
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
     });
@@ -263,6 +312,22 @@ describe('Views', () => {
         'http://api.url/v1/views/org/project/myViewId/progress',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
+    });
+  });
+  describe('projectionStatistics', () => {
+    it('should make httpGet call to the views api', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await view.projectionStatistics(
+        'org',
+        'project',
+        'myViewId',
+        'myProjectioId',
+      );
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myViewId/myProjectioId/statistics',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
 });

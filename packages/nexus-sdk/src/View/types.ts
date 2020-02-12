@@ -160,9 +160,10 @@ export type CrossProjectEventStreamSource = Source & {
 };
 
 export type RemoteProjectEventStreamSource = Source & {
-  '@type': 'RemoteProjectEventStream';
+  '@type': string;
   endpoint: string;
-  token: string;
+  project: string;
+  token?: string;
 };
 
 export type ProjectEventStreamSource = Source & {
@@ -186,14 +187,15 @@ export type Projection = {
   '@id': string;
   '@type': 'ElasticSearchProjection' | 'SparqlProjection';
   query: string;
-  resourceSchemas: string[];
-  resourceTypes: string[];
-  resourceTag: string;
+  resourceSchemas?: string[];
+  resourceTypes?: string[];
+  resourceTag?: string;
   includeMetadata?: boolean;
   includeDeprecated?: boolean;
 };
 
 export type CompositeViewPayload = {
+  '@id'?: string;
   '@type': ['CompositeView', 'Beta'];
   sources: (
     | ProjectEventStreamSource

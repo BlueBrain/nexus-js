@@ -138,6 +138,10 @@ const View = (
         },
       });
     },
+    restart: (orgLabel: string, projectLabel: string, viewId: string) =>
+      httpDelete({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/progress`,
+      }),
     statistics: (
       orgLabel: string,
       projectLabel: string,

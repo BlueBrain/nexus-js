@@ -19,6 +19,7 @@ export type AggregatedElasticSearchView = Resource & {
   _uuid: string;
   views: { project: string; viewId: string }[];
 };
+
 export type AggregatedSparqlView = Resource & {
   '@id': ['AggregatedSparqlView', 'View'];
   _uuid: string;
@@ -28,6 +29,7 @@ export type AggregatedSparqlView = Resource & {
 export type View =
   | SparqlView
   | ElasticSearchView
+  | CompositeView
   | AggregatedElasticSearchView
   | AggregatedSparqlView;
 export type ViewList = PaginatedList<View>;
@@ -135,9 +137,78 @@ export type AggregatedSparqlViewPayload = {
   views: { project: string; viewId: string }[];
 };
 
+type RebuildStrategyType = {
+  '@type': 'Interval';
+  value: {};
+};
+
+export type CompositeView = Resource & {
+  '@id': ['CompositeView', 'Beta', 'View'];
+  _uuid: string;
+  sources: (
+    | ProjectEventStreamSource
+    | CrossProjectEventStreamSource
+    | RemoteProjectEventStreamSource)[];
+  projections: (Projection | ElasticSearchProjection)[];
+  rebuildStrategy?: RebuildStrategyType;
+};
+
+export type CrossProjectEventStreamSource = Source & {
+  '@type': 'CrossProjectEventStream';
+  project: string;
+  identities: {}[];
+};
+
+export type RemoteProjectEventStreamSource = Source & {
+  '@type': 'RemoteProjectEventStream';
+  endpoint: string;
+  project: string;
+  token?: string;
+};
+
+export type ProjectEventStreamSource = Source & {
+  '@type': 'ProjectEventStream';
+};
+
+export type Source = {
+  '@id': string;
+  includeDeprecated?: boolean;
+  resourceSchemas?: string[];
+  resourceTypes?: string[];
+  resourceTag?: string;
+};
+
+export type ElasticSearchProjection = Projection & {
+  mapping: {};
+  context: Context;
+};
+
+export type Projection = {
+  '@id': string;
+  '@type': 'ElasticSearchProjection' | 'SparqlProjection';
+  query: string;
+  resourceSchemas?: string[];
+  resourceTypes?: string[];
+  resourceTag?: string;
+  includeMetadata?: boolean;
+  includeDeprecated?: boolean;
+};
+
+export type CompositeViewPayload = {
+  '@id'?: string;
+  '@type': ['CompositeView', 'Beta'];
+  sources: (
+    | ProjectEventStreamSource
+    | CrossProjectEventStreamSource
+    | RemoteProjectEventStreamSource)[];
+  projections: (Projection | ElasticSearchProjection)[];
+  rebuildStrategy?: RebuildStrategyType;
+};
+
 export type ViewPayload =
   | ElasticSearchViewPayload
   | AggregatedElasticSearchViewPayload
+  | CompositeViewPayload
   | SparqlViewPayload
   | AggregatedSparqlViewPayload;
 

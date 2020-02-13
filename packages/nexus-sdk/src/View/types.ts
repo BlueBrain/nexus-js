@@ -143,7 +143,7 @@ type RebuildStrategyType = {
 };
 
 export type CompositeView = Resource & {
-  '@id': ['CompositeView', 'Beta', 'View'];
+  '@type': ['CompositeView', 'Beta', 'View'];
   _uuid: string;
   sources: (
     | ProjectEventStreamSource

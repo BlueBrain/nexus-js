@@ -187,7 +187,7 @@ const View = (
       projectLabel: string,
       viewId: string,
       projectionId: string,
-    ): Promise<PaginatedList<Statistics>> =>
+    ): Promise<Statistics> =>
       httpGet({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/${projectionId}/statistics`,
       }),
@@ -196,7 +196,7 @@ const View = (
       projectLabel: string,
       viewId: string,
       options?: { pollIntervalMs: number },
-    ): Observable<PaginatedList<Statistics>> =>
+    ): Observable<Statistics> =>
       poll({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/statistics`,
         context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },

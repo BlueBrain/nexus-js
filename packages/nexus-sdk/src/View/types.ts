@@ -222,4 +222,18 @@ export type Statistics = {
   processedEvents: number;
   remainingEvents: number;
   totalEvents: number;
+  values?: {
+    '@type': 'ViewStatistics';
+    sourceId: string;
+    projectionId: string;
+    totalEvents: number;
+    processedEvents: number;
+    evaluatedEvents: number;
+    remainingEvents: number;
+    discardedEvents: number;
+    failedEvents: number;
+    delayInSeconds: number;
+    lastEventDateTime: Date;
+    lastProcessedEventDateTime: Date;
+  }[];
 };

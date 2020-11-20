@@ -3,7 +3,7 @@
  */
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Link, Operation, FetchAs } from './types';
+import { Link, Operation } from './types';
 
 export const setMethod = (method: string): Link => (
   operation: Operation,
@@ -36,8 +36,33 @@ export const setToken = (token: string): Link => (
   return forward(nextOperation);
 };
 
-export const triggerFetch = (fetch?: any): Link => (operation: Operation) =>
-  new Observable(observer => {
+export const parseResponse: Link = (operation: Operation, forward?: Link) => {
+  // if (response.status >= 400) {
+  //   observer.error(await response.json());
+  // } else {
+  //   const { parseAs } = context;
+  //   switch (parseAs) {
+  //     case FetchAs.TEXT:
+  //       observer.next(await response.text());
+  //     case FetchAs.BLOB:
+  //       observer.next(await response.blob());
+  //     case FetchAs.DOCUMENT:
+  //       observer.next(await response.formData());
+  //     case FetchAs.JSON:
+  //     default:
+  //       observer.next(await response.json());
+  //   }
+  // }
+  console.log('parseRESP', { operation });
+  const obs = new Observable();
+  return obs;
+};
+
+export const triggerFetch = (fetch?: any): Link => (
+  operation: Operation,
+  forward?: Link,
+) => {
+  return new Observable(observer => {
     const controller = new AbortController();
     const signal = controller.signal;
     const { path, body, headers, method, context = {} } = operation;
@@ -46,6 +71,7 @@ export const triggerFetch = (fetch?: any): Link => (operation: Operation) =>
       : {
           'Content-Type': 'application/json',
         };
+
     fetch(path, {
       body,
       headers: { ...defaultHeaders, ...headers },
@@ -53,31 +79,24 @@ export const triggerFetch = (fetch?: any): Link => (operation: Operation) =>
       method,
     })
       .then(async (response: Response) => {
-        if (response.status >= 400) {
-          observer.error(await response.json());
-        } else {
-          const { parseAs } = context;
-          switch (parseAs) {
-            case FetchAs.TEXT:
-              observer.next(await response.text());
-            case FetchAs.BLOB:
-              observer.next(await response.blob());
-            case FetchAs.DOCUMENT:
-              observer.next(await response.formData());
-            case FetchAs.JSON:
-            default:
-              observer.next(await response.json());
-          }
-        }
+        observer.next(response);
+        const nextOperation = {
+          ...operation,
+          response,
+        };
+        forward(nextOperation).subscribe(observer);
       })
       .catch(error => {
         observer.error(error);
+      })
+      .finally(() => {
         observer.complete();
       });
 
     // On un-subscription, cancel the request
     return () => controller.abort();
   });
+};
 
 export const poll = (pollIntervalMs: number): Link => (
   operation: Operation,

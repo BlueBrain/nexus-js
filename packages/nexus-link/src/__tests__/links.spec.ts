@@ -106,14 +106,21 @@ describe('triggerFetch', () => {
   it('fetches the data and parses as json by default', done => {
     const testLink = Links.triggerFetch(fetch);
     const data = { data: '12345' };
-    const obs = testLink({ path: 'testpath' });
+    const obs = testLink({ path: 'testpath' }, Links.parseResponse);
 
     fetchMock.mockResponseOnce(JSON.stringify(data));
 
-    obs.subscribe(res => {
-      expect(res).toMatchObject(data);
-      done();
-    });
+    obs.subscribe(
+      res => {
+        console.log('TRIGGERFETCH', res);
+
+        expect(res).toMatchObject(data);
+        done();
+      },
+      error => {
+        console.log(error);
+      },
+    );
   });
 
   it('parses the data as text', done => {

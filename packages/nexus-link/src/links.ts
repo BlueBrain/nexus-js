@@ -1,9 +1,9 @@
 /**
  * A set of useful links
  */
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { Link, Operation } from './types';
+import { Observable, of, Subscription } from 'rxjs';
+import { catchError, flatMap } from 'rxjs/operators';
+import { FetchAs, Link, Operation } from './types';
 
 export const setMethod = (method: string): Link => (
   operation: Operation,
@@ -37,32 +37,49 @@ export const setToken = (token: string): Link => (
 };
 
 export const parseResponse: Link = (operation: Operation, forward?: Link) => {
-  // if (response.status >= 400) {
-  //   observer.error(await response.json());
-  // } else {
-  //   const { parseAs } = context;
-  //   switch (parseAs) {
-  //     case FetchAs.TEXT:
-  //       observer.next(await response.text());
-  //     case FetchAs.BLOB:
-  //       observer.next(await response.blob());
-  //     case FetchAs.DOCUMENT:
-  //       observer.next(await response.formData());
-  //     case FetchAs.JSON:
-  //     default:
-  //       observer.next(await response.json());
-  //   }
-  // }
-  console.log('parseRESP', { operation });
-  const obs = new Observable();
-  return obs;
+  return new Observable(observer => {
+    const parse = async () => {
+      if (operation.response) {
+        if (operation.response.status >= 400) {
+          observer.error(await operation.response.json());
+        } else {
+          const { parseAs } = operation.context || { parseAs: 'json' };
+          switch (parseAs) {
+            case FetchAs.TEXT:
+              observer.next(await operation.response.text());
+            case FetchAs.BLOB:
+              observer.next(await operation.response.blob());
+            case FetchAs.DOCUMENT:
+              observer.next(await operation.response.formData());
+            case FetchAs.JSON:
+            default:
+              observer.next(await operation.response.json());
+          }
+        }
+      }
+    };
+
+    const forwardObserver: Subscription = forward
+      ? forward(operation).subscribe(observer)
+      : null;
+
+    parse()
+      .then()
+      .catch(error => observer.error(error))
+      .finally(() => observer.complete());
+
+    return () => {
+      observer.unsubscribe();
+      forwardObserver && forwardObserver.unsubscribe();
+    };
+  });
 };
 
 export const triggerFetch = (fetch?: any): Link => (
   operation: Operation,
   forward?: Link,
 ) => {
-  return new Observable(observer => {
+  const fetchObseverable = new Observable<Response>(subscriber => {
     const controller = new AbortController();
     const signal = controller.signal;
     const { path, body, headers, method, context = {} } = operation;
@@ -71,7 +88,6 @@ export const triggerFetch = (fetch?: any): Link => (
       : {
           'Content-Type': 'application/json',
         };
-
     fetch(path, {
       body,
       headers: { ...defaultHeaders, ...headers },
@@ -79,23 +95,31 @@ export const triggerFetch = (fetch?: any): Link => (
       method,
     })
       .then(async (response: Response) => {
-        observer.next(response);
-        const nextOperation = {
-          ...operation,
-          response,
-        };
-        forward(nextOperation).subscribe(observer);
+        subscriber.next(response);
       })
       .catch(error => {
-        observer.error(error);
+        subscriber.error(error);
       })
       .finally(() => {
-        observer.complete();
+        subscriber.complete();
       });
 
     // On un-subscription, cancel the request
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+    };
   });
+
+  if (forward) {
+    return fetchObseverable.pipe(
+      flatMap(response => forward({ ...operation, response })),
+    );
+  }
+  return fetchObseverable;
+  // .pipe(
+  //   observeOn(asyncScheduler),
+  //   map(response => forward({ ...operation, response }).subscribe),
+  // );
 };
 
 export const poll = (pollIntervalMs: number): Link => (

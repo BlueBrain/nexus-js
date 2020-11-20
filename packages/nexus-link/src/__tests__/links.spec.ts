@@ -1,6 +1,7 @@
 import * as Links from '../links';
 import { Operation } from '../types';
 import { Observable } from 'rxjs';
+import { pipe } from '../utils';
 
 jest.useFakeTimers();
 jest.setTimeout(1500);
@@ -103,18 +104,58 @@ describe('poll', () => {
 });
 
 describe('triggerFetch', () => {
-  it('fetches the data and parses as json by default', done => {
+  it('fetches the data and returns Subscription<Response>', done => {
     const testLink = Links.triggerFetch(fetch);
     const data = { data: '12345' };
-    const obs = testLink({ path: 'testpath' }, Links.parseResponse);
+    const obs = testLink({ path: 'testpath' });
 
     fetchMock.mockResponseOnce(JSON.stringify(data));
 
     obs.subscribe(
       res => {
-        console.log('TRIGGERFETCH', res);
+        expect(res).toBeInstanceOf(Response);
+        done();
+      },
+      error => {
+        console.log(error);
+      },
+    );
+  });
 
-        expect(res).toMatchObject(data);
+  it('unsubscribing aborts the fetch request', done => {
+    const testLink = Links.triggerFetch(fetch);
+    const data = { data: '12345' };
+    const obs = testLink({ path: 'testpath' });
+
+    fetchMock.mockResponseOnce(JSON.stringify(data));
+
+    obs
+      .subscribe(
+        res => {},
+        error => {
+          console.log(error);
+        },
+      )
+      .unsubscribe();
+
+    expect(fetchMock.mock.calls[0][1].signal.aborted).toBeTruthy();
+    done();
+  });
+});
+
+describe('parseResponse', () => {
+  it('parses the data as json by default', done => {
+    const data = { data: '12345' };
+
+    const obs = pipe([Links.triggerFetch(fetch), Links.parseResponse])({
+      path: 'testpath',
+    });
+
+    fetchMock.mockResponseOnce(JSON.stringify(data));
+
+    obs.subscribe(
+      res => {
+        expect(res).toEqual(data);
         done();
       },
       error => {
@@ -124,9 +165,12 @@ describe('triggerFetch', () => {
   });
 
   it('parses the data as text', done => {
-    const testLink = Links.triggerFetch(fetch);
     const data = '12345';
-    const obs = testLink({ path: 'testpath', context: { parseAs: 'text' } });
+
+    const obs = pipe([Links.triggerFetch(fetch), Links.parseResponse])({
+      path: 'testpath',
+      context: { parseAs: 'text' },
+    });
 
     fetchMock.mockResponseOnce(data);
 
@@ -137,7 +181,7 @@ describe('triggerFetch', () => {
   });
 
   it('throws an error when tries to parse a text as json', done => {
-    const testLink = Links.triggerFetch(fetch);
+    const testLink = pipe([Links.triggerFetch(fetch), Links.parseResponse]);
     const data = 'randomText';
     const obs = testLink({ path: 'testpath', context: { parseAs: 'json' } });
 

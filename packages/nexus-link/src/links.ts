@@ -110,16 +110,12 @@ export const triggerFetch = (fetch?: any): Link => (
     };
   });
 
-  if (forward) {
-    return fetchObseverable.pipe(
-      flatMap(response => forward({ ...operation, response })),
-    );
-  }
-  return fetchObseverable;
-  // .pipe(
-  //   observeOn(asyncScheduler),
-  //   map(response => forward({ ...operation, response }).subscribe),
-  // );
+  // add Response to subsequent links if there are any, otherwise return Response directly.
+  return forward
+    ? fetchObseverable.pipe(
+        flatMap(response => forward({ ...operation, response })),
+      )
+    : fetchObseverable;
 };
 
 export const poll = (pollIntervalMs: number): Link => (

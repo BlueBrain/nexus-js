@@ -30,6 +30,7 @@ import { getFetchInstance, getAbortControllerInstance } from './utils';
 export type NexusClientOptions = {
   uri: string;
   links?: (StatefulLink | Link)[];
+  linksOverwrite?: (StatefulLink | Link)[];
   context?: Context;
   fetch?: any; // fetch api implementation
   token?: string; // bearer token
@@ -55,8 +56,11 @@ export function createNexusClient(options: NexusClientOptions) {
   }
 
   const defaultLinks = [triggerFetch(fetchInstance), parseResponse];
+
   options.token && defaultLinks.unshift(setToken(options.token));
-  const links = options.links
+  const links = options.linksOverwrite
+    ? options.linksOverwrite
+    : options.links
     ? [...options.links, ...defaultLinks]
     : defaultLinks;
   const requestHandler = pipe(links);

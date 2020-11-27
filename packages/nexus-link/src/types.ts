@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 export type Operation = RequestInit & {
   path: string | RequestInfo;
   context?: Context;
+  response?: Response;
 };
 
 export type Context = {

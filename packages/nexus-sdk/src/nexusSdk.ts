@@ -1,6 +1,7 @@
 import {
   pipe,
   triggerFetch,
+  parseResponse,
   setMethod,
   setToken,
   poll,
@@ -53,7 +54,7 @@ export function createNexusClient(options: NexusClientOptions) {
     );
   }
 
-  const defaultLinks = [triggerFetch(fetchInstance)];
+  const defaultLinks = [triggerFetch(fetchInstance), parseResponse];
   options.token && defaultLinks.unshift(setToken(options.token));
   const links = options.links
     ? [...options.links, ...defaultLinks]

@@ -58,11 +58,34 @@ const nexus = createNexusClient({
 ### Middleware
 
 You can enhance the behaviour of Nexus Client with middlewares called Links.
+This will add your middleware link to the front of the execution order, but it will still
+call `triggerFetch` and `parseResponse` links at the end. This is convenient if you just need
+to add something to your payload request, such as changing headers.
 
 ```typescript
 const nexus = createNexusClient({
   uri: 'https://api.url',
   links: [someMiddleware],
+});
+```
+
+You can also use the `linksOverwrite` property to provide your own middleware, without any defaults.
+In this case, it might be useful to include the `@bbp/nexus-links` package to call `triggerFetch` and
+`parseResonse` somewhere else on the chain.
+
+This might be usefull for implementing client-side with the native Cache api.
+
+important! this will overwrite any suppled links array in the `links` property.
+
+```typescript
+const nexus = createNexusClient({
+  uri: 'https://api.url',
+  linksOverwrite: [
+    detectCache,
+    triggerFetch(fetch),
+    cacheResponse,
+    parseResponse,
+  ],
 });
 ```
 

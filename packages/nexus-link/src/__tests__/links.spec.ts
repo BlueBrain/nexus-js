@@ -121,26 +121,6 @@ describe('triggerFetch', () => {
       },
     );
   });
-
-  it('unsubscribing aborts the fetch request', done => {
-    const testLink = Links.triggerFetch(fetch);
-    const data = { data: '12345' };
-    const obs = testLink({ path: 'testpath' });
-
-    fetchMock.mockResponseOnce(JSON.stringify(data));
-
-    obs
-      .subscribe(
-        res => {},
-        error => {
-          console.log(error);
-        },
-      )
-      .unsubscribe();
-
-    expect(fetchMock.mock.calls[0][1].signal.aborted).toBeTruthy();
-    done();
-  });
 });
 
 describe('parseResponse', () => {

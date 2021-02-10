@@ -79,7 +79,39 @@ export const triggerFetch = (fetch?: any): Link => (
   operation: Operation,
   forward?: Link,
 ) => {
-  const fetchObseverable = new Observable<Response>(subscriber => {
+  const fetchObservable = new Observable<Response>(subscriber => {
+    const { path, body, headers, method, context = {} } = operation;
+    const defaultHeaders = context.noDefaultHeader
+      ? {}
+      : {
+          'Content-Type': 'application/json',
+        };
+    fetch(path, {
+      body,
+      headers: { ...defaultHeaders, ...headers },
+      method,
+    })
+      .then(async (response: Response) => {
+        subscriber.next(response);
+      })
+      .catch(error => {
+        subscriber.error(error);
+      })
+      .finally(() => {
+        subscriber.complete();
+      });
+  });
+
+  // add Response to subsequent links if there are any, otherwise return Response directly.
+  return forward
+    ? fetchObservable.pipe(
+        flatMap(response => forward({ ...operation, response })),
+      )
+    : fetchObservable;
+};
+
+export const oldtriggerFetch = (fetch?: any): Link => (operation: Operation) =>
+  new Observable(observer => {
     const controller = new AbortController();
     const signal = controller.signal;
     const { path, body, headers, method, context = {} } = operation;
@@ -95,28 +127,31 @@ export const triggerFetch = (fetch?: any): Link => (
       method,
     })
       .then(async (response: Response) => {
-        subscriber.next(response);
+        if (response.status >= 400) {
+          observer.error(await response.json());
+        } else {
+          const { parseAs } = context;
+          switch (parseAs) {
+            case FetchAs.TEXT:
+              observer.next(await response.text());
+            case FetchAs.BLOB:
+              observer.next(await response.blob());
+            case FetchAs.DOCUMENT:
+              observer.next(await response.formData());
+            case FetchAs.JSON:
+            default:
+              observer.next(await response.json());
+          }
+        }
       })
       .catch(error => {
-        subscriber.error(error);
-      })
-      .finally(() => {
-        subscriber.complete();
+        observer.error(error);
+        observer.complete();
       });
 
     // On un-subscription, cancel the request
-    return () => {
-      controller.abort();
-    };
+    return () => controller.abort();
   });
-
-  // add Response to subsequent links if there are any, otherwise return Response directly.
-  return forward
-    ? fetchObseverable.pipe(
-        flatMap(response => forward({ ...operation, response })),
-      )
-    : fetchObseverable;
-};
 
 export const poll = (pollIntervalMs: number): Link => (
   operation: Operation,

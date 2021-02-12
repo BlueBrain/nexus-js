@@ -79,9 +79,7 @@ export const triggerFetch = (fetch?: any): Link => (
   operation: Operation,
   forward?: Link,
 ) => {
-  const fetchObseverable = new Observable<Response>(subscriber => {
-    const controller = new AbortController();
-    const signal = controller.signal;
+  const fetchObservable = new Observable<Response>(subscriber => {
     const { path, body, headers, method, context = {} } = operation;
     const defaultHeaders = context.noDefaultHeader
       ? {}
@@ -91,7 +89,6 @@ export const triggerFetch = (fetch?: any): Link => (
     fetch(path, {
       body,
       headers: { ...defaultHeaders, ...headers },
-      signal,
       method,
     })
       .then(async (response: Response) => {
@@ -103,19 +100,14 @@ export const triggerFetch = (fetch?: any): Link => (
       .finally(() => {
         subscriber.complete();
       });
-
-    // On un-subscription, cancel the request
-    return () => {
-      controller.abort();
-    };
   });
 
   // add Response to subsequent links if there are any, otherwise return Response directly.
   return forward
-    ? fetchObseverable.pipe(
+    ? fetchObservable.pipe(
         flatMap(response => forward({ ...operation, response })),
       )
-    : fetchObseverable;
+    : fetchObservable;
 };
 
 export const poll = (pollIntervalMs: number): Link => (

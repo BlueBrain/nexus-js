@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`Archive Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/current/kg/kg-archives-api.html)
+[`Archive Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/delta/api/current/kg-archives-api.html)
 
 ```typescript
 // Archive

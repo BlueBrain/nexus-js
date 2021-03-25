@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`Realm Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/admin/admin-orgs-api.html)
+[`Realm Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/delta/api/current/admin-orgs-api.html)
 
 ```typescript
 // Orgs

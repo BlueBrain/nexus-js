@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`File Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/kg/kg-files-api.html)
+[`File Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/delta/api/current/iam-identities.htmlkg-files-api.html)
 
 ```typescript
 // Resources

@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`Storage Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/kg/kg-storages-api.html)
+[`Storage Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/delta/api/current/kg-storages-api.html)
 
 ```typescript
 // Storages

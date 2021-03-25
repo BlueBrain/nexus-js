@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`Schema Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/kg/kg-schemas-api.html)
+[`Schema Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/delta/api/current/kg-schemas-api.html)
 
 ```typescript
 // Schemas

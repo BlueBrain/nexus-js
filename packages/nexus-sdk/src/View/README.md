@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`View Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/kg/kg-storages-api.html)
+[`View Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/delta/api/current/kg-storages-api.html)
 
 ## Sparql and ElasticSearch Views
 

@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`Resolver Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/kg/kg-resolvers-api.html)
+[`Resolver Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/delta/api/current/kg-resolvers-api.html)
 
 ```typescript
 // Resolvers

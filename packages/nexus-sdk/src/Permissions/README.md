@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`Permissions Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/iam/iam-permissions-api.html#replace-permissions)
+[`Permissions Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/delta/api/current/iam-permissions-api.html#replace-permissions)
 
 ```typescript
 // Permissions

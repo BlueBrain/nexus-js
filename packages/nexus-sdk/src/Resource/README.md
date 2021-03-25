@@ -2,7 +2,7 @@
 
 [`Back to Readme`](../../#readme)
 
-[`Resource Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/api/1.1/kg/kg-resources-api.html)
+[`Resource Documentation on BlueBrainNexus.io`](https://bluebrainnexus.io/docs/delta/api/current/kg-resources-api.html)
 
 ```typescript
 // Resources
@@ -44,7 +44,10 @@ nexus.Resource.deprecate('myOrg', 'myProject', 'myId', 1)
   .catch(e => console.error(e));
 
 // get the original payload of a resource:
-nexus.Resource.getSource('myOrg', 'myProject', 'myResourceId', 'schemaId', { rev: 1, tag: 'tag' })
+nexus.Resource.getSource('myOrg', 'myProject', 'myResourceId', 'schemaId', {
+  rev: 1,
+  tag: 'tag',
+})
   .then(d => console.log('res>', d))
-  .catch(e => console.error(e));  
+  .catch(e => console.error(e));
 ```

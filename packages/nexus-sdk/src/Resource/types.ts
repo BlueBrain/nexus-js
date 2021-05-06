@@ -37,21 +37,25 @@ export type ResourcePayload = {
   [key: string]: any;
 };
 
+export type ExpandedValue = {
+  value: string | number | boolean;
+};
+
 export type ExpandedResource<T = { [key: string]: any }> = T & {
   '@context'?: Context;
   '@type'?: string | string[];
   '@id': string;
-  'https://bluebrain.github.io/nexus/vocabulary/incoming': string;
-  'https://bluebrain.github.io/nexus/vocabulary/outgoing': string;
-  'https://bluebrain.github.io/nexus/vocabulary/self': string;
-  'https://bluebrain.github.io/nexus/vocabulary/constrainedBy': string;
-  'https://bluebrain.github.io/nexus/vocabulary/project': string;
-  'https://bluebrain.github.io/nexus/vocabulary/rev': number;
-  'https://bluebrain.github.io/nexus/vocabulary/deprecated': boolean;
-  'https://bluebrain.github.io/nexus/vocabulary/createdAt': string;
-  'https://bluebrain.github.io/nexus/vocabulary/createdBy': string;
-  'https://bluebrain.github.io/nexus/vocabulary/updatedAt': string;
-  'https://bluebrain.github.io/nexus/vocabulary/updatedBy': string;
+  'https://bluebrain.github.io/nexus/vocabulary/incoming': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/outgoing': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/self': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/constrainedBy': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/project': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/rev': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/deprecated': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/createdAt': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/createdBy': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/updatedAt': ExpandedValue[];
+  'https://bluebrain.github.io/nexus/vocabulary/updatedBy': ExpandedValue[];
 };
 
 export type Resource<T = { [key: string]: any }> = T & {

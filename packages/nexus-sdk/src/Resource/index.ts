@@ -28,7 +28,7 @@ const Resource = (
       projectLabel: string,
       resourceId: string,
       options?: GetResourceOptions,
-    ): Promise<Resource<T> | ExpandedResource<T>> => {
+    ): Promise<Resource<T> | ExpandedResource<T>[]> => {
       const { as = 'json', ...opts } = options || {};
       const parseAs = parseAsBuilder(as);
       return httpGet({

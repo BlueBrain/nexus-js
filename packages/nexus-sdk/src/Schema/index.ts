@@ -50,7 +50,7 @@ const Schema = (
       orgLabel: string,
       projectLabel: string,
       payload: SchemaPayload,
-      options: SchemaOptions = { execution: 'consistent' },
+      options: SchemaOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams(options);
       return httpPost({
@@ -64,7 +64,7 @@ const Schema = (
       schemaId: string,
       rev: number,
       payload: SchemaPayload,
-      options: SchemaOptions = { execution: 'consistent' },
+      options: SchemaOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpPut({
@@ -81,7 +81,7 @@ const Schema = (
         tag: string;
         rev: number;
       },
-      options: SchemaOptions = { execution: 'consistent' },
+      options: SchemaOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpPost({
@@ -94,7 +94,7 @@ const Schema = (
       projectLabel: string,
       schemaId: string,
       rev: number,
-      options: SchemaOptions = { execution: 'consistent' },
+      options: SchemaOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpDelete({

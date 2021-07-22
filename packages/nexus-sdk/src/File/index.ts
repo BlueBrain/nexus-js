@@ -65,10 +65,10 @@ const NexusFile = (
       orgLabel: string,
       projectLabel: string,
       payload: FilePayload,
-      options: CreateFileOptions = { execution: 'consistent' },
+      options: CreateFileOptions = { indexing: 'sync' },
     ): Promise<NexusFile> => {
       const { '@id': fileId, file: body, storage } = payload;
-      const opts = buildQueryParams({ storage, execution: options.execution });
+      const opts = buildQueryParams({ storage, indexing: options.indexing });
       const headers = (options && options.extraHeaders) || {};
 
       return fileId
@@ -94,7 +94,7 @@ const NexusFile = (
       orgLabel: string,
       projectLabel: string,
       payload: LinkFilePayload,
-      options: LinkFileOptions = { execution: 'consistent' },
+      options: LinkFileOptions = { indexing: 'sync' },
     ): Promise<NexusFile> => {
       const { '@id': fileId, storage, ...body } = payload;
       const opts = buildQueryParams({ storage, ...options });
@@ -113,13 +113,13 @@ const NexusFile = (
       orgLabel: string,
       projectLabel: string,
       payload: UpdateFilePayload,
-      options: UpdateFileOptions = { execution: 'consistent' },
+      options: UpdateFileOptions = { indexing: 'sync' },
     ): Promise<NexusFile> => {
       const { '@id': fileId, file: body, storage, rev } = payload;
       const opts = buildQueryParams({
         rev,
         storage,
-        execution: options.execution,
+        indexing: options.indexing,
       });
       const headers = (options && options.extraHeaders) || {};
       return httpPut({
@@ -133,7 +133,7 @@ const NexusFile = (
       projectLabel: string,
       fileId: string,
       rev: number,
-      options: DeprecateFileOptions = { execution: 'consistent' },
+      options: DeprecateFileOptions = { indexing: 'sync' },
     ): Promise<NexusFile> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpDelete({
@@ -145,7 +145,7 @@ const NexusFile = (
       projectLabel: string,
       fileId: string,
       payload: TagResourcePayload,
-      options: TagFileOptions = { execution: 'consistent' },
+      options: TagFileOptions = { indexing: 'sync' },
     ): Promise<NexusFile> => {
       const { previousRev, ...body } = payload;
       const opts = buildQueryParams({ ...options, rev: previousRev });

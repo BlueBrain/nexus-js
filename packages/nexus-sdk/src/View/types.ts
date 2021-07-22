@@ -1,4 +1,4 @@
-import { Resource, PaginatedList, Context, ExecutionOption } from '../types';
+import { Resource, PaginatedList, Context, IndexingOption } from '../types';
 
 export type SparqlView = Resource & {
   '@id': ['SparqlView', 'View'];
@@ -40,12 +40,10 @@ export type ElasticSearchExplanation = {
   details: ElasticSearchExplanation[];
 };
 
-export type CreateViewOptions = ExecutionOption & {};
-export type UpdateViewOptions = ExecutionOption & {};
-export type TagViewOptions = ExecutionOption & {};
-export type DeprecateViewOptions = ExecutionOption & {};
-export type RestartViewOptions = ExecutionOption & {};
-export type RestartProjectionOptions = ExecutionOption & {};
+export type CreateViewOptions = IndexingOption & {};
+export type UpdateViewOptions = IndexingOption & {};
+export type TagViewOptions = IndexingOption & {};
+export type DeprecateViewOptions = IndexingOption & {};
 
 export type ElasticSearchViewQueryResponse<T> = {
   hits: {

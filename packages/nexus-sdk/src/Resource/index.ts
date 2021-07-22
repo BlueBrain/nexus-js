@@ -77,7 +77,7 @@ const Resource = (
       payload: ResourcePayload,
       schemaId: string = '_',
       resourceId?: string,
-      options: ResourceCreateOptions = { execution: 'consistent' },
+      options: ResourceCreateOptions = { indexing: 'sync' },
     ): Promise<Resource> =>
       resourceId
         ? httpPut({
@@ -101,7 +101,7 @@ const Resource = (
       rev: number,
       payload: ResourcePayload,
       schemaId?: string,
-      options: ResourceUpdateOptions = { execution: 'consistent' },
+      options: ResourceUpdateOptions = { indexing: 'sync' },
     ): Promise<Resource> =>
       httpPut({
         path: `${
@@ -122,7 +122,7 @@ const Resource = (
         tag: string;
         rev: number;
       },
-      options: ResourceTagOptions = { execution: 'consistent' },
+      options: ResourceTagOptions = { indexing: 'sync' },
     ): Promise<Resource> =>
       httpPost({
         path: `${
@@ -138,7 +138,7 @@ const Resource = (
       resourceId: string,
       rev: number,
       schemaId?: string,
-      options: ResourceDeprecateOptions = { execution: 'consistent' },
+      options: ResourceDeprecateOptions = { indexing: 'sync' },
     ): Promise<Resource> =>
       httpDelete({
         path: `${

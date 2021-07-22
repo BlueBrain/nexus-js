@@ -4,8 +4,6 @@ import { NexusContext } from '../nexusSdk';
 import {
   CreateViewOptions,
   DeprecateViewOptions,
-  RestartProjectionOptions,
-  RestartViewOptions,
   SparqlViewQueryResponse,
   Statistics,
   TagViewOptions,
@@ -59,7 +57,7 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       payload: ViewPayload,
-      options: CreateViewOptions = { execution: 'consistent' },
+      options: CreateViewOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams(options);
       return httpPost({
@@ -73,7 +71,7 @@ const View = (
       viewId: string,
       rev: number,
       payload: ViewPayload,
-      options: UpdateViewOptions = { execution: 'consistent' },
+      options: UpdateViewOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpPut({
@@ -90,7 +88,7 @@ const View = (
         tag: string;
         rev: number;
       },
-      options: TagViewOptions = { execution: 'consistent' },
+      options: TagViewOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpPost({
@@ -103,7 +101,7 @@ const View = (
       projectLabel: string,
       viewId: string,
       rev: number,
-      options: DeprecateViewOptions = { execution: 'consistent' },
+      options: DeprecateViewOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpDelete({
@@ -156,17 +154,9 @@ const View = (
         },
       });
     },
-    restart: (
-      orgLabel: string,
-      projectLabel: string,
-      viewId: string,
-      options: RestartViewOptions = {
-        execution: 'consistent',
-      },
-    ) => {
-      const opts = buildQueryParams(options);
+    restart: (orgLabel: string, projectLabel: string, viewId: string) => {
       return httpDelete({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/progress${opts}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/progress`,
       });
     },
     compositeElasticSearchQuery: <T = any>(
@@ -233,14 +223,9 @@ const View = (
       projectLabel: string,
       viewId: string,
       projectionId: string,
-      options: RestartProjectionOptions = { execution: 'consistent' },
     ): Promise<Resource> =>
       httpDelete({
-        path: `${
-          context.uri
-        }/views/${orgLabel}/${projectLabel}/${viewId}/projections/${projectionId}${buildQueryParams(
-          options,
-        )}`,
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/projections/${projectionId}`,
       }),
   };
 };

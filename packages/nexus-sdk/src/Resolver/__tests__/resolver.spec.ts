@@ -109,7 +109,7 @@ describe('Resolver', () => {
       await resolver.create('org', 'project', payload);
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resolvers/org/project',
+        'http://api.url/v1/resolvers/org/project?indexing=sync',
       );
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
@@ -127,7 +127,7 @@ describe('Resolver', () => {
       await resolver.update('org', 'project', 'myResolverId', 1, payload);
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resolvers/org/project/myResolverId?rev=1',
+        'http://api.url/v1/resolvers/org/project/myResolverId?indexing=sync&rev=1',
       );
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
       expect(fetchMock.mock.calls[0][1].method).toEqual('PUT');
@@ -144,7 +144,7 @@ describe('Resolver', () => {
       await resolver.tag('org', 'project', 'myId', 1, payload);
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resolvers/org/project/myId?rev=1',
+        'http://api.url/v1/resolvers/org/project/myId?indexing=sync&rev=1',
       );
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
@@ -157,7 +157,7 @@ describe('Resolver', () => {
       await resolver.deprecate('org', 'project', 'myId', 1);
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
-        'http://api.url/v1/resolvers/org/project/myId?rev=1',
+        'http://api.url/v1/resolvers/org/project/myId?indexing=sync&rev=1',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });

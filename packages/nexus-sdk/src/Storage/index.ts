@@ -54,7 +54,7 @@ const Storage = (
       orgLabel: string,
       projectLabel: string,
       payload: StoragePayload,
-      options: CreateStorageOptions = { execution: 'consistent' },
+      options: CreateStorageOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams(options);
       return httpPost({
@@ -68,7 +68,7 @@ const Storage = (
       storageId: string,
       rev: number,
       payload: StoragePayload,
-      options: UpdateStorageOptions = { execution: 'consistent' },
+      options: UpdateStorageOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpPut({
@@ -85,7 +85,7 @@ const Storage = (
         tag: string;
         rev: number;
       },
-      options: TagStorageOptions = { execution: 'consistent' },
+      options: TagStorageOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpPost({
@@ -98,7 +98,7 @@ const Storage = (
       projectLabel: string,
       storageId: string,
       rev: number,
-      options: DeprecateStorageOptions = { execution: 'consistent' },
+      options: DeprecateStorageOptions = { indexing: 'sync' },
     ): Promise<Resource> => {
       const opts = buildQueryParams({ ...options, rev });
       return httpDelete({

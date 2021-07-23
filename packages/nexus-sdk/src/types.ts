@@ -10,6 +10,8 @@ export type Fetchers = {
   poll: Link;
 };
 
+export type IndexingOption = { indexing?: 'sync' | 'async' };
+
 export type Context =
   | string
   | (string | { [key: string]: any })[]

@@ -1,4 +1,4 @@
-import { Resource, PaginatedList, Identity } from '../types';
+import { Resource, PaginatedList, Identity, IndexingOption } from '../types';
 
 export type ResolverType = 'InProject' | 'CrossProject';
 
@@ -32,6 +32,12 @@ export type ListResolverOptions = {
   createdBy?: string;
   updatedBy?: string;
 };
+
+export type CreateResolverOptions = IndexingOption & {};
+export type UpdateResolverOptions = IndexingOption & {};
+export type TagResolverOptions = IndexingOption & {};
+export type DeprecateResolverOptions = IndexingOption & {};
+
 export type ResolverPayload =
   | InProjectResolverPayload
   | CrossProjectResolverPayload;

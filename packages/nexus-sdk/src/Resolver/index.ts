@@ -6,6 +6,10 @@ import {
   GetResolverOptions,
   ListResolverOptions,
   ResolverPayload,
+  CreateResolverOptions,
+  UpdateResolverOptions,
+  TagResolverOptions,
+  DeprecateResolverOptions,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildHeader, buildQueryParams, parseAsBuilder } from '../utils';
@@ -73,9 +77,12 @@ const Resolver = (
       orgLabel: string,
       projectLabel: string,
       payload: ResolverPayload,
+      options: CreateResolverOptions = { indexing: 'sync' },
     ): Promise<Resource> =>
       httpPost({
-        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}`,
+        path: `${
+          context.uri
+        }/resolvers/${orgLabel}/${projectLabel}${buildQueryParams(options)}`,
         body: JSON.stringify(payload),
       }),
     update: (
@@ -84,9 +91,14 @@ const Resolver = (
       resolverId: string,
       rev: number,
       payload: ResolverPayload,
+      options: UpdateResolverOptions = { indexing: 'sync' },
     ): Promise<Resource> =>
       httpPut({
-        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
+        path: `${
+          context.uri
+        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}${buildQueryParams(
+          { rev, ...options },
+        )}`,
         body: JSON.stringify(payload),
       }),
     tag: (
@@ -98,9 +110,14 @@ const Resolver = (
         tag: string;
         rev: number;
       },
+      options: TagResolverOptions = { indexing: 'sync' },
     ): Promise<Resource> =>
       httpPost({
-        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}/${resourceId}?rev=${rev}`,
+        path: `${
+          context.uri
+        }/resolvers/${orgLabel}/${projectLabel}/${resourceId}${buildQueryParams(
+          { rev, ...options },
+        )}`,
         body: JSON.stringify(payload),
       }),
     deprecate: (
@@ -108,9 +125,14 @@ const Resolver = (
       projectLabel: string,
       resolverId: string,
       rev: number,
+      options: DeprecateResolverOptions = { indexing: 'sync' },
     ): Promise<Resource> =>
       httpDelete({
-        path: `${context.uri}/resolvers/${orgLabel}/${projectLabel}/${resolverId}?rev=${rev}`,
+        path: `${
+          context.uri
+        }/resolvers/${orgLabel}/${projectLabel}/${resolverId}${buildQueryParams(
+          { rev, ...options },
+        )}`,
       }),
     poll: (
       orgLabel: string,

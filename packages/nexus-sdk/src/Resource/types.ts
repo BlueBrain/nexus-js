@@ -1,4 +1,4 @@
-import { Context, Resource, PaginatedList } from '../types';
+import { Context, IndexingOption } from '../types';
 
 export type IncomingLink = Resource & {
   paths: string[];
@@ -29,6 +29,14 @@ export type ResourceListOptions = {
   sort?: string | string[];
   [key: string]: any;
 };
+
+export type ResourceCreateOptions = IndexingOption & {};
+
+export type ResourceUpdateOptions = IndexingOption & {};
+
+export type ResourceTagOptions = IndexingOption & {};
+
+export type ResourceDeprecateOptions = IndexingOption & {};
 
 export type ResourcePayload = {
   '@id'?: string;

@@ -2,8 +2,12 @@ import { Observable } from '@bbp/nexus-link';
 import { Fetchers, Resource } from '../types';
 import { NexusContext } from '../nexusSdk';
 import {
+  CreateViewOptions,
+  DeprecateViewOptions,
   SparqlViewQueryResponse,
   Statistics,
+  TagViewOptions,
+  UpdateViewOptions,
   View,
   ViewList,
   ViewPayload,
@@ -53,22 +57,28 @@ const View = (
       orgLabel: string,
       projectLabel: string,
       payload: ViewPayload,
-    ): Promise<Resource> =>
-      httpPost({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}`,
+      options: CreateViewOptions = { indexing: 'sync' },
+    ): Promise<Resource> => {
+      const opts = buildQueryParams(options);
+      return httpPost({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}${opts}`,
         body: JSON.stringify(payload),
-      }),
+      });
+    },
     update: (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
       rev: number,
       payload: ViewPayload,
-    ): Promise<Resource> =>
-      httpPut({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
+      options: UpdateViewOptions = { indexing: 'sync' },
+    ): Promise<Resource> => {
+      const opts = buildQueryParams({ ...options, rev });
+      return httpPut({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}${opts}`,
         body: JSON.stringify(payload),
-      }),
+      });
+    },
     tag: (
       orgLabel: string,
       projectLabel: string,
@@ -78,20 +88,26 @@ const View = (
         tag: string;
         rev: number;
       },
-    ): Promise<Resource> =>
-      httpPost({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
+      options: TagViewOptions = { indexing: 'sync' },
+    ): Promise<Resource> => {
+      const opts = buildQueryParams({ ...options, rev });
+      return httpPost({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}${opts}`,
         body: JSON.stringify(payload),
-      }),
+      });
+    },
     deprecate: (
       orgLabel: string,
       projectLabel: string,
       viewId: string,
       rev: number,
-    ): Promise<Resource> =>
-      httpDelete({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}?rev=${rev}`,
-      }),
+      options: DeprecateViewOptions = { indexing: 'sync' },
+    ): Promise<Resource> => {
+      const opts = buildQueryParams({ ...options, rev });
+      return httpDelete({
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}${opts}`,
+      });
+    },
     poll: (
       orgLabel: string,
       projectLabel: string,
@@ -138,10 +154,11 @@ const View = (
         },
       });
     },
-    restart: (orgLabel: string, projectLabel: string, viewId: string) =>
-      httpDelete({
+    restart: (orgLabel: string, projectLabel: string, viewId: string) => {
+      return httpDelete({
         path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/progress`,
-      }),
+      });
+    },
     compositeElasticSearchQuery: <T = any>(
       orgLabel: string,
       projectLabel: string,

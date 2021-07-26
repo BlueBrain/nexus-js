@@ -63,6 +63,14 @@ This repo is managed as a _monorepo_ using [lerna](https://github.com/lerna/lern
 - Test: `make test`
 - Lint: `make lint`
 
-# License
+## License
 
 [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+## Funding & Acknowledgment
+
+The development of this software was supported by funding to the Blue Brain Project, a research center of the École polytechnique fédérale de
+Lausanne (EPFL), from the Swiss government's ETH Board of the Swiss Federal Institutes of Technology.
+
+Copyright © 2015-2021 Blue Brain Project/EPFL
+

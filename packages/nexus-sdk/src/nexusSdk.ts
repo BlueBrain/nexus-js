@@ -26,6 +26,7 @@ import ACL from './ACL';
 import Archive from './Archive';
 import Resource from './Resource';
 import Search from './Search';
+import Quotas from './Quotas';
 import { getFetchInstance, getAbortControllerInstance } from './utils';
 
 export type NexusClientOptions = {
@@ -99,6 +100,7 @@ export function createNexusClient(options: NexusClientOptions) {
     ACL: ACL(fetchers, context),
     Archive: Archive(fetchers, context),
     Search: Search(fetchers, context),
+    Quotas: Quotas(fetchers, context),
     ...fetchers,
   };
 }

@@ -1,3 +1,4 @@
-export type Quota = any;
-
-export type QuotaPayload = any;
+export type Quota = {
+  '@type': 'Quota';
+  resources: number;
+};

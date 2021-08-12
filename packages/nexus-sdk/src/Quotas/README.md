@@ -1,5 +1,7 @@
 # Quotas
 
+Quotas restrict volume of data in Projects.
+
 [`Back to Readme`](../../#readme)
 
 ```typescript

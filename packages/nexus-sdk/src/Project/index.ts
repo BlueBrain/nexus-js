@@ -78,6 +78,10 @@ const Project = (
         context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
       });
     },
+    statistics: (orgLabel: string, projectLabel: string): Promise<Project> =>
+      httpGet({
+        path: `${context.uri}/projects/${orgLabel}/${projectLabel}/statistics`,
+      }),
   };
 };
 

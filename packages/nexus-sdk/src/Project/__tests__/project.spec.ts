@@ -139,4 +139,16 @@ describe('Project', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
+
+  describe('statistics', () => {
+    it('should fetch projects statistics', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await project.statistics('orgLabel', 'projectLabel');
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/projects/orgLabel/projectLabel/statistics',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+  });
 });

@@ -49,3 +49,10 @@ export type ProjectPayload = {
   vocab?: string;
   apiMappings?: ApiMapping[];
 };
+
+export type ProjectStatistics = {
+  '@context': string;
+  eventsCount: number;
+  lastProcessedEventDateTime: string;
+  resourcesCount: number;
+};

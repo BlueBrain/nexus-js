@@ -16,7 +16,6 @@ describe('Quotas', () => {
         }),
       );
       await quotas.get('orgLabel', 'projectLabel');
-
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/quotas/orgLabel/projectLabel',

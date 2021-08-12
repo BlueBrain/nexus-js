@@ -5,6 +5,7 @@ import {
   ProjectList,
   ProjectListOptions,
   ProjectPayload,
+  ProjectStatistics,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
@@ -78,6 +79,13 @@ const Project = (
         context: { pollIntervalMs: options && options.pollIntervalMs | 1000 },
       });
     },
+    statistics: (
+      orgLabel: string,
+      projectLabel: string,
+    ): Promise<ProjectStatistics> =>
+      httpGet({
+        path: `${context.uri}/projects/${orgLabel}/${projectLabel}/statistics`,
+      }),
   };
 };
 

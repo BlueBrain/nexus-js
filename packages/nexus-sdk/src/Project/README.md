@@ -29,4 +29,8 @@ nexus.Project.deprecate('myOrg', 'myProject', 1)
 nexus.Project.get('myOrg', 'myProject')
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
+
+nexus.Project.statistics('myOrg', 'myProject')
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
 ```

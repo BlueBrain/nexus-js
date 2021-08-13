@@ -31,3 +31,4 @@ export * from './Realm/types';
 export * from './Permissions/types';
 export * from './ACL/types';
 export * from './Archive/types';
+export * from './Quotas/types';

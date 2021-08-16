@@ -1,6 +1,6 @@
 {
   "name": "@bbp/react-nexus",
-  "version": "1.3.7",
+  "version": "1.3.8",
   "description": "A set of React components for Nexus",
   "keywords": [
     "react",
@@ -34,15 +34,15 @@
     "url": "https://github.com/BlueBrain/nexus-js/issues"
   },
   "dependencies": {
-    "@bbp/nexus-link": "^1.3.7",
+    "@bbp/nexus-link": "^1.3.8",
     "ts-invariant": "0.4.1"
   },
   "peerDependencies": {
-    "@bbp/nexus-sdk": "^1.3.7",
+    "@bbp/nexus-sdk": "^1.3.8",
     "react": ">= 16.8.3"
   },
   "devDependencies": {
-    "@bbp/nexus-sdk": "^1.3.7",
+    "@bbp/nexus-sdk": "^1.3.8",
     "@types/react": "^16.8.3",
     "react": "^16.8.3"
   },

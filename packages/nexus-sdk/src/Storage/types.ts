@@ -10,6 +10,8 @@ export type DiskStorage = Resource & {
   readPermissions?: string[];
   writePermissions?: string[];
   _algorithm: string;
+  capacity?: number;
+  maxFileSize?: number;
 };
 export type RemoteDiskStorage = Resource & {
   '@type': ['RemoteStorage', 'Storage'];
@@ -19,6 +21,7 @@ export type RemoteDiskStorage = Resource & {
   readPermissions?: string[];
   writePermissions?: string[];
   _algorithm: string;
+  maxFileSize?: number;
 };
 export type S3Storage = Resource & {
   '@type': ['S3Storage', 'Storage'];
@@ -27,6 +30,7 @@ export type S3Storage = Resource & {
   writePermissions?: string[];
   bucket: string;
   _algorithm: string;
+  maxFileSize?: number;
 };
 export type StorageList = PaginatedList<Storage>;
 
@@ -86,4 +90,11 @@ export type S3StoragePayload = {
   secretKey?: string;
   readPermissions?: string[];
   writePermissions?: string[];
+};
+
+export type StorageStatistics = {
+  '@context': string;
+  files: number;
+  lastProcessedEventDateTime?: string;
+  spaceUsed: number;
 };

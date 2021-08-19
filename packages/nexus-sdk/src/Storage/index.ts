@@ -9,6 +9,7 @@ import {
   StoragePayload,
   TagStorageOptions,
   UpdateStorageOptions,
+  StorageStatistics,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildHeader, buildQueryParams, parseAsBuilder } from '../utils';
@@ -114,6 +115,14 @@ const Storage = (
       poll({
         path: `${context.uri}/storages/${orgLabel}/${projectLabel}/${storageId}`,
         context: { pollTime: options && options.pollTime | 1000 },
+      }),
+    statistics: (
+      orgLabel: string,
+      projectLabel: string,
+      storageId: string,
+    ): Promise<StorageStatistics> =>
+      httpGet({
+        path: `${context.uri}/storages/${orgLabel}/${projectLabel}/${storageId}/statistics`,
       }),
   };
 };

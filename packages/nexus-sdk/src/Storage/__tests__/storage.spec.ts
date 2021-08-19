@@ -187,4 +187,16 @@ describe('Storage', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
+
+  describe('statistics', () => {
+    it('should fetch storage statistics', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await storage.statistics('orgLabel', 'projectLabel', 'storageId');
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/storages/orgLabel/projectLabel/storageId/statistics',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+  });
 });

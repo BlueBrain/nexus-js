@@ -189,7 +189,7 @@ describe('Storage', () => {
   });
 
   describe('statistics', () => {
-    it('should fetch stroage statistics', async () => {
+    it('should fetch storage statistics', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await storage.statistics('orgLabel', 'projectLabel', 'storageId');
       expect(fetchMock.mock.calls.length).toEqual(1);

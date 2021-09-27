@@ -151,4 +151,16 @@ describe('Project', () => {
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
   });
+
+  describe('project deletion config', () => {
+    it('exposes the project deletion configuration', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await project.projectDeletionConfig();
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/project-deletion/config',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+  });
 });

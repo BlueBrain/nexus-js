@@ -33,4 +33,8 @@ nexus.Project.get('myOrg', 'myProject')
 nexus.Project.statistics('myOrg', 'myProject')
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
+
+nexus.Project.deletionConfig()
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
 ```

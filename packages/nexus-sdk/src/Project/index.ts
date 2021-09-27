@@ -87,7 +87,7 @@ const Project = (
       httpGet({
         path: `${context.uri}/projects/${orgLabel}/${projectLabel}/statistics`,
       }),
-    projectDeletionConfig: (): Promise<ProjectDeletionConfig> =>
+    deletionConfig: (): Promise<ProjectDeletionConfig> =>
       httpGet({
         path: `${context.uri}/project-deletion/config`,
       }),

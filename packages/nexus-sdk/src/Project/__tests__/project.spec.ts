@@ -155,7 +155,7 @@ describe('Project', () => {
   describe('project deletion config', () => {
     it('exposes the project deletion configuration', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
-      await project.projectDeletionConfig();
+      await project.deletionConfig();
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/project-deletion/config',

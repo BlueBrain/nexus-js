@@ -56,3 +56,13 @@ export type ProjectStatistics = {
   lastProcessedEventDateTime: string;
   resourcesCount: number;
 };
+
+export type ProjectDeletionConfig = {
+  '@context': string;
+  '@type': 'ProjectDeletionConfig';
+  _idleIntervalInSeconds: number;
+  _idleCheckPeriodInSeconds: number;
+  _deleteDeprecatedProjects: boolean;
+  _includedProjects: string[];
+  _excludedProjects: string[];
+};

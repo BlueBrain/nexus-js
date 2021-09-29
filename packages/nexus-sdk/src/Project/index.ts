@@ -6,6 +6,7 @@ import {
   ProjectListOptions,
   ProjectPayload,
   ProjectStatistics,
+  ProjectDeletionConfig,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildQueryParams } from '../utils';
@@ -85,6 +86,10 @@ const Project = (
     ): Promise<ProjectStatistics> =>
       httpGet({
         path: `${context.uri}/projects/${orgLabel}/${projectLabel}/statistics`,
+      }),
+    deletionConfig: (): Promise<ProjectDeletionConfig> =>
+      httpGet({
+        path: `${context.uri}/project-deletion/config`,
       }),
   };
 };

@@ -116,3 +116,13 @@ export type ResourceSource = {
   '@type'?: string | string[];
   '@id': string;
 };
+
+export type GetResourceTagOptions = {
+  rev?: number;
+  tag?: string;
+};
+
+export type ResourceTags = {
+  '@context'?: Context;
+  tags: { rev: number; tag: string }[];
+};

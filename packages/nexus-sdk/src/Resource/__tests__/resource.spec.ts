@@ -285,6 +285,48 @@ describe('Resource', () => {
     });
   });
 
+  describe('tags', () => {
+    it('should make httpGet call to the resources api with rev parameter', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const options = {
+        rev: 2,
+      };
+      await resource.tags(
+        'orgLabel',
+        'projectLabel',
+        'resourceId',
+        'schemaId',
+        options,
+      );
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/orgLabel/projectLabel/schemaId/resourceId/tags?rev=2',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+  });
+
+  describe('tags', () => {
+    it('should make httpGet call to the resources api with tag parameter', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const options = {
+        tag: 'randomTag',
+      };
+      await resource.tags(
+        'orgLabel',
+        'projectLabel',
+        'resourceId',
+        'schemaId',
+        options,
+      );
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/orgLabel/projectLabel/schemaId/resourceId/tags?tag=randomTag',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+  });
+
   describe('tag', () => {
     it('should make httpPost call to the resources api', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));

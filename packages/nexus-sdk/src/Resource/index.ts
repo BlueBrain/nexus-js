@@ -17,6 +17,8 @@ import {
   ResourceDeprecateOptions,
   ResourceUpdateOptions,
   ResourceTagOptions,
+  ResourceTags,
+  GetResourceTagOptions,
 } from './types';
 import { NexusContext } from '../nexusSdk';
 import { buildHeader, buildQueryParams, parseAsBuilder } from '../utils';
@@ -112,6 +114,19 @@ const Resource = (
           ...options,
         })}`,
         body: JSON.stringify(payload),
+      }),
+    tags: (
+      orgLabel: string,
+      projectLabel: string,
+      resourceId: string,
+      schemaId?: string,
+      options?: GetResourceTagOptions,
+    ): Promise<ResourceTags> =>
+      httpGet({
+        path: `${
+          context.uri
+        }/resources/${orgLabel}/${projectLabel}/${schemaId ||
+          DEFAULT_SCHEMA_ID}/${resourceId}/tags${buildQueryParams(options)}`,
       }),
     tag: (
       orgLabel: string,

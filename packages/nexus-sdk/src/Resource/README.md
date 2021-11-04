@@ -50,4 +50,23 @@ nexus.Resource.getSource('myOrg', 'myProject', 'myResourceId', 'schemaId', {
 })
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
+
+// list tags defined by a specified revision of resource
+nexus.Resource.tags('myOrg', 'myProject', 'myResourceId', 'schemaId', {
+  rev: 1,
+})
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+
+// list tags defined by a specified tag
+nexus.Resource.tags('myOrg', 'myProject', 'myResourceId', 'schemaId', {
+  tag: 'myTagName',
+})
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+
+// list tags defined on latest revision of resource
+nexus.Resource.tags('myOrg', 'myProject', 'myResourceId', 'schemaId')
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
 ```

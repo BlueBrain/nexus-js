@@ -50,13 +50,24 @@ const Resource = (
       });
     },
     list: <T>(
-      orgLabel: string,
-      projectLabel: string,
+      orgLabel?: string,
+      projectLabel?: string,
       options?: ResourceListOptions,
     ): Promise<ResourceList<T>> => {
       const opts = buildQueryParams(options);
+
+      if (orgLabel) {
+        if (projectLabel) {
+          return httpGet({
+            path: `${context.uri}/resources/${orgLabel}/${projectLabel}${opts}`,
+          });
+        }
+        return httpGet({
+          path: `${context.uri}/resources/${orgLabel}${opts}`,
+        });
+      }
       return httpGet({
-        path: `${context.uri}/resources/${orgLabel}/${projectLabel}${opts}`,
+        path: `${context.uri}/resources${opts}`,
       });
     },
     links: (

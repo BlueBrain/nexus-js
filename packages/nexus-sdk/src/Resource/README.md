@@ -14,7 +14,18 @@ nexus.Resource.poll('myOrg', 'myProject', 'myID', { pollTime: 3000 }).subscribe(
   d => console.log('res>', d),
 );
 
+// listing within specified organisation and project
 nexus.Resource.list('myOrg', 'myProject', { type: 'myType' })
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+
+// listing within specified organisation
+nexus.Resource.list('myOrg', undefined, { type: 'myType' })
+  .then(d => console.log('res>', d))
+  .catch(e => console.error(e));
+
+// listing across all organisations/projects
+nexus.Resource.list(undefined, undefined, { type: 'myType' })
   .then(d => console.log('res>', d))
   .catch(e => console.error(e));
 

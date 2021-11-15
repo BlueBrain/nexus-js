@@ -96,7 +96,7 @@ describe('Resource', () => {
   });
 
   describe('list', () => {
-    it('should make httpGet call to the resources api', async () => {
+    it('with both org and project label should make httpGet call to the resources api with params', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       await resource.list('org', 'project');
       expect(fetchMock.mock.calls.length).toEqual(1);
@@ -127,6 +127,24 @@ describe('Resource', () => {
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/resources/org/project?sort=-_createdAt&sort=-%40id',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('without org or project label should make httpGet call to the resources api without params', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await resource.list();
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual('http://api.url/v1/resources');
+      expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
+    });
+
+    it('with org label only should make httpGet call to the resources api with org param', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      await resource.list('org');
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/org',
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });

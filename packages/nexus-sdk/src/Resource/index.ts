@@ -158,6 +158,22 @@ const Resource = (
         )}`,
         body: JSON.stringify(payload),
       }),
+    removeTag: (
+      orgLabel: string,
+      projectLabel: string,
+      resourceId: string,
+      tagName: string,
+      rev: number,
+      schemaId?: string,
+    ): Promise<Resource> =>
+      httpDelete({
+        path: `${
+          context.uri
+        }/resources/${orgLabel}/${projectLabel}/${schemaId ||
+          DEFAULT_SCHEMA_ID}/${resourceId}/tags/${tagName}${buildQueryParams({
+          rev,
+        })}`,
+      }),
     deprecate: (
       orgLabel: string,
       projectLabel: string,

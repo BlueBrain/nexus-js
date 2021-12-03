@@ -58,49 +58,56 @@ const matchIdentity = (identities: Array<any>, acl: any): any | false => {
 // if empty, you have access, if not, you don't (and you get the list of missing permissions)
 const checkPermissions = (
   permissions: Array<string>,
-  path: string = '/',
+  path: string | Array<string> = ['/'],
 ) => async nexus => {
   const identities = await nexus.Identity.list();
-  const acls = await nexus.ACL.list(path, {
-    ancestors: true,
-    self: true,
-  });
 
-  // what ACLs are valid base on our identities
-  const validAcls: Array<any> = acls._results.reduce(
-    (flattenACLs, currentACL) => [
-      ...flattenACLs,
-      ...currentACL.acl.reduce(
-        (valid, acl) =>
-          matchIdentity(identities.identities, acl.identity)
-            ? [...valid, acl]
-            : valid,
-        [],
-      ),
-    ],
-    [],
+  const pathArray = Array.isArray(path) ? path : [path];
+  const pathsACLs = pathArray.map(p =>
+    nexus.ACL.list(p, { ancestors: true, self: true }),
   );
 
-  // grab the list of permissions that are not in the ACLs
-  const checkList = validAcls.reduce((checkList, acl) => {
-    return checkList.filter(
-      permission => !acl.permissions.includes(permission),
-    );
-  }, permissions);
+  return Promise.all(pathsACLs).then(acls => {
+    const missingPermissions = acls.map(a => {
+      // what ACLs are valid base on our identities
+      const validAcls: Array<any> = a._results.reduce(
+        (flattenACLs, currentACL) => [
+          ...flattenACLs,
+          ...currentACL.acl.reduce(
+            (valid, acl) =>
+              matchIdentity(identities.identities, acl.identity)
+                ? [...valid, acl]
+                : valid,
+            [],
+          ),
+        ],
+        [],
+      );
 
-  return new Promise((resolve, reject) => {
-    // if check list if empty, we have the necessary permissions
-    if (checkList.length === 0) {
-      resolve(true);
-    }
-    // if not reject with missing permissions
-    reject(checkList);
+      // accumulate permissions that are not in the ACLs for path
+      return validAcls.reduce((missingList, acl) => {
+        return missingList.filter(
+          permission => !acl.permissions.includes(permission),
+        );
+      }, permissions);
+    });
+
+    const uniqueMissingPermissions = [...new Set(missingPermissions.flat())];
+
+    return new Promise((resolve, reject) => {
+      // if no missing permissions then we can access
+      if (uniqueMissingPermissions.length === 0) {
+        resolve(true);
+      }
+      // if missing permissions reject and list them
+      reject(uniqueMissingPermissions);
+    });
   });
 };
 
 export type AccessControlProps = {
   permissions: Array<string>;
-  path: string;
+  path: string | Array<string>;
   children: React.ReactNode;
   noAccessComponent?: ({
     missingPermissions,

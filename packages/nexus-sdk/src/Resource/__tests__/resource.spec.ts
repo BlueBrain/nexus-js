@@ -322,9 +322,7 @@ describe('Resource', () => {
       );
       expect(fetchMock.mock.calls[0][1].method).toEqual('GET');
     });
-  });
 
-  describe('tags', () => {
     it('should make httpGet call to the resources api with tag parameter', async () => {
       fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
       const options = {
@@ -359,6 +357,26 @@ describe('Resource', () => {
       );
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+    });
+  });
+
+  describe('tags/tagName', () => {
+    it('should make httpDelete call to the resources api with tag specified and previous revision as parameter', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+
+      await resource.removeTag(
+        'orgLabel',
+        'projectLabel',
+        'resourceId',
+        'myTag',
+        1,
+        'schemaId',
+      );
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/resources/orgLabel/projectLabel/schemaId/resourceId/tags/myTag?rev=1',
+      );
+      expect(fetchMock.mock.calls[0][1].method).toEqual('DELETE');
     });
   });
 

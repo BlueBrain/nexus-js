@@ -27,6 +27,7 @@ import Archive from './Archive';
 import Resource from './Resource';
 import Search from './Search';
 import Quotas from './Quotas';
+import GraphAnalytics from './GraphAnalytics';
 import { getFetchInstance, getAbortControllerInstance } from './utils';
 
 export type NexusClientOptions = {
@@ -101,6 +102,7 @@ export function createNexusClient(options: NexusClientOptions) {
     Archive: Archive(fetchers, context),
     Search: Search(fetchers, context),
     Quotas: Quotas(fetchers, context),
+    GraphAnalytics: GraphAnalytics(fetchers, context),
     ...fetchers,
   };
 }

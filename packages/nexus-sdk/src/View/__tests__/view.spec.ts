@@ -223,6 +223,26 @@ describe('Views', () => {
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
     });
+
+    it('should make httpPost call to the views query api with paging options in payload', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const query = {
+        query: {
+          term: {
+            _deprecated: true,
+          },
+        },
+      };
+      const options = { size: 10, from: 0 };
+      const payload = { ...query, ...options };
+      await view.elasticSearchQuery('org', 'project', 'myId', query, options);
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myId/_search',
+      );
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+    });
   });
 
   describe('compositeElasticSearchQuery', () => {
@@ -245,6 +265,33 @@ describe('Views', () => {
       expect(fetchMock.mock.calls.length).toEqual(1);
       expect(fetchMock.mock.calls[0][0]).toEqual(
         'http://api.url/v1/views/org/project/myId/projections/myProejection/_search',
+      );
+      expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
+      expect(fetchMock.mock.calls[0][1].method).toEqual('POST');
+    });
+
+    it('should make httpPost call to the views query api with paging options in payload', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify({ data: '' }));
+      const query = {
+        query: {
+          term: {
+            _deprecated: true,
+          },
+        },
+      };
+      const options = { size: 10, from: 0 };
+      const payload = { ...query, ...options };
+      await view.compositeElasticSearchQuery(
+        'org',
+        'project',
+        'myId',
+        'myProjection',
+        query,
+        options,
+      );
+      expect(fetchMock.mock.calls.length).toEqual(1);
+      expect(fetchMock.mock.calls[0][0]).toEqual(
+        'http://api.url/v1/views/org/project/myId/projections/myProjection/_search',
       );
       expect(fetchMock.mock.calls[0][1].body).toEqual(JSON.stringify(payload));
       expect(fetchMock.mock.calls[0][1].method).toEqual('POST');

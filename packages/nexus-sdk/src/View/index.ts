@@ -134,10 +134,10 @@ const View = (
         size: number;
       },
     ): Promise<T> => {
-      const opts = buildQueryParams(options);
+      const searchBody = options ? { ...query, ...options } : query;
       return httpPost({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/_search${opts}`,
-        body: JSON.stringify(query),
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/_search`,
+        body: JSON.stringify(searchBody),
       });
     },
     sparqlQuery: (
@@ -170,10 +170,10 @@ const View = (
         size: number;
       },
     ): Promise<T> => {
-      const opts = buildQueryParams(options);
+      const searchBody = options ? { ...query, ...options } : query;
       return httpPost({
-        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/projections/${projection_id}/_search${opts}`,
-        body: JSON.stringify(query),
+        path: `${context.uri}/views/${orgLabel}/${projectLabel}/${viewId}/projections/${projection_id}/_search`,
+        body: JSON.stringify(searchBody),
       });
     },
     compositeSparqlQuery: (
